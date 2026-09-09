@@ -178,3 +178,17 @@ lives — bbh `[BBH-9]`).
   19:09, 20:28) — another session working there live, none of it BBX. The
   working tree of a lineage is a moving target; a clone at the commit is
   the instrument.
+- R19 answered the same evening: "agreed, although this should be like a
+  default implementation/recommendation. In the end the principle must
+  hold, the exact implementation matters little." Recorded so: the pull
+  queue is the ruling, the FIFO token queue its default. Not lifted yet.
+- R20's cost and risk were measured on the maintainer's question rather
+  than argued: a clone of bbh at `f675710` costs 0.14 s shared / 0.32 s
+  plain and under 3 MB; the fidelity gate on it PASSES with output
+  identical to the in-place run but for `porcelain=4` → `0`; the four
+  dirty files re-point VampireSaved build directories and touch no F13–F15
+  row; a clone starts with no ignored files, so the read-only proof there
+  can include `--ignored`, which the in-place proof cannot. A plain clone
+  has no `alternates` dependence on bbh's object store during the run; the
+  recommendation was revised to a plain clone (also for the recount, D17,
+  +1.6 s on VampireSaved). Awaiting the answer.

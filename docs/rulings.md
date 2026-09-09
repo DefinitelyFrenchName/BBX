@@ -124,10 +124,26 @@ written until the ruling its slice needs is answered (CLAUDE.md §6, §9).
 - **Recommendation:** lift 14z-144's queue into `bin/bbx-run-sweep` as the `--jobs N` mechanism (slot = token = clone), keep the prereq lane serial, keep row order in `results.tsv` non-deterministic and keyed by name; fidelity F14 is unaffected at `--jobs 1` (bbh's default) and a new pair at `--jobs 2` over bbh's example diffs the sorted results, never the order. Generalize the scratch binding from `[sweep].scratch_lanes` to a kind-blind `[sweep].clone_per_slot = true|false` (D-row) whose clone is a shared clone of the consumer's own repository at HEAD, so any kind's heavy gates run N-wide on N pinned trees.
 - **Declined:** `xargs -P` / GNU parallel (not in the R3 floor); Python workers (the runner is sh so its verdict contract stays shell-native, R3); a global BBX job server (BBX-25: one consumer).
 - **Cost of being wrong:** one FIFO and N clones per run; a gate that is not clone-safe (writes outside its slot) is detected by the tree check, which each clone gets.
-- **Answer:** (open)
+- **Answer (maintainer, 2026-09-09):** agreed — as a default implementation and recommendation. The principle must hold (parallel work is pulled from a queue by N workers, each on its own pinned tree); the exact implementation matters little. Applied when lifted: the FIFO token queue is BBX's default `--jobs` mechanism, documented as one implementation of the principle; a consumer or adapter may bring another as long as workers pull and trees are pinned per worker, and the readout says which.
 
 ### R20 — Whether the fidelity gate runs on a clone of bbh at f675710 (raised bbx-2)
 - **Context:** `gates/fidelity_bbh.sh` runs bbh's own runners and example in bbh's working tree in place; R8 fixed the baseline as the commit `f675710` while the tree carries 4 uncommitted modifications (`docs/config.md`, `example/consumers/bbh.vampire.toml`, `lib/py/bbh/config.py`, `selftest/test_fidelity_vampire.sh`). Every F13–F15 row so far was measured on the dirty tree.
 - **Recommendation:** move it to a shared clone at `f675710` (R18's mechanism) and re-measure F13–F15 there; if any row's text differs from the in-place run, the difference is a finding about the 4 files, recorded as a dated line in `docs/rebaselines.md`, and the clone becomes the baseline (it is what R8 says the baseline is). Until ruled, the gate stays in place, declared and proved read-only.
 - **Declined:** keeping the dirty tree as the instrument forever (a baseline that is not a commit cannot be re-created on another machine, R3).
+- **Cost and risk, measured (bbx-2, 2026-09-09, on the maintainer's question):**
+
+  | | shared clone (`--shared`) | plain local clone (hardlinked objects) | in place (today) |
+  |---|---|---|---|
+  | clone of bbh at `f675710` | 0.14 s, 1.7 MB | 0.32 s, 2.3 MB | — |
+  | clone of VampireSaved (for F20 later) | 1.76 s, 363 MB | 3.40 s, 490 MB as `du` counts it (the 949 MB pack is a hardlink, 2 links: no extra disk) | — |
+  | fidelity gate, whole run | 44.4 s (PASS) | not run separately (same tree) | 38.7 s (PASS) |
+  | output diff, clone vs in place | empty except `porcelain=4` → `porcelain=0` (two lines) | same | — |
+  | what the 4 dirty files change | nothing in F13–F15: they re-point VampireSaved build directories (`m3b_merged25` → `26`, `don_m21` → `22`, `hui55` → `56`, `pyron40` → `41`, `m5_stock16` → `17`), which matter to F20 only | | they are part of the measured input, undeclared |
+  | read-only proof | complete: a clone starts with zero untracked AND zero ignored files, so `status --ignored` after the run must be empty — measured empty | same | blind to ignored paths (`example/build/`, `.DS_Store`) by construction; measured not written today, unprovable in general |
+  | dependence on bbh's `.git` during the run | an `alternates` file points at bbh's object store: a `git gc --prune` in bbh during the ~45 s window would break the clone loudly (git errors → FAIL), never silently | none: objects are hardlinked at clone time; a repack in bbh leaves the inode | the tree itself; bbh's HEAD moving turns the gate red until re-baselined |
+  | when bbh's HEAD moves | the gate keeps measuring `f675710` (the ruled baseline) and reports drift as a NOTE, as the census does | same | red |
+  | portability | `git` only (R3 floor); hardlinks need the same filesystem, else git copies (bbh: 2.3 MB, trivial) | same | — |
+
+  Risks that survive either clone: a fixture that depends on an ignored or untracked file in bbh's tree would pass in place and fail on a clone — that is the finding wanted, not a risk to avoid (measured: none today, F13–F15 identical); a consumer config with absolute paths into another lineage (bbh's `bbh.vampire.toml` → VampireSaved) is unaffected because the clone is only of bbh.
+- **Recommendation, revised by the measurement:** a PLAIN local clone (not `--shared`) at `f675710` under `TMPDIR` — 0.2 s more than shared, and no live dependence on bbh's object store; the same choice is worth making in the recount (D17) for the same reason at +1.6 s on VampireSaved. The read-only proof on the clone then includes ignored files (`status --porcelain --ignored` empty after the run). The in-place path stays as `BBX_BBH_HOME` pointing at a tree, declared and proved as today, for a verifier who wants the dirty tree on purpose.
 - **Answer:** (open)
