@@ -1,0 +1,8 @@
+# Project BLACKBOX — what never enters the tree
+.DS_Store
+scratch/
+*.tmp
+*.log
+!docs/**/*.log
+__pycache__/
+*.pyc
