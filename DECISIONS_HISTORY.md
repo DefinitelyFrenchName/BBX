@@ -153,3 +153,28 @@ lives — bbh `[BBH-9]`).
   readout generator and the platform gates alongside. The last green means
   the kernel reproduces bbh on bbh's fixtures and BBX's gates fire their
   controls — and nothing yet about any comparison.
+
+## bbx-2 — 2026-09-09 (session 2: the VampireSaved re-measure, R18)
+
+- The sitting opened red (`census_recount` HEAD-MOVED: VampireSaved
+  `5df1d8be` → `0cdd9726`, two commits). Re-measured at the tip; gotcha G12;
+  R18 raised with a recommendation (recount on a read-only shared clone at
+  the recorded HEAD, drift at the tip as a NOTE).
+- The maintainer ruled R18 in their own words, wider than asked: "census
+  and tests should either work on a clone or, if impossible, make very
+  explicit that no change to the tree should be done"; clones also serve
+  multiple instances on one commit; "clones are not mandatory but they are
+  safe and we value safe. any similar implementation is fundamentally
+  acceptable". They added the direction that parallel work is best as a
+  pull queue with N workers (raised as R19, with VampireSaved's 14z-144
+  measured as the precedent) — and R20 asks whether fidelity moves to a
+  clone of bbh at `f675710`.
+- Measurements that shaped the answer: `git clone --shared --no-checkout`
+  of VampireSaved (`.git` 949 MB) + checkout → 1.76 s, 363 MB under
+  `TMPDIR`; the bbx-1 census recounted on that clone at `5df1d8be` →
+  `match=100 mismatch=0` in 19.8 s, with the lineage's tip at `0cdd9726`;
+  and, across this sitting, VampireSaved's porcelain moved 373 → 377 and
+  its `M` count 1 → 3 (a new gate script at 20:24, sweep logs at 18:11,
+  19:09, 20:28) — another session working there live, none of it BBX. The
+  working tree of a lineage is a moving target; a clone at the commit is
+  the instrument.

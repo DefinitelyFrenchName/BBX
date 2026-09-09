@@ -25,8 +25,10 @@ recorded HEAD:
    with its source, never promoted.
 5. A mismatch is reported; nothing is averaged or adjusted (CLAUDE.md §1).
 
-No recount script exists yet (ruling R9: no tool before the STOP). Every
-command is in the files; the recount is possible by hand today.
+The recount script is `lib/py/bbx/recount.py` (`bin/bbx recount`, slice S1
+step 1, ruled R9); the commands stay in the files so a recount by hand stays
+possible. (This paragraph said "no recount script exists yet" until bbx-2: a
+sentence that was true at birth and rotted the day the tool landed.)
 
 ## The census grammar (read by `lib/py/bbx/recount.py`; ruled into existence by R9/R14)
 

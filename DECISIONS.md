@@ -26,9 +26,10 @@ table below is what is in force.
 | R15 | **Adapters:** external testing tools and frameworks can be interfaced or integrated as drivers under the four-argument contract (abstraction D7), so any deterministic test suite can put BBX in front of it as a guardrail. | maintainer | 2026-09-09 |
 | R16 | **Any edit to `CLAUDE.md` requires maintainer approval** before it is made; a contributor files the proposed wording in `docs/rulings.md` and waits. | maintainer | 2026-09-09 |
 | R17 | **The session ritual** (`HANDOFF.md`): open by HANDOFF → STATE → rulings and the battery run alone; close by green-first, nothing-evaporates, the readout section, STATE rolled into `STATE_HISTORY.md` under the key, HANDOFF rewritten, decisions and gotchas filed, the retraction / deferral / defaults / controls sweeps shown, the lineage checked untouched, one close commit. Sessions keyed `bbx-N`, one per sitting, never renamed. Adapted from VampireSaved VSP-17/18/162; NEXT_SESSION folded into HANDOFF, the three-group STATE window replaced by the twin's paragraphs. | maintainer | 2026-09-09 |
+| R18 | **Safety of the measured tree:** the census and the tests work on a clone of the recorded commit or, where a clone is impossible, declare explicitly that the tree must not be changed and prove it. Clones are not mandatory; they are safe and safety is valued; any equivalent implementation is acceptable. A lineage's movement is reported, never fatal to BBX. | maintainer | 2026-09-09 |
 | M4 | A default true of one subject kind lives in that kind's profile, never in DEFAULTS (config layers: consumer → kind profile → kind-blind). | contributor (method) | 2026-09-09 |
 | M1 | Every lineage rule is binned individually; a `drop` row with no reason is an error. | contributor (method) | 2026-09-09 |
 | M2 | A census row's provenance is `gen:<generator>` or `read`; every count has its command; a filed count is labelled `filed:` with its source. | contributor (method) | 2026-09-09 |
 | M3 | Every load-bearing census number is produced by one agent and re-derived by a different one; unresolved mismatches are reported, never averaged. | contributor (method), from FIRST_PROMPT.md | 2026-09-09 |
 
-Open rulings: none. New ones are raised in `docs/rulings.md`.
+Open rulings: R19 (the pull queue, N workers over N clones), R20 (fidelity on a clone of bbh). Raised in `docs/rulings.md`.
