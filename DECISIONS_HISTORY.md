@@ -241,3 +241,9 @@ lives — bbh `[BBH-9]`).
   BBX's own tree passes its own gates twice at one HEAD, its clones leave
   the lineage untouched, and bbh's verdict text is reproduced on bbh's
   fixtures — and nothing yet about any comparison.
+- After the close (2026-09-10): the maintainer ruled R22 — a GitHub remote
+  and pushing, superseding R7's "no remote, no push". Repository created
+  private from this tree (`gh repo create`), `origin` set, `main` pushed;
+  R21's bundle step replaced by a clone of the remote. Checked before the
+  push with the two document gates, not the whole battery (a ruling and
+  its ledgers; no tool changed).

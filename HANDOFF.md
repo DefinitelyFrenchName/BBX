@@ -32,6 +32,7 @@ Shape: operational map. Read this first, then `STATE.md`, then
 
 | repository | path | remote |
 |---|---|---|
+| **BBX (this tree)** | `~/Developer/generalized-blackbox-harness/BBX` | github.com/DefinitelyFrenchName/BBX (private, R22) |
 | bbh | `~/Developer/blackbox-harness` | github.com/DefinitelyFrenchName/blackbox-harness |
 | VampireSaved | `~/Developer/Vampire_Saved/VampireSaved` | github.com/DefinitelyFrenchName/VampireSaved |
 | SMS-FrenchName-edition | `~/Developer/SailorMoonS` (directory name differs) | github.com/DefinitelyFrenchName/SMS-FrenchName-edition |
@@ -105,7 +106,8 @@ readouts, gotchas and history resolve through it). The last closed sitting is **
    lineage's tip and porcelain from the recount summaries; they are
    reported, not required equal to the census (VampireSaved is worked on
    live by another session — its tree is nobody's baseline).
-10. **One close commit** per sitting, tally in the message; no push (R7).
+10. **One close commit** per sitting, tally in the message, pushed to
+    `origin` (R22; a post-close correction is pushed with it).
 
 Steps 8 and 9 are checked, not remembered: step 8 by `close_sweeps`, step 9
 by construction (the recount's clone) and by `fidelity_bbh`'s proof.
