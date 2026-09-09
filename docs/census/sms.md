@@ -10,7 +10,7 @@ Every number below was printed by the command in its row, run from the repo root
 | A1 | HEAD | `ecc5481` | `git rev-parse --short HEAD` |
 | A2 | tracked files | 633 | `git ls-files \| wc -l` |
 | A3 | commits | 574 | `git log --oneline \| wc -l` |
-| A4 | dirty paths | 0 | `git status --porcelain \| wc -l` |
+| A4 | dirty paths — a HOST fact (rule 7); on a clone this row could never fail (gotcha G13), so it is not a count | host: 0 on 2026-09-09 | not recountable (rule 7); was `git status --porcelain \| wc -l` run in place |
 | A5 | tracked files in `tools/` | 501 | `git ls-files \| awk -F/ '{if (NF==1) print "(root)"; else print $1}' \| sort \| uniq -c \| sort -rn \| awk '$2=="tools"{print $1}'` |
 | A6 | tracked files in `docs/` | 53 | (same command as above) |
 | A7 | tracked files in `build/` | 37 | (same command as above) |
@@ -19,8 +19,8 @@ Every number below was printed by the command in its row, run from the repo root
 | A10 | tracked files in `release/` | 3 | (same command as above) |
 | A11 | tracked files in `.github/` | 3 | (same command as above) |
 | A12 | tracked files in `.claude/` | 2 | (same command as above) |
-| A13 | `traces/` files on disk (gitignored) | 5332 | `find traces -type f \| wc -l` |
-| A14 | `build/` files on disk (only `.bps`/`.ips` tracked) | 324 | `find build -type f \| wc -l` |
+| A13 | `traces/` files TRACKED at the commit (host: 5332 on disk on 2026-09-09, gitignored — a fact about the host, not the commit; rule 7) | 30 | `git ls-files traces \| wc -l` |
+| A14 | `build/` files TRACKED at the commit — the `.bps`/`.ips` (host: 324 on disk on 2026-09-09; rule 7) | 37 | `git ls-files build \| wc -l` |
 | A15 | memory file `CLAUDE.md` | 134 lines | `wc -l CLAUDE.md HANDOFF.md README.md` |
 | A16 | memory file `HANDOFF.md` | 1620 lines | (same command as above) |
 | A17 | memory file `README.md` | 115 lines | (same command as above) |

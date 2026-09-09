@@ -62,6 +62,20 @@ A census file is a document the harness reads, so its shape is a contract:
    `grep` (ugrep, skips ignored files and archives) and `sh`'s `grep` (BSD,
    reads everything) disagreeing on six counts. Searches use `git grep`, whose
    universe is the tracked tree at the recorded HEAD.
+7. The rows run on a SHARED CLONE of the recorded commit under `TMPDIR`
+   (ruling R18; `git clone --shared --no-checkout` + `checkout`, nothing
+   written under the lineage's `.git`, the clone removed after the run) —
+   never in the repository's working tree, which is read for its HEAD and
+   porcelain only. So a row measures the COMMIT. A number that is a fact
+   about the host's tree — the porcelain, files git ignores, anything on disk
+   that is not tracked — is not a count: its cell reads `host: <n> on <date>`
+   (NOT-RECOUNTABLE, named) and the live tree's `porcelain=` is on every
+   summary line. A command that names the repository's absolute path is
+   REFUSED (the one way a row could reach past the clone). When the tip is
+   past the recorded HEAD the rows run once more on a clone of the tip and the
+   moved ids are printed as one `NOTE: drift …` line — reported, never fatal;
+   the census moves its recorded HEAD (a dated line at its end, as at bbx-2)
+   only when a slice needs the current lineage.
 
 The first recount (2026-09-09, slice S1) found the three files written in two
 pipe conventions and 10 rows malformed; the files were normalized to this
@@ -215,3 +229,16 @@ instrument verifies the instrument's consistency, not the count (BBX-15); the
 recount under a pinned environment is the lineage-independent check, and a
 verifier must from now on run the commands through `bin/bbx recount <census>
 --only <ids>`, never through its own shell.
+
+### The clone — the third party on the census itself (bbx-2, 2026-09-09)
+
+Ruling R18 moved the recount onto a shared clone of the recorded commit. The
+first clone run disagreed with four rows that every in-place run — producer,
+verifier, recount — had reproduced: bbh A3 and SMS A4 (`git status
+--porcelain | wc -l`: 4 and 0 on the host, 0 on any clone — A4 could never
+have failed), SMS A13 and A14 (`find` over gitignored `traces/` and `build/`:
+5332 and 324 on the host, 30 and 37 tracked). They were facts about this
+machine wearing the census's clothes; the bbh verifier's finding 1 above had
+said as much. Rows re-labelled (`host:` cells for A3, A4; tracked counts for
+A13, A14), rule 7 written, gotcha G13. The not-recountable numbers move up by
+one each for bbh and SMS for that reason and no other.

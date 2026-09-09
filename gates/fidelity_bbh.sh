@@ -10,10 +10,14 @@
 # F14f the fingerprint over example/roms (every flag, the registered and the refused image);
 # F15 (BBX_FIDELITY_F15=1, ~2-6 min) every bbh selftest's (exit, log) classified by both
 # classifiers.
-# Usage: BBX_BBH_HOME=~/Developer/blackbox-harness gates/fidelity_bbh.sh     (~10 s; F15 opt-in)
+# Usage: BBX_BBH_HOME=~/Developer/blackbox-harness gates/fidelity_bbh.sh     (~37 s measured 2026-09-09, docs/defaults.md D19; F15 opt-in)
 # SKIP: BBX_BBH_HOME unset or not a bbh tree (exit 0; asserts nothing).
 # Usage note: F14's real run executes bbh's example gates (they call bbh's own tools) under
 # each runner; only the runners' printed lines are compared. ~25 s.
+# READ-ONLY (R18): bbh's tree is run IN PLACE — the 4 uncommitted modifications of R8 are part of
+# the measured input (whether the gate moves to a clone at f675710 is ruling R20) — and never
+# written: its tracked porcelain is snapshotted before and after and any difference is FAIL; the
+# untracked count before/after is a NOTE. This gate does not add, edit or remove a file under bbh.
 # MUST-FIRE: perturbed-copy: verdict-text — a shadow copy of bbx-run-static with one verdict format string changed must make F13a's diff non-empty, or the diff cannot fail
 #
 set -eu
@@ -29,6 +33,8 @@ norm() { sed -E 's/ +[0-9]+s( |$)/ Ns\1/g'; }
 _rb="$(grep -m1 '^- ' "$BBX_HOME/docs/rebaselines.md" 2>/dev/null || echo '- (none recorded)')"
 echo "LAST RE-BASELINE: ${_rb#- }"
 echo "bbh: $B @ $(git -C "$B" rev-parse --short HEAD) porcelain=$(git -C "$B" status --porcelain | wc -l | tr -d ' ') (baseline f675710, ruling R8)"
+_tracked_before="$(git -C "$B" status --porcelain | grep -v '^??' || true)"
+_untracked_before="$(git -C "$B" status --porcelain | grep -c '^??' || true)"
 
 pair() {  # pair <label> <cmd-a> <cmd-b>  — both captured with their exit, normalised, diffed
     _l="$1"; _a="$2"; _b="$3"
@@ -155,6 +161,18 @@ if [ "${BBX_FIDELITY_F15:-}" = 1 ]; then
 else
     echo "== F15. not run (set BBX_FIDELITY_F15=1; runs bbh's whole selftest, ~2-6 min) =="
 fi
+
+echo "== READ-ONLY: bbh's tree after the run (R18) =="
+_tracked_after="$(git -C "$B" status --porcelain | grep -v '^??' || true)"
+_untracked_after="$(git -C "$B" status --porcelain | grep -c '^??' || true)"
+if [ "$_tracked_before" = "$_tracked_after" ]; then
+    ok "bbh tracked porcelain unchanged ($(printf '%s\n' "$_tracked_before" | awk 'NF' | wc -l | tr -d ' ') entries before and after)"
+else
+    fail "bbh tree DIRTIED by this gate — tracked entries differ (before / after):"
+    printf '%s\n' "$_tracked_before" | awk 'NF' > "$T/tb.txt"; printf '%s\n' "$_tracked_after" | awk 'NF' > "$T/ta.txt"
+    diff "$T/tb.txt" "$T/ta.txt" | grep '^[<>]' | sed 's/^/        /' | head -12
+fi
+echo "NOTE: bbh-untracked before=$_untracked_before after=$_untracked_after"
 
 echo
 [ "$rc" = 0 ] && echo "PASS: BBX reproduces bbh's verdict text over bbh's own fixtures (F13a-e, F14, F14f); F15 $([ "${BBX_FIDELITY_F15:-}" = 1 ] && echo run || echo 'not run')" || { echo "FAIL: see above"; exit 1; }

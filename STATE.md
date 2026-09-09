@@ -7,20 +7,24 @@ paragraph per sitting, the outgoing status verbatim). Read `HANDOFF.md` first.
 generalization of `blackbox-harness` (bbh) to any subject with testable inputs
 and outputs. Born 2026-09-09.
 
-**Status (bbx-1 close, 2026-09-09):** session 1 delivered the plan, the
-maintainer ruled R0–R17, and slice S1 steps 1–3 landed the same sitting.
-`bin/bbx selftest` is GREEN at the close: 9 gates, 12/12 controls fired,
-~117 s. Fidelity F13 (9 pairs), F14 (12 pairs) and F15 (32 logs) diff empty
-against bbh f675710. In the tree: `bin/bbx` (`run-static`, `run-sweep`,
-`classify`, `tier`, `config`, `controls`, `fingerprint`, `recount`,
-`selftest`), `lib/sh/`, `lib/py/bbx/`, `bbx.toml` (the `self` kind), nine
-gates under `gates/` with three registries, `docs/controls.md`,
-`docs/defaults.md` D1–D16. No comparator, suite runner, expectation
+**Status (bbx-2, step 1, 2026-09-09):** the sitting opened red (VampireSaved
+had moved; census re-measured at `0cdd9726`, G12), the maintainer ruled R18
+(clone or provably read-only), and step 1 landed it: the recount runs on a
+shared clone of the recorded commit, refuses a command that names the tree,
+reports a moved lineage as a `drift` NOTE; the fidelity gate declares and
+proves READ-ONLY on bbh's tree. `bin/bbx selftest` is GREEN: 9 gates, 14/14
+controls fired, ~156 s. Fidelity F13 (9 pairs), F14 (12 pairs) and F15 (32
+logs) diff empty against bbh f675710. In the tree: `bin/bbx` (`run-static`,
+`run-sweep`, `classify`, `tier`, `config`, `controls`, `fingerprint`,
+`recount`, `selftest`), `lib/sh/`, `lib/py/bbx/`, `bbx.toml` (the `self`
+kind), nine gates under `gates/` with three registries, `docs/controls.md`,
+`docs/defaults.md` D1–D19. No comparator, suite runner, expectation
 register, driver or fixture yet.
 
-**In force:** `DECISIONS.md` — R0–R17 and method M1–M4. **Open rulings:** R18
-(what the census recount measures when a lineage repository moves; raised at
-the bbx-2 open, recommendation filed, tool unchanged until answered).
+**In force:** `DECISIONS.md` — R0–R17 and method M1–M4. **Open rulings:** R19 (parallel work as a pull queue, N workers over N
+clones — lifted from VampireSaved 14z-144 when ruled), R20 (fidelity on a
+clone of bbh at `f675710`). R18 is in force: the census and the tests work
+on a clone or are explicitly, provably read-only.
 BBX = Black Box harness eXpanded; GPL-3; sh + Python 3 on macOS, Linux and
 Windows/WSL; kinds: frame-driven (bbh), document set, command-line tool, plus
 BBX itself as a subject (R14) and external test frameworks as drivers (R15).
@@ -35,15 +39,17 @@ BBX itself as a subject (R14) and external test frameworks as drivers (R15).
 
 **Rules:** all 30 in CLAUDE.md §4 remain `[inherited]` in the file (edits
 need R16); incidents that re-anchor one in fact: G8 → §1, G9 → BBX-15,
-G10 → BBX-8, G12 → BBX-29 (`docs/gotchas.md`, G1–G12). The formal promotion is slice S5.
+G10 → BBX-8, G12 → BBX-29, G13 → BBX-16 (`docs/gotchas.md`, G1–G13). The formal promotion is slice S5.
 
 **Constitution:** BBX-5's citation corrected to `MJC-52` (R12, own commit).
 Every further edit to `CLAUDE.md` needs maintainer approval (R16). The counts
 "304 gates / 4,000 expectations" are in bbh's README, not in CLAUDE.md
 (measured 311 / 4,808; G3, G8).
 
-**Census:** 300 count rows, 246 recountable by command at the recorded HEADs,
-54 not recountable (VS 27, SMS 27) — the number to bring down. Grammar in
+**Census:** 300 count rows, 244 recountable by command on a shared clone of
+the recorded commit (R18), 56 not recountable (bbh 1, VS 27, SMS 28) — the
+number to bring down; the two added at bbx-2 are host facts the clone
+exposed (G13, rule 7), the only exception ever allowed to move it upward. Grammar in
 `docs/census/README.md`.
 
 **Next in S1 (step 4, the last):** the readout generator (RO1–RO3 as a

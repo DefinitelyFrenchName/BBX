@@ -247,3 +247,51 @@ The recount under the hermetic environment (D6) at the new HEAD, run first on a 
 - That the ten hand-read citations say what the rows claim: the check was old line = new line, not a re-read of the claim.
 - That the ritual's step-8/9 sweeps are gated: still hand-run (S1 step 4).
 - Anything R18 recommends: the recount is unchanged until the maintainer answers.
+
+---
+
+# bbx-2 step 1 — R18: the recount on a clone, the tests provably read-only (2026-09-09)
+
+## Verdict
+
+`BBX_BBH_HOME=~/Developer/blackbox-harness bin/bbx selftest`, alone → **GREEN**, 156 s:
+
+```
+PASS 9     SKIP 0     FAIL 0     MISSING 0
+controls fired 14 / declared 14; gates with no declaration: 0; red: 0
+ok: no tracked file changed during the run
+NOTE  fidelity_bbh  bbh-untracked before=0 after=0
+```
+
+`gates/census_recount.sh` alone: `PASS: 3 census files, 300 rows: 244 match, 0 mismatch, 0 refused, 56 not recountable, 1 matched with a non-zero exit; 4 controls fired`, 32 s.
+
+## What changed
+
+The maintainer ruled R18: the census and the tests work on a clone or make explicit, and prove, that the tree is not changed. `lib/py/bbx/recount.py` now exports the recorded commit as a shared clone under `TMPDIR`, runs every row there, removes the clone, refuses a command that names the repository's absolute path, and reports a moved lineage tip as one `NOTE: drift …` line after re-running the rows on a clone of the tip. `gates/fidelity_bbh.sh` declares READ-ONLY on bbh's tree and proves it (tracked porcelain before = after, or FAIL). Census grammar rule 7; defaults D17–D19; D2 re-measured.
+
+## Counts, separately
+
+| | |
+|---|---|
+| controls declared / fired, `census_recount` | 4 / 4 (wrong-head → "HEAD unknown"; moved-count; names-the-tree → REFUSED; drift-detected → `ahead=1 rows_moved=1 ids=A2` on a shadow recorded at bbh's parent `b4852e5`) |
+| drift on real data | the bbx-1 VampireSaved census (recorded `5df1d8be`) against the tip: `ahead=2 rows_moved=1 ids=A77` — the same one row the hand re-measure found; 42.8 s |
+| shared clone of VampireSaved | 1.76 s, 363 MB (its `.git` is 949 MB; nothing written under it; `git worktree list` there unchanged) |
+| census rows the clone exposed as host facts | 4: bbh A3 (4 → 0), SMS A4 (0 = 0, a row that could never fail), SMS A13 (5332 → 30 tracked), SMS A14 (324 → 37 tracked) — G13 |
+| not-recountable rows, before → after | 54 → 56 (bbh 0 → 1, SMS 27 → 28): the two `host:` cells; the only upward move allowed, with G13 as the reason |
+| recountable rows now measuring the commit, not the tree | 244 / 244 (every `ls` row is now a fact of the checkout, not of whatever the host had untracked) |
+| bbh tree during fidelity | tracked porcelain 4 = 4; untracked 0 = 0 |
+| lineage tips and porcelain at this run | bbh `f675710` / 4; VampireSaved `0cdd9726` / 377 (live: another session's work, not BBX's); SMS `ecc5481` / 0 |
+| runtimes | census gate 21 → 32 s (D2); fidelity 37 s measured (D19; header had said ~10 s); selftest 117 → 156 s (D14), the sweep-runner gate 55 → 66 s under a host running VampireSaved's sweep at the same time |
+| rulings | R18 in force; R19 (pull queue, N workers over N clones), R20 (fidelity on a clone of bbh) open |
+
+## What it rests on
+
+The four controls of the census gate, each failing (or, for drift, firing) for its stated reason on a shadow of bbh's census; the fidelity gate's before/after snapshot; the clone mechanism measured on the largest lineage; and the recount's summary line carrying `tree=clone tip= ahead= porcelain=` so the readout can tell a rotted census from a moved lineage.
+
+## What this green does NOT assert
+
+- That the fidelity gate is read-only on bbh's *untracked* files beyond the count (0 = 0 here; a gate that wrote and deleted a file inside the run would not show). Moving fidelity to a clone (R20) would make this structural.
+- That `--in-place` is read-only: it is declared so and unproved; it exists for a verifier's spot-check on a tree that is already a clone.
+- That the census's 56 not-recountable rows are true at their commits.
+- Anything about the pull queue (R19): the sweep runner still batches with a barrier.
+- Portability of the clone step beyond macOS (R3): `git clone --shared` is used on Linux the same way, not yet measured there.

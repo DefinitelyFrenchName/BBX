@@ -23,8 +23,8 @@ Shape: operational map. Read this first, then `STATE.md`, then
 | the controls contract (must-fire grammar, R10) | `docs/controls.md` |
 | the defaults register (BBX-24) | `docs/defaults.md` |
 | the kernel | `bin/bbx` (dispatcher: `run-static run-sweep classify tier config controls fingerprint recount selftest`), `lib/sh/`, `lib/py/bbx/`, `bbx.toml` (BBX as its own consumer, kind `self`) |
-| BBX's gates and registries | `gates/*.sh` (9), `gates/portable.txt`, `gates/static.txt`, `gates/sweep.tsv` (empty) — run with `BBX_BBH_HOME=~/Developer/blackbox-harness bin/bbx selftest` (~117 s) |
-| the recount tool | `bin/bbx recount <census.md> [--only A1,A2] [--root DIR]` |
+| BBX's gates and registries | `gates/*.sh` (9), `gates/portable.txt`, `gates/static.txt`, `gates/sweep.tsv` (empty) — run with `BBX_BBH_HOME=~/Developer/blackbox-harness bin/bbx selftest` (~156 s, D14) |
+| the recount tool | `bin/bbx recount <census.md> [--only A1,A2] [--root DIR] [--in-place]` — runs on a shared clone of the recorded commit (R18); `--in-place` is the unproved escape hatch |
 
 ## The lineage on this machine
 
@@ -40,7 +40,7 @@ bbh is **never modified** from here. VampireSaved and SMS are read only.
 ## What is running
 
 Nothing in the background. `BBX_BBH_HOME=~/Developer/blackbox-harness
-bin/bbx selftest` (~117 s) is GREEN: 9 gates, 12/12 controls. Run it first
+bin/bbx selftest` (~156 s) is GREEN: 9 gates, 14/14 controls. Run it first
 thing, with no edits in flight (the runner's working-tree check reports a
 concurrent edit as DIRTIED); the census recount inside it is the
 re-derivation step of the ritual (CLAUDE.md §6.2) made into a gate.
@@ -54,11 +54,14 @@ readouts, gotchas and history resolve through it). This sitting is **bbx-2** (bb
 1. Read this file, `STATE.md`, `docs/rulings.md`. (`CLAUDE.md` is the
    constitution, not the map.)
 2. Re-derive before relying: `BBX_BBH_HOME=~/Developer/blackbox-harness
-   bin/bbx selftest`, alone, with no edits in flight. A HEAD-MOVED line from
-   the recount means a lineage repository moved: re-measure that census file
-   (`bin/bbx recount … --only`) before anything else. A red fidelity pair
-   means bbh or BBX moved: read `docs/rebaselines.md` before touching either.
-   A red row is the session's first finding (BBX-26: it halts feature work).
+   bin/bbx selftest`, alone, with no edits in flight. A `drift` line in the
+   NOTE block means a lineage repository moved past a census's recorded HEAD
+   (the moved row ids are listed): the census is still true of its commit;
+   re-measure it (`bin/bbx recount …`, then a dated line at its end) only
+   when a slice needs the current lineage. A red census row means the census
+   file rotted. A red fidelity pair means bbh or BBX moved: read
+   `docs/rebaselines.md` before touching either. A red row is the session's
+   first finding (BBX-26: it halts feature work).
 
 **Close, in this order**
 1. **Green first.** Run the battery once more, alone. The close quotes its
@@ -87,9 +90,12 @@ readouts, gotchas and history resolve through it). This sitting is **bbx-2** (bb
    (TODO, TBD, FIXME, placeholder text) → empty or listed; every new default
    has a `docs/defaults.md` row; every gate declares its controls
    (`bin/bbx controls declared <gate>`).
-9. **Lineage untouched:** bbh, VampireSaved and SMS porcelain and HEAD equal
-   what the census recorded (bbh: 4 modified at f675710; VS: 1 M + 372 ??
-   at 0cdd9726; SMS: clean at ecc5481).
+9. **Lineage untouched — by construction and by proof (R18):** the recount
+   never enters a lineage tree (clone); the fidelity gate runs in bbh's tree
+   and proves its tracked porcelain unchanged. The close quotes each
+   lineage's tip and porcelain from the recount summaries; they are
+   reported, not required equal to the census (VampireSaved is worked on
+   live by another session — its tree is nobody's baseline).
 10. **One close commit** per sitting, tally in the message; no push (R7).
 
 Steps 8 and 9 become a portable gate in S1 step 4, so the close is checked
@@ -126,6 +132,10 @@ rather than remembered.
   verify a census count through the interactive shell; use
   `python3 lib/py/bbx/recount.py <census> --only <ids>`, which runs under a
   pinned PATH.
+- VampireSaved is worked on concurrently by another session (bbx-2 saw its
+  porcelain move 373 → 377 and its `M` count 1 → 3 in one sitting). Never
+  read a fact off its working tree; the census's clone at the recorded
+  commit is the instrument.
 - Two recounts running at once in one tree are not a known problem (the
   inflation seen while bisecting G9 was the grep, not the overlap), but the
   tools in the SMS tree do run for minutes; run the gate alone.

@@ -152,3 +152,21 @@ unchanged until it is answered. Re-anchors: BBX-29 (keyed by subject
 version — the HEAD-MOVED verdict is the rule firing) and BBX-9 (a
 hand-maintained list is a smaller thing to forget: the `read` citations
 are that list).
+
+## G13 — Four census rows measured this machine, not the commit, and three in-place readers agreed with them; the clone disagreed on its first run (paid: 0 — found by R18's clone the day it landed; would have been a permanent false green on one row, 2026-09-09)
+The first clone-based recount (`lib/py/bbx/recount.py`, R18) mismatched
+bbh A3 (`git status --porcelain | wc -l`: 4 in the tree, 0 on a clone) and
+SMS A13, A14 (`find` over gitignored `traces/` and `build/`: 5332 and 324
+on disk, 30 and 37 tracked), and MATCHED SMS A4 (dirty paths 0) for the
+wrong reason: on a clone that row is 0 whatever the tree holds, so it
+could never have failed (BBX-2, BBX-8). The producer, the verifier and the
+in-place recount had reproduced all four, three times, because all three
+read the same view — this host's working tree — without declaring it
+(BBX-16). The clone is a different view and the first lineage-independent
+reader of the census's rows (BBX-15, the second time this project's own
+instrument re-anchors it; G9 was the first). Fix, no loosening: rule 7 in
+`docs/census/README.md` (a row measures the commit; a host fact is written
+`host: <n> on <date>` and is not a count; the live porcelain is on every
+summary line), the four rows re-labelled, bbh's and SMS's not-recountable
+numbers up by one each with this entry as the reason. Re-anchors: BBX-16
+(every extractor declares its view) and BBX-15.
