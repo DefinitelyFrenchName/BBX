@@ -35,3 +35,23 @@ lives — bbh `[BBH-9]`).
   seven citation/gloss defects found and corrected by the producers, one
   orchestrator error ("319 gate scripts") found by a verifier's question and
   re-measured to 311 + 8 library scripts. The protocol (M3) stays.
+
+## 2026-09-09 — the rulings, same day, after the STOP
+
+- The maintainer asked to rule in-session rather than wait. Thirteen open
+  rulings were put in three batches, recommendation first; every
+  recommendation was taken. Three answers carried more than the options
+  offered and became rulings of their own: **R14** (self-validation, the
+  maintainer's "Juvenal Escape Clause" — BBX validates BBX without degrading
+  its rules), **R15** (external test frameworks as drivers, so agents in any
+  codebase can bring their own tooling), **R16** (every edit to CLAUDE.md
+  needs maintainer approval). R3's answer widened the floor to "fully
+  portable, OS-agnostic": Windows through WSL treated as Linux, fragmentation
+  measured by self-validation per platform.
+- The R12 edit was made after a grep, and the grep changed it: CLAUDE.md never
+  carried the "304 / 4,000" counts the finding attributed to it (they are
+  bbh's README's). Only the MJC-52 citation was corrected — its own commit,
+  before this one — and the mis-attribution is gotcha G8, the first incident
+  in the contributor's own conduct that re-anchors CLAUDE.md §1.
+- Slice estimate moved 14 → 15 sessions: S4 gains the adapter contract (R15)
+  and its second framework.

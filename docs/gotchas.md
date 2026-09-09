@@ -25,8 +25,8 @@ every check later written against it. Ruling R12 holds the correction.
 Re-anchors: BBX-21 ("every rule cites its incident") — a citation is a claim
 and is checked like one.
 
-## G3 — Numbers in the constitution were filed counts (paid: 0 — labelled, not carried, 2026-09-09)
-"304 gates, 4,000 frozen expectations" (bbh README, inherited into CLAUDE.md)
+## G3 — Numbers in the lineage's own README were filed counts (paid: 0 — labelled, not carried, 2026-09-09)
+"304 gates, 4,000 frozen expectations" (bbh README line 6; NOT repeated in CLAUDE.md — see G8)
 measure today as 311 gates and 4,808 / 3,814 expectation files (`docs/census/vampiresaved.md`).
 VampireSaved's own docs carry three more stale counters (319 vs 410 gotchas
 entries; 553 vs 555 rules; 1,891 vs 2,311 masked specs). Each was correct
@@ -63,3 +63,15 @@ a miscount. The plan file for this session had carried 27 as a filed count
 labelled as such, and nothing downstream had used it. Re-anchors: CLAUDE.md
 §1 ("a number someone else reports is a filed count, not a measurement") —
 the one BBX rule that already has its first incident in this project.
+
+## G8 — The orchestrator attributed a number to a file it had not grepped, and only "measure before you edit" caught it (paid: one corrected ruling and three corrected documents, 2026-09-09)
+Ruling R12's second finding said CLAUDE.md "quotes bbh's README figures 304 /
+4,000 by inheritance". It does not: `grep -n '304\|4,000' CLAUDE.md` is
+empty. The figures are bbh's README only. The claim was written from memory
+of reading the README and the constitution together, and it reached
+`docs/rulings.md`, `docs/gotchas.md` G3, `STATE.md` and `docs/readout.md`
+before the pre-edit grep exposed it. Had the edit been made from the
+finding, the constitution would have gained a label for a number it never
+carried. Re-anchors: CLAUDE.md §1 third clause — the edit was the moment of
+certainty, and the grep was the measurement it demanded. **This is the
+project's first re-anchoring incident in the contributor's own conduct.**

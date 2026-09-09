@@ -1,6 +1,6 @@
 # The generality proof — two non-frame subject kinds (ruling R2)
 
-**Shape: proposal (session 1, 2026-09-09). Status: UNRATIFIED; nothing built.**
+**Shape: proposal (session 1, 2026-09-09). R2 ruled 2026-09-09 with two additions (R14, R15), folded in below. Nothing built.**
 CLAUDE.md §5 sets the minimum: at least two subject kinds that are not
 frame-driven, exercised end to end, one involving no executable. One
 non-frame instance proves nothing; two prove the abstraction; the third —
@@ -77,6 +77,30 @@ unknown-option refusal. Outputs are chiral by construction.
 bbh's fake machine and example consumer, unmodified, driven through BBX's
 contracts. Its proof is fidelity, not generality: `docs/fidelity.md`.
 
+## Kind D — BBX ITSELF (self-validation, ruled R14)
+
+Not a fourth kind: BBX's own tree driven through kinds A and B. Its documents
+(`docs/census/*.md`, `docs/bins.md`, every readout) are a document set whose
+claims are the counts, re-derived by the commands beside them — the recount
+gate (R9) is the first instance and the first gate BBX runs; its gates,
+runners and registries are command-line subjects whose observations are their
+own verdict lines and anti-orphan reports. The maintainer's condition is
+"without degrading its rules": a self-validation gate is subject to G3 (its
+controls must fire), and the custodian outside the loop is bbh — the fidelity
+rows are what a shared convention error cannot fool (BBX-15). On every
+platform of R3 (macOS, Linux, Windows/WSL), which is also how fragmentation
+is measured rather than feared.
+
+## Adapters — external test frameworks as drivers (ruled R15)
+
+An adapter is a driver of kind B that runs a framework's own suite as the
+scenario and maps each test case to an observation point (abstraction D7).
+Two frameworks are needed before the adapter is called generic (BBX-25); the
+candidates are chosen when slice S4 opens, from what the first real consumer
+already uses. What the adapter does NOT assert: that the framework's tests
+are good — it asserts that they ran, deterministically, and produced the
+frozen observation.
+
 ## What the proof measures
 
 When kinds A and B exist, the readout of that slice reports, as numbers with
@@ -87,7 +111,8 @@ the command that produced them:
   target; measured when built);
 - controls declared / fired per kind, and that each failed on purpose;
 - every expectation's provenance class;
-- for each kind, the sentence "what this green does not assert".
+- for each kind, the sentence "what this green does not assert";
+- the self-validation gates (kind D) and their control counts, per platform.
 
 A generic thing needs two instances (BBX-25): any component used by only one
 kind at the end of the proof is moved to that kind's profile and reported.

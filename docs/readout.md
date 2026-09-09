@@ -5,9 +5,10 @@ what was not looked at, and what this session's "done" does not assert.
 
 ## Verdict
 
-**Session 1 delivered a plan and STOPPED. No tool exists.** Seven
-deliverables are on disk and in commit one; thirteen rulings are open
-(`docs/rulings.md`); three were answered in-session (R6–R8).
+**Session 1 delivered a plan, STOPPED, and the maintainer ruled.** Seven
+deliverables are in commit one; all sixteen rulings are answered
+(`DECISIONS.md`); the one approved edit to the constitution is its own
+commit. No tool exists. Slice S1 may open.
 
 ## What it rests on
 
@@ -68,10 +69,10 @@ step that found nothing would have been the suspicious result.
 | fidelity rows run | 0 of F12–F21 planned |
 | census count rows verified | 295 of 300 re-run by a verifier (294 MATCH at first pass, 1 corrected); 5 added after verification, measured once |
 | census item rows | 1,248, all binned |
-| rulings answered / open | 3 / 13 |
-| incidents filed with price | 7 (`docs/gotchas.md`) |
-| BBX rules re-anchored by an incident here | 0 of 30 (all remain `[inherited]`; G7 is the first incident under CLAUDE.md §1) |
+| rulings answered / open | 16 / 0 |
+| incidents filed with price | 8 (`docs/gotchas.md`) |
+| BBX rules re-anchored by an incident here | 0 of 30 formally; G7 and G8 are the first incidents under CLAUDE.md §1 (a filed count wrong by a third; a number attributed to a file never grepped) |
 
 ## Next
 
-Nothing until the rulings are answered. Then `HANDOFF.md` step 3.
+`HANDOFF.md` step 3: open slice S1 with the recount gate.

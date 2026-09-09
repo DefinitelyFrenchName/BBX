@@ -43,13 +43,13 @@ Nothing. No gate exists. No background process.
    and confirm the three HEADs and the headline numbers; if any moved, that is
    the session's first finding and the census rows it touches are re-measured
    before anything else.
-3. Check which rulings are answered. If R0, R1, R3 and R9 are answered, slice
-   S1 may start (`docs/slices.md`); its first deliverable is the census
-   recount gate (R9), with its must-fire (a wrong HEAD). If they are not, the
-   session's work is whatever the maintainer's answers require and nothing
-   else.
-4. If R12 is answered, correct `CLAUDE.md` first, in its own commit, then
-   sweep for the old wording (BBX-22) and show the empty grep.
+3. All rulings are answered (`DECISIONS.md`, R0–R16). Slice S1 may open
+   (`docs/slices.md`): its first deliverable is the census recount gate
+   (R9, R14) with its must-fire (a wrong HEAD), then the classifier and the
+   gate contract over bbh's `example/`, ending with F12–F15 diffing empty.
+   Load the `blackbox-harness` skill before writing the first gate.
+4. `CLAUDE.md` is edited only with maintainer approval (R16). A defect found
+   in it goes to `docs/rulings.md` with proposed wording.
 5. Before ending: update `STATE.md` and this file; append to
    `DECISIONS_HISTORY.md`; price every incident in `docs/gotchas.md`; convert
    every measurement into a rerunnable case.
