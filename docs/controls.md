@@ -62,3 +62,14 @@ self-run (2026-09-09) read `controls fired 9 / declared 9` over 7 gates. The
 reader's own first defect — a firing nobody declared, in a gate with no
 declarations, classed UNDECLARED instead of RED — was caught by
 `gates/controls.sh` before the reader's first real use (BBX-5).
+
+**The rest of the header API (abstraction G2), read by the same rule — line 2
+to the first bare `#`.** `# SKIP: <when this gate asserts nothing, and exits
+0>`; `# READ-ONLY (<rulings>): <which tree is never written, and how that is
+proved>`; and, from bbx-2, `# NOT-ASSERTED: <one blind spot of this gate's
+green>`, one line per blind spot, read by `lib/py/bbx/readout.py` for the
+screen's RO2 section (BBX-30). A gate with no `NOT-ASSERTED:` line is not an
+error — it is COUNTED on the screen as "declaring no blind spot", which is the
+number the maintainer asks about. `NOTE: <key> <value>` at column 0 of a
+gate's OUTPUT is the NOTE-class number (never fatal); the key `coverage` is
+what the screen reads as coverage (BBX-18).

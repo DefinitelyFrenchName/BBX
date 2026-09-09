@@ -13,6 +13,9 @@
 # MUST-FIRE: known-bad: prereq-stop — a red gate in the prereq lane must STOP the run before any later lane, or a moved instrument's measurements would be read as evidence
 # MUST-FIRE: known-bad: serial-order — at --jobs 1 the third short gate must start only AFTER the long one ends, or the stamps cannot tell a queue from a line (the known negative of section 15)
 # MUST-FIRE: known-bad: no-clone-dirties — without clone_per_slot the same writing gates must dirty the base tree, or section 16's clean base proves nothing
+# NOT-ASSERTED: speed-up on a real consumer: the queue is measured on stub gates with sleeps, not on an instrument-tier suite
+# NOT-ASSERTED: a gate that escapes its clone by an absolute path: clone-per-slot pins the cwd, nothing more
+# NOT-ASSERTED: portability beyond macOS: mkfifo and exec 8<> are POSIX, not yet run on Linux or WSL
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME

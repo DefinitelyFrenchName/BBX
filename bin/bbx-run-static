@@ -28,6 +28,9 @@
 #   ... --strict                              SKIP is a failure too
 #   ... --list                                print the registry and exit
 #   ... --tier portable|static                one tier only
+#   ... --log DIR                              keep the run: results.tsv, <gate>.log, controls.txt,
+#                                              run.txt (subject HEAD, porcelain, platform) — the
+#                                              readout's input (bbx readout DIR); prints nothing extra
 #
 # The config names the gates dir and the two registries ([registries]
 # portable / static), and `static_needs_env` — the variable whose presence
@@ -41,13 +44,14 @@ BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME
 . "$BBX_HOME/lib/sh/classify.sh"
 . "$BBX_HOME/lib/sh/registry.sh"
 
-CONFIG=""; STRICT=0; TIER=all; LIST=0
+CONFIG=""; STRICT=0; TIER=all; LIST=0; LOG=""
 while [ $# -gt 0 ]; do
     case "$1" in
     --config) shift; CONFIG="${1:?--config needs a file}" ;;
     --strict) STRICT=1 ;;
     --list)   LIST=1 ;;
     --tier)   shift; TIER="${1:?--tier needs portable|static|all}" ;;
+    --log)    shift; LOG="${1:?--log needs a dir}" ;;
     -h|--help) sed -n '2,40p' "$0"; exit 0 ;;
     *) echo "unknown argument '$1' (try --help)" >&2; exit 2 ;;
     esac
@@ -92,6 +96,12 @@ if [ "$LIST" = 1 ]; then
 fi
 
 WORK="$(mktemp -d)"; trap 'rm -rf "$WORK"' EXIT INT TERM
+# --log: the run kept on disk, keyed by (subject version, start time) — BBX-29. Nothing printed changes.
+RUN_START="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+if [ -n "$LOG" ]; then
+    mkdir -p "$LOG" && LOG="$(CDPATH= cd "$LOG" && pwd)" || { echo "cannot create --log $LOG" >&2; exit 2; }
+    printf 'gate\ttier\tverdict\tseconds\texit\tdetail\n' > "$LOG/results.tsv"
+fi
 n_pass=0; n_skip=0; n_fail=0; n_miss=0
 failed=""; skipped=""; ran=""
 
@@ -114,6 +124,7 @@ run_tier() {  # run_tier <label> <names>
         if [ ! -x "$GATES_DIR/$g.sh" ]; then
             printf '  %-34s %s\n' "$g" "MISSING (registered but not executable)"
             n_miss=$((n_miss + 1)); failed="$failed $g(missing)"
+            [ -z "$LOG" ] || printf '%s\t%s\tMISSING\t0\t-\tregistered but not executable\n' "$g" "$_label" >> "$LOG/results.tsv"
             continue
         fi
         _t0=$(date +%s)
@@ -124,6 +135,10 @@ run_tier() {  # run_tier <label> <names>
         _dur=$((_t1 - _t0))
         ran="$ran $g"
         bbx_classify "$_st" "$WORK/$g.out" 58
+        if [ -n "$LOG" ]; then
+            printf '%s\t%s\t%s\t%s\t%s\t%s\n' "$g" "$_label" "$BBX_VERDICT" "$_dur" "$_st" "$BBX_DETAIL" >> "$LOG/results.tsv"
+            cp "$WORK/$g.out" "$LOG/$g.log"
+        fi
         case "$BBX_VERDICT" in
         TIMEOUT)
             printf '  %-34s TIMEOUT %3ss  (exit %s)\n' "$g" "$_dur" "$_st"
@@ -184,6 +199,7 @@ if [ "$ENFORCE" = true ] && [ -n "$ran" ]; then
     echo "== controls (declared MUST-FIRE vs CONTROL FIRED) =="
     # shellcheck disable=SC2086
     python3 -m bbx.controls report "$GATES_DIR" "$WORK" $ran > "$WORK/controls.txt" && _cst=0 || _cst=$?
+    [ -z "$LOG" ] || cp "$WORK/controls.txt" "$LOG/controls.txt"
     sed 's/^/  /' "$WORK/controls.txt"
     n_ctrl_red="$(grep -c 'verdict=RED' "$WORK/controls.txt" || true)"
     _decl="$(awk '{for(i=1;i<=NF;i++) if($i ~ /^declared=/){split($i,a,"="); s+=a[2]}} END{print s+0}' "$WORK/controls.txt")"
@@ -258,4 +274,21 @@ if [ "$n_ctrl_red" != 0 ]; then
 fi
 [ "$rc" = 0 ] && echo "GREEN — every registered $WORD-free gate passed." \
               || echo "NOT GREEN — see above. Rule 6: fixing this is the only task."
+if [ -n "$LOG" ]; then
+    _root="$(pwd)"; _head="$(git rev-parse --short HEAD 2>/dev/null || echo '-')"
+    _porc="$(git status --porcelain 2>/dev/null | wc -l | tr -d ' ')"
+    _tree=not-checked
+    if git rev-parse --git-dir >/dev/null 2>&1; then
+        [ "$tree_before" = "${tree_after:-$tree_before}" ] && _tree=unchanged || _tree=dirtied
+    fi
+    {
+        echo "config=$BBX_CONFIG"; echo "root=$_root"; echo "kind=$(bbx_cfg project.kind "-")"; echo "gates_dir=$GATES_DIR"
+        echo "head=$_head"; echo "porcelain=$_porc"; echo "started=$RUN_START"; echo "platform=$(uname -sm)"
+        echo "bbx_home=$BBX_HOME"; echo "bbx_head=$(git -C "$BBX_HOME" rev-parse --short HEAD 2>/dev/null || echo '-')"
+        echo "tier=$TIER"; echo "strict=$STRICT"; echo "controls_enforced=$ENFORCE"
+        echo "pass=$n_pass"; echo "skip=$n_skip"; echo "fail=$n_fail"; echo "missing=$n_miss"; echo "controls_red=$n_ctrl_red"
+        echo "tree=$_tree"; echo "verdict=$([ "$rc" = 0 ] && echo GREEN || echo 'NOT GREEN')"
+        echo "rebaseline=$(grep -m1 '^- ' "$BBX_HOME/docs/rebaselines.md" 2>/dev/null | cut -c3- || true)"
+    } > "$LOG/run.txt"
+fi
 exit $rc

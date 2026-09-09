@@ -7,6 +7,7 @@
 # bbh selftest/test_config.sh; VampireSaved tools/_minitoml.py (GitHub #42 there). Portable, ~1 s.
 # Usage: gates/config.sh
 # MUST-FIRE: known-bad: refused-constructs — each of the eleven refused constructs must raise SubsetError; one accepted silently is a dead control
+# NOT-ASSERTED: the meaning of a consumer's keys: only that the layers resolve (consumer over kind profile over kind-blind default) and that dumps are stable
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME

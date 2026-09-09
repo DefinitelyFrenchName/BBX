@@ -7,6 +7,8 @@
 # Usage: gates/static_runner.sh
 # MUST-FIRE: known-bad: skip-and-exit-2 — a gate that prints a SKIP marker and exits 2 must be FAIL in the runner's row and counted in FAIL, never SKIP
 # MUST-FIRE: known-bad: strict-all-skip — an all-SKIP run must exit 0 plainly and non-zero under --strict, or --strict does nothing
+# NOT-ASSERTED: the sweep runner or any gate that needs an instrument: this is the pre-commit chain only
+# NOT-ASSERTED: runtimes as anything but this host under this load
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME

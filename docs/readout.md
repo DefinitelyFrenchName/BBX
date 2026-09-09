@@ -381,3 +381,70 @@ Stamps printed by the stub gates (`date +%s`), never the runner's own accounting
 - A gate that escapes its clone by absolute path: not guarded (the recount's path guard is the census's, not the sweep's).
 - That the queue's row order in `results.tsv` is stable: it is not, by design; `--resume` keys by name.
 - Portability beyond macOS (R3): `mkfifo` and `exec 8<>` are POSIX, not yet run on Linux or WSL.
+
+---
+
+# bbx-2 step 4 — the readout generator: the screen below is GENERATED (2026-09-09)
+
+## The screen, verbatim (`bin/bbx readout build/selftest_20260909T203339Z --against build/selftest_20260909T203000Z`)
+
+```
+== READOUT — self subject at /Users/koneko/Developer/generalized-blackbox-harness/BBX @ 8890e4e (porcelain 22) — started 2026-09-09T20:33:39Z on Darwin arm64 ==
+VERDICT: GREEN   PASS 11  SKIP 0  FAIL 0  TIMEOUT 0  MISSING 0   (gates 11)
+tree during the run: unchanged   harness: bbx @ 8890e4e
+rests on:
+  controls: fired 23 / declared 23; dead 0; undeclared firings 0; gates red 0
+  each can fail: 11 of 11 gates proved a control fires on purpose
+  expectations relied upon: none registered — the expectation register with its provenance classes is slice S2; until then no comparison against a frozen expectation is claimed
+  coverage: census_recount: rows=300 recountable=244 not_recountable=56 (BBX-18: the census claims no command re-derives)
+  BBX-14 (more than one run): met — 11 gates, 0 verdict differences against the run started 2026-09-09T20:30:01Z at the same HEAD
+  last re-baseline: (none recorded)
+what this green does NOT assert (declared by each gate's header):
+  classify: that a verdict word printed by a gate outside the runner is read at all: the classifier reads exit status first, then the log; a PASS printed after a non-zero exit is FAIL by design
+  config: the meaning of a consumer's keys: only that the layers resolve (consumer over kind profile over kind-blind default) and that dumps are stable
+  tier: that a gate reaching an instrument through a path the source regex does not match is seen: the depth and the regex are the limit
+  static_runner: the sweep runner or any gate that needs an instrument: this is the pre-commit chain only
+  static_runner: runtimes as anything but this host under this load
+  controls: that a control is RIGHT — only that a declared control fired and an undeclared one is red (docs/controls.md)
+  sweep_runner: speed-up on a real consumer: the queue is measured on stub gates with sleeps, not on an instrument-tier suite
+  sweep_runner: a gate that escapes its clone by an absolute path: clone-per-slot pins the cwd, nothing more
+  sweep_runner: portability beyond macOS: mkfifo and exec 8<> are POSIX, not yet run on Linux or WSL
+  fingerprint: the identity of any artifact that is not a single file: the kind-blind fingerprint is file-sha1 (D16)
+  rulings_shape: the prose of a ruling: only its heading, its answer line and its DECISIONS row are read
+  readout: that a declared blind spot is true or complete: the screen prints what the header says
+  readout: the sweep runner's runs: only bbx-run-static --log is read
+  census_recount: the truth of the not-recountable rows at their commits: they are named and counted, never run
+  census_recount: that a hand-read citation says what its row claims: only that the line exists
+  fidelity_bbh: anything about a suite, a comparator or an expectation: slice S2
+  fidelity_bbh: bbh's example's correctness (G11 is bbh's to fix)
+  fidelity_bbh: F15 unless BBX_FIDELITY_F15=1 was set for the run
+  gates declaring no blind spot: 0   (a gate nobody has asked what its green leaves out)
+```
+
+## What changed
+
+`bin/bbx-run-static --log DIR` keeps a run (results.tsv, every gate's log, controls.txt, run.txt with the subject's HEAD, porcelain, platform and the runner's own verdict) and prints nothing extra (F13 identical). `lib/py/bbx/readout.py` reads a kept run into the screen above: RO1's content line by line, RO2 from the gates' new `# NOT-ASSERTED:` header lines (all eleven gates declare; the screen counts any that do not), RO3 by construction. `gates/readout.sh` holds it to a fixture with three controls. The census gate prints its coverage as a NOTE the screen reads. R21 raised (no Linux/WSL host on this machine).
+
+## Counts, separately
+
+| | |
+|---|---|
+| kept runs at HEAD 8890e4e (porcelain 22, this step's edits) | 3: the first NOT GREEN (below), then two GREEN, 0 verdict differences between them |
+| the first kept run's red | `rulings_shape` FAIL, 2 controls dead: the gate built its shadows from the queue's LAST entry, answered only until R21 was filed open the same hour; fixed to the last answered ruling (DECISIONS' last row); the screen reported it as `gates red 1: rulings_shape (RED)` and exited 1 |
+| controls declared / fired | 23 / 23 (readout 3: verdict-follows-run, bbx-14-unmet, undeclared-blind-spot) |
+| NOT-ASSERTED lines across the tree | 18 over 11 gates; gates declaring none: 0 |
+| coverage on the screen | 300 rows, 244 recountable, 56 not (from the census gate's NOTE) |
+| fidelity after the runner change | F13a–e identical (36, 37, 22, 24, 25, 10, 13, 2, 108 lines) |
+| runtimes | readout gate 4 s; selftest 219 s (D14) |
+| rulings | R21 open (platform runs); the shape gate caught its author's "Open rulings:" wording once (R3 named in passing) |
+
+## What it rests on
+
+The kept run's files, read and never re-derived; the gates' own headers for the blind spots; `--against` for BBX-14 (verdict equality per gate at one HEAD); the fixture gate's shadows (a FAIL row, a differing second run, a gate with no declaration).
+
+## What this green does NOT assert
+
+- Everything the screen itself lists above; plus: that the screen's wording is what the maintainer needs — RO3 is judged by its reader, not by a gate.
+- The sweep runner's runs are not on the screen (only `bbx-run-static --log` is read).
+- Platform runs (R21): none exist; every green here is Darwin arm64.
+- The close ritual's sweeps (steps 8–9) are still hand-run.

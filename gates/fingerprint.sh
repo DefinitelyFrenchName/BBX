@@ -10,6 +10,7 @@
 # frame-driven profile (D9), which is why the lineage's regex applies below. Portable, ~3 s.
 # Usage: gates/fingerprint.sh
 # MUST-FIRE: known-bad: wholeset-only-row — a twin image sharing the program key must NOT resolve through a registry row keyed by the other image's whole-set key (exit 2), or two builds differing outside the program would share a set
+# NOT-ASSERTED: the identity of any artifact that is not a single file: the kind-blind fingerprint is file-sha1 (D16)
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME

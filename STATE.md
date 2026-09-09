@@ -7,7 +7,7 @@ paragraph per sitting, the outgoing status verbatim). Read `HANDOFF.md` first.
 generalization of `blackbox-harness` (bbh) to any subject with testable inputs
 and outputs. Born 2026-09-09.
 
-**Status (bbx-2, step 3, 2026-09-09):** the sitting opened red (VampireSaved
+**Status (bbx-2, step 4, 2026-09-09):** the sitting opened red (VampireSaved
 had moved; census re-measured at `0cdd9726`, G12); the maintainer ruled
 R18–R20 and all three landed: `bbx-run-sweep --jobs N` is a pull queue (a
 FIFO of slot tokens, 14z-144) with `[sweep].clone_per_slot` for a plain
@@ -15,16 +15,20 @@ clone of HEAD per worker (D21); the recount and the fidelity gate measure a PLAI
 LOCAL CLONE of the recorded commit under `TMPDIR` (never a lineage's working
 tree; a moved lineage is a `drift` NOTE; the clone is proved clean after the
 run, ignored paths included), and the rulings queue has a shape gate
-(`rulings_shape`, G14). `bin/bbx selftest` is GREEN: 10 gates, 20/20
-controls fired, ~223 s on a loaded host. Fidelity F13 (9 pairs), F14 (12
+(`rulings_shape`, G14). S1's readout generator exists: `bin/bbx selftest --log DIR` keeps a run and
+`bin/bbx readout DIR --against DIR2` prints the one screen from it, blind
+spots coming from every gate's `NOT-ASSERTED:` header. `bin/bbx selftest` is
+GREEN twice at one HEAD (BBX-14 met): 11 gates, 23/23 controls fired,
+~219 s on a loaded host. Fidelity F13 (9 pairs), F14 (12
 pairs) and F15 (32 logs) diff empty against bbh f675710 on the clone. In the
 tree: `bin/bbx` (`run-static`, `run-sweep`, `classify`, `tier`, `config`,
 `controls`, `fingerprint`, `recount`, `selftest`), `lib/sh/`, `lib/py/bbx/`,
-`bbx.toml` (the `self` kind), ten gates under `gates/` with three
-registries, `docs/controls.md`, `docs/defaults.md` D1–D21. No comparator,
+`bbx.toml` (the `self` kind), eleven gates under `gates/` with three
+registries, `docs/controls.md`, `docs/defaults.md` D1–D22. No comparator,
 suite runner, expectation register, driver or fixture yet.
 
-**In force:** `DECISIONS.md` — R0–R17 and method M1–M4. **Open rulings:** none. In force since bbx-2: R18 (the census and the tests
+**In force:** `DECISIONS.md` — R0–R17 and method M1–M4. **Open rulings:** R21 (the platform runs: no Linux or WSL host here).
+In force since bbx-2: R18 (the census and the tests
 work on a clone or are explicitly, provably read-only), R19 (parallel work
 is a pull queue; the FIFO token queue is the default implementation, the
 principle is the ruling), R20 (fidelity on a plain clone of bbh at
@@ -57,9 +61,8 @@ number to bring down; the two added at bbx-2 are host facts the clone
 exposed (G13, rule 7), the only exception ever allowed to move it upward. Grammar in
 `docs/census/README.md`.
 
-**Next in S1 (step 4, the last):** the readout generator (RO1–RO3 as a
-tool over a run's results: verdicts, controls, provenance histogram,
-coverage, what-is-not-asserted) and the platform gates (R3: Linux, WSL).
+**Next in S1:** the platform runs (R21, awaiting the maintainer's host or a
+container runtime) and the close ritual's sweeps (steps 8–9) as a gate.
 Then S2 (comparators, expectation kinds, the provenance register with the
 R11 vocabulary, the suite runner, F12/F16/F17). One finding for the
 maintainer: bbh's example lib has a wrong fallback path (G11); bbh is not

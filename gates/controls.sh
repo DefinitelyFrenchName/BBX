@@ -6,6 +6,7 @@
 # (74 of 311 gates carry the marker as prose, 15+ spellings, no reader; gotcha G5). Portable, ~2 s.
 # Usage: gates/controls.sh
 # MUST-FIRE: known-bad: dead-control — a gate that declares a control and never prints CONTROL FIRED for it must turn the enforcing runner NOT GREEN with exit 1
+# NOT-ASSERTED: that a control is RIGHT — only that a declared control fired and an undeclared one is red (docs/controls.md)
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME

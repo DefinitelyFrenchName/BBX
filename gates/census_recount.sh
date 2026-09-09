@@ -18,6 +18,8 @@
 # MUST-FIRE: perturbed-copy: moved-count — a shadow census with one recountable count changed by one must FAIL on that row
 # MUST-FIRE: known-bad: names-the-tree — a shadow census whose one command names the repository's absolute path must be REFUSED on that row (the one way a row could reach past the clone)
 # MUST-FIRE: known-bad: drift-detected — a shadow census recorded at the parent of the repository's HEAD must print a drift NOTE with ahead=1, or "no drift" is measured by silence (BBX-7)
+# NOT-ASSERTED: the truth of the not-recountable rows at their commits: they are named and counted, never run
+# NOT-ASSERTED: that a hand-read citation says what its row claims: only that the line exists
 #
 set -u
 BBX_ROOT=$(cd "$(dirname "$0")/.." && pwd)
@@ -155,6 +157,7 @@ fi
 
 # --- the verdict --------------------------------------------------------------
 summary="$files census files, $rows rows: $match match, $mismatch mismatch, $refused refused, $notrec not recountable, $nonzero matched with a non-zero exit"
+echo "NOTE: coverage rows=$rows recountable=$((match + mismatch + refused)) not_recountable=$notrec (BBX-18: the census claims no command re-derives)"
 if [ "$fail" -eq 0 ]; then
     echo "PASS: $summary; $fired controls fired"
     exit 0

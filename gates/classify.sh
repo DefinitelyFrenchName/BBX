@@ -8,6 +8,7 @@
 # segfault look-alike were each paid for. Portable, ~1 s.
 # Usage: gates/classify.sh
 # MUST-FIRE: known-bad: config-reaches-classifier — a consumer [classify] with another skip marker must change the verdict of a `SKIP:` log from SKIP to PASS, and its own marker must read SKIP
+# NOT-ASSERTED: that a verdict word printed by a gate outside the runner is read at all: the classifier reads exit status first, then the log; a PASS printed after a non-zero exit is FAIL by design
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME

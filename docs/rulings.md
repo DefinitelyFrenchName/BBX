@@ -156,4 +156,10 @@ written until the ruling its slice needs is answered (CLAUDE.md §6, §9).
 
 ## Open
 
-(none — every ruling raised so far is answered; a new one is added here with its recommendation, the alternatives declined, and `- **Answer:** (open)` until the maintainer answers, then moved.)
+### R21 — How the platform runs of R3 are obtained (raised bbx-2)
+- **Context measured (2026-09-09):** this host is macOS only — `docker`, `podman`, `limactl`, `multipass`, `orb` and `wsl.exe` are all absent (`command -v` each), so no Linux or WSL run of `bin/bbx selftest` can be produced from here. R3 rules every platform guard gated on each platform and BBX validating BBX per platform; today every green is macOS-only and every readout says so.
+- **Recommendation:** the maintainer runs `BBX_BBH_HOME=<bbh> bin/bbx selftest --log build/selftest_<platform>_<stamp>` on a Linux or WSL host with the lineage cloned beside it, and brings back the kept run directory (results.tsv, run.txt, controls.txt, the logs); `bin/bbx readout` on that directory is the platform's screen, committed under `docs/platforms/<platform>/` with the run's HEAD. Until a run directory exists, the platform row in the readout reads *not run*, never *passed*. A run brought back by hand is a filed count until its directory is in the tree (CLAUDE.md §1); once in the tree it is a kept run keyed by version (BBX-29). A second recommendation, cheaper per sitting: a container runtime on this host (any of the six above), after which a `platform_linux` gate can run the battery inside it and the row becomes a measurement, not a delivery.
+- **Declined:** marking the platform row green from the POSIX-ness of the scripts (a claim, not a run); a CI service (no remote exists, R7; a run nobody can re-derive locally is a filed count).
+- **Answer:** (open)
+
+(A new ruling is added here with its recommendation, the alternatives declined, and `- **Answer:** (open)` until the maintainer answers, then moved.)

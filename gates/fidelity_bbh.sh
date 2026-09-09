@@ -22,6 +22,9 @@
 # porcelain proved before = after, the untracked count a NOTE. bbh's own tree is read for its HEAD
 # and porcelain only.
 # MUST-FIRE: perturbed-copy: verdict-text — a shadow copy of bbx-run-static with one verdict format string changed must make F13a's diff non-empty, or the diff cannot fail
+# NOT-ASSERTED: anything about a suite, a comparator or an expectation: slice S2
+# NOT-ASSERTED: bbh's example's correctness (G11 is bbh's to fix)
+# NOT-ASSERTED: F15 unless BBX_FIDELITY_F15=1 was set for the run
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME

@@ -7,6 +7,7 @@
 # BBX's generalization: an empty pattern list means nothing reaches an instrument. Portable, ~1 s.
 # Usage: gates/tier.sh
 # MUST-FIRE: known-bad: depth-3-chain — a chain three libs deep must be PLAIN at source_depth 2 and INSTRUMENT at source_depth 3, or the depth is not what decides
+# NOT-ASSERTED: that a gate reaching an instrument through a path the source regex does not match is seen: the depth and the regex are the limit
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME

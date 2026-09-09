@@ -23,7 +23,8 @@ Shape: operational map. Read this first, then `STATE.md`, then
 | the controls contract (must-fire grammar, R10) | `docs/controls.md` |
 | the defaults register (BBX-24) | `docs/defaults.md` |
 | the kernel | `bin/bbx` (dispatcher: `run-static run-sweep classify tier config controls fingerprint recount selftest`), `lib/sh/`, `lib/py/bbx/`, `bbx.toml` (BBX as its own consumer, kind `self`) |
-| BBX's gates and registries | `gates/*.sh` (10: 8 portable incl. `rulings_shape`, 2 static), `gates/portable.txt`, `gates/static.txt`, `gates/sweep.tsv` (empty) — run with `BBX_BBH_HOME=~/Developer/blackbox-harness bin/bbx selftest` (~223 s on a loaded host, D14) |
+| BBX's gates and registries | `gates/*.sh` (11: 9 portable incl. `rulings_shape`, `readout`; 2 static), `gates/portable.txt`, `gates/static.txt`, `gates/sweep.tsv` (empty) — run with `BBX_BBH_HOME=~/Developer/blackbox-harness bin/bbx selftest` (~223 s on a loaded host, D14) |
+| the readout, generated | `bin/bbx selftest --log build/selftest_<stamp>` keeps the run; `bin/bbx readout <dir> [--against <dir>]` prints the one screen (RO1–RO3; BBX-14 met only with `--against` a second kept run at the same HEAD) |
 | the recount tool | `bin/bbx recount <census.md> [--only A1,A2] [--root DIR] [--in-place]` — runs on a plain local clone of the recorded commit (R18, R20); `--in-place` is the unproved escape hatch |
 
 ## The lineage on this machine
@@ -64,16 +65,20 @@ readouts, gotchas and history resolve through it). This sitting is **bbx-2** (bb
    first finding (BBX-26: it halts feature work).
 
 **Close, in this order**
-1. **Green first.** Run the battery once more, alone. The close quotes its
-   tally line and its controls line verbatim. Not green: the close says
-   NOT GREEN and why; the next session's first task is ruled by BBX-26.
+1. **Green first, twice, kept.** Run the battery alone, twice, each with
+   `--log build/selftest_<stamp>` (BBX-14 needs two runs at one HEAD); the
+   close quotes the tally line and the controls line verbatim. Not green:
+   the close says NOT GREEN and why; the next session's first task is ruled
+   by BBX-26.
 2. **Nothing evaporates into prose.** Every number measured this sitting is
    reproduced by a gate or a census row, or is labelled "measured once, not
    gated" in the readout — the honest floor, not a backlog.
-3. **The readout** (`docs/readout.md`): the sitting's section — verdict,
-   counts separately, controls fired / declared, fidelity rows, what it rests
-   on, what the green does NOT assert, next. This is the one screen the
-   maintainer reads; it is BBX's CLOSE row.
+3. **The readout** (`docs/readout.md`): the sitting's section opens with
+   the GENERATED screen, verbatim — `bin/bbx readout <second run> --against
+   <first run>` — then what the generator cannot know yet: fidelity rows,
+   what changed, next. Blind spots come from the gates' `NOT-ASSERTED:`
+   headers; a gate declaring none is counted on the screen. This is the one
+   screen the maintainer reads; it is BBX's CLOSE row.
 4. **STATE** rewritten as a lean living page; the outgoing status paragraph
    appended verbatim to `STATE_HISTORY.md` under the session key. The twin
    is the ledger: one paragraph per sitting, never rewritten.

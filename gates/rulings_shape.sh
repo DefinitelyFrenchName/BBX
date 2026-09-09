@@ -10,6 +10,7 @@
 # MUST-FIRE: known-bad: open-under-answered — a shadow queue whose one entry is `(open)` under an Answered heading must FAIL on that id
 # MUST-FIRE: known-bad: no-decisions-row — a shadow DECISIONS.md with one R row deleted must FAIL naming that id
 # MUST-FIRE: known-bad: row-without-entry — a shadow DECISIONS.md with a row for an R that no entry defines must FAIL naming it
+# NOT-ASSERTED: the prose of a ruling: only its heading, its answer line and its DECISIONS row are read
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME
@@ -27,9 +28,13 @@ else
     fail "$(tail -1 "$T/real.out")"; grep '^ERROR' "$T/real.out" | sed 's/^/        /' | head -12
 fi
 
-# the id the shadows move around: the last answered entry in the queue
-last="$(grep -oE '^### R[0-9]+' "$Q" | tail -1 | cut -c5-)"
-[ -n "$last" ] || { echo "FAIL: no entry in $Q to build the shadows from"; exit 1; }
+# the id the shadows move around: the last ANSWERED entry — the last R row of DECISIONS.md, which
+# the real check has just held equal to the queue's answered set. (The first version took the
+# queue's last entry, which was answered only until the first open ruling was raised: both
+# controls went dead the hour R21 was filed, and the battery said so — BBX-2, both directions.)
+last="$(grep -oE '^\| R[0-9]+ \|' "$D" | tail -1 | tr -d '| ')"
+[ -n "$last" ] || { echo "FAIL: no answered ruling row in $D to build the shadows from"; exit 1; }
+grep -q "^### $last " "$Q" || { echo "FAIL: DECISIONS row $last has no entry in $Q (the real check above should have said so)"; exit 1; }
 
 echo "== MUST-FIRE controls =="
 # 1. answered-under-open: retitle the heading above the last entry to `## Open`

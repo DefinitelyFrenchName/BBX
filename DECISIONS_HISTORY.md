@@ -208,3 +208,14 @@ lives — bbh `[BBH-9]`).
   clones at HEAD, the base tree untouched, and without clones the same
   gates dirtied it (the other known negative). Fidelity F14 against bbh
   unchanged at `--jobs 1`.
+- S1's readout generator landed (bbx-2): `bbx-run-static --log DIR` keeps
+  a run (results, logs, controls, `run.txt` with the subject's HEAD,
+  porcelain, platform), `bbx readout DIR [--against DIR]` prints the one
+  screen, and every gate declares its blind spots as `NOT-ASSERTED:`
+  header lines the screen aggregates — a gate declaring none is counted,
+  not hidden. R21 raised: no Linux or WSL host exists on this machine
+  (six runtimes checked, none present), so the platform runs of R3 need
+  the maintainer's host or a container runtime; recommendation filed.
+- The rulings-shape gate caught its author the same hour: the new "Open
+  rulings:" line mentioned R3 in passing and no longer listed exactly the
+  open ids. Reworded; the gate stays as it is.
