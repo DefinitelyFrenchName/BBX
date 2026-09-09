@@ -23,8 +23,8 @@ Shape: operational map. Read this first, then `STATE.md`, then
 | the controls contract (must-fire grammar, R10) | `docs/controls.md` |
 | the defaults register (BBX-24) | `docs/defaults.md` |
 | the kernel | `bin/bbx` (dispatcher: `run-static run-sweep classify tier config controls fingerprint recount selftest`), `lib/sh/`, `lib/py/bbx/`, `bbx.toml` (BBX as its own consumer, kind `self`) |
-| BBX's gates and registries | `gates/*.sh` (9), `gates/portable.txt`, `gates/static.txt`, `gates/sweep.tsv` (empty) — run with `BBX_BBH_HOME=~/Developer/blackbox-harness bin/bbx selftest` (~156 s, D14) |
-| the recount tool | `bin/bbx recount <census.md> [--only A1,A2] [--root DIR] [--in-place]` — runs on a shared clone of the recorded commit (R18); `--in-place` is the unproved escape hatch |
+| BBX's gates and registries | `gates/*.sh` (10: 8 portable incl. `rulings_shape`, 2 static), `gates/portable.txt`, `gates/static.txt`, `gates/sweep.tsv` (empty) — run with `BBX_BBH_HOME=~/Developer/blackbox-harness bin/bbx selftest` (~227 s on a loaded host, D14) |
+| the recount tool | `bin/bbx recount <census.md> [--only A1,A2] [--root DIR] [--in-place]` — runs on a plain local clone of the recorded commit (R18, R20); `--in-place` is the unproved escape hatch |
 
 ## The lineage on this machine
 
@@ -40,7 +40,7 @@ bbh is **never modified** from here. VampireSaved and SMS are read only.
 ## What is running
 
 Nothing in the background. `BBX_BBH_HOME=~/Developer/blackbox-harness
-bin/bbx selftest` (~156 s) is GREEN: 9 gates, 14/14 controls. Run it first
+bin/bbx selftest` (~227 s) is GREEN: 10 gates, 18/18 controls. Run it first
 thing, with no edits in flight (the runner's working-tree check reports a
 concurrent edit as DIRTIED); the census recount inside it is the
 re-derivation step of the ritual (CLAUDE.md §6.2) made into a gate.
@@ -83,7 +83,9 @@ readouts, gotchas and history resolve through it). This sitting is **bbx-2** (bb
 6. **DECISIONS / DECISIONS_HISTORY**: new rulings in force; the sitting's
    history entry ends with the anti-hyperfocus line (BBX-27).
 7. **Gotchas with prices; rulings with recommendation and declined
-   alternatives.** Nothing pending silently.
+   alternatives.** Nothing pending silently; an answered ruling is MOVED
+   under an Answered heading, never annotated under Open (G14; gated by
+   `rulings_shape`, which also holds DECISIONS.md to the queue both ways).
 8. **Sweeps, each with its result shown:** the retraction grep for every
    claim corrected this sitting (BBX-22, hits allowed only in the ledgers:
    gotchas, rulings, census README, readout, DECISIONS*); the deferral grep

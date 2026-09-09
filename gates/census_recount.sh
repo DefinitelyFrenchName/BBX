@@ -1,16 +1,16 @@
 #!/bin/sh
 # census_recount.sh — every count in docs/census/*.md reproduces at the recorded HEAD of its repository, on a clone
 # For each census file, every §A row whose count is a plain integer or a quoted string and
-# whose command is one shell pipeline is re-run from the root of a SHARED CLONE of the
+# whose command is one shell pipeline is re-run from the root of a PLAIN LOCAL CLONE of the
 # repository at the HEAD the file was measured at (lib/py/bbx/recount.py). Rows in any other
 # shape are NOT-RECOUNTABLE: counted and named in the output, never passed. The first
 # self-validation gate (R9, R14): BBX's own documents read as a document set.
-# READ-ONLY (R18): the lineage repositories are never written. The rows run in a clone under
+# READ-ONLY (R18, R20): the lineage repositories are never written. The rows run in a clone under
 # TMPDIR that is removed afterwards; the lineage's own tree is read for its HEAD and porcelain
 # only. A lineage whose tip moved past the recorded HEAD is a NOTE-class drift line (the rows
 # re-run on a clone of the tip, the moved ids listed), never a verdict: a moved lineage is a
 # fact about the lineage, a mismatch at the recorded HEAD is a fact about BBX.
-# Usage: gates/census_recount.sh                (from the BBX root; ~32 s measured 2026-09-09, docs/defaults.md D2)
+# Usage: gates/census_recount.sh                (from the BBX root; ~44 s measured 2026-09-09, docs/defaults.md D2)
 #   BBX_CENSUS_TIMEOUT=<seconds per command>     default 60 (docs/defaults.md D1)
 #   BBX_CENSUS_DIR=<dir of census files>         default docs/census (docs/defaults.md D7); a dir whose census names an absent tree exercises SKIP
 # SKIP: a repository directory a census file names is absent (exit 0; asserts nothing).

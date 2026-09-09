@@ -25,6 +25,14 @@ itself against VampireSaved with F1–F11 (`~/Developer/blackbox-harness/selftes
   the census was re-measured there (`docs/census/vampiresaved.md`, last line).
   F20 is not written yet, so no row moved; when F20 is written its baseline is
   the HEAD measured that day, recorded here as a dated line.
+- 2026-09-09 (bbx-2, ruling R20): the gate measures bbh on a PLAIN LOCAL CLONE
+  of `f675710` under `TMPDIR` (`BBX_BBH_BASELINE`, D20), never in bbh's working
+  tree; after the run the clone must be clean of tracked, untracked and
+  ignored changes. Measured before ruling: every F13–F15 line identical on the
+  clone and in place, so the 4 dirty files touch no row yet (they re-point
+  VampireSaved build directories: F20's concern). bbh's tip past the baseline
+  is `NOTE: bbh-drift ahead=N`; `BBX_FIDELITY_IN_PLACE=1` keeps the dirty tree
+  as the input on purpose, read-only declared and proved on tracked paths.
 - bbh is located by an environment variable (`BBX_BBH_HOME`), never a
   submodule `[BBH-85]`; when absent every F row SKIPs, and a SKIP is reported
   as *not proved*, never as green `[BBH-16]`.

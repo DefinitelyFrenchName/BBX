@@ -16,9 +16,11 @@ Every other row is NOT-RECOUNTABLE and is counted and named — never passed.
 THE TREE IS NEVER WRITTEN (ruling R18, 2026-09-09: "census and tests should
 either work on a clone or, if impossible, make very explicit that no change
 to the tree should be done"). The rows do not run in the repository's working
-tree: the recorded commit is exported as a SHARED CLONE under TMPDIR
-(`git clone --shared --no-checkout` + `checkout <head>`: reads the repository's
-objects, writes nothing under its `.git`, never `git worktree add`), every
+tree: the recorded commit is exported as a PLAIN LOCAL CLONE under TMPDIR
+(`git clone --no-checkout` + `checkout <head>`: objects hardlinked on the same
+filesystem, copied otherwise; no `alternates` file, so the clone does not
+depend on the repository's object store staying intact during the run —
+ruling R20; writes nothing under its `.git`, never `git worktree add`), every
 command runs there, and the clone is removed. So the census stays true of the
 commit it names while the repository's own tree moves under other hands (the
 first day of BBX saw VampireSaved's porcelain move 373 -> 377 during one
@@ -177,13 +179,15 @@ def commit_known(root, head):
 
 
 def make_clone(root, head):
-    """A shared clone of <root> checked out at <head>, under TMPDIR; the caller removes it.
+    """A plain local clone of <root> checked out at <head>, under TMPDIR; the caller removes it.
 
-    `--shared` borrows the repository's object store through an alternates
-    file inside the CLONE; nothing is written under the repository's own
-    `.git` (a `git worktree add` would be). Returns (dir, error)."""
+    A local clone hardlinks the objects (same filesystem) or copies them: no
+    `alternates` file, no dependence on the repository's object store during
+    the run (R20 declined `--shared` for that reason: a `git gc` in the source
+    would break a shared clone mid-run). Nothing is written under the
+    repository's own `.git` (a `git worktree add` would be). Returns (dir, error)."""
     d = tempfile.mkdtemp(prefix="bbx_recount_", dir=os.environ.get("TMPDIR") or "/tmp")
-    for cmd in (["git", "clone", "-q", "--shared", "--no-checkout", root, d],
+    for cmd in (["git", "clone", "-q", "--no-checkout", root, d],
                 ["git", "-C", d, "checkout", "-q", head]):
         p = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
         if p.returncode != 0:

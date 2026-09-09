@@ -295,3 +295,48 @@ The four controls of the census gate, each failing (or, for drift, firing) for i
 - That the census's 56 not-recountable rows are true at their commits.
 - Anything about the pull queue (R19): the sweep runner still batches with a barrier.
 - Portability of the clone step beyond macOS (R3): `git clone --shared` is used on Linux the same way, not yet measured there.
+
+---
+
+# bbx-2 step 2 — R20: plain clones; the rulings-shape gate (2026-09-09)
+
+## Verdict
+
+`BBX_BBH_HOME=~/Developer/blackbox-harness bin/bbx selftest`, alone → **GREEN**, 227 s (host shared with another session's VampireSaved sweep):
+
+```
+PASS 10    SKIP 0     FAIL 0     MISSING 0
+controls fired 18 / declared 18; gates with no declaration: 0; red: 0
+ok: no tracked file changed during the run
+NOTE  fidelity_bbh  bbh-source tip=f675710 porcelain=4 untouched-by-construction=clone
+```
+
+## What changed
+
+R20 ruled plain clone: `gates/fidelity_bbh.sh` clones bbh at `f675710` (D20) under `TMPDIR` and measures there; after the run the clone must be clean of tracked, untracked and ignored entries (it is); bbh's tip past the baseline is a NOTE. The recount's clone is plain too (D17). New gate `gates/rulings_shape.sh` (portable): every ruling under the heading of its state, the queue and `DECISIONS.md` one registry both ways, the `Open rulings:` line exact — born of G14.
+
+## Counts, separately
+
+| | |
+|---|---|
+| gates PASS / SKIP / FAIL / MISSING | 10 / 0 / 0 / 0 (+ `rulings_shape`) |
+| controls declared / fired | 18 / 18 (`rulings_shape` 4: answered-under-open, open-under-answered, no-decisions-row, row-without-entry) |
+| rulings queue | 21 entries, 21 answered, 0 open, 21 DECISIONS rows, 0 errors |
+| fidelity on the clone vs in place | F13–F15 identical; the only diff two `porcelain` lines (4 vs 0) |
+| clone of bbh at `f675710` | plain: 0.32 s, 2.3 MB; clean after the run: 0 tracked, untracked, ignored |
+| clone cost, VampireSaved, plain vs shared | 3.40 s / 490 MB (hardlinked pack) vs 1.76 s / 363 MB |
+| runtimes, alone | census gate 44 s (D2; 57 s inside the loaded battery), fidelity 46 s (D19), rulings_shape 0.3 s |
+| gotchas filed | G14 (answered under Open), G15 (a commit message ahead of its edits; amended) |
+| rulings | R18, R19, R20 all answered; open: none |
+
+## What it rests on
+
+The measurement that preceded R20 (identical fidelity output on the clone and in place); the clone's `status --porcelain --ignored` empty after the run; `rulings_shape`'s four shadow files, each failing on the named id; the battery's registry and controls checks.
+
+## What this green does NOT assert
+
+- That the pull queue (R19) is built: the sweep runner still batches with a barrier.
+- That any gate other than the recount and fidelity is clone-safe: BBX's own gates run in BBX's tree (a tracked-file check, not a clone), and `bbx.toml` does not yet carry a clone-per-slot option.
+- The rulings grammar beyond what the gate reads: prose in an entry is not checked, only the answer line, the heading and the DECISIONS row.
+- Runtimes as anything but this host under this load (D14's row says so).
+- Portability beyond macOS (R3).

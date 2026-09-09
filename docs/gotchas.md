@@ -187,3 +187,17 @@ ruling with no `DECISIONS.md` row, a DECISIONS row with no entry) — with a
 shadow file in each wrong shape as its controls. Re-anchors: BBX-20 (a
 document declares its shape and completeness is a check) and BBX-9 (the
 rulings queue and DECISIONS are one registry, complete both ways).
+
+## G15 — A commit message described edits that had not happened: the edit script aborted, the appends after it ran, and the commit was made on the appends alone (paid: one amended commit, caught by `git show --stat` one step later, 2026-09-09)
+Commit cfe2535 as first made said "rulings queue reshaped — R18–R20 under
+Answered, Open empty"; its diffstat was two files, the gotcha and the
+history appends. The python edit script had asserted on a wrapped anchor
+that the file held on one line, written nothing, and exited non-zero; the
+shell's `cat >>` lines and `git commit` that followed did not depend on it.
+The message was written from the intent, the commit from what happened.
+Fix: the commit amended (unpushed, R7) once the edits were re-applied and
+`grep -nE '^## '` had shown the new headings; from here on an edit-then-
+commit command chains with `&&` from the edit to the commit, and the commit
+step prints `git show --stat` so the message is read against the diffstat
+before the next step. Re-anchors: CLAUDE.md §0 ("done" must be legible
+without reading the file) and §1 (the commit was the moment of certainty).
