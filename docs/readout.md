@@ -187,3 +187,18 @@ bbh `f675710` (porcelain 4); every lifted file cites its bbh origin; F14's real 
 - That the `frame-driven` profile's literals (VampireSaved's build directories among them) are anything but bbh's — they are carried for fidelity and labelled so (D12, D15).
 - Portability beyond macOS (R3) — no Linux or WSL run yet.
 - bbh's example's correctness: G11 is bbh's to fix; BBX does not modify bbh.
+
+
+---
+
+# CLOSE — bbx-1 (2026-09-09)
+
+**Green first, alone:** `PASS 9     SKIP 0     FAIL 0     MISSING 0` — `controls fired 12 / declared 12; gates with no declaration: 0; red: 0` — `ok: no tracked file changed during the run`.
+
+**Nothing evaporates:** every number in the four readout sections above is reproduced by a gate (`bin/bbx selftest`) or a census row (`docs/census/`), except the slice estimate (an estimate, labelled) and the runtimes (measured once per close, D2, D14).
+
+**Sweeps:** retraction — the corrected wordings live only in the ledgers; deferral — empty; defaults — 16 rows; controls — 9 of 9 gates declare. **Lineage untouched:** bbh 4 modified at f675710; VampireSaved 1 M + 370 ?? at 5df1d8be; SMS clean at ecc5481.
+
+**Rulings this sitting:** R0–R17 (all answered). **Incidents filed with a price:** G1–G11. **Commits:** 8 including this close.
+
+**What this close does NOT assert:** anything about S2's comparators; portability beyond macOS; that the ritual's sweeps are gated (they are hand-run until S1 step 4).

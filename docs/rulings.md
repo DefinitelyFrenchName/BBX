@@ -101,3 +101,9 @@ written until the ruling its slice needs is answered (CLAUDE.md §6, §9).
 
 ### R16 — Edits to CLAUDE.md require maintainer approval
 - **Ruling (maintainer, 2026-09-09):** the R12 edit is approved once; from now on any edit to `CLAUDE.md` requires maintainer approval before it is made. A contributor who finds a defect in the constitution files it in `docs/rulings.md` with the proposed wording and waits.
+
+### R17 — The session ritual and the session key
+- **Ruling (maintainer, 2026-09-09):** the close ritual proposed at the bbx-1 close is adopted as written in `HANDOFF.md` ("The ritual"); sessions are keyed `bbx-N`, one key per sitting, never renamed.
+- **Adapted from:** VampireSaved VSP-17 (begin by reading STATE, end by updating it; the rollover rule), VSP-18 (every measurement a rerunnable case before the session ends), VSP-13 (grep for the claim), VSP-162 (the key is a lookup index, never re-based), the CLOSE row that quotes the measured tallies.
+- **Declined:** a separate NEXT_SESSION file (HANDOFF carries the orientation; one fewer page to rot); the three-group STATE window (the constitution wants STATE lean, so the history twin holds one paragraph per sitting); the ROM audit and freeze steps (consumer-specific).
+- **To become a gate:** steps 8 and 9 (the sweeps, the lineage check) in S1 step 4.

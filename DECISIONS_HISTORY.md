@@ -132,3 +132,24 @@ lives — bbh `[BBH-9]`).
   in parallel with them next session. The last green means: on bbh's
   fixtures and BBX's own gates, nothing was lost in the lift — and nothing
   yet about any comparison.
+
+## bbx-1 CLOSE — 2026-09-09
+
+- The maintainer asked for VampireSaved's end-of-session ritual, read there
+  (VSP-17 in CLAUDE.md:233 and the skill, the rollover rule in STATE's
+  header, VSP-18, VSP-162), and ruled the adaptation R17 as proposed.
+- Close measurements: green first — `PASS 9 SKIP 0 FAIL 0 MISSING 0`,
+  `controls fired 12 / declared 12`, tree clean during the run. Retraction
+  sweep: `MFI-52`, `319 gate`, `74 of 319`, `no row runs yet`, `27 code
+  files` appear only in the ledgers (gotchas, rulings, census README,
+  readout, DECISIONS*) and, for "319", in the VampireSaved census row that
+  explains it. Deferral sweep: empty. Defaults: 16 rows. Controls: every one
+  of the 9 gates declares. Lineage: bbh 4 modified at f675710, VS 1 M +
+  370 ?? at 5df1d8be, SMS clean at ecc5481 — as the census recorded.
+- `STATE_HISTORY.md` born with the bbx-1 paragraph.
+- Anti-hyperfocus checkpoint (BBX-27): the session ends at 68 % context by
+  the maintainer's call, with S1's fidelity obligation met and two small S1
+  items left; the most valuable next thread is S2's comparators, with the
+  readout generator and the platform gates alongside. The last green means
+  the kernel reproduces bbh on bbh's fixtures and BBX's gates fire their
+  controls — and nothing yet about any comparison.
