@@ -1,0 +1,2 @@
+# gates/portable.txt — BBX gates that run anywhere with sh + python3 and nothing else (bbh's portable tier)
+# One gate per line, relative to gates/. Complete both ways (BBX-9) — enforced by the runner (slice S1).

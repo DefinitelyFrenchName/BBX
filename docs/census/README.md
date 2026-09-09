@@ -28,6 +28,44 @@ recorded HEAD:
 No recount script exists yet (ruling R9: no tool before the STOP). Every
 command is in the files; the recount is possible by hand today.
 
+## The census grammar (read by `lib/py/bbx/recount.py`; ruled into existence by R9/R14)
+
+A census file is a document the harness reads, so its shape is a contract:
+
+1. Line 1 ends `@ <HEAD> — measured <date>`; the HEAD is what `git rev-parse
+   HEAD` at the repository started with (7 or more hex digits).
+2. Line 2 names the repository's local path as the first backtick-quoted
+   absolute path.
+3. `## A. Counts` is a table `| id | dimension | count | command |`, ids
+   `A<n>`. Every `|` inside a cell is written `\|` — code spans included, as
+   GitHub-flavoured markdown requires. A regex that needs a literal pipe writes
+   a bracket expression `[\|]`. A command that contains a backtick is wrapped
+   in a double-backtick span.
+4. A row is RECOUNTABLE when its count is a plain integer (bold and commas
+   allowed) or one backtick-quoted string, and its command cell opens with a
+   backtick span whose pipeline, run with `sh -c` from the repository root,
+   prints exactly that value on stdout (leading and trailing whitespace
+   ignored). A command that prints a filename after the number, a histogram,
+   or a sentence is not recountable as written and is rewritten to print the
+   number alone (`wc -l < file`, `… \| awk '$2=="window"{print $1}'`), then
+   re-run before the count is kept.
+5. Every other row is NOT-RECOUNTABLE; the recount names it and counts it.
+   The number of such rows is the census's uncovered claims (BBX-18), printed
+   in every readout and allowed to move only downward.
+6. Commands run under `sh` in a HERMETIC environment: `PATH` pinned to the
+   system directories, `LANG`/`LC_ALL` fixed to `C.UTF-8`, nothing else from
+   the caller's shell (`docs/defaults.md` D6). A command that searches the
+   working tree recursively (`grep -r …`) is not admitted: ignored files make
+   its count a fact about the host, and the first recount found this shell's
+   `grep` (ugrep, skips ignored files and archives) and `sh`'s `grep` (BSD,
+   reads everything) disagreeing on six counts. Searches use `git grep`, whose
+   universe is the tracked tree at the recorded HEAD.
+
+The first recount (2026-09-09, slice S1) found the three files written in two
+pipe conventions and 10 rows malformed; the files were normalized to this
+grammar (65 bbh rows by script, 11 rows by hand, listed in
+`DECISIONS_HISTORY.md`) before any count was compared.
+
 ## Orchestrator re-derivation — 2026-09-09
 
 Run from the BBX session, one shell, after the producers' maps and before
@@ -162,3 +200,16 @@ Disposition: A70, A19, A21, V-R556, V-P10 sent back to the producer; its correct
 Producer's correction of `vampiresaved.md` (2026-09-09, after the verifier): A70 → "2, and NEITHER is a marker" (`docs/project/gotchas.md:1935` `**What it cost:**`, `:2698` `Measured cost:`; the price key remains `paid:`); A19 gloss split into 8 real prefixes + 4 checker fixtures (XX 22 / YY 6 / ZZ 2 / QQ 1) + 1 regex false positive + 1 live cross-repo reference, with new rows A123 (`[AW-N]` = 7 occurrences in 3 files, Verilog `addr[AW-1]`), A124 (`RH-N` in 43 files / 72 occurrences / 24 distinct IDs), A125 (18 distinct RH IDs outside the history archives), A126 (bracketed `[RH-N]` = 1, `tests/test_skill_guides.sh:16`; the 4 SKILL.md headers carry the placeholder `[RH-NN]`); A21 re-labelled "tracked `tests/**/*.sh`, the glob recurses, NOT the gate count" with the 8 `tests/lib/` scripts named, and new A127 "gate scripts, top level only" = **311**; V-T1 "74 of 319" → "74 of 311"; V-R556 and V-R557 header citations `:7` → `:6` (all 8 SKILL.md H1 lines are at :6); V-P10 quoted verbatim without added emphasis, source `CLAUDE.md:52-53`; three new rows V-X29–V-X31 for the live `[RH-N]` cross-repository reference (cited 72× in 43 files, defined nowhere in the tree, unchecked by design per `docs/project/skills_scope.md:119`). File 965 lines; §A 127 rows; §B **740** rows (R 563, C 34, X 31, P 25, K 18, G 18, I 15, T 13, F 12, D 11). VampireSaved unchanged.
 
 Note for the bins: the VampireSaved binner was started from the 737-row census; it re-derived the count at the end of its run, found 740, and binned V-X29–V-X31 itself (the 563 rule rows diffed byte-identical across the change).
+
+### The recount — the third party (slice S1, 2026-09-09)
+
+The verifiers re-ran the producers' commands in the same interactive shell
+the producers used, so a count that depended on that shell's `grep` (ugrep)
+was reproduced three times and was wrong for any other host (gotcha G9). The
+recount gate runs under `sh` in a hermetic environment and disagreed on six
+SMS rows; the rows were rewritten to `git grep` and every count reproduced.
+Lesson recorded in the protocol: a verifier that shares the producer's
+instrument verifies the instrument's consistency, not the count (BBX-15); the
+recount under a pinned environment is the lineage-independent check, and a
+verifier must from now on run the commands through `lib/py/bbx/recount.py
+--only <ids>`, never through its own shell.

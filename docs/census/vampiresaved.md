@@ -7,7 +7,7 @@ Read-only survey. Every number below carries the command that printed it, run fr
 
 | id | dimension | count | command (run from repo root) |
 |---|---|---|---|
-| A1 | rules total, across the 8 skills | 555 | `python3 tools/checkskills.py -v \| tail -1` |
+| A1 | rules total, across the 8 skills | 555 | `python3 tools/checkskills.py -v \| tail -1 \| grep -oE '[0-9]+ rules' \| cut -d' ' -f1` |
 | A2 | rules, VSP (vampire-saved-port) | 180 | `grep -cE '^- \[VSP-[0-9]+\]' .claude/skills/vampire-saved-port/SKILL.md` |
 | A3 | rules, VSE (vampire-savior-engine) | 85 | `grep -cE '^- \[VSE-[0-9]+\]' .claude/skills/vampire-savior-engine/SKILL.md` |
 | A4 | rules, MSC (mister-cps2-wide-core) | 73 | `grep -cE '^- \[MSC-[0-9]+\]' .claude/skills/mister-cps2-wide-core/SKILL.md` |
@@ -26,11 +26,11 @@ Read-only survey. Every number below carries the command that printed it, run fr
 | A17 | files holding an anchored `**[CPH-N]**` definition | 3 | `git grep -lE '\*\*\[CPH-[0-9]+\]\*\*' \| wc -l` |
 | A18 | rules whose anchor is UNIQUE (checker's guarantee, re-measured) | 555 of 555 | `python3 <G1 in §C>` — reports `rules=555 no-anchor=0`, and `grep -c ' +[0-9]* \|' rules_rows.md` → 0 multi-anchor |
 | A19 | rule-ID prefixes in use — 8 REAL schemes, 4 checker fixtures, 1 regex false positive, 1 live CROSS-REPO scheme | 8 + 4 + 1 + 1 | `git grep -ohE '\[[A-Z][A-Z0-9]{1,6}-[0-9]+\]' -- '*.md' '*.tsv' '*.toml' '*.py' '*.sh' '*.lua' \| sed -E 's/\[([A-Z][A-Z0-9]*)-[0-9]+\]/\1/' \| sort \| uniq -c \| sort -rn` → VSP 877, MJC 334, MSC 276, VSE 243, MFI 241, CPE 168, CPH 135, MSV 85 (real); XX 22, YY 6, ZZ 2, QQ 1 (checker fixtures); AW 7 (false positive, A123); RH 1 (real, A124) |
-| A20 | `BBH-N` rule IDs defined in this tree | 0 | `git grep -ohE 'BBH-[0-9]+' \| sort -uV` → only the literal `BBH-1` inside the string `[BBH-1..87]` naming the OTHER repo |
+| A20 | `BBH-N` rule IDs defined (anchored `**[BBH-N]**`) in this tree | 0 | `git grep -ohE '\*\*\[BBH-[0-9]+\]\*\*' \| wc -l` — `git grep -ohE 'BBH-[0-9]+' \| sort -uV` shows only the literal `BBH-1` inside the string `[BBH-1..87]` naming the OTHER repo |
 | A21 | tracked `tests/**/*.sh` — the glob RECURSES, so this includes the 8 shared scripts under `tests/lib/` and is NOT the gate count | 319 | `git ls-files 'tests/*.sh' \| wc -l` ; the 8: `git ls-files 'tests/*.sh' \| grep '^tests/.*/'` → classify, decrypt_cache, enumerate_expectations, m2a_common, masked_compare, pairing, shadow_tools, tenant_build |
 | A22 | gate scripts present in the working tree | 311 | `ls tests/*.sh \| wc -l` |
 | A23 | gate scripts named `test_*` | 239 | `ls tests/test_*.sh \| wc -l` |
-| A24 | rows in the GENERATED gate index | 311 | ``grep -c '^| `tests/' docs/project/gate_index.md`` |
+| A24 | rows in the GENERATED gate index | 311 | ``grep -c '^[\|] `tests/' docs/project/gate_index.md`` |
 | A25 | registry rows, `tests/gate_index.tsv` (family, hand-maintained) | 311 | `grep -vE '^\s*(#\|$)' tests/gate_index.tsv \| wc -l` |
 | A26 | registry rows, `tests/ci_static.txt` | 74 | `grep -vE '^\s*(#\|$)' tests/ci_static.txt \| wc -l` |
 | A27 | registry rows, `tests/ci_portable.txt` | 68 | `grep -vE '^\s*(#\|$)' tests/ci_portable.txt \| wc -l` |
@@ -42,7 +42,7 @@ Read-only survey. Every number below carries the command that printed it, run fr
 | A33 | MUST-FIRE marker occurrences under `tests/` | 194 | `git grep -ohiE 'must.{0,2}fire' tests \| wc -l` |
 | A34 | distinct SPELLINGS of the MUST-FIRE marker | 8 | `git grep -ohiE 'must.{0,2}fire' tests \| sort -u \| wc -l` — `must-fire` 91, `MUST-FIRE` 65, `must fire` 13, `must_fire` 11, `Must-fire` 5, `must FIRE` 4, `MUST fire` 4, `must- fire` 1 |
 | A35 | docs/memory files mentioning MUST-FIRE | 35 | `git grep -lie 'must.fire' -- 'docs/**/*.md' '*.md' \| wc -l` |
-| A36 | machine-readable MUST-FIRE registry | 0 | `git ls-files \| grep -i mustfire` → empty; the marker is prose only |
+| A36 | machine-readable MUST-FIRE registry | 0 | `git ls-files \| grep -i mustfire \| wc -l` → empty; the marker is prose only |
 | A37 | tracked files under `tests/expected/` | 4808 | `git ls-files tests/expected \| wc -l` |
 | A38 | expectation files, `.masked` | 2311 | `git ls-files 'tests/expected/*.masked' \| wc -l` |
 | A39 | expectation files, `.log` (frozen reference logs) | 807 | `git ls-files 'tests/expected/*.log' \| wc -l` |
@@ -59,7 +59,7 @@ Read-only survey. Every number below carries the command that printed it, run fr
 | A50 | verdict-bearing expectations (.masked+.skip+.sha1+.pending) | 3814 | sum of A38, A40, A41, A46 |
 | A51 | expectation SETS (subdirectories of `tests/expected/`) | 86 | `git ls-files tests/expected \| awk -F/ 'NF>2{print $3}' \| sort -u \| wc -l` |
 | A52 | sets carrying frozen `logs/` | 42 | `git ls-files tests/expected \| grep '/logs/' \| awk -F/ '{print $3}' \| sort -u \| wc -l` |
-| A53 | `.masked` spec class census — `window` | 1322 | `git ls-files 'tests/expected/*.masked' \| while read f; do head -1 "$f"; done \| awk '{print $1}' \| sort \| uniq -c \| sort -rn` |
+| A53 | `.masked` spec class census — `window` | 1322 | `git ls-files 'tests/expected/*.masked' \| while read f; do head -1 "$f"; done \| awk '{print $1}' \| sort \| uniq -c \| sort -rn \| awk '$2=="window"{print $1}'` |
 | A54 | `.masked` spec class census — `composite` | 596 | (same command as A53) |
 | A55 | `.masked` spec class census — `exact` | 192 | (same command as A53) |
 | A56 | `.masked` spec class census — `diverge` | 43 | (same command as A53) |
@@ -81,18 +81,18 @@ Read-only survey. Every number below carries the command that printed it, run fr
 | A72 | STALE COUNTER — `harness_scope.md` says vs measured, skill rules | says 553, is 555 | `grep -on '553 rules' docs/project/harness_scope.md` (→ `313:`, `608:`) vs A1 |
 | A73 | STALE COUNTER — `harness_scope.md` / fidelity gate say vs measured, masked specs | says 1,891, is 2311 | `grep -on '1,891' docs/project/harness_scope.md tests/test_bbh_fidelity.sh` (→ 4 sites) vs A38 |
 | A74 | rot classes in the harness-rot taxonomy | 7 | `grep -cE '^[0-9]\. \*\*THE ' docs/project/harness_hardening_history.md` |
-| A75 | fidelity rows in `harness_scope.md` §5 (F1..F11 + the F8-measured row) | 12 | `sed -n '/## 5\./,/## 6\./p' docs/project/harness_scope.md \| grep -cE '^\| \*?\*?F[0-9]'` |
-| A76 | memory file lines — `CLAUDE.md` | 395 | `wc -l CLAUDE.md` |
-| A77 | memory file lines — `STATE.md` | 1509 | `wc -l STATE.md` |
-| A78 | memory file lines — `HANDOFF.md` | 1515 | `wc -l HANDOFF.md` |
-| A79 | memory file lines — `DECISIONS_HISTORY.md` | 2783 | `wc -l DECISIONS_HISTORY.md` |
-| A80 | memory file lines — `STATE_HISTORY.md` | 28918 | `wc -l STATE_HISTORY.md` |
-| A81 | memory file lines — `HANDOFF_HISTORY.md` | 2437 | `wc -l HANDOFF_HISTORY.md` |
-| A82 | memory file lines — `README.md` | 35 | `wc -l README.md` |
-| A83 | memory file lines — `SPEC.md` | 175 | `wc -l SPEC.md` |
-| A84 | memory file lines — `docs/NEXT_SESSION.md` | 92 | `wc -l docs/NEXT_SESSION.md` |
-| A85 | memory file lines — `docs/NEXT_SESSION_HISTORY.md` | 5947 | `wc -l docs/NEXT_SESSION_HISTORY.md` |
-| A86 | memory file lines — `docs/annotations.md` (GENERATED) | 3023 | `wc -l docs/annotations.md` |
+| A75 | fidelity rows in `harness_scope.md` §5 (F1..F11 + the F8-measured row) | 12 | `sed -n '/## 5\./,/## 6\./p' docs/project/harness_scope.md \| grep -cE '^[\|] \*?\*?F[0-9]'` |
+| A76 | memory file lines — `CLAUDE.md` | 395 | `wc -l < CLAUDE.md` |
+| A77 | memory file lines — `STATE.md` | 1509 | `wc -l < STATE.md` |
+| A78 | memory file lines — `HANDOFF.md` | 1515 | `wc -l < HANDOFF.md` |
+| A79 | memory file lines — `DECISIONS_HISTORY.md` | 2783 | `wc -l < DECISIONS_HISTORY.md` |
+| A80 | memory file lines — `STATE_HISTORY.md` | 28918 | `wc -l < STATE_HISTORY.md` |
+| A81 | memory file lines — `HANDOFF_HISTORY.md` | 2437 | `wc -l < HANDOFF_HISTORY.md` |
+| A82 | memory file lines — `README.md` | 35 | `wc -l < README.md` |
+| A83 | memory file lines — `SPEC.md` | 175 | `wc -l < SPEC.md` |
+| A84 | memory file lines — `docs/NEXT_SESSION.md` | 92 | `wc -l < docs/NEXT_SESSION.md` |
+| A85 | memory file lines — `docs/NEXT_SESSION_HISTORY.md` | 5947 | `wc -l < docs/NEXT_SESSION_HISTORY.md` |
+| A86 | memory file lines — `docs/annotations.md` (GENERATED) | 3023 | `wc -l < docs/annotations.md` |
 | A87 | domain-token files — `vsav` | 4718 | `git grep -il vsav \| wc -l` |
 | A88 | domain-token files — `mame` | 527 | `git grep -il mame \| wc -l` |
 | A89 | domain-token files — `vampire` | 489 | `git grep -il vampire \| wc -l` |
@@ -101,7 +101,7 @@ Read-only survey. Every number below carries the command that printed it, run fr
 | A92 | domain-token files — `fbneo` | 210 | `git grep -il fbneo \| wc -l` |
 | A93 | domain-token files — `mister` | 170 | `git grep -il mister \| wc -l` |
 | A94 | domain-token files — `68k` | 136 | `git grep -il 68k \| wc -l` |
-| A95 | tracked files — `tests/` | 5422 | `git ls-files \| awk -F/ '{if (NF==1) print "(root)"; else print $1}' \| sort \| uniq -c \| sort -rn` |
+| A95 | tracked files — `tests/` | 5422 | `git ls-files \| awk -F/ '{if (NF==1) print "(root)"; else print $1}' \| sort \| uniq -c \| sort -rn \| awk '$2=="tests"{print $1}'` |
 | A96 | tracked files — `build/` | 1043 | (same command as A95) |
 | A97 | tracked files — `release/` | 719 | (same command as A95) |
 | A98 | tracked files — `tools/` | 161 | (same command as A95) |
@@ -124,15 +124,15 @@ Read-only survey. Every number below carries the command that printed it, run fr
 | A115 | suite runners | 4 | `ls tests/run_*.sh \| wc -l` |
 | A116 | tools | 161 (135 `.py`, 26 `.sh`) | `git ls-files tools \| wc -l` ; `git ls-files tools \| sed -E 's/.*\.//' \| sort \| uniq -c` |
 | A117 | build manifests (the source of every ROM byte) | 33 | `git ls-files build/manifest \| wc -l` |
-| A118 | frozen doc-anchor census rows | 561 | `wc -l tests/expected/doc_anchor_census.tsv` |
-| A119 | files this tree gains from the bbh extraction | 1 | `git ls-files \| grep -i bbh` → `tests/test_bbh_fidelity.sh` only |
+| A118 | frozen doc-anchor census rows | 561 | `wc -l < tests/expected/doc_anchor_census.tsv` |
+| A119 | files this tree gains from the bbh extraction | 1 | `git ls-files \| grep -i bbh \| wc -l` → `tests/test_bbh_fidelity.sh` only |
 | A120 | tracked files mentioning `bbh` | 23 | `git grep -il bbh \| wc -l` |
 | A121 | tracked files mentioning `fidelity` | 19 | `git grep -il fidelity \| wc -l` |
 | A122 | tracked `.md` files | 234 | `git ls-files '*.md' \| wc -l` |
 | A123 | `AW-N` — a REGEX FALSE POSITIVE, not a rule scheme: Verilog bit-slices `addr[AW-1]` / `prog_addr[AW-1]` where AW is an address-width parameter | 7 occurrences in 3 files | `git grep -ohE '\[AW-[0-9]+\]' -- '*.md' '*.tsv' '*.toml' '*.py' '*.sh' '*.lua' \| wc -l` → 7 ; `git grep -lE '\[AW-[0-9]+\]' -- '*.md' …` → `STATE_HISTORY.md`, `docs/platform/gotchas.md`, `docs/platform/mister.md` |
 | A124 | `RH-N` — a LIVE CROSS-REPO scheme: the external `romhacking-methodology` skill, cited but never defined here | 43 files, 72 occurrences, 24 distinct IDs | `git grep -lE 'RH-[0-9]+' \| wc -l` → 43 ; `git grep -ohE 'RH-[0-9]+' \| wc -l` → 72 ; `git grep -ohE 'RH-[0-9]+' \| sort -u \| wc -l` → 24 |
-| A125 | distinct `RH-N` IDs cited OUTSIDE the history archives (the live citation set) | 18 | `git grep -ohE 'RH-[0-9]+' -- ':!*_HISTORY.md' ':!*_history.md' \| sort -uV` → RH-2 8 9 11 14 15 17 18 19 23 25 26 27 43 44 48 49 58 |
-| A126 | bracketed `[RH-N]` occurrences in the A19 scope (why A19 counted only 1) | 1 | `git grep -nE '\[RH-[0-9]+\]' -- '*.md' '*.tsv' '*.toml' '*.py' '*.sh' '*.lua'` → `tests/test_skill_guides.sh:16` `[RH-9]`; the 4 SKILL.md headers use the PLACEHOLDER form `[RH-NN]`, which no `[0-9]+` regex matches |
+| A125 | distinct `RH-N` IDs cited OUTSIDE the history archives (the live citation set) | 18 | `git grep -ohE 'RH-[0-9]+' -- ':!*_HISTORY.md' ':!*_history.md' \| sort -uV \| wc -l` → RH-2 8 9 11 14 15 17 18 19 23 25 26 27 43 44 48 49 58 |
+| A126 | bracketed `[RH-N]` occurrences in the A19 scope (why A19 counted only 1) | 1 | `git grep -nE '\[RH-[0-9]+\]' -- '*.md' '*.tsv' '*.toml' '*.py' '*.sh' '*.lua' \| wc -l` → `tests/test_skill_guides.sh:16` `[RH-9]`; the 4 SKILL.md headers use the PLACEHOLDER form `[RH-NN]`, which no `[0-9]+` regex matches |
 | A127 | gate scripts tracked, TOP LEVEL ONLY — the real gate count, equal to A22 (in-tree) and A24 (index rows) | 311 | `git ls-files 'tests/*.sh' \| grep -vc '^tests/.*/'` |
 
 ## B. Items

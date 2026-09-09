@@ -76,3 +76,36 @@ step that found nothing would have been the suspicious result.
 ## Next
 
 `HANDOFF.md` step 3: open slice S1 with the recount gate.
+
+---
+
+# Readout — slice S1, step 1: the census recount gate (2026-09-09)
+
+## Verdict
+
+`gates/census_recount.sh` → **PASS**, twice, byte-identical output:
+`3 census files, 300 rows: 246 match, 0 mismatch, 54 not recountable, 1 matched with a non-zero exit; 2 controls fired` — 21 s.
+
+## Counts, separately
+
+| | |
+|---|---|
+| gates run / PASS / SKIP / FAIL / TIMEOUT | 1 / 1 / 0 / 0 / 0 |
+| controls declared / fired | 2 / 2 (`wrong-head`: a shadow census at HEAD 0000000 → HEAD-MOVED; `moved-count`: row A1 191 vs 190 → MISMATCH) |
+| the SKIP path exercised | yes: a census naming `/nonexistent/…` → `SKIP:` exit 0; a missing census file → `FAIL:` exit 1 |
+| recountable rows, by file | bbh 79/79, VampireSaved 100/100, SMS 67/67 |
+| NOT-RECOUNTABLE rows | 54 (VS 27, SMS 27; ids printed by the gate) — the census's uncovered claims, allowed to move only downward |
+| census rows rewritten to reach this (document first, no count changed) | bbh 65 by script + 9 by hand; VS 22; SMS 34 |
+| instrument findings | G9 (two greps), G10 (a never-matching pattern) |
+
+## What it rests on
+
+The recorded HEADs (`f675710`, `5df1d8be`, `ecc5481`), checked before any row runs; the hermetic environment (D6); the census grammar (`docs/census/README.md`); every count's own command.
+
+## What this green does NOT assert
+
+- Anything about §B item rows or §C generators: the recount re-runs §A counts only. The 1,248 item rows and the 848 generated rows were verified once, by the verifiers, through the interactive shell (G9 applies to any of them that used a recursive grep — none of the generators did; the §B spot-checks read files by line, not by grep).
+- The 54 not-recountable rows. Their claims stand on the verifiers' one-time reading.
+- That the counts are *current*: they are the counts at the recorded HEADs, and a moved HEAD turns the whole file red until it is re-measured.
+- That the commands measure what their dimension says. The recount proves the command prints the number; whether the command is the right question is the reviewer's (G10 is the example).
+- Portability: measured on macOS only so far (R3 wants Linux and WSL; the platform gates are later in S1).

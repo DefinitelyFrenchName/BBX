@@ -75,3 +75,33 @@ finding, the constitution would have gained a label for a number it never
 carried. Re-anchors: CLAUDE.md §1 third clause — the edit was the moment of
 certainty, and the grep was the measurement it demanded. **This is the
 project's first re-anchoring incident in the contributor's own conduct.**
+
+## G9 — Two programs answer to the name `grep`, and every human and agent in this session used the one that lies about ignored files (paid: ~1 hour of bisection, 2026-09-09; would have been a permanent false census)
+The interactive shell on this host resolves `grep` to ugrep 7.8 (skips
+gitignored files and archives); `sh -c` resolves `/usr/bin/grep`, BSD grep
+(reads everything, including two `.tar` files under `tools/Flips/` in SMS that
+contain the bytes "vampire"). The census producers, the three verifiers and
+the orchestrator all measured through the interactive shell, so the
+verification reproduced the producer's instrument, not the count: six SMS
+rows "matched" three times and were wrong for any other host. The first
+recount, running under `sh`, was the third party (BBX-15) that exposed it.
+Fix in two places, neither a loosening: the recount runs every command in a
+hermetic environment (`docs/defaults.md` D6, PATH pinned), and recursive
+greps over the working tree are no longer admitted in the census grammar —
+searches use `git grep`, whose universe is the tracked tree at the recorded
+HEAD (`docs/census/README.md` rule 6). Nineteen SMS rows rewritten; every
+count reproduced under `git grep`, because ugrep's ignore behaviour had
+coincided with "tracked files" — which is what the producers meant.
+Re-anchors: BBX-15 (a third, lineage-independent party) — the first
+re-anchoring by an incident in *this project's own instrument*.
+
+## G10 — A pattern that could never match measured "0 forward references", and the verifier reproduced the 0 by re-running it (paid: 0 — caught by reading the row while rewriting it, 2026-09-09)
+SMS census A93 counted files mentioning blackbox-harness or bbh with
+`grep -ril 'blackbox-harness\|blackbox_harness\|bbh'`: after the markdown
+unescape the pattern is a basic-regex literal containing pipes, which matches
+nothing, so the count was 0 whatever the tree held. The verifier ran the same
+command and reported MATCH. The corrected row (`git grep -ilwE …`) also
+measures 0 — the claim was true, the evidence was not (BBX-2: "a gate born
+against a live defect has never exercised PASS"). Re-anchors: BBX-8 (a
+validator is re-run where it must fail) — this row never was; the recount's
+moved-count control is the first such re-run in BBX.

@@ -19,7 +19,11 @@ Shape: operational map. Read this first, then `STATE.md`, then
 | the generality proof (two non-frame kinds, their fixtures) | `docs/generality.md` |
 | the fidelity plan, F12+ | `docs/fidelity.md`; re-baseline log `docs/rebaselines.md` |
 | the slice sequence with the estimate | `docs/slices.md` |
-| the maintainer readout of session 1 | `docs/readout.md` |
+| the maintainer readouts (session 1; S1 step 1) | `docs/readout.md` |
+| the controls contract (must-fire grammar, R10) | `docs/controls.md` |
+| the defaults register (BBX-24) | `docs/defaults.md` |
+| the first gate and the registries | `gates/census_recount.sh`, `gates/static.txt`, `gates/portable.txt` |
+| the first tool | `lib/py/bbx/recount.py` (`--only A1,A2` re-runs single rows; `--root` overrides) |
 
 ## The lineage on this machine
 
@@ -34,20 +38,22 @@ bbh is **never modified** from here. VampireSaved and SMS are read only.
 
 ## What is running
 
-Nothing. No gate exists. No background process.
+Nothing in the background. One gate exists and is green:
+`sh gates/census_recount.sh` (~21 s) — run it first thing; it is the
+re-derivation step of the ritual (CLAUDE.md §6.2) made into a gate.
 
 ## The ritual for session 2 (CLAUDE.md §6)
 
 1. Read this file, `STATE.md`, `docs/rulings.md`.
-2. Re-derive before relying: run the command block in `docs/census/README.md`
-   and confirm the three HEADs and the headline numbers; if any moved, that is
-   the session's first finding and the census rows it touches are re-measured
-   before anything else.
-3. All rulings are answered (`DECISIONS.md`, R0–R16). Slice S1 may open
-   (`docs/slices.md`): its first deliverable is the census recount gate
-   (R9, R14) with its must-fire (a wrong HEAD), then the classifier and the
-   gate contract over bbh's `example/`, ending with F12–F15 diffing empty.
-   Load the `blackbox-harness` skill before writing the first gate.
+2. Re-derive before relying: `sh gates/census_recount.sh`. A HEAD-MOVED line
+   means a lineage repository moved: re-measure that census file (the tool's
+   `--only` runs single rows) before anything else. A red row is a finding.
+3. Continue S1 (`docs/slices.md`): the one classifier (bbh's contract,
+   reproduced), the gate header reader incl. the MUST-FIRE grammar
+   (`docs/controls.md`), the tiered registries with the anti-orphan check,
+   the static runner, then the suite and sweep runners over bbh's `example/`,
+   ending with F12–F15 diffing empty. Load the `blackbox-harness` skill first.
+   Every new default gets a row in `docs/defaults.md` before it is used.
 4. `CLAUDE.md` is edited only with maintainer approval (R16). A defect found
    in it goes to `docs/rulings.md` with proposed wording.
 5. Before ending: update `STATE.md` and this file; append to
@@ -64,3 +70,10 @@ Nothing. No gate exists. No background process.
 - Three counters inside VampireSaved's own docs are stale (see
   `docs/census/vampiresaved.md`); do not quote VampireSaved's prose numbers,
   quote its commands.
+- This host's interactive `grep` is ugrep, not BSD grep (gotcha G9). Never
+  verify a census count through the interactive shell; use
+  `python3 lib/py/bbx/recount.py <census> --only <ids>`, which runs under a
+  pinned PATH.
+- Two recounts running at once in one tree are not a known problem (the
+  inflation seen while bisecting G9 was the grep, not the overlap), but the
+  tools in the SMS tree do run for minutes; run the gate alone.

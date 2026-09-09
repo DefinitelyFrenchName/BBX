@@ -8,85 +8,85 @@ Purpose: enumerate everything a generalization of bbh to non-frame subjects must
 
 | id | dimension | count | command (run from repo root) |
 |---|---|---|---|
-| A1 | tracked files (total) | 190 | `git ls-files | wc -l` |
-| A2 | commits on HEAD | 19 | `git log --oneline | wc -l` |
-| A3 | dirty files in the working tree | 4 | `git status --porcelain | wc -l` |
-| A4 | tracked files in example/ | 83 | `git ls-files example | wc -l` |
-| A5 | tracked files in selftest/ | 33 | `git ls-files selftest | wc -l` |
-| A6 | tracked files in lib/ | 32 | `git ls-files lib | wc -l` |
-| A7 | tracked files in lua/ | 13 | `git ls-files lua | wc -l` |
-| A8 | tracked files in docs/ | 9 | `git ls-files docs | wc -l` |
-| A9 | tracked files in bin/ | 8 | `git ls-files bin | wc -l` |
-| A10 | tracked files in drivers/ | 5 | `git ls-files drivers | wc -l` |
-| A11 | tracked files in skill/ | 3 | `git ls-files skill | wc -l` |
-| A12 | tracked files at the repo root | 4 | `git ls-files | grep -vc /` |
-| A13 | bin/ entry points | 8 | `ls -1 bin/* | wc -l` |
-| A14 | lib/py/bbh python modules | 23 | `ls -1 lib/py/bbh/*.py | wc -l` |
-| A15 | lib/sh sourced shell libs | 9 | `ls -1 lib/sh/*.sh | wc -l` |
-| A16 | lua/mame scripts + profiles | 13 | `git ls-files lua | wc -l` |
-| A17 | machine profiles (lua/mame/profiles) | 3 | `ls -1 lua/mame/profiles/*.lua | wc -l` |
-| A18 | shipped drivers | 4 | `ls -1 drivers/*.sh | wc -l` |
+| A1 | tracked files (total) | 190 | `git ls-files \| wc -l` |
+| A2 | commits on HEAD | 19 | `git log --oneline \| wc -l` |
+| A3 | dirty files in the working tree | 4 | `git status --porcelain \| wc -l` |
+| A4 | tracked files in example/ | 83 | `git ls-files example \| wc -l` |
+| A5 | tracked files in selftest/ | 33 | `git ls-files selftest \| wc -l` |
+| A6 | tracked files in lib/ | 32 | `git ls-files lib \| wc -l` |
+| A7 | tracked files in lua/ | 13 | `git ls-files lua \| wc -l` |
+| A8 | tracked files in docs/ | 9 | `git ls-files docs \| wc -l` |
+| A9 | tracked files in bin/ | 8 | `git ls-files bin \| wc -l` |
+| A10 | tracked files in drivers/ | 5 | `git ls-files drivers \| wc -l` |
+| A11 | tracked files in skill/ | 3 | `git ls-files skill \| wc -l` |
+| A12 | tracked files at the repo root | 4 | `git ls-files \| grep -vc /` |
+| A13 | bin/ entry points | 8 | `ls -1 bin/* \| wc -l` |
+| A14 | lib/py/bbh python modules | 23 | `ls -1 lib/py/bbh/*.py \| wc -l` |
+| A15 | lib/sh sourced shell libs | 9 | `ls -1 lib/sh/*.sh \| wc -l` |
+| A16 | lua/mame scripts + profiles | 13 | `git ls-files lua \| wc -l` |
+| A17 | machine profiles (lua/mame/profiles) | 3 | `ls -1 lua/mame/profiles/*.lua \| wc -l` |
+| A18 | shipped drivers | 4 | `ls -1 drivers/*.sh \| wc -l` |
 | A19 | bbh subcommands dispatched | 26 | `grep -cE '^[a-z-]+\)  *exec' bin/bbh` |
-| A20 | distinct BBH rule IDs | 87 | `git grep -ohE '\[BBH-[0-9]+\]' | sed 's/[][]//g' | sort -u | wc -l` |
-| A21 | distinct ANCHORED rule defs (bold, docs only) | 87 | `git grep -ohE '\*\*\[BBH-[0-9]+\]\*\*' -- docs README.md drivers/README.md | sed 's/[][*]//g' | sort -u | wc -l` |
-| A22 | files that DEFINE rules (carry a bold anchor), excl. GUIDE.md | 9 | `git grep -lE '\*\*\[BBH-[0-9]+\]\*\*' | grep -v GUIDE.md | wc -l` |
+| A20 | distinct BBH rule IDs | 87 | `git grep -ohE '\[BBH-[0-9]+\]' \| sed 's/[][]//g' \| sort -u \| wc -l` |
+| A21 | distinct ANCHORED rule defs (bold, docs only) | 87 | `git grep -ohE '\*\*\[BBH-[0-9]+\]\*\*' -- docs README.md drivers/README.md \| sed 's/[][*]//g' \| sort -u \| wc -l` |
+| A22 | files that DEFINE rules (carry a bold anchor), excl. GUIDE.md | 9 | `git grep -lE '\*\*\[BBH-[0-9]+\]\*\*' \| grep -v GUIDE.md \| wc -l` |
 | A23 | rule bullets in SKILL.md | 87 | `grep -cE '^- \[BBH-[0-9]+\]' skill/blackbox-harness/SKILL.md` |
 | A24 | anchors in the GENERATED GUIDE.md | 87 | `grep -cE '^\*\*\[BBH-[0-9]+\]\*\*' skill/blackbox-harness/GUIDE.md` |
-| A25 | distinct NON-BBH bracket IDs anywhere | 17 | `git grep -ohE '\[[A-Z]{2,5}-[0-9]+\]' | sed 's/[][]//g' | grep -v '^BBH-' | sort -u | wc -l` |
-| A26 | files carrying the one real foreign rule ID [CPE-24] | 6 | `git grep -il 'CPE-24' | wc -l` |
-| A27 | forbidden tokens in skill/skills.toml forbid list | 33 | `sed -n '/^forbid = /p' skill/skills.toml | grep -o '"[^"]*"' | wc -l` |
-| A28 | forbidden BRACKET-prefix tokens (other skills' IDs) | 9 | `grep -o '"\[[A-Z]*-"' skill/skills.toml | wc -l` |
-| A29 | oracle comparison classes (table rows) | 5 | `sed -n '/^## The classes/,/^Two rulings/p' docs/method/oracle_classes.md | grep -E '^\| ' | tail -n +2 | wc -l` |
-| A30 | expectation KINDS registered in enumerate_expectations.sh | 5 | `grep -cE '^\s+(masked|skip|sha1|diverge|pending)\)' lib/sh/enumerate_expectations.sh` |
-| A31 | comparator / checker modules under lib/py/bbh | 7 | `ls -1 lib/py/bbh/compare_*.py lib/py/bbh/check_*.py lib/py/bbh/describe_masked_shape.py | wc -l` |
-| A32 | comparison thresholds declared in thresholds.py | 3 | `grep -oE '"[a-z_]+": [0-9]+' lib/py/bbh/thresholds.py | wc -l` |
-| A33 | replay-family driver env vars (drivers/README.md §2) | 9 | `sed -n '/^## 2. The environment/,/^\*\*\[BBH-29\]/p' drivers/README.md | grep -cE '^\| `[A-Z_]+`'` |
-| A34 | guard-family driver env vars | 9 | `sed -n '/\[BBH-29\]/,/\[BBH-28\]/p' drivers/README.md | grep -oE '`[A-Z_]+`' | sort -u | wc -l` |
-| A35 | driver exit statuses defined | 4 | `sed -n '/^## 4. The exit status/,/^## 5/p' drivers/README.md | grep -cE '^\| [0-9]'` |
-| A36 | hygiene checks (docs/hygiene.md table rows) | 8 | `sed -n '/^| check |/,/^$/p' docs/hygiene.md | grep -cE '^\| `'` |
-| A37 | lineage evidence classes (closed vocabulary, hygiene.md) | 6 | `sed -n '/^\*\*\[BBH-53\]\*\*/,/^Files with no/p' docs/hygiene.md | grep -cE '^- `'` |
-| A38 | example consumer evidence classes | 4 | `grep -cE '^- `' example/expected/PROVENANCE.md` |
-| A39 | machine-profile keys documented (docs/lua.md §1 table) | 16 | `sed -n '/^| key | read by | meaning |/,/^$/p' docs/lua.md | grep -cE '^\| `'` |
+| A25 | distinct NON-BBH bracket IDs anywhere | 17 | `git grep -ohE '\[[A-Z]{2,5}-[0-9]+\]' \| sed 's/[][]//g' \| grep -v '^BBH-' \| sort -u \| wc -l` |
+| A26 | files carrying the one real foreign rule ID [CPE-24] | 6 | `git grep -il 'CPE-24' \| wc -l` |
+| A27 | forbidden tokens in skill/skills.toml forbid list | 33 | `sed -n '/^forbid = /p' skill/skills.toml \| grep -o '"[^"]*"' \| wc -l` |
+| A28 | forbidden BRACKET-prefix tokens (other skills' IDs) | 9 | `grep -o '"\[[A-Z]*-"' skill/skills.toml \| wc -l` |
+| A29 | oracle comparison classes (table rows) | 5 | `sed -n '/^## The classes/,/^Two rulings/p' docs/method/oracle_classes.md \| grep -E '^[\|] ' \| tail -n +2 \| wc -l` |
+| A30 | expectation KINDS registered in enumerate_expectations.sh | 5 | `grep -cE '^\s+(masked\|skip\|sha1\|diverge\|pending)\)' lib/sh/enumerate_expectations.sh` |
+| A31 | comparator / checker modules under lib/py/bbh | 7 | `ls -1 lib/py/bbh/compare_*.py lib/py/bbh/check_*.py lib/py/bbh/describe_masked_shape.py \| wc -l` |
+| A32 | comparison thresholds declared in thresholds.py | 3 | `grep -oE '"[a-z_]+": [0-9]+' lib/py/bbh/thresholds.py \| wc -l` |
+| A33 | replay-family driver env vars (drivers/README.md §2) | 9 | ``sed -n '/^## 2. The environment/,/^\*\*\[BBH-29\]/p' drivers/README.md \| grep -cE '^[\|] `[A-Z_]+`'`` |
+| A34 | guard-family driver env vars | 9 | ``sed -n '/\[BBH-29\]/,/\[BBH-28\]/p' drivers/README.md \| grep -oE '`[A-Z_]+`' \| sort -u \| wc -l`` |
+| A35 | driver exit statuses defined | 4 | `sed -n '/^## 4. The exit status/,/^## 5/p' drivers/README.md \| grep -cE '^[\|] [0-9]'` |
+| A36 | hygiene checks (docs/hygiene.md table rows) | 8 | ``sed -n '/^[\|] check [\|]/,/^$/p' docs/hygiene.md \| grep -cE '^[\|] `'`` |
+| A37 | lineage evidence classes (closed vocabulary, hygiene.md) | 6 | ``sed -n '/^\*\*\[BBH-53\]\*\*/,/^Files with no/p' docs/hygiene.md \| grep -cE '^- `'`` |
+| A38 | example consumer evidence classes | 4 | ``grep -cE '^- `' example/expected/PROVENANCE.md`` |
+| A39 | machine-profile keys documented (docs/lua.md §1 table) | 16 | ``sed -n '/^[\|] key [\|] read by [\|] meaning [\|]/,/^$/p' docs/lua.md \| grep -cE '^[\|] `'`` |
 | A40 | top-level keys in profiles/TEMPLATE.lua | 16 | `grep -cE '^\s+[a-z_]+ =' lua/mame/profiles/TEMPLATE.lua` |
-| A41 | selftests (selftest/test_*.sh) | 32 | `ls -1 selftest/test_*.sh | wc -l` |
-| A42 | selftests containing the marker 'must-fire' | 23 | `git grep -il 'must-fire' -- selftest | wc -l` |
-| A43 | selftests containing any control marker (must-fire|negative control|control:) | 24 | `git grep -ilE 'must-fire|negative control|control:' -- selftest | wc -l` |
-| A44 | total 'must-fire' occurrences across selftest/ | 54 | `git grep -oi 'must-fire' -- selftest | wc -l` |
-| A45 | config keys DOCUMENTED (table rows in docs/config.md) | 121 | `grep -cE '^\| `' docs/config.md` |
+| A41 | selftests (selftest/test_*.sh) | 32 | `ls -1 selftest/test_*.sh \| wc -l` |
+| A42 | selftests containing the marker 'must-fire' | 23 | `git grep -il 'must-fire' -- selftest \| wc -l` |
+| A43 | selftests containing any control marker (must-fire, negative control, control:) | 24 | `git grep -ilE 'must-fire\|negative control\|control:' -- selftest \| wc -l` |
+| A44 | total 'must-fire' occurrences across selftest/ | 54 | `git grep -oi 'must-fire' -- selftest \| wc -l` |
+| A45 | config keys DOCUMENTED (table rows in docs/config.md) | 121 | ``grep -cE '^[\|] `' docs/config.md`` |
 | A46 | config sections in docs/config.md | 17 | `grep -cE '^## ' docs/config.md` |
 | A47 | config keys in code (lib/py/bbh/config.py DEFAULTS) | 116 | `PYTHONPATH=lib/py python3 -c 'from bbh import config as C; print(sum(len(d) for d in C.DEFAULTS.values()))'` |
 | A48 | config sections in code (DEFAULTS) | 16 | `PYTHONPATH=lib/py python3 -c 'from bbh import config as C; print(len(C.DEFAULTS))'` |
-| A49 | docs/config.md rows with origin = config | 93 | `grep -oE '\| (code|config)[^|]*\|' docs/config.md | sed 's/|//g;s/^ *//;s/ *$//' | grep -cx 'config'` |
-| A50 | docs/config.md rows with origin = code | 13 | `grep -oE '\| (code|config)[^|]*\|' docs/config.md | sed 's/|//g;s/^ *//;s/ *$//' | grep -cx 'code'` |
-| A51 | docs/config.md rows with origin = config (policy) | 8 | `grep -oE '\| (code|config)[^|]*\|' docs/config.md | sed 's/|//g;s/^ *//;s/ *$//' | grep -cx 'config (policy)'` |
-| A52 | docs/config.md rows with origin = config (a game fact) | 1 | `grep -oE '\| (code|config)[^|]*\|' docs/config.md | sed 's/|//g;s/^ *//;s/ *$//' | grep -cx 'config (a game fact)'` |
-| A53 | docs/config.md rows with origin = code (policy) | 1 | `grep -oE '\| (code|config)[^|]*\|' docs/config.md | sed 's/|//g;s/^ *//;s/ *$//' | grep -cx 'code (policy)'` |
-| A54 | literals binned in the lua defaults census (docs/lua.md §5) | 12 | `sed -n '/^## 5. The defaults census/,/^## 6/p' docs/lua.md | grep -E '^\| ' | tail -n +2 | wc -l` |
+| A49 | docs/config.md rows with origin = config | 93 | `grep -oE '[\|] (code\|config)[^\|]*[\|]' docs/config.md \| sed 's/\|//g;s/^ *//;s/ *$//' \| grep -cx 'config'` |
+| A50 | docs/config.md rows with origin = code | 13 | `grep -oE '[\|] (code\|config)[^\|]*[\|]' docs/config.md \| sed 's/\|//g;s/^ *//;s/ *$//' \| grep -cx 'code'` |
+| A51 | docs/config.md rows with origin = config (policy) | 8 | `grep -oE '[\|] (code\|config)[^\|]*[\|]' docs/config.md \| sed 's/\|//g;s/^ *//;s/ *$//' \| grep -cx 'config (policy)'` |
+| A52 | docs/config.md rows with origin = config (a game fact) | 1 | `grep -oE '[\|] (code\|config)[^\|]*[\|]' docs/config.md \| sed 's/\|//g;s/^ *//;s/ *$//' \| grep -cx 'config (a game fact)'` |
+| A53 | docs/config.md rows with origin = code (policy) | 1 | `grep -oE '[\|] (code\|config)[^\|]*[\|]' docs/config.md \| sed 's/\|//g;s/^ *//;s/ *$//' \| grep -cx 'code (policy)'` |
+| A54 | literals binned in the lua defaults census (docs/lua.md §5) | 12 | `sed -n '/^## 5. The defaults census/,/^## 6/p' docs/lua.md \| grep -E '^[\|] ' \| tail -n +2 \| wc -l` |
 | A55 | ruled defaults in docs/conventions.md | 9 | `grep -cE '^[0-9]+\. ' docs/conventions.md` |
 | A56 | re-baseline entries in docs/rebaselines.md | 1 | `grep -c '^- ' docs/rebaselines.md` |
 | A57 | fidelity rows F1-F11 (header entries) | 11 | `grep -cE '^#   F[0-9]+ ' selftest/test_fidelity_vampire.sh` |
 | A58 | F8 sub-rows F8a-F8h | 8 | `grep -cE '^#   F8[a-h] ' selftest/test_fidelity_mame.sh` |
-| A59 | example gates (tests/g_*.sh) | 12 | `ls -1 example/tests/g_*.sh | wc -l` |
-| A60 | example replays (.rpl) | 6 | `ls -1 example/replays/*.rpl | wc -l` |
-| A61 | example fake ROM image dirs | 5 | `ls -1d example/roms/*/ | wc -l` |
-| A62 | example expected .sha1 files | 11 | `git ls-files 'example/expected/*.sha1' | wc -l` |
-| A63 | example expected .masked specs | 10 | `git ls-files 'example/expected/*.masked' | wc -l` |
-| A64 | example expected .skip files | 2 | `git ls-files 'example/expected/*.skip' | wc -l` |
-| A65 | example expected .diverge files | 1 | `git ls-files 'example/expected/*.diverge' | wc -l` |
-| A66 | example expected frozen logs | 17 | `git ls-files 'example/expected/*.log' | wc -l` |
-| A67 | example mask/MASK basis files | 3 | `git ls-files example/expected | grep -icE '(^|/)(MASK|mask)$'` |
+| A59 | example gates (tests/g_*.sh) | 12 | `ls -1 example/tests/g_*.sh \| wc -l` |
+| A60 | example replays (.rpl) | 6 | `ls -1 example/replays/*.rpl \| wc -l` |
+| A61 | example fake ROM image dirs | 5 | `ls -1d example/roms/*/ \| wc -l` |
+| A62 | example expected .sha1 files | 11 | `git ls-files 'example/expected/*.sha1' \| wc -l` |
+| A63 | example expected .masked specs | 10 | `git ls-files 'example/expected/*.masked' \| wc -l` |
+| A64 | example expected .skip files | 2 | `git ls-files 'example/expected/*.skip' \| wc -l` |
+| A65 | example expected .diverge files | 1 | `git ls-files 'example/expected/*.diverge' \| wc -l` |
+| A66 | example expected frozen logs | 17 | `git ls-files 'example/expected/*.log' \| wc -l` |
+| A67 | example mask/MASK basis files | 3 | `git ls-files example/expected \| grep -icE '(^\|/)(MASK\|mask)$'` |
 | A68 | example registry.tsv fingerprint rows | 4 | `grep -vc '^#' example/expected/registry.tsv` |
-| A69 | example PROVENANCE.md rows | 1 | `grep -cE '^\| `' example/expected/PROVENANCE.md` |
+| A69 | example PROVENANCE.md rows | 1 | ``grep -cE '^[\|] `' example/expected/PROVENANCE.md`` |
 | A70 | example sweep registry rows | 5 | `grep -vc '^#' example/tests/ci_sweep.tsv` |
 | A71 | example gate_index.tsv family rows | 12 | `grep -vc '^#' example/tests/gate_index.tsv` |
 | A72 | example fields.tsv mapped fields | 7 | `grep -vc '^#' example/tests/fields.tsv` |
-| A73 | fake machine feature/knob rows (example/README.md) | 7 | `sed -n '/^## What the fake machine is/,$p' example/README.md | grep -E '^\| ' | tail -n +2 | wc -l` |
-| A74 | files mentioning 'cps2' (case-insensitive) | 18 | `git grep -il cps2 | wc -l` |
-| A75 | files mentioning 'mame' (case-insensitive) | 43 | `git grep -il mame | wc -l` |
-| A76 | files mentioning 'vampire' (case-insensitive) | 65 | `git grep -il vampire | wc -l` |
-| A77 | files mentioning '68k' (case-insensitive) | 0 | `git grep -il 68k | wc -l` |
-| A78 | files mentioning 'fbneo' (case-insensitive) | 20 | `git grep -il fbneo | wc -l` |
-| A79 | files mentioning 'lua' (case-insensitive) | 40 | `git grep -il lua | wc -l` |
+| A73 | fake machine feature/knob rows (example/README.md) | 7 | `sed -n '/^## What the fake machine is/,$p' example/README.md \| grep -E '^[\|] ' \| tail -n +2 \| wc -l` |
+| A74 | files mentioning 'cps2' (case-insensitive) | 18 | `git grep -il cps2 \| wc -l` |
+| A75 | files mentioning 'mame' (case-insensitive) | 43 | `git grep -il mame \| wc -l` |
+| A76 | files mentioning 'vampire' (case-insensitive) | 65 | `git grep -il vampire \| wc -l` |
+| A77 | files mentioning '68k' (case-insensitive) | 0 | `git grep -il 68k \| wc -l` |
+| A78 | files mentioning 'fbneo' (case-insensitive) | 20 | `git grep -il fbneo \| wc -l` |
+| A79 | files mentioning 'lua' (case-insensitive) | 40 | `git grep -il lua \| wc -l` |
 
 ## B. Items
 
@@ -268,7 +268,7 @@ Line numbers are at HEAD `f675710`. For a rule the source is the **anchor** (`**
 | B-D22 | D | lua literal — PCWEEDS suppressed after 10 lines → bin **policy** | docs/lua.md:111 | gen:G4 |
 | B-D23 | D | lua literal — GUARD_BREAK stops before frame 100 are "the boot pass" → bin **policy** | docs/lua.md:112 | gen:G4 |
 | B-D24 | D | lua literal — the ALIVE heartbeat every 600 frames → bin **policy** | docs/lua.md:113 | gen:G4 |
-| B-D25 | D | lua literal — `TAIL_FRAMES` 120, `GUARD_PROBE_MAX` 400, `MAX_FRAMES` 200000, `STOP_AFTER` 600, `W… → bin **policy (the lineage's values, stated in each header)** | docs/lua.md:114 | gen:G4 |
+| B-D25 | D | lua literal — `TAIL_FRAMES` 120, `GUARD_PROBE_MAX` 400, `MAX_FRAMES` 200000, `STOP_AFTER` 600, `W… → bin **policy (the lineage's values, stated in each header)** \| docs/lua.md:114 \| gen:G4 \|
 | B-D26 | D | lua literal — `[machine].profile` → bin **config, NO default** | docs/lua.md:115 | gen:G4 |
 | B-D27 | D | lua literal — `[inp].*` (`vsavjw`, a build dir, the pinned MAME) → bin **config, the lineage's literals** | docs/lua.md:116 | gen:G4 |
 | B-D28 | D | lua literal — a maximum replay length → bin **none on the MAME side** | docs/lua.md:117 | gen:G4 |

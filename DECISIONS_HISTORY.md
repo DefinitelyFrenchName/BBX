@@ -55,3 +55,27 @@ lives — bbh `[BBH-9]`).
   in the contributor's own conduct that re-anchors CLAUDE.md §1.
 - Slice estimate moved 14 → 15 sessions: S4 gains the adapter contract (R15)
   and its second framework.
+
+## 2026-09-09 — slice S1 opens: the recount gate and what it did to the census
+
+- The first BBX tool (`lib/py/bbx/recount.py`) and gate
+  (`gates/census_recount.sh`, two declared must-fire controls) were written
+  after all rulings were answered and the maintainer chose to open S1 in the
+  same session.
+- **The census was not machine-recountable as written.** Three producers,
+  two pipe conventions (bbh raw, VS/SMS GitHub-escaped), ten malformed rows,
+  and ~50 commands that print more than the number. Ruled into a grammar
+  (`docs/census/README.md`, six rules) and the files normalized, document
+  first: bbh 65 rows by script (raw pipes escaped, regex pipes to `[\|]`), 11
+  rows by hand (double-backtick spans: bbh A33 A34 A36 A37 A38 A39 A45 A69,
+  VS A24, SMS A80; bbh A43 dimension text), VS 21 command rewrites (A1 A20 A36
+  A53 A75 A76–A86 A95 A118 A119 A125 A126), SMS 14 (A5 A20 A39 A40 A41
+  A46–A50 A83 A84 A85 A93) and then 19 more (A30 A31 A54–A64 A88 A89 A91–A94)
+  from `grep -r` to `git grep` after gotcha G9. Every rewritten row was re-run
+  and matched its recorded count; no count was changed.
+- **Not recountable by design and left so:** VS 27 rows, SMS 27 rows
+  (free-form counts such as `150 / 167`, `says 319, is 410`, `filed` rows
+  pointing at a HANDOFF line). Their number is the census's uncovered claims
+  and may only go down.
+- **Instrument findings:** G9 (two greps) and G10 (a never-matching pattern).
+  Neither changed a count; both changed the grammar and the tool.

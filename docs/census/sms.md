@@ -11,7 +11,7 @@ Every number below was printed by the command in its row, run from the repo root
 | A2 | tracked files | 633 | `git ls-files \| wc -l` |
 | A3 | commits | 574 | `git log --oneline \| wc -l` |
 | A4 | dirty paths | 0 | `git status --porcelain \| wc -l` |
-| A5 | tracked files in `tools/` | 501 | `git ls-files \| awk -F/ '{if (NF==1) print "(root)"; else print $1}' \| sort \| uniq -c \| sort -rn` |
+| A5 | tracked files in `tools/` | 501 | `git ls-files \| awk -F/ '{if (NF==1) print "(root)"; else print $1}' \| sort \| uniq -c \| sort -rn \| awk '$2=="tools"{print $1}'` |
 | A6 | tracked files in `docs/` | 53 | (same command as above) |
 | A7 | tracked files in `build/` | 37 | (same command as above) |
 | A8 | tracked files in `traces/` | 30 | (same command as above) |
@@ -26,7 +26,7 @@ Every number below was printed by the command in its row, run from the repo root
 | A17 | memory file `README.md` | 115 lines | (same command as above) |
 | A18 | memory file `docs/project/NEXT_SESSION.md` | 707 lines | `wc -l docs/project/NEXT_SESSION.md` |
 | A19 | tracked `.md` | 55 | `git ls-files '*.md' \| wc -l` |
-| A20 | total lines in `docs/**/*.md` | 17893 | `git ls-files 'docs/**/*.md' 'docs/*.md' \| xargs wc -l \| tail -1` |
+| A20 | total lines in `docs/**/*.md` | 17893 | `git ls-files 'docs/**/*.md' 'docs/*.md' \| xargs wc -l \| tail -1 \| awk '{print $1}'` |
 | A21 | tracked `.py` | 80 | `git ls-files '*.py' \| wc -l` |
 | A22 | tracked `.lua` | 407 | `git ls-files '*.lua' \| wc -l` |
 | A23 | tracked `.sh` | 13 | `git ls-files '*.sh' \| wc -l` |
@@ -36,8 +36,8 @@ Every number below was printed by the command in its row, run from the repo root
 | A27 | `[SSP-N]` rule definitions, agent rendition | 28 | `grep -cE '^- \[SSP-[0-9]+\]' .claude/skills/supers-porting/SKILL.md` |
 | A28 | `[SSP-N]` rule definitions, human rendition | 28 | `grep -cE '^\*\*\[SSP-[0-9]+\]\*\*' docs/project/saturn/porting_lessons.md` |
 | A29 | rule pairs verified ID-equal both ways | 66 rules / 2 pairs | `python3 tools/checkskills.py` → `ALL PASS (66 rules across 2 pairs; both renditions define the same IDs, both ways)` |
-| A30 | `[RH-N]` references (defined **outside** this repo) | 29 | `grep -rhoE '\[RH-[0-9]+\]' --include='*.md' . \| wc -l` |
-| A31 | `[SNES-N]` references (defined **outside** this repo) | 28 | `grep -rhoE '\[SNES-[0-9]+\]' --include='*.md' . \| wc -l` |
+| A30 | `[RH-N]` references (defined **outside** this repo) | 29 | `git grep -hoE '\[RH-[0-9]+\]' -- '*.md' \| wc -l` |
+| A31 | `[SNES-N]` references (defined **outside** this repo) | 28 | `git grep -hoE '\[SNES-[0-9]+\]' -- '*.md' \| wc -l` |
 | A32 | traps 1–23 (collected in one ledger) | 23 | `grep -cE '^[0-9]+\. \*\*' HANDOFF.md` |
 | A33 | traps 24–28 (filed beside the work that paid for them) | 5 | `grep -cE 'Trap 2[4-8] — ' HANDOFF.md` |
 | A34 | Measurement-Rule corollaries | 7 | `sed -n '34,59p' CLAUDE.md \| grep -c '^\* \*\*'` |
@@ -45,32 +45,32 @@ Every number below was printed by the command in its row, run from the repo root
 | A36 | checkdocs family: table-structure validators | 17 | `grep -c '^@table(' tools/checkdocs.py` |
 | A37 | checkdocs family: file-offset claims extracted from prose | 16 | `python3 -c "import sys;sys.path.insert(0,'tools');import docaddrs as d;print(len(d.file_offset_claims()))"` |
 | A38 | checkdocs family: quoted byte-run claims | 6 | `python3 -c "import sys;sys.path.insert(0,'tools');import docaddrs as d;g=[p for p in d.docs_files() if p.parent.name=='game'];print(len(d.byte_run_claims(g)))"` |
-| A39 | checkdocs family: quoted-instruction claims | 30 | `python3 -c "...;print(len(d.instruction_claims(g)))"` (same preamble) |
-| A40 | checkdocs family: table-row claims | 17 | `python3 -c "...;print(len(d.table_row_claims(g)))"` |
-| A41 | checkdocs family: disassembly-listing-row claims | 28 | `python3 -c "...;print(len(d.listing_claims(g)))"` |
+| A39 | checkdocs family: quoted-instruction claims | 30 | `python3 -c "import sys;sys.path.insert(0,'tools');import docaddrs as d;g=[p for p in d.docs_files() if p.parent.name=='game'];print(len(d.instruction_claims(g)))"` |
+| A40 | checkdocs family: table-row claims | 17 | `python3 -c "import sys;sys.path.insert(0,'tools');import docaddrs as d;g=[p for p in d.docs_files() if p.parent.name=='game'];print(len(d.table_row_claims(g)))"` |
+| A41 | checkdocs family: disassembly-listing-row claims | 28 | `python3 -c "import sys;sys.path.insert(0,'tools');import docaddrs as d;g=[p for p in d.docs_files() if p.parent.name=='game'];print(len(d.listing_claims(g)))"` |
 | A42 | **filed** checkdocs total at first landing (31) | 31 — `HANDOFF.md:338` | `grep -n '31 checks' HANDOFF.md` |
 | A43 | **filed** checkdocs total 207 (37 hand · 17 tables · 69 prose · 84 structural) | 207 — `HANDOFF.md:224` | `grep -n 'checkdocs..\? 207' HANDOFF.md` |
 | A44 | **filed** checkdocs total 228 | 228 — `HANDOFF.md:125` | `grep -n '87 → 228' HANDOFF.md` |
 | A45 | **filed** checkdocs total 248 (current) | 248 — `HANDOFF.md:59` | `grep -n 'checkdocs. \*\*248\*\*' HANDOFF.md` |
-| A46 | distinct ROM addresses in hand-written `docs/game/` pages (measured now) | 428 | `python3 tools/docaddrs.py` |
-| A47 | addresses in ROM-generated pages (`mkcharmap --check`) | 123 | `python3 tools/docaddrs.py` |
-| A48 | addresses that are RAM (not decidable from the cartridge) | 44 | `python3 tools/docaddrs.py` |
-| A49 | addresses in appended banks (this project's own patches) | 2 | `python3 tools/docaddrs.py` |
-| A50 | addresses named by `docs/project/` (not gated) | 508 | `python3 tools/docaddrs.py` |
+| A46 | distinct ROM addresses in hand-written `docs/game/` pages (measured now) | 428 | `python3 tools/docaddrs.py \| grep -oE '[0-9]+ distinct ROM addresses' \| cut -d' ' -f1` |
+| A47 | addresses in ROM-generated pages (`mkcharmap --check`) | 123 | `python3 tools/docaddrs.py \| grep -oE '[0-9]+ in ROM-generated' \| cut -d' ' -f1` |
+| A48 | addresses that are RAM (not decidable from the cartridge) | 44 | `python3 tools/docaddrs.py \| grep -oE '[0-9]+ RAM,' \| cut -d' ' -f1` |
+| A49 | addresses in appended banks (this project's own patches) | 2 | `python3 tools/docaddrs.py \| grep -oE '[0-9]+ in appended' \| cut -d' ' -f1` |
+| A50 | addresses named by `docs/project/` (not gated) | 508 | `python3 tools/docaddrs.py \| grep -oE 'names [0-9]+ more' \| grep -oE '[0-9]+'` |
 | A51 | **filed** coverage 190/325 re-derived | 190/325 — `HANDOFF.md:153` | `grep -n '190/325' HANDOFF.md` |
 | A52 | **filed** coverage 105/254 re-derived | 105/254 — `HANDOFF.md:242` | `grep -n '105/254' HANDOFF.md` |
 | A53 | **filed** addresses that stay uncovered, each saying why | 135 — `HANDOFF.md:165` | `grep -n '135 stay uncovered' HANDOFF.md` |
-| A54 | “negative control” lines, repo-wide | 42 | `grep -rn -i 'negative control' --exclude-dir=.git . \| wc -l` |
-| A55 | files mentioning “negative control”, repo-wide (incl. docs) | 25 | `grep -rli 'negative control' --exclude-dir=.git . \| wc -l` |
-| A56 | “negative control” lines in **code** | 30 | `grep -rni 'negative control' --exclude-dir=.git --include='*.py' --include='*.lua' --include='*.sh' . \| wc -l` |
-| A57 | **code files** carrying a negative control (→ the `S-T*` rows) | 18 | `grep -rli 'negative control' --exclude-dir=.git --include='*.py' --include='*.lua' --include='*.sh' . \| wc -l` |
-| A58 | `SETUP-FAIL` sites (the third verdict class) | 39 | `grep -rn 'SETUP-FAIL' --exclude-dir=.git . \| wc -l` |
-| A59 | “must fail” hits | 14 | `grep -rni 'must fail' --exclude-dir=.git . \| wc -l` |
-| A60 | “wrong base” hits | 7 | `grep -rni 'wrong base' --exclude-dir=.git . \| wc -l` |
-| A61 | “wrong address” hits | 8 | `grep -rni 'wrong address' --exclude-dir=.git . \| wc -l` |
-| A62 | “wrong seed” hits | 2 | `grep -rni 'wrong seed' --exclude-dir=.git . \| wc -l` |
-| A63 | “wrong game” hits (the cross-game control) | 3 | `grep -rni 'wrong game' --exclude-dir=.git . \| wc -l` |
-| A64 | `DETERMINISM` stage declarations in shell harnesses | 4 | `grep -rni 'DETERMINISM' --include='*.sh' . \| wc -l` |
+| A54 | “negative control” lines, repo-wide | 42 | `git grep -n -i 'negative control' \| wc -l` |
+| A55 | files mentioning “negative control”, repo-wide (incl. docs) | 25 | `git grep -li 'negative control' \| wc -l` |
+| A56 | “negative control” lines in **code** | 30 | `git grep -ni 'negative control' -- '*.py' '*.lua' '*.sh' \| wc -l` |
+| A57 | **code files** carrying a negative control (→ the `S-T*` rows) | 18 | `git grep -li 'negative control' -- '*.py' '*.lua' '*.sh' \| wc -l` |
+| A58 | `SETUP-FAIL` sites (the third verdict class) | 39 | `git grep -n 'SETUP-FAIL' \| wc -l` |
+| A59 | “must fail” hits | 14 | `git grep -ni 'must fail' \| wc -l` |
+| A60 | “wrong base” hits | 7 | `git grep -ni 'wrong base' \| wc -l` |
+| A61 | “wrong address” hits | 8 | `git grep -ni 'wrong address' \| wc -l` |
+| A62 | “wrong seed” hits | 2 | `git grep -ni 'wrong seed' \| wc -l` |
+| A63 | “wrong game” hits (the cross-game control) | 3 | `git grep -ni 'wrong game' \| wc -l` |
+| A64 | `DETERMINISM` stage declarations in shell harnesses | 4 | `git grep -ni 'DETERMINISM' -- '*.sh' \| wc -l` |
 | A65 | generators owning a `--check` mode | 6 | `grep -ln '\-\-check' tools/mk*.py \| wc -l` |
 | A66 | living-page + `*_history.md` twin pairs | **0** | `git ls-files \| grep -ciE '_history\.md$'` |
 | A67 | docs maps / index READMEs | 4 | `git ls-files 'docs/**/README.md' 'docs/README.md' \| wc -l` |
@@ -86,21 +86,21 @@ Every number below was printed by the command in its row, run from the repo root
 | A77 | tool family `extract_*` (root / saturn) | 2 / 3 | `git ls-files 'tools/extract_*' \| wc -l` ; `git ls-files 'tools/saturn/extract_*' \| wc -l` |
 | A78 | tool family `trace_*` (root / saturn) | 1 / 2 | `git ls-files 'tools/trace_*' \| wc -l` ; `git ls-files 'tools/saturn/trace_*' \| wc -l` |
 | A79 | `tools/README.md` groups | 11 | `grep -c '^## ' tools/README.md` |
-| A80 | `tools/README.md` group sizes | Saturn 195 · Probes 165 · Other 37 · Demos 32 · Builders 18 · Training pkg 18 · Suites 15 · Build scripts 10 · Libs 6 · Training entry 2 · Extractors 2 | `awk '/^## /{h=$0;c[h]=0;order[++n]=h} /^- `/{if(h!="")c[h]++} END{for(i=1;i<=n;i++)printf "%s\t%d\n",order[i],c[order[i]]}' tools/README.md` |
+| A80 | `tools/README.md` group sizes | Saturn 195 · Probes 165 · Other 37 · Demos 32 · Builders 18 · Training pkg 18 · Suites 15 · Build scripts 10 · Libs 6 · Training entry 2 · Extractors 2 | ``awk '/^## /{h=$0;c[h]=0;order[++n]=h} /^- `/{if(h!="")c[h]++} END{for(i=1;i<=n;i++)printf "%s\t%d\n",order[i],c[order[i]]}' tools/README.md`` |
 | A81 | `tools/README.md` self-verified as in sync | 500 scripts, 11 groups | `python3 tools/mkindex.py --check` |
 | A82 | regression suite cases | 68 | `grep -c '^add{' tools/test_regression.lua` |
-| A83 | documented knobs verified both ways | 15 | `python3 tools/checkknobs.py` |
-| A84 | training-doc checks verified both directions | 13 | `python3 tools/checktrainingdocs.py` |
-| A85 | cliguard self-test cases | 12 | `python3 tools/cliguard.py` |
+| A83 | documented knobs verified both ways | 15 | `python3 tools/checkknobs.py \| grep -oE '[0-9]+ documented knobs' \| cut -d' ' -f1` |
+| A84 | training-doc checks verified both directions | 13 | `python3 tools/checktrainingdocs.py \| grep -oE '[0-9]+ checks' \| cut -d' ' -f1` |
+| A85 | cliguard self-test cases | 12 | `python3 tools/cliguard.py \| grep -oE '[0-9]+ cases' \| cut -d' ' -f1` |
 | A86 | commits carrying a `Gates:` evidence line | 9 | `git log --format='%b' \| grep -c '^Gates:'` |
 | A87 | commit bodies containing `ALL PASS` | 84 | `git log --format='%b' \| grep -c 'ALL PASS'` |
-| A88 | `⚠` incident markers, lines repo-wide | 287 | `grep -rc '⚠' --exclude-dir=.git . 2>/dev/null \| awk -F: '{s+=$2} END{print s}'` |
-| A89 | `⚠` markers, files | 51 | `grep -rl '⚠' --exclude-dir=.git . \| wc -l` |
+| A88 | `⚠` incident markers, lines repo-wide | 287 | `git grep -c '⚠' \| awk -F: '{s+=$2} END{print s}'` |
+| A89 | `⚠` markers, files | 51 | `git grep -l '⚠' \| wc -l` |
 | A90 | `⚠` markers in `HANDOFF.md` | 37 | `grep -c '⚠' HANDOFF.md` |
-| A91 | distinct issue IDs `#NN` cited in code/docs | 96 | `grep -rhoE '#[0-9]{1,3}\b' --include='*.md' --include='*.py' --include='*.lua' --include='*.sh' . \| sort -u \| wc -l` |
-| A92 | forward references to **VampireSaved** | **0** | `grep -ril 'vampire' . --exclude-dir=.git \| wc -l` |
-| A93 | forward references to **blackbox-harness / bbh** | **0** | `grep -ril 'blackbox-harness\|blackbox_harness\|bbh' . --exclude-dir=.git \| wc -l` |
-| A94 | uses of the term “black box” at all | **0** | `grep -rn -i 'black.box' . --exclude-dir=.git \| wc -l` |
+| A91 | distinct issue IDs `#NN` cited in code/docs | 96 | `git grep -h '#[0-9]' -- '*.md' '*.py' '*.lua' '*.sh' \| grep -oE '#[0-9]{1,3}\b' \| sort -u \| wc -l` |
+| A92 | forward references to **VampireSaved** | **0** | `git grep -il 'vampire' \| wc -l` |
+| A93 | forward references to **blackbox-harness / bbh** | **0** | `git grep -ilwE 'blackbox-harness\|blackbox_harness\|bbh' \| wc -l` |
+| A94 | uses of the term “black box” at all | **0** | `git grep -n -i 'black.box' \| wc -l` |
 
 > Correction to an earlier pass: the code-side negative-control **line** count is 30 and the **file** count is 18 (A54–A57 above). An earlier summary said “27 sites”; that was a miscount and is superseded by the commands shown.
 
