@@ -79,6 +79,7 @@ DEFAULTS = {
         "scratch_lanes": [],
         "scratch_env": "",
         "scratch_default": "",
+        "clone_per_slot": False,     # D21: every --jobs slot runs on its own plain clone of the consumer's HEAD (R19)
         "prereq_cite": "",
     },
     # the subject identity (lib/py/bbx/fingerprint.py) — kind-blind: the artifact is ONE file (D16)

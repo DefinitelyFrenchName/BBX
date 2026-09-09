@@ -199,3 +199,12 @@ lives — bbh `[BBH-9]`).
   an Open heading): R18–R20 moved under an Answered heading, the rule
   written into the file, gotcha G14, and a gate (`rulings_shape`) so the
   shape is checked rather than remembered.
+- R19 lifted (bbx-2, later the same evening): the barrier in `bbx-run-sweep`
+  replaced by 14z-144's FIFO token queue, with a kind-blind
+  `[sweep].clone_per_slot` (D21, off by default) for pinned trees per
+  worker. Measured in the gate's fixture: at `--jobs 2` the third 1-s gate
+  started 2 s before the 4-s gate ended (a barrier or a line cannot do
+  that; at `--jobs 1` it started 3 s after — the known negative); two
+  clones at HEAD, the base tree untouched, and without clones the same
+  gates dirtied it (the other known negative). Fidelity F14 against bbh
+  unchanged at `--jobs 1`.

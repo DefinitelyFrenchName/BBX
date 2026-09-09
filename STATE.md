@@ -7,19 +7,21 @@ paragraph per sitting, the outgoing status verbatim). Read `HANDOFF.md` first.
 generalization of `blackbox-harness` (bbh) to any subject with testable inputs
 and outputs. Born 2026-09-09.
 
-**Status (bbx-2, step 2, 2026-09-09):** the sitting opened red (VampireSaved
+**Status (bbx-2, step 3, 2026-09-09):** the sitting opened red (VampireSaved
 had moved; census re-measured at `0cdd9726`, G12); the maintainer ruled
-R18–R20 and both landed: the recount and the fidelity gate measure a PLAIN
+R18–R20 and all three landed: `bbx-run-sweep --jobs N` is a pull queue (a
+FIFO of slot tokens, 14z-144) with `[sweep].clone_per_slot` for a plain
+clone of HEAD per worker (D21); the recount and the fidelity gate measure a PLAIN
 LOCAL CLONE of the recorded commit under `TMPDIR` (never a lineage's working
 tree; a moved lineage is a `drift` NOTE; the clone is proved clean after the
 run, ignored paths included), and the rulings queue has a shape gate
-(`rulings_shape`, G14). `bin/bbx selftest` is GREEN: 10 gates, 18/18
-controls fired, ~227 s on a loaded host. Fidelity F13 (9 pairs), F14 (12
+(`rulings_shape`, G14). `bin/bbx selftest` is GREEN: 10 gates, 20/20
+controls fired, ~223 s on a loaded host. Fidelity F13 (9 pairs), F14 (12
 pairs) and F15 (32 logs) diff empty against bbh f675710 on the clone. In the
 tree: `bin/bbx` (`run-static`, `run-sweep`, `classify`, `tier`, `config`,
 `controls`, `fingerprint`, `recount`, `selftest`), `lib/sh/`, `lib/py/bbx/`,
 `bbx.toml` (the `self` kind), ten gates under `gates/` with three
-registries, `docs/controls.md`, `docs/defaults.md` D1–D20. No comparator,
+registries, `docs/controls.md`, `docs/defaults.md` D1–D21. No comparator,
 suite runner, expectation register, driver or fixture yet.
 
 **In force:** `DECISIONS.md` — R0–R17 and method M1–M4. **Open rulings:** none. In force since bbx-2: R18 (the census and the tests

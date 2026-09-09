@@ -23,7 +23,7 @@ Shape: operational map. Read this first, then `STATE.md`, then
 | the controls contract (must-fire grammar, R10) | `docs/controls.md` |
 | the defaults register (BBX-24) | `docs/defaults.md` |
 | the kernel | `bin/bbx` (dispatcher: `run-static run-sweep classify tier config controls fingerprint recount selftest`), `lib/sh/`, `lib/py/bbx/`, `bbx.toml` (BBX as its own consumer, kind `self`) |
-| BBX's gates and registries | `gates/*.sh` (10: 8 portable incl. `rulings_shape`, 2 static), `gates/portable.txt`, `gates/static.txt`, `gates/sweep.tsv` (empty) — run with `BBX_BBH_HOME=~/Developer/blackbox-harness bin/bbx selftest` (~227 s on a loaded host, D14) |
+| BBX's gates and registries | `gates/*.sh` (10: 8 portable incl. `rulings_shape`, 2 static), `gates/portable.txt`, `gates/static.txt`, `gates/sweep.tsv` (empty) — run with `BBX_BBH_HOME=~/Developer/blackbox-harness bin/bbx selftest` (~223 s on a loaded host, D14) |
 | the recount tool | `bin/bbx recount <census.md> [--only A1,A2] [--root DIR] [--in-place]` — runs on a plain local clone of the recorded commit (R18, R20); `--in-place` is the unproved escape hatch |
 
 ## The lineage on this machine
@@ -40,7 +40,7 @@ bbh is **never modified** from here. VampireSaved and SMS are read only.
 ## What is running
 
 Nothing in the background. `BBX_BBH_HOME=~/Developer/blackbox-harness
-bin/bbx selftest` (~227 s) is GREEN: 10 gates, 18/18 controls. Run it first
+bin/bbx selftest` (~223 s) is GREEN: 10 gates, 20/20 controls. Run it first
 thing, with no edits in flight (the runner's working-tree check reports a
 concurrent edit as DIRTIED); the census recount inside it is the
 re-derivation step of the ritual (CLAUDE.md §6.2) made into a gate.
@@ -107,7 +107,10 @@ rather than remembered.
 - S1 has two items left: the readout generator (abstraction RO1–RO3 as a
   tool that reads a run's results and prints the one screen, with a gate)
   and the platform gates (R3: a Linux or WSL run of `bin/bbx selftest`,
-  recorded in the readout). Neither blocks S2.
+  recorded in the readout). Neither blocks S2. Done at bbx-2 on top of the
+  plan: R18–R20 (clones), R19's pull queue and `clone_per_slot` in the sweep
+  runner, the `rulings_shape` gate; the close sweeps (steps 8–9) are still
+  hand-run.
 - S2 (`docs/slices.md`): the comparators (the temporal family lifted from
   bbh, thresholds declared once), the expectation kinds registry, the
   provenance register with the R11 vocabulary, the suite runner, fidelity

@@ -340,3 +340,44 @@ The measurement that preceded R20 (identical fidelity output on the clone and in
 - The rulings grammar beyond what the gate reads: prose in an entry is not checked, only the answer line, the heading and the DECISIONS row.
 - Runtimes as anything but this host under this load (D14's row says so).
 - Portability beyond macOS (R3).
+
+---
+
+# bbx-2 step 3 — R19: the pull queue and clone-per-slot in the sweep runner (2026-09-09)
+
+## Verdict
+
+`BBX_BBH_HOME=~/Developer/blackbox-harness bin/bbx selftest`, alone → **GREEN**, 223 s (loaded host):
+
+```
+PASS 10    SKIP 0     FAIL 0     MISSING 0
+controls fired 20 / declared 20; gates with no declaration: 0; red: 0
+ok: no tracked file changed during the run
+```
+
+## What changed
+
+`bin/bbx-run-sweep --jobs N` no longer batches: a FIFO holds one token per slot, a worker blocks reading a token, runs its gate, writes the token back (VampireSaved 14z-144, lifted; the loop stays in the main shell). `[sweep].clone_per_slot = true` (D21, off by default) gives every slot, the serial prereq lane included, a plain clone of the consumer's HEAD under `TMPDIR`, removed at exit; the banner names the commit and the working tree's porcelain. `gates/sweep_runner.sh` sections 15–16 measure both.
+
+## Counts, separately
+
+| | |
+|---|---|
+| queue, measured by the gates' own stamps | `--jobs 2`: the third 1-s gate started 2 s BEFORE the 4-s gate ended (a barrier or a line cannot); `--jobs 1`: 3 s AFTER (control `serial-order`) |
+| clone-per-slot | 2 workers, 2 trees, neither the base, both at the fixture's HEAD; base tree untouched by two file-writing gates; clone dir removed; without clones the same gates left 2 files in the base (control `no-clone-dirties`) |
+| controls declared / fired, `sweep_runner` | 4 / 4 (env-default-export, prereq-stop, serial-order, no-clone-dirties) |
+| fidelity F14 after the runner change | every pair identical (--list 8 lines, --list all 9, --dry-run 32, real run 35, 8 fingerprint pairs) |
+| runtimes | sweep-runner gate 90 s alone (sections 15–16 add ~15 s of deliberate sleeps); selftest 223 s (D14) |
+| defaults | D21 added (`clone_per_slot`, arbitrary: off because a clone measures HEAD, not the working tree) |
+
+## What it rests on
+
+Stamps printed by the stub gates (`date +%s`), never the runner's own accounting; `pwd -P` and `git rev-parse` from inside the workers; the base tree's listing after the run; F14 against bbh's own runner at `--jobs 1`.
+
+## What this green does NOT assert
+
+- Speed-up on a real consumer: the 1.65× → 3.48× figures are VampireSaved's, quoted from its source, not re-measured here (no instrument-tier consumer exists in BBX yet).
+- Clone-per-slot on a consumer with uncommitted work: the clone is HEAD; the banner says so, nothing refuses.
+- A gate that escapes its clone by absolute path: not guarded (the recount's path guard is the census's, not the sweep's).
+- That the queue's row order in `results.tsv` is stable: it is not, by design; `--resume` keys by name.
+- Portability beyond macOS (R3): `mkfifo` and `exec 8<>` are POSIX, not yet run on Linux or WSL.

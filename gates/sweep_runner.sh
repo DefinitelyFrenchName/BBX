@@ -1,13 +1,18 @@
 #!/bin/sh
-# sweep_runner.sh — the sweep runner's lanes, verdicts, placeholders, anti-orphan check, --strict, the prereq STOP, scope, cadence, timeouts, --resume and the exported env default mean what they say
+# sweep_runner.sh — the sweep runner's lanes, verdicts, placeholders, anti-orphan check, --strict, the prereq STOP, scope, cadence, timeouts, --resume, the exported env default, the pull queue and clone-per-slot mean what they say
 # Ground truth for bin/bbx-run-sweep: a synthetic repo of stub gates with KNOWN verdicts, a
 # consumer config, driven through the REAL runner — never a copy of its logic. Lifted from bbh
 # selftest/test_run_sweep.sh (S1, 2026-09-09), whose lineage is VampireSaved's
 # test_emulator_runner.sh (thirteen sections). The example-consumer section (bbh's §15) lives
-# in gates/fidelity_bbh.sh as F14. Portable, ~45 s (three deliberately slow gates).
+# in gates/fidelity_bbh.sh as F14. Sections 15–16 (bbx-2, R19): the --jobs queue is a PULL
+# (a worker takes the next gate the moment it frees, measured by start/end stamps in the
+# gates' own logs) and [sweep].clone_per_slot gives every slot its own plain clone of HEAD,
+# so a gate that writes into its tree never touches the working tree. Portable, ~90 s measured 2026-09-09 on a loaded host.
 # Usage: gates/sweep_runner.sh
 # MUST-FIRE: shadow-tool: env-default-export — a copy of the runner with the export line removed must leave the gate's MAME_BIN UNSET, or the assertion depends on the environment and not on the export
 # MUST-FIRE: known-bad: prereq-stop — a red gate in the prereq lane must STOP the run before any later lane, or a moved instrument's measurements would be read as evidence
+# MUST-FIRE: known-bad: serial-order — at --jobs 1 the third short gate must start only AFTER the long one ends, or the stamps cannot tell a queue from a line (the known negative of section 15)
+# MUST-FIRE: known-bad: no-clone-dirties — without clone_per_slot the same writing gates must dirty the base tree, or section 16's clean base proves nothing
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME
@@ -249,6 +254,51 @@ printf '%s\n' "$out14" | grep -q "^ROM audit FAILED — stop$" && ! printf '%s\n
 printf '#!/usr/bin/env python3\nimport sys\n' > "$FR/tools/audit_roms.py"
 out14b="$(cd "$FR" && "$BBX_HOME/bin/bbx-run-sweep" --config bbx.toml --log "$T/l14b" 2>&1)" && fail "no ROMDIR was accepted" || { printf '%s\n' "$out14b" | grep -q "set ROMDIR — every gate here reads the reference input" && ok "the input variable is demanded (after --list, which needs none)" || fail "input demand: $out14b"; }
 out14c="$(cd "$FR" && "$BBX_HOME/bin/bbx-run-sweep" --config bbx.toml --list 2>&1)" && printf '%s\n' "$out14c" | grep -q "^lanes=prereq fbneo mame scope=release cadence=all only=\*  (1 gates)$" && ok "--list needs no input and prints the lineage's summary line" || fail "--list: $out14c"
+
+echo "15. --jobs N is a PULL queue: a worker takes the next gate the moment it frees (R19)"
+# g_q_slow holds one of two slots for 4 s; three 1-s gates share the other. Under a queue the
+# third short gate starts before the slow one ends; under a barrier ([slow,f1] wait [f2,f3])
+# or a line it cannot. Stamps come from the gates themselves (date +%s), never from the runner.
+printf '#!/bin/sh\n: "${MAME_BIN:-}"\necho "start=$(date +%%s)"\nsleep 4\necho "end=$(date +%%s)"\n' > "$FR/tests/g_q_slow.sh"
+for _n in 1 2 3; do printf '#!/bin/sh\n: "${MAME_BIN:-}"\necho "start=$(date +%%s)"\nsleep 1\necho "end=$(date +%%s)"\n' > "$FR/tests/g_q_f$_n.sh"; done
+chmod +x "$FR/tests/g_q_slow.sh" "$FR/tests/g_q_f1.sh" "$FR/tests/g_q_f2.sh" "$FR/tests/g_q_f3.sh"
+reg "$(row g_q_slow mame release - '')" "$(row g_q_f1 mame release - '')" "$(row g_q_f2 mame release - '')" "$(row g_q_f3 mame release - '')"
+stamp() { grep -h "^$2=" "$1" 2>/dev/null | cut -d= -f2; }
+run --jobs 2 --log "$T/l15" >/dev/null 2>&1 || true
+s_end="$(stamp "$T/l15/g_q_slow.log" end)"; f3_start="$(stamp "$T/l15/g_q_f3.log" start)"
+if [ -n "$s_end" ] && [ -n "$f3_start" ] && [ "$f3_start" -lt "$s_end" ]; then
+    ok "--jobs 2: the third short gate started at $f3_start, before the slow gate ended at $s_end — a pull, not a batch"
+else fail "queue: f3 start='$f3_start' slow end='$s_end' (a barrier or a line would give start >= end)"; fi
+[ "$(awk -F'\t' 'NR>1' "$T/l15/results.tsv" | wc -l | tr -d ' ')" = 4 ] && ok "all four rows recorded (order is the workers', keyed by name)" || fail "rows: $(cat "$T/l15/results.tsv")"
+# the known negative: --jobs 1 is a line, and the stamps must say so
+run --jobs 1 --log "$T/l15s" >/dev/null 2>&1 || true
+s_end1="$(stamp "$T/l15s/g_q_slow.log" end)"; f3_start1="$(stamp "$T/l15s/g_q_f3.log" start)"
+if [ -n "$s_end1" ] && [ -n "$f3_start1" ] && [ "$f3_start1" -ge "$s_end1" ]; then
+    echo "CONTROL FIRED: serial-order — at --jobs 1 the third short gate started at $f3_start1, after the slow gate ended at $s_end1"
+else fail "CONTROL DEAD: serial-order — f3 start='$f3_start1' slow end='$s_end1'"; fi
+
+echo "16. [sweep].clone_per_slot: every slot measures its own plain clone of HEAD; the base tree is never written"
+printf '#!/bin/sh\n: "${MAME_BIN:-}"\necho "tree=$(pwd -P)"\necho "head=$(git rev-parse --short HEAD)"\necho written > "dirty_$$.txt"\nsleep 1\necho PASS\n' > "$FR/tests/g_c_a.sh"
+cp "$FR/tests/g_c_a.sh" "$FR/tests/g_c_b.sh"; chmod +x "$FR/tests/g_c_a.sh" "$FR/tests/g_c_b.sh"
+sed '/^\[sweep\]$/a\
+clone_per_slot = true' "$FR/bbx.toml" > "$FR/bbx_clone.toml"
+reg "$(row g_c_a mame release - '')" "$(row g_c_b mame release - '')"
+( cd "$FR" && git init -q && git add -A && git -c user.name=bbx -c user.email=bbx@example.invalid commit -qm "fixture" ) || fail "could not make the fake repo a git repository"
+fr_head="$(git -C "$FR" rev-parse --short HEAD)"; fr_real="$(cd "$FR" && pwd -P)"
+out16="$(cd "$FR" && ROMDIR="$T/roms" "$BBX_HOME/bin/bbx-run-sweep" --config bbx_clone.toml --lane mame --jobs 2 --log "$T/l16" 2>&1)" || true
+ta="$(stamp "$T/l16/g_c_a.log" tree)"; tb="$(stamp "$T/l16/g_c_b.log" tree)"; ha="$(stamp "$T/l16/g_c_a.log" head)"; hb="$(stamp "$T/l16/g_c_b.log" head)"
+[ -n "$ta" ] && [ -n "$tb" ] && [ "$ta" != "$tb" ] && [ "$ta" != "$fr_real" ] && [ "$tb" != "$fr_real" ] && ok "two workers, two trees, neither the base: $ta / $tb" || fail "trees: a='$ta' b='$tb' base='$fr_real'"
+[ "$ha" = "$fr_head" ] && [ "$hb" = "$fr_head" ] && ok "both clones are at the base's HEAD $fr_head" || fail "heads: a='$ha' b='$hb' base='$fr_head'"
+printf '%s\n' "$out16" | grep -q "^  clones     .*plain clones of $fr_head; working tree porcelain=" && ok "the banner names the clones, the commit and the working tree's porcelain" || fail "banner: $(printf '%s\n' "$out16" | grep clones)"
+[ -z "$(cd "$FR" && ls dirty_*.txt 2>/dev/null)" ] && ok "the base tree received no file from the writing gates" || fail "base dirtied: $(cd "$FR" && ls dirty_*.txt)"
+_cd="$(printf '%s\n' "$out16" | grep '^  clones' | sed -E 's/^  clones     (.*)\/slot0\.\..*/\1/')"
+[ -n "$_cd" ] && [ ! -d "$_cd" ] && ok "the clone directory is removed after the run" || fail "clone dir '$_cd' still exists or unparsed"
+# the known negative: without clone_per_slot the same gates write into the base
+(cd "$FR" && ROMDIR="$T/roms" "$BBX_HOME/bin/bbx-run-sweep" --config bbx.toml --lane mame --jobs 2 --log "$T/l16n" >/dev/null 2>&1) || true
+_nd="$(cd "$FR" && ls dirty_*.txt 2>/dev/null | wc -l | tr -d ' ')"
+if [ "$_nd" -ge 1 ]; then echo "CONTROL FIRED: no-clone-dirties — without clone_per_slot the two writing gates left $_nd file(s) in the base tree"
+else fail "CONTROL DEAD: no-clone-dirties — the base tree stayed clean without clones"; fi
+rm -f "$FR"/dirty_*.txt "$FR/tests/g_c_a.sh" "$FR/tests/g_c_b.sh" "$FR"/tests/g_q_*.sh
 
 echo
 [ "$rc" = 0 ] && echo "PASS: bbx-run-sweep classifies every ground-truth case correctly" || { echo "FAIL: see above"; exit 1; }

@@ -15,6 +15,19 @@
 # against bbh's); the project nouns in them are config ([sweep]), and the
 # kind-blind defaults name no instrument (docs/defaults.md D15).
 #
+# --jobs N IS A PULL QUEUE, NOT A PUSH BATCH (ruling R19; lifted from VampireSaved
+# tests/run_all_emulator.sh 14z-144). bash 3.2 has no `wait -n`, so the lineage's
+# first parallel loop was a BARRIER: N gates started, `wait` for all, repeat —
+# every batch cost its slowest member (measured there: 1.65x at --jobs 4 where a
+# queue gives 3.48x). The mechanism: a FIFO used as a token semaphore where THE
+# TOKEN IS THE SLOT NUMBER; a worker blocks reading a token, runs its gate, writes
+# the token back. The slot binds the worker's scratch ([sweep].scratch_lanes) and,
+# with [sweep].clone_per_slot = true, its own PLAIN CLONE of the consumer's HEAD
+# under TMPDIR (R18/R20: the working tree is never the tree under test; every
+# worker measures the same commit; uncommitted changes are NOT measured and the
+# banner says so with the porcelain count). The principle is the ruling; this
+# queue is its default implementation.
+#
 # ORDER IS NOT DECORATION. The PREREQ lane — the instrument and verdict-logic
 # ground truths — runs FIRST, sequentially whatever --jobs says, and a red
 # there STOPS the run: an instrument that moved invalidates every measurement
@@ -33,7 +46,7 @@
 #   ... --cadence <cadence>|all        default: all
 #   ... --freeze                       = --cadence <freeze_cadence> (drops the rest, named)
 #   ... --only 'glob'                  a subset (shell glob on the gate name)
-#   ... --jobs N                       N gates at once (the prereq lane stays serial)
+#   ... --jobs N                       N workers pull gates from a queue (the prereq lane stays serial)
 #   ... --timeout SECS                 per gate; a row's 7th column overrides it
 #   ... --log DIR                      default <log_dir_prefix><stamp>
 #   ... --resume                       skip gates already in the log's results.tsv
@@ -107,6 +120,8 @@ BUILD_SETS="$(bbx_cfg sweep.build_sets | tr '\n' ' ')"
 SCRATCH_LANES="$(bbx_cfg sweep.scratch_lanes "" | tr '\n' ' ')"; SCRATCH_LANES="${SCRATCH_LANES% }"
 SCRATCH_ENV="$(bbx_cfg sweep.scratch_env "")"
 SCRATCH_NAME="$(bbx_cfg sweep.scratch_default)"
+CLONE_SLOTS="$(bbx_cfg sweep.clone_per_slot "false")"
+case "$CLONE_SLOTS" in true|True|1|yes) CLONE_SLOTS=1 ;; *) CLONE_SLOTS=0 ;; esac
 PREREQ_CITE="$(bbx_cfg sweep.prereq_cite "")"
 [ -n "$SCOPE" ] || SCOPE="$RELEASE"
 [ "$FREEZE" = 1 ] && CADENCE="$FREEZE_CADENCE"
@@ -183,7 +198,8 @@ fi
 STAMP="$(date +%Y%m%d_%H%M%S)"
 [ -n "$LOGDIR" ] || LOGDIR="$LOG_PREFIX$STAMP"
 mkdir -p "$LOGDIR"
-RESULTS="$LOGDIR/results.tsv"
+LOGABS="$(CDPATH= cd "$LOGDIR" && pwd)"   # a worker running inside a clone must write here, never into the clone
+RESULTS="$LOGABS/results.tsv"
 [ -f "$RESULTS" ] || printf 'gate\tlane\tscope\tverdict\tseconds\tdetail\n' > "$RESULTS"
 
 echo "== the $WORD-tier sweep =="
@@ -198,6 +214,20 @@ if [ -n "$SCRATCH_ENV" ]; then
     [ "$JOBS" -gt 1 ] && echo "  scratch    $SCRATCH_BASE (${SCRATCH_LANES%% *} slot 0), $SCRATCH_BASE-slotN (slots 1..$((JOBS-1)))"
 fi
 echo "  log        $LOGDIR"
+CLONE_DIR=""
+if [ "$CLONE_SLOTS" = 1 ] && [ "$DRY" = 0 ]; then
+    git rev-parse --git-dir >/dev/null 2>&1 || { echo "[sweep].clone_per_slot needs a git repository at $BBX_ROOT" >&2; exit 2; }
+    CLONE_DIR="$(mktemp -d "${TMPDIR:-/tmp}/bbx-clones.XXXXXX")" || { echo "cannot create the clone directory" >&2; exit 2; }
+    trap 'rm -rf "$CLONE_DIR"' EXIT INT TERM
+    _head="$(git rev-parse --short HEAD)"; _porc="$(git status --porcelain | wc -l | tr -d ' ')"
+    _i=0
+    while [ "$_i" -lt "$JOBS" ]; do
+        { git clone -q --no-checkout "$BBX_ROOT" "$CLONE_DIR/slot$_i" && git -C "$CLONE_DIR/slot$_i" checkout -q "$_head"; } \
+            || { echo "SETUP-FAIL: could not clone $BBX_ROOT at $_head into $CLONE_DIR/slot$_i" >&2; exit 2; }
+        _i=$((_i + 1))
+    done
+    echo "  clones     $CLONE_DIR/slot0..$((JOBS - 1)) — plain clones of $_head; working tree porcelain=$_porc (uncommitted changes are NOT measured)"
+fi
 printf '  %-10s %s\n' "$INPUT_ENV" "$INPUT"
 
 # The build set, IDENTIFIED — never named. A search path is a search path,
@@ -278,10 +308,12 @@ if git rev-parse --git-dir >/dev/null 2>&1; then
 fi
 
 # ── THE RUN ─────────────────────────────────────────────────────────────────
-run_one() {   # run_one <gate> <lane> <scope> <args> [timeout] — writes one results row
+run_one() {   # run_one <gate> <lane> <scope> <args> [timeout] [tree] — writes one results row
     _g="$1"; _lane="$2"; _scope="$3"; _args="$4"
     _tmo="${5:-}"; case "$_tmo" in ""|-) _tmo=$TMO ;; esac
-    _log="$LOGDIR/$_g.log"
+    # [tree]: the clone this worker measures; callers pass it only from a subshell (the cd is theirs)
+    [ -z "${6:-}" ] || cd "$6" || { printf '%s\t%s\t%s\tMISSING\t0\tclone %s is not enterable\n' "$_g" "$_lane" "$_scope" "$6" >> "$RESULTS"; return; }
+    _log="$LOGABS/$_g.log"
     if [ ! -x "$GATES_DIR/$_g.sh" ]; then
         printf '%s\t%s\t%s\tMISSING\t0\tregistered but not executable\n' \
             "$_g" "$_lane" "$_scope" >> "$RESULTS"
@@ -335,12 +367,22 @@ for _l in $LANES; do
     # measure the instruments, and an instrument measured under contention is
     # a different instrument.
     _jobs=$JOBS; [ "$_l" = "$PREREQ" ] && _jobs=1
-    _running=0
     # THE LANE'S ROWS GO THROUGH A FILE, NOT A PIPE: a `| while read` loop is a
     # subshell, its background gates are the subshell's, and the main shell's
     # `wait` would have nothing to wait for — the lineage saw a gate orphaned
     # across a lane boundary and filed under the wrong heading.
-    printf '%s\n' "$_rows" > "$LOGDIR/.lane_$_l"
+    printf '%s\n' "$_rows" > "$LOGABS/.lane_$_l"
+    # THE PULL QUEUE (R19, 14z-144): fd 8 is a FIFO holding one token per slot;
+    # a worker blocks on `read` until a slot frees. Opened read-write so the
+    # open never blocks; token lines are single short writes, atomic under
+    # PIPE_BUF. The loop stays in the MAIN shell (the 14z-128 orphaning scar).
+    SLOTFIFO=""
+    if [ "$_jobs" -gt 1 ] && [ "$DRY" = 0 ]; then
+        SLOTFIFO="$LOGABS/.slots_$_l"
+        rm -f "$SLOTFIFO"; mkfifo "$SLOTFIFO"
+        exec 8<>"$SLOTFIFO"
+        _i=0; while [ "$_i" -lt "$_jobs" ]; do printf '%s\n' "$_i" >&8; _i=$((_i + 1)); done
+    fi
     while IFS="$(printf '\t')" read -r g lane scope cadence args note tmo; do
         [ -n "$g" ] || continue
         if already_done "$g"; then
@@ -352,24 +394,32 @@ for _l in $LANES; do
             printf '  %-34s %-7s %s\n' "$g" "$lane" "$GATES_DIR/$g.sh $_shown"
             continue
         fi
+        _tree=""; [ -z "$CLONE_DIR" ] || _tree="$CLONE_DIR/slot0"
         if [ "$_jobs" -le 1 ]; then
-            run_one "$g" "$lane" "$scope" "${args:--}" "${tmo:-}"
+            if [ -n "$_tree" ]; then ( run_one "$g" "$lane" "$scope" "${args:--}" "${tmo:-}" "$_tree" )
+            else run_one "$g" "$lane" "$scope" "${args:--}" "${tmo:-}"; fi
         else
-            # A SCRATCH LANE IS PARALLEL BY SCRATCH CLONE: job slot 0 keeps the
-            # base scratch (its compiled model is warm), slot N gets
-            # `<base>-slotN`, handed to the gate through [sweep].scratch_env.
+            read -r _slot <&8                  # BLOCKS until a slot frees; the token is the slot number
+            # A SCRATCH LANE IS PARALLEL BY SCRATCH CLONE: slot 0 keeps the base
+            # scratch (its compiled model is warm), slot N gets `<base>-slotN`,
+            # handed to the gate through [sweep].scratch_env. The slot a gate
+            # gets is the slot it took, so the binding follows the token.
             _slot_env=""
             if [ -n "$SCRATCH_ENV" ] && is_scratch_lane "$_l"; then
-                _scr="$SCRATCH_BASE"; [ "$_running" -gt 0 ] && _scr="$SCRATCH_BASE-slot$_running"
+                _scr="$SCRATCH_BASE"
+                if [ "${_slot:-0}" != 0 ]; then _scr="$SCRATCH_BASE-slot$_slot"; fi
                 _slot_env="$SCRATCH_ENV=$_scr "
             fi
-            run_one "$g" "$lane" "$scope" "$_slot_env${args:--}" "${tmo:-}" &
-            _running=$((_running + 1))
-            if [ "$_running" -ge "$_jobs" ]; then wait; _running=0; fi
+            [ -z "$CLONE_DIR" ] || _tree="$CLONE_DIR/slot$_slot"
+            (
+                run_one "$g" "$lane" "$scope" "$_slot_env${args:--}" "${tmo:-}" "$_tree"
+                printf '%s\n' "$_slot" >&8       # the token goes back: the pull
+            ) &
         fi
-    done < "$LOGDIR/.lane_$_l"
+    done < "$LOGABS/.lane_$_l"
     wait                       # the lane is not finished until its gates are
-    rm -f "$LOGDIR/.lane_$_l"
+    if [ -n "$SLOTFIFO" ]; then exec 8>&-; rm -f "$SLOTFIFO"; SLOTFIFO=""; fi
+    rm -f "$LOGABS/.lane_$_l"
     # THE INSTRUMENT GATE. A red prereq means every later measurement is
     # measured with a moved instrument, so the run stops by default.
     if [ "$_l" = "$PREREQ" ] && [ "$DRY" = 0 ] && [ "$KEEPGOING" = 0 ]; then
