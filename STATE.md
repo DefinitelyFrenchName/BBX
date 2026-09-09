@@ -21,11 +21,11 @@ kind), nine gates under `gates/` with three registries, `docs/controls.md`,
 `docs/defaults.md` D1–D19. No comparator, suite runner, expectation
 register, driver or fixture yet.
 
-**In force:** `DECISIONS.md` — R0–R17 and method M1–M4. **Open rulings:** R20 (fidelity on a clone of bbh at `f675710`; cost and
-risk measured, plain clone recommended). In force since bbx-2: R18 (the
-census and the tests work on a clone or are explicitly, provably
-read-only) and R19 (parallel work is a pull queue; the FIFO token queue is
-the default implementation, the principle is the ruling).
+**In force:** `DECISIONS.md` — R0–R17 and method M1–M4. **Open rulings:** none. In force since bbx-2: R18 (the census and the tests
+work on a clone or are explicitly, provably read-only), R19 (parallel work
+is a pull queue; the FIFO token queue is the default implementation, the
+principle is the ruling), R20 (fidelity on a plain clone of bbh at
+`f675710`; the recount's clone plain too).
 BBX = Black Box harness eXpanded; GPL-3; sh + Python 3 on macOS, Linux and
 Windows/WSL; kinds: frame-driven (bbh), document set, command-line tool, plus
 BBX itself as a subject (R14) and external test frameworks as drivers (R15).

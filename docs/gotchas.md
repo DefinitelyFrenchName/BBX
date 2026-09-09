@@ -170,3 +170,20 @@ instrument re-anchors it; G9 was the first). Fix, no loosening: rule 7 in
 summary line), the four rows re-labelled, bbh's and SMS's not-recountable
 numbers up by one each with this entry as the reason. Re-anchors: BBX-16
 (every extractor declares its view) and BBX-15.
+
+## G14 — Three answered rulings sat under an "Open" heading with their answers written in; the maintainer read the heading, not the entries (paid: 0 — caught by the maintainer at bbx-2; the shape would have made every later reader of the queue trust a wrong heading, 2026-09-09)
+R18, R19 and R20 were raised under `## Open — raised at the bbx-2 open` and
+answered in place: the `- **Answer:**` line was filled and the heading left
+as it was. The maintainer: "if R18 is fully ruled on, it should be in the
+answered category, not in the Open category with a mention that it is
+answered as this is typically the kind of dark pattern that leads to silent
+issues." The failure is general to every ledger with state sections: a
+heading is what a reader trusts at a glance, and an entry whose state
+disagrees with its heading is invisible exactly to the reader who is
+skimming for state. Fix: the entries moved under an `## Answered` heading,
+the file's header states the rule, and `gates/rulings_shape.sh` fails on
+the shape (an answer under Open, an `(open)` under Answered, an answered
+ruling with no `DECISIONS.md` row, a DECISIONS row with no entry) — with a
+shadow file in each wrong shape as its controls. Re-anchors: BBX-20 (a
+document declares its shape and completeness is a check) and BBX-9 (the
+rulings queue and DECISIONS are one registry, complete both ways).

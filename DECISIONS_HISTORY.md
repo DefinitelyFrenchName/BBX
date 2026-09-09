@@ -192,3 +192,10 @@ lives — bbh `[BBH-9]`).
   has no `alternates` dependence on bbh's object store during the run; the
   recommendation was revised to a plain clone (also for the recount, D17,
   +1.6 s on VampireSaved). Awaiting the answer.
+- R20 answered: plain clone. The maintainer's note on why — the measurement,
+  not the intuition, decided it. The gate moves onto a plain clone of
+  `f675710` in the step that follows; the recount's clone becomes plain.
+- The maintainer's correction on the queue's shape (answered entries under
+  an Open heading): R18–R20 moved under an Answered heading, the rule
+  written into the file, gotcha G14, and a gate (`rulings_shape`) so the
+  shape is checked rather than remembered.
