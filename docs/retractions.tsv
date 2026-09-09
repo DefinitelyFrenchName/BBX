@@ -1,0 +1,13 @@
+# docs/retractions.tsv — the retractions register (BBX-22): a wording BBX once stated as current and later corrected.
+# id <TAB> pattern (Python regex) <TAB> retracted on <TAB> allowed in (comma-separated paths, dir/ prefixes) <TAB> why
+# The ledgers are allowed by default (history is their point): docs/gotchas.md, docs/rulings.md, docs/readout.md,
+# DECISIONS_HISTORY.md, STATE_HISTORY.md, docs/census/README.md, docs/defaults.md (rows carry dated history), this file.
+# gates/close_sweeps.sh sweeps every other file and fails on a hit. Read by lib/py/bbx/close_sweeps.py.
+X1	MFI-52	2026-09-09	docs/gotchas.md,docs/rulings.md,docs/readout.md,DECISIONS.md,DECISIONS_HISTORY.md,STATE_HISTORY.md,docs/census/README.md,docs/retractions.tsv	BBX-5's citation was MJC-52 (R12, G2); DECISIONS.md's R12 row records the correction
+X2	319 gate scripts	2026-09-09	docs/gotchas.md,docs/rulings.md,docs/readout.md,DECISIONS_HISTORY.md,STATE_HISTORY.md,docs/census/README.md,docs/census/vampiresaved.md,docs/retractions.tsv	VampireSaved has 311; 319 counts sourced libs (G3)
+X3	74 of 319	2026-09-09	docs/gotchas.md,docs/rulings.md,docs/readout.md,DECISIONS_HISTORY.md,STATE_HISTORY.md,docs/census/README.md,docs/retractions.tsv	same as X2
+X4	No recount script exists yet	2026-09-09	docs/gotchas.md,docs/rulings.md,docs/readout.md,DECISIONS_HISTORY.md,STATE_HISTORY.md,docs/census/README.md,docs/retractions.tsv	the tool landed in S1 step 1; the sentence rotted (bbx-2)
+X5	54 not recountable	2026-09-09	docs/gotchas.md,docs/rulings.md,docs/readout.md,DECISIONS_HISTORY.md,STATE_HISTORY.md,docs/census/README.md,docs/retractions.tsv	56 since the clone exposed two host rows (G13)
+X6	12/12 controls	2026-09-09	docs/gotchas.md,docs/rulings.md,docs/readout.md,DECISIONS_HISTORY.md,STATE_HISTORY.md,docs/retractions.tsv	the count moved with every gate added; a living page quotes the last kept run
+X7	shared clone	2026-09-09	docs/gotchas.md,docs/rulings.md,docs/readout.md,DECISIONS_HISTORY.md,STATE_HISTORY.md,docs/census/README.md,docs/defaults.md,docs/retractions.tsv,lib/py/bbx/recount.py	plain clone since R20; recount.py explains why shared was declined
+X8	HEAD-MOVED line	2026-09-09	docs/gotchas.md,docs/rulings.md,docs/readout.md,DECISIONS_HISTORY.md,STATE_HISTORY.md,docs/retractions.tsv	a moved lineage is a drift NOTE since R18, never a verdict

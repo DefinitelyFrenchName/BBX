@@ -448,3 +448,60 @@ The kept run's files, read and never re-derived; the gates' own headers for the 
 - The sweep runner's runs are not on the screen (only `bbx-run-static --log` is read).
 - Platform runs (R21): none exist; every green here is Darwin arm64.
 - The close ritual's sweeps (steps 8–9) are still hand-run.
+
+---
+
+# bbx-2 step 5 — the close sweeps as a gate; and CLOSE — bbx-2 (2026-09-10)
+
+## The screen, verbatim (`bin/bbx readout build/selftest_20260909T221655Z --against build/selftest_20260909T221309Z`)
+
+```
+== READOUT — self subject at /Users/koneko/Developer/generalized-blackbox-harness/BBX @ 3247b80 (porcelain 6) — started 2026-09-09T22:16:56Z on Darwin arm64 ==
+VERDICT: GREEN   PASS 12  SKIP 0  FAIL 0  TIMEOUT 0  MISSING 0   (gates 12)
+tree during the run: unchanged   harness: bbx @ 3247b80
+rests on:
+  controls: fired 26 / declared 26; dead 0; undeclared firings 0; gates red 0
+  each can fail: 12 of 12 gates proved a control fires on purpose
+  expectations relied upon: none registered — the expectation register with its provenance classes is slice S2; until then no comparison against a frozen expectation is claimed
+  coverage: census_recount: rows=300 recountable=244 not_recountable=56 (BBX-18: the census claims no command re-derives)
+  BBX-14 (more than one run): met — 12 gates, 0 verdict differences against the run started 2026-09-09T22:13:10Z at the same HEAD
+  last re-baseline: (none recorded)
+what this green does NOT assert (declared by each gate's header):
+  classify: that a verdict word printed by a gate outside the runner is read at all: the classifier reads exit status first, then the log; a PASS printed after a non-zero exit is FAIL by design
+  config: the meaning of a consumer's keys: only that the layers resolve (consumer over kind profile over kind-blind default) and that dumps are stable
+  tier: that a gate reaching an instrument through a path the source regex does not match is seen: the depth and the regex are the limit
+  static_runner: the sweep runner or any gate that needs an instrument: this is the pre-commit chain only
+  static_runner: runtimes as anything but this host under this load
+  controls: that a control is RIGHT — only that a declared control fired and an undeclared one is red (docs/controls.md)
+  sweep_runner: speed-up on a real consumer: the queue is measured on stub gates with sleeps, not on an instrument-tier suite
+  sweep_runner: a gate that escapes its clone by an absolute path: clone-per-slot pins the cwd, nothing more
+  sweep_runner: portability beyond macOS: mkfifo and exec 8<> are POSIX, not yet run on Linux or WSL
+  fingerprint: the identity of any artifact that is not a single file: the kind-blind fingerprint is file-sha1 (D16)
+  rulings_shape: the prose of a ruling: only its heading, its answer line and its DECISIONS row are read
+  readout: that a declared blind spot is true or complete: the screen prints what the header says
+  readout: the sweep runner's runs: only bbx-run-static --log is read
+  close_sweeps: that every corrected claim has a register row: the register is written by hand at the correction (a claim nobody registered is not swept)
+  close_sweeps: step 9 of the close (the lineage untouched): that is the recount's clone and the fidelity gate's proof, not this gate
+  census_recount: the truth of the not-recountable rows at their commits: they are named and counted, never run
+  census_recount: that a hand-read citation says what its row claims: only that the line exists
+  fidelity_bbh: anything about a suite, a comparator or an expectation: slice S2
+  fidelity_bbh: bbh's example's correctness (G11 is bbh's to fix)
+  fidelity_bbh: F15 unless BBX_FIDELITY_F15=1 was set for the run
+  gates declaring no blind spot: 0   (a gate nobody has asked what its green leaves out)
+```
+
+## Step 5, what changed
+
+`gates/close_sweeps.sh` + `lib/py/bbx/close_sweeps.py` + `docs/retractions.tsv` (8 rows): the close ritual's step 8 as a check — a retracted wording anywhere but the ledgers its row allows, a TODO/TBD/FIXME anywhere, a `D<n>` cited with no register row: FAIL; three planted-defect controls. Step 9 is by construction (R18/R20) and by the fidelity gate's proof. R21 carries the procedure for the Linux run (bundle BBX, clone bbh from GitHub, the census SKIPs there, run twice with `--log`). The sweep's first run on the real tree found three things its author had not thought of: DECISIONS' R12 row naming the retracted citation (a ledger, now allowed), bbh's bins citing a lineage D-id (lineage files excluded), and the gate's own control text (its two files never swept). The rulings-shape gate rejected R21's answer line written as "(open — …)": the grammar wants exactly "(open)", and got it.
+
+# CLOSE — bbx-2 (2026-09-10)
+
+**Green first, twice, kept:** `PASS 12    SKIP 0     FAIL 0     MISSING 0` — `controls fired 26 / declared 26; gates with no declaration: 0; red: 0` — `ok: no tracked file changed during the run` — BBX-14 met on the screen above (12 gates, 0 verdict differences between the two runs). Runtime 222 s (D14).
+
+**Nothing evaporates:** every number in this sitting's sections is reproduced by a gate, a census row, or a kept run under `build/`; runtimes are measured once per step (D2, D14, D19) and say so; VampireSaved's 1.65×/3.48× figures are quoted from its source (R19) and labelled so.
+
+**Sweeps:** gated — `close_sweeps` GREEN in both runs (8 retraction rows, 0 hits outside the ledgers; 0 deferrals; 22 defaults rows, 59 citations, 0 unresolved); every gate declares its controls (the runner: gates with no declaration 0); the queue's shape GREEN (`rulings_shape`: 22 entries, 21 answered, 1 open — R21). **Lineage untouched, by construction and by proof:** bbh recorded=f675710 tip=f675710 ahead=0 porcelain=4; vampiresaved recorded=0cdd9726 tip=e25e6f7 ahead=2 porcelain=385; sms recorded=ecc5481 tip=ecc5481 ahead=0 porcelain=0. The drift NOTE for VampireSaved is in the run's census log; the screen does not list it yet (bbx-3's first fix).
+
+**Rulings this sitting:** R18, R19, R20 answered; R21 open (the platform run: the maintainer's host, procedure in the entry). **Incidents filed with a price:** G12–G15. **Commits:** 11 including this close.
+
+**What this close does NOT assert:** anything about a comparator, an expectation register or a suite (S2); any platform but Darwin arm64 (R21); the pull queue's speed-up on a real consumer; the close ritual's step 2 (nothing evaporates) is still read by a person; the screen's NOTE block beyond coverage.

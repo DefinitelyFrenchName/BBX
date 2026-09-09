@@ -219,3 +219,25 @@ lives — bbh `[BBH-9]`).
 - The rulings-shape gate caught its author the same hour: the new "Open
   rulings:" line mentioned R3 in passing and no longer listed exactly the
   open ids. Reworded; the gate stays as it is.
+
+## bbx-2 CLOSE — 2026-09-10
+
+- Close measurements: green first, twice, kept — `PASS 12 SKIP 0 FAIL 0
+  MISSING 0`, `controls fired 26 / declared 26`, tree unchanged in both,
+  BBX-14 met on the generated screen (0 verdict differences at one HEAD).
+  Sweeps gated (`close_sweeps` GREEN: 8 retraction rows, 0 hits outside
+  the ledgers, 0 deferrals, 22 defaults rows, 59 citations resolved).
+  Lineage: never entered (clones); the recount summaries report the tips —
+  VampireSaved's tip moved again during the sitting (`e25e6f7`, 2 ahead).
+- `docs/retractions.tsv` born with 8 rows, every wording this project has
+  corrected so far; the register is the close's one remaining hand step.
+- Anti-hyperfocus checkpoint (BBX-27): the sitting spent itself on the
+  maintainer's three rulings (clones, the queue, the queue's shape) and on
+  finishing S1's readout; each was measured before it was built and each
+  new gate caught its author within the hour (R21's answer line, the
+  untracked copies, the last-entry assumption). The most valuable next
+  thread is S2's comparators — nothing on the screen yet says what a green
+  rests on beyond controls, and that line is S2's. The last green means:
+  BBX's own tree passes its own gates twice at one HEAD, its clones leave
+  the lineage untouched, and bbh's verdict text is reproduced on bbh's
+  fixtures — and nothing yet about any comparison.

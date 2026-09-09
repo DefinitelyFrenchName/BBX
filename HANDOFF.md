@@ -23,8 +23,9 @@ Shape: operational map. Read this first, then `STATE.md`, then
 | the controls contract (must-fire grammar, R10) | `docs/controls.md` |
 | the defaults register (BBX-24) | `docs/defaults.md` |
 | the kernel | `bin/bbx` (dispatcher: `run-static run-sweep classify tier config controls fingerprint recount selftest`), `lib/sh/`, `lib/py/bbx/`, `bbx.toml` (BBX as its own consumer, kind `self`) |
-| BBX's gates and registries | `gates/*.sh` (11: 9 portable incl. `rulings_shape`, `readout`; 2 static), `gates/portable.txt`, `gates/static.txt`, `gates/sweep.tsv` (empty) — run with `BBX_BBH_HOME=~/Developer/blackbox-harness bin/bbx selftest` (~223 s on a loaded host, D14) |
+| BBX's gates and registries | `gates/*.sh` (12: 10 portable incl. `rulings_shape`, `readout`, `close_sweeps`; 2 static), `gates/portable.txt`, `gates/static.txt`, `gates/sweep.tsv` (empty) — run with `BBX_BBH_HOME=~/Developer/blackbox-harness bin/bbx selftest` (~222 s on a loaded host, D14) |
 | the readout, generated | `bin/bbx selftest --log build/selftest_<stamp>` keeps the run; `bin/bbx readout <dir> [--against <dir>]` prints the one screen (RO1–RO3; BBX-14 met only with `--against` a second kept run at the same HEAD) |
+| the retractions register (BBX-22) | `docs/retractions.tsv`, read by `gates/close_sweeps.sh` |
 | the recount tool | `bin/bbx recount <census.md> [--only A1,A2] [--root DIR] [--in-place]` — runs on a plain local clone of the recorded commit (R18, R20); `--in-place` is the unproved escape hatch |
 
 ## The lineage on this machine
@@ -41,15 +42,15 @@ bbh is **never modified** from here. VampireSaved and SMS are read only.
 ## What is running
 
 Nothing in the background. `BBX_BBH_HOME=~/Developer/blackbox-harness
-bin/bbx selftest` (~223 s) is GREEN: 10 gates, 20/20 controls. Run it first
-thing, with no edits in flight (the runner's working-tree check reports a
+bin/bbx selftest` (~222 s) is GREEN: 12 gates, 26/26 controls. Run it first
+thing, with `--log build/selftest_<stamp>` and no edits in flight (the runner's working-tree check reports a
 concurrent edit as DIRTIED); the census recount inside it is the
 re-derivation step of the ritual (CLAUDE.md §6.2) made into a gate.
 
 ## The ritual (ruled R17 at the bbx-1 close, 2026-09-09; adapted from VampireSaved VSP-17/VSP-18/VSP-162)
 
 Sessions are keyed `bbx-N`, one key per sitting, never renamed (pointers in
-readouts, gotchas and history resolve through it). This sitting is **bbx-2** (bbx-1 closed 2026-09-09).
+readouts, gotchas and history resolve through it). The last closed sitting is **bbx-2** (2026-09-10); the next is **bbx-3**.
 
 **Open**
 1. Read this file, `STATE.md`, `docs/rulings.md`. (`CLAUDE.md` is the
@@ -91,12 +92,13 @@ readouts, gotchas and history resolve through it). This sitting is **bbx-2** (bb
    alternatives.** Nothing pending silently; an answered ruling is MOVED
    under an Answered heading, never annotated under Open (G14; gated by
    `rulings_shape`, which also holds DECISIONS.md to the queue both ways).
-8. **Sweeps, each with its result shown:** the retraction grep for every
-   claim corrected this sitting (BBX-22, hits allowed only in the ledgers:
-   gotchas, rulings, census README, readout, DECISIONS*); the deferral grep
-   (TODO, TBD, FIXME, placeholder text) → empty or listed; every new default
-   has a `docs/defaults.md` row; every gate declares its controls
-   (`bin/bbx controls declared <gate>`).
+8. **Sweeps — gated since bbx-2 (`gates/close_sweeps.sh`, in the battery):**
+   every claim corrected this sitting gets a row in `docs/retractions.tsv`
+   (BBX-22; the gate fails on the wording anywhere but the ledgers the row
+   allows); deferrals (TODO, TBD, FIXME) fail; a `D<n>` cited with no
+   `docs/defaults.md` row fails; every gate declares its controls (the
+   runner refuses otherwise). The close's only hand step here: write the
+   retraction rows.
 9. **Lineage untouched — by construction and by proof (R18):** the recount
    never enters a lineage tree (clone); the fidelity gate runs in bbh's tree
    and proves its tracked porcelain unchanged. The close quotes each
@@ -105,10 +107,27 @@ readouts, gotchas and history resolve through it). This sitting is **bbx-2** (bb
    live by another session — its tree is nobody's baseline).
 10. **One close commit** per sitting, tally in the message; no push (R7).
 
-Steps 8 and 9 become a portable gate in S1 step 4, so the close is checked
-rather than remembered.
+Steps 8 and 9 are checked, not remembered: step 8 by `close_sweeps`, step 9
+by construction (the recount's clone) and by `fidelity_bbh`'s proof.
 
-**Next-session orientation (written at the bbx-1 close)**
+**Next-session orientation (written at the bbx-2 close, 2026-09-10)**
+- Open first: `bin/bbx selftest --log build/selftest_<stamp>` (twice if the
+  close's screen is wanted at the open); `bin/bbx readout` on it. A `drift`
+  NOTE is a lineage moving, not a red — VampireSaved was 2 commits past the
+  census at this close (tip `e25e6f7`), by design not re-measured.
+- First small fix: `lib/py/bbx/readout.py` prints only the `coverage` NOTE;
+  every other NOTE line (drift, bbh-source) belongs on the screen too.
+- R21 is the only open ruling: the maintainer produces the Linux/WSL run by
+  the procedure in the entry; when the kept run arrives, commit it under
+  `docs/platforms/<platform>/` and generate its screen. It blocks nothing.
+- S2 starts in bbx-3: lift bbh's comparators and `bbh-run-suite` (see below),
+  every printed verdict line frozen, F12/F16/F17 as the proof. The expectation
+  register's provenance vocabulary is R11; the screen's "expectations relied
+  upon" line is where S2 becomes visible to the maintainer.
+- Rulings go under `## Open` with `- **Answer:** (open)` exactly; the shape
+  gate reads that literal.
+
+**Orientation carried from the bbx-1 close (still true where not superseded above)**
 - S1 has two items left: the readout generator (abstraction RO1–RO3 as a
   tool that reads a run's results and prints the one screen, with a gate)
   and the platform gates (R3: a Linux or WSL run of `bin/bbx selftest`,
