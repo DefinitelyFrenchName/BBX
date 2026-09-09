@@ -109,3 +109,41 @@ The recorded HEADs (`f675710`, `5df1d8be`, `ecc5481`), checked before any row ru
 - That the counts are *current*: they are the counts at the recorded HEADs, and a moved HEAD turns the whole file red until it is re-measured.
 - That the commands measure what their dimension says. The recount proves the command prints the number; whether the command is the right question is the reviewer's (G10 is the example).
 - Portability: measured on macOS only so far (R3 wants Linux and WSL; the platform gates are later in S1).
+
+---
+
+# Readout — slice S1, step 2: the kernel, and BBX validating BBX (2026-09-09)
+
+## Verdict
+
+`BBX_BBH_HOME=~/Developer/blackbox-harness bin/bbx selftest` → **GREEN**, run twice, identical with durations normalised, 47 s:
+
+```
+PASS 7     SKIP 0     FAIL 0     MISSING 0
+controls fired 9 / declared 9; gates with no declaration: 0; red: 0
+ok: every instrument-free gate is registered
+```
+
+## Counts, separately
+
+| | |
+|---|---|
+| gates PASS / SKIP / FAIL / TIMEOUT / MISSING | 7 / 0 / 0 / 0 / 0 (classify, config, tier, static_runner, controls; census_recount, fidelity_bbh) |
+| controls declared / fired | 9 / 9 — every one prints its `CONTROL FIRED:` line and is checked by the runner |
+| fidelity F13 | 9 pairs identical: synthetic repo plain + `--strict`; example portable, both tiers, NOT RUN, `--list`; tier `--list`, `--unregistered`; config `dump` |
+| fidelity must-fire | `verdict-text`: one changed format string → 8 differing lines |
+| F14 (sweep) / F15 (classifier over bbh's selftests) | not run — F14 not built; F15 built, opt-in, not yet run |
+| new defaults registered with a class | D8–D14 |
+| a defect caught by a control before the tool's first real use | 1 (the controls reader: a firing nobody declared read UNDECLARED; `gates/controls.sh` §2) |
+
+## What it rests on
+
+bbh at `f675710` (porcelain 4, recorded), found by `BBX_BBH_HOME`; lifted code cited line by line to its bbh origin; the diff mechanism inherited from bbh's F1–F11 with durations the only normalisation; BBX's own gates, each with a control that failed on purpose in this run.
+
+## What this green does NOT assert
+
+- Anything about the suite, the sweep, the comparators, expectations, or provenance registers: none exists in BBX yet (S1 step 3: the sweep runner and F14; S2: the comparators, F12, F16, F17).
+- F15: the classifier agreement over bbh's real selftest logs has not been run.
+- Portability beyond this host (macOS, bash 3.2, Python 3.9.6): the tomllib half of `gates/config.sh` is not asserted here (no tomllib on 3.9); Linux and WSL runs are still to come (R3).
+- That the `frame-driven` profile is the right shape for kinds A and B: it is bbh's defaults under a name; the two new kinds are the test.
+- That BBX's self-validation catches a convention error it shares with itself: the custodian for that is F13 (bbh), which passed, and the must-fire controls, which fired — nothing more (BBX-15).

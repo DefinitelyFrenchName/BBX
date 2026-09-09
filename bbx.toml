@@ -1,0 +1,38 @@
+# bbx.toml — BBX's OWN consumer config: the harness reads its own tree as a
+# subject (ruled R14). Every key left out takes the `self` kind profile's
+# value, then the kind-blind default (lib/py/bbx/config.py; docs/defaults.md).
+# Paths are relative to this file's directory.
+
+[project]
+root = "."
+kind = "self"
+gates_dir = "gates"
+gate_glob = "*.sh"
+lib_dir = "lib/sh"
+runner_prefixes = ["run_"]
+manual_suffixes = ["_soak"]
+instrument_word = "instrument"
+
+[registries]
+portable = "gates/portable.txt"
+static = "gates/static.txt"
+# the static tier needs the lineage trees: bbh at $BBX_BBH_HOME (fidelity),
+# and the census files' recorded roots (the recount SKIPs on its own)
+static_needs_env = "BBX_BBH_HOME"
+
+[tier]
+# nothing in BBX's own gates reaches an instrument yet; the fidelity gate
+# runs bbh's tools, which are the SUBJECT of the frame-driven kind, not an
+# instrument of this tree — an empty list means "nothing" (tier.py)
+patterns = []
+source_regex = '^\s*\.\s+"?\$(?:BBX_HOME|\{BBX_HOME\})"?/(lib/sh/[a-z0-9_]+\.sh)'
+source_depth = 2
+
+[classify]
+skip_regex = '^ *SKIP'
+shell_error_regex = '\.sh: line [0-9]+: [A-Za-z_][A-Za-z0-9_]*: '
+timeout_exits = [124, 137]
+fail_tail = 12
+
+[controls]
+enforce = true

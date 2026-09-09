@@ -79,3 +79,32 @@ lives — bbh `[BBH-9]`).
   and may only go down.
 - **Instrument findings:** G9 (two greps) and G10 (a never-matching pattern).
   Neither changed a count; both changed the grammar and the tool.
+
+## 2026-09-09 — slice S1 step 2: the kernel, lifted and proved
+
+- **How the kernel was built:** the lineage's own method — bbh's classifier,
+  config reader, TOML subset, tier classifier and static runner lifted with
+  their incident comments and a `Lifted from bbh …` line each, renamed
+  `bbx`, and proved by F13 (9 pairs byte-identical after duration
+  normalisation). New code is only where BBX generalizes: the three-layer
+  defaults (consumer → kind profile → kind-blind, **M4**, so bbh's literals
+  live under the name `frame-driven` and BBX's own tree under `self`), an
+  empty tier pattern list meaning "nothing", the controls reader and the
+  runner's controls block (R10, off by default for fidelity).
+- **M4 (method):** a default true of one subject kind lives in that kind's
+  profile, never in DEFAULTS; `[project].kind` defaults to `frame-driven`
+  only because bbh configs carry no kind (D9, arbitrary — the third kind
+  is its detector).
+- **A control caught a defect before first use (BBX-5):** the controls
+  reader classed a firing nobody declared as UNDECLARED when the gate had no
+  declarations at all; `gates/controls.sh` §2 went red on the first run and
+  the reader was corrected to RED. Not a gotcha: it never reached a run.
+- **Plan correction:** F12 (the suite over bbh's example) moves from S1 to
+  S2 — the suite's verdict lines are printed by the comparators, which are
+  S2's deliverable. Recorded in `docs/fidelity.md` and `docs/slices.md`.
+- Anti-hyperfocus checkpoint (BBX-27): the next most valuable thread is F14
+  (the sweep runner, bbh's largest lifted piece) rather than the readout
+  generator, because F14 is the last fidelity row S1 can prove without the
+  comparators; the last green (`bin/bbx selftest`) means the kernel
+  reproduces bbh on bbh's fixtures and BBX's own gates fire their controls —
+  and nothing about any subject kind but the frame-driven one.

@@ -1,2 +1,8 @@
 # gates/portable.txt — BBX gates that run anywhere with sh + python3 and nothing else (bbh's portable tier)
-# One gate per line, relative to gates/. Complete both ways (BBX-9) — enforced by the runner (slice S1).
+# One gate per line, relative to gates/. Complete both ways (BBX-9): bin/bbx selftest reports
+# every gate in neither registry, and a registered gate that does not exist is MISSING.
+classify
+config
+tier
+static_runner
+controls

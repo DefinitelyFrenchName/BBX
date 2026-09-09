@@ -7,12 +7,16 @@ when this page first rolls over). Read `HANDOFF.md` first.
 generalization of `blackbox-harness` (bbh) to any subject with testable inputs
 and outputs. Born 2026-09-09.
 
-**Status:** slice S1 open, step 1 done (2026-09-09): the census recount gate
-is GREEN with both controls fired (`docs/readout.md`, second section). One
-tool (`lib/py/bbx/recount.py`), one gate (`gates/census_recount.sh`), two
-registries (`gates/static.txt`, `gates/portable.txt`), the controls contract
-(`docs/controls.md`), the defaults register (`docs/defaults.md`, D1–D7). No
-classifier, runner, comparator, driver or fixture yet.
+**Status:** slice S1, steps 1–2 done (2026-09-09): the kernel exists and
+BBX validates BBX — `bin/bbx selftest` is GREEN (7 gates, 9/9 controls
+fired, 47 s), fidelity F13 diffs empty on 9 pairs against bbh
+(`docs/readout.md`, third section). In the tree: `bin/bbx` (`run-static`,
+`classify`, `tier`, `config`, `controls`, `recount`, `selftest`),
+`lib/sh/{classify,config,registry}.sh`, `lib/py/bbx/{toml_subset,config,
+tier,controls,recount}.py`, `bbx.toml` (the `self` kind), seven gates under
+`gates/` with two registries, `docs/controls.md`, `docs/defaults.md` D1–D14.
+No sweep runner, no comparator, no expectation register, no driver, no
+fixture yet.
 
 **In force:** `DECISIONS.md` — R0–R16 and method M1–M3. **Open rulings:** none.
 BBX = Black Box harness eXpanded; GPL-3; sh + Python 3 on macOS, Linux and
@@ -40,6 +44,8 @@ Every further edit to `CLAUDE.md` needs maintainer approval (R16). The counts
 54 not recountable (VS 27, SMS 27) — the number to bring down. Grammar in
 `docs/census/README.md`.
 
-**What does not exist yet:** `bin/`, the classifier, the runners, the
-readout generator, any comparator, `fixture/`, a skill. Next in S1: the one
-classifier and the gate contract over bbh's `example/`, toward F12–F15.
+**Next in S1 (step 3):** the sweep runner (bbh `bin/bbh-run-sweep`, 491
+lines: lanes, the prereq stop, scope and cadence, placeholders, per-row
+timeouts, `--jobs`, `--resume`) and F14 over bbh's example; then F15 run
+once. F12 moved to S2 (the suite's verdict lines are the comparators').
+Then the readout generator (RO1–RO3) and the platform gates (R3).

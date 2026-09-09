@@ -47,6 +47,18 @@ control that lies (SMS trap 22: "a negative control is CODE, and it is wrong
 until it has failed on purpose"). That judgement is in the reviewer's hands;
 the contract makes the control findable and its silence loud.
 
-**First instance.** `gates/census_recount.sh` declares two controls
-(`known-bad: wrong-head`, `perturbed-copy: moved-count`) and prints their
-firing lines.
+**The runner.** `bin/bbx-run-static` reads the declarations with
+`lib/py/bbx/controls.py` when `[controls].enforce = true` and prints one
+line per gate it ran — `controls=<gate> declared=<n> fired=<n> dead=<n>
+undeclared=<n> verdict=OK|RED|UNDECLARED` — then the sum `controls fired
+<n> / declared <n>`. RED (a declared control that did not fire, a `CONTROL
+DEAD:` line, a firing no header declares) and, under enforcement, UNDECLARED
+(no `MUST-FIRE:` line at all) make the run NOT GREEN with exit 1. With
+enforcement off the block is absent and the output is bbh's byte for byte
+(fidelity F13). Ground truth: `gates/controls.sh`.
+
+**First instances.** Every gate in `gates/` declares its controls; the first
+self-run (2026-09-09) read `controls fired 9 / declared 9` over 7 gates. The
+reader's own first defect — a firing nobody declared, in a gate with no
+declarations, classed UNDECLARED instead of RED — was caught by
+`gates/controls.sh` before the reader's first real use (BBX-5).

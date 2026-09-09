@@ -1,4 +1,4 @@
-# gates/static.txt — BBX gates that need the lineage trees or a build, no instrument (bbh's static tier)
-# One gate per line, relative to gates/. Complete both ways: a gate here that does not exist and a
-# gate in gates/ that is in no registry are both red (BBX-9) — enforced by the runner (slice S1).
-census_recount.sh
+# gates/static.txt — BBX gates that need the lineage trees (BBX_BBH_HOME set), no instrument (bbh's static tier)
+# One gate per line, relative to gates/. Complete both ways (BBX-9) — enforced by bin/bbx selftest.
+census_recount
+fidelity_bbh

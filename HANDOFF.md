@@ -22,8 +22,9 @@ Shape: operational map. Read this first, then `STATE.md`, then
 | the maintainer readouts (session 1; S1 step 1) | `docs/readout.md` |
 | the controls contract (must-fire grammar, R10) | `docs/controls.md` |
 | the defaults register (BBX-24) | `docs/defaults.md` |
-| the first gate and the registries | `gates/census_recount.sh`, `gates/static.txt`, `gates/portable.txt` |
-| the first tool | `lib/py/bbx/recount.py` (`--only A1,A2` re-runs single rows; `--root` overrides) |
+| the kernel | `bin/bbx` (dispatcher: `run-static classify tier config controls recount selftest`), `lib/sh/`, `lib/py/bbx/`, `bbx.toml` (BBX as its own consumer, kind `self`) |
+| BBX's gates and registries | `gates/*.sh` (7), `gates/portable.txt`, `gates/static.txt` — run with `BBX_BBH_HOME=~/Developer/blackbox-harness bin/bbx selftest` (~47 s) |
+| the recount tool | `bin/bbx recount <census.md> [--only A1,A2] [--root DIR]` |
 
 ## The lineage on this machine
 
@@ -38,22 +39,26 @@ bbh is **never modified** from here. VampireSaved and SMS are read only.
 
 ## What is running
 
-Nothing in the background. One gate exists and is green:
-`sh gates/census_recount.sh` (~21 s) — run it first thing; it is the
-re-derivation step of the ritual (CLAUDE.md §6.2) made into a gate.
+Nothing in the background. `BBX_BBH_HOME=~/Developer/blackbox-harness
+bin/bbx selftest` (~47 s) is GREEN: 7 gates, 9/9 controls. Run it first
+thing; the census recount inside it is the re-derivation step of the ritual
+(CLAUDE.md §6.2) made into a gate.
 
 ## The ritual for session 2 (CLAUDE.md §6)
 
 1. Read this file, `STATE.md`, `docs/rulings.md`.
-2. Re-derive before relying: `sh gates/census_recount.sh`. A HEAD-MOVED line
-   means a lineage repository moved: re-measure that census file (the tool's
-   `--only` runs single rows) before anything else. A red row is a finding.
-3. Continue S1 (`docs/slices.md`): the one classifier (bbh's contract,
-   reproduced), the gate header reader incl. the MUST-FIRE grammar
-   (`docs/controls.md`), the tiered registries with the anti-orphan check,
-   the static runner, then the suite and sweep runners over bbh's `example/`,
-   ending with F12–F15 diffing empty. Load the `blackbox-harness` skill first.
-   Every new default gets a row in `docs/defaults.md` before it is used.
+2. Re-derive before relying: `BBX_BBH_HOME=~/Developer/blackbox-harness
+   bin/bbx selftest`. A HEAD-MOVED line from the recount means a lineage
+   repository moved: re-measure that census file (`bin/bbx recount … --only`)
+   before anything else. A red fidelity pair means bbh or BBX moved: read
+   `docs/rebaselines.md` before touching either. A red row is a finding.
+3. Continue S1 step 3 (`docs/slices.md`, `STATE.md`): lift bbh's sweep
+   runner (`bin/bbh-run-sweep`) and prove F14 over bbh's `example/`
+   (`--list`, `--dry-run`, `--scope all`); run F15 once
+   (`BBX_FIDELITY_F15=1 gates/fidelity_bbh.sh`); then the readout generator.
+   Every lifted file cites its bbh origin in its header; every new default
+   gets a row in `docs/defaults.md` before it is used; every new gate
+   declares its controls (`docs/controls.md`) or the self-run goes red.
 4. `CLAUDE.md` is edited only with maintainer approval (R16). A defect found
    in it goes to `docs/rulings.md` with proposed wording.
 5. Before ending: update `STATE.md` and this file; append to
