@@ -143,7 +143,7 @@ eventually carry is generated from these, never hand-written.
   Report them differently.
 
 **Controls**
-- [BBX-5] `[inherited VS MFI-52]` Separate the author from the verdict.
+- [BBX-5] `[inherited VS MJC-52]` Separate the author from the verdict.
   Prove an instrument fires on a known positive and stays quiet on a known
   negative before its first real use; name its implausible value in advance.
 - [BBX-6] `[inherited VS rot class 3]` A must-fire control that no longer
