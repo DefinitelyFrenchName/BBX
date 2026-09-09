@@ -211,5 +211,5 @@ SMS rows; the rows were rewritten to `git grep` and every count reproduced.
 Lesson recorded in the protocol: a verifier that shares the producer's
 instrument verifies the instrument's consistency, not the count (BBX-15); the
 recount under a pinned environment is the lineage-independent check, and a
-verifier must from now on run the commands through `lib/py/bbx/recount.py
+verifier must from now on run the commands through `bin/bbx recount <census>
 --only <ids>`, never through its own shell.

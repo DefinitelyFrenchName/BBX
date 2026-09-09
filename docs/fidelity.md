@@ -1,6 +1,6 @@
 # The fidelity plan — the F-series from F12
 
-**Shape: proposal (session 1, 2026-09-09). Status: UNRATIFIED; no row runs yet.**
+**Shape: proposal (session 1, 2026-09-09), now partly measured: F13 runs in `gates/fidelity_bbh.sh` and diffs empty (2026-09-09); F15 is built and opt-in; F12, F14, F16–F21 are open.**
 
 ## The obligation
 
