@@ -147,3 +147,43 @@ bbh at `f675710` (porcelain 4, recorded), found by `BBX_BBH_HOME`; lifted code c
 - Portability beyond this host (macOS, bash 3.2, Python 3.9.6): the tomllib half of `gates/config.sh` is not asserted here (no tomllib on 3.9); Linux and WSL runs are still to come (R3).
 - That the `frame-driven` profile is the right shape for kinds A and B: it is bbh's defaults under a name; the two new kinds are the test.
 - That BBX's self-validation catches a convention error it shares with itself: the custodian for that is F13 (bbh), which passed, and the must-fire controls, which fired — nothing more (BBX-15).
+
+---
+
+# Readout — slice S1, step 3: the sweep runner, the fingerprint, F14 and F15 (2026-09-09)
+
+## Verdict
+
+`BBX_BBH_HOME=~/Developer/blackbox-harness bin/bbx selftest` → **GREEN**, 117 s:
+
+```
+PASS 9     SKIP 0     FAIL 0     MISSING 0
+controls fired 12 / declared 12; gates with no declaration: 0; red: 0
+ok: every instrument-free gate is registered
+```
+
+Run twice. The two runs differ in one block only: run one reported the working tree DIRTIED by three `docs/*.md` files, which the orchestrator was editing while the run was in progress; run two, with no concurrent edits, reported `ok: no tracked file changed`. The runner's working-tree check worked on its author.
+
+## Counts, separately
+
+| | |
+|---|---|
+| gates PASS / SKIP / FAIL / TIMEOUT / MISSING | 9 / 0 / 0 / 0 / 0 (+ sweep_runner, fingerprint since step 2) |
+| controls declared / fired | 12 / 12 |
+| fidelity F13 / F14 / F15 | 9 pairs / 12 pairs / 32 logs — all identical |
+| fidelity deltas found | 1, and it is a finding about bbh's example consumer, not about BBX (G11): a sourced lib's fallback path is wrong and is masked by bbh's runner exporting its own location; recorded per `[BBH-82]`, both sides of that pair run with `BBH_HOME` exported |
+| the mechanism of G11, measured | `env -u BBH_HOME sh tests/g_needs_fake.sh` → `…/Developer/drivers/fake.sh: No such file or directory`; with `BBH_HOME` set → PASS; the lib's fallback resolves to `/Users/koneko/Developer` |
+| new defaults registered | D15 (sweep, kind-blind), D16 (fingerprint + suite keys) |
+| S1 rows still open | the readout generator (RO1–RO3 as a tool), the platform gates (R3: Linux, WSL), F12 moved to S2 |
+
+## What it rests on
+
+bbh `f675710` (porcelain 4); every lifted file cites its bbh origin; F14's real run executes bbh's own example gates under each runner and compares only the runners' printed lines; F15 runs bbh's 32 selftests once and classifies each (exit, log) both ways.
+
+## What this green does NOT assert
+
+- Anything about a suite, a comparator, an expectation or a provenance register: S2.
+- That BBX's sweep runner is right on any consumer but bbh's example and the synthetic repo of `gates/sweep_runner.sh`.
+- That the `frame-driven` profile's literals (VampireSaved's build directories among them) are anything but bbh's — they are carried for fidelity and labelled so (D12, D15).
+- Portability beyond macOS (R3) — no Linux or WSL run yet.
+- bbh's example's correctness: G11 is bbh's to fix; BBX does not modify bbh.

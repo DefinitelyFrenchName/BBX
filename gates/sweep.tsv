@@ -1,0 +1,2 @@
+# gates/sweep.tsv — BBX's instrument-tier registry (bin/bbx run-sweep). Empty at birth: no BBX gate
+# reaches an instrument yet. COLUMNS gate <TAB> lane <TAB> scope <TAB> cadence <TAB> args <TAB> note [<TAB> timeout]

@@ -105,3 +105,21 @@ measures 0 — the claim was true, the evidence was not (BBX-2: "a gate born
 against a live defect has never exercised PASS"). Re-anchors: BBX-8 (a
 validator is re-run where it must fail) — this row never was; the recount's
 moved-count control is the first such re-run in BBX.
+
+## G11 — bbh's example consumer works only because bbh's runner leaks its own location into every gate (paid: 0 here — found by fidelity F14, which is what fidelity is for, 2026-09-09)
+`example/tests/lib/needs_fake.sh` computes bbh's location as
+`$(dirname "$0")/../../..` — but `$0` inside a sourced lib is the GATE
+(`tests/g_needs_fake.sh`), so the path resolves one level above the bbh
+tree. Under `bbh-run-sweep` the fallback never runs: the runner exports
+`BBH_HOME` into every gate. Under `bbx-run-sweep`, which exports `BBX_HOME`,
+the latent defect surfaced as the one delta of F14's real run (g_needs_fake
+PASS under bbh, FAIL under BBX). Measured: `env -u BBH_HOME sh
+tests/g_needs_fake.sh` fails from `example/`; with `BBH_HOME` set it passes.
+Disposition (bbh `[BBH-82]`): a finding about the consumer, recorded, never
+a fidelity failure and never fixed by making BBX leak the same variable; the
+fidelity pair exports `BBH_HOME` on both sides as the consumer's input, the
+way bbh's own F4 runs both sides with `MAME_BIN` unset. bbh is not modified
+here; the maintainer may fix the lib's fallback in bbh (`../..`). Re-anchors:
+BBX-16 (a claim reads in a view — here the view was "with the runner's
+environment", never declared) and BBX-15 (the second implementation as the
+third party).

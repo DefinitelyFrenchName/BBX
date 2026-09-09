@@ -39,6 +39,7 @@ DEFAULTS = {
     "registries": {
         "portable": "tests/ci_portable.txt",
         "static": "tests/ci_static.txt",
+        "sweep": "tests/ci_sweep.tsv",
         "static_needs_env": "",      # empty: the static tier always runs; a kind names its input variable
     },
     "tier": {
@@ -55,6 +56,47 @@ DEFAULTS = {
     "controls": {
         "enforce": False,            # D10: read MUST-FIRE declarations and require them to fire (off = bbh's behaviour, fidelity)
     },
+    # the instrument-tier sweep (bin/bbx-run-sweep) — kind-blind: one lane, no instruments, no placeholders (D15)
+    "sweep": {
+        "lanes": ["prereq"],
+        "default_lanes": ["prereq"],
+        "prereq_lane": "prereq",
+        "release_scope": "release",
+        "cadences": ["always"],
+        "freeze_cadence": "always",
+        "cadence_drop_note": [],
+        "default_timeout": 600,
+        "precondition": "",
+        "precondition_fail_text": "precondition FAILED — stop",
+        "input_env": "BBX_INPUT",
+        "log_dir_prefix": "build/sweep_",
+        "placeholders": {},
+        "rompath_placeholder_suffix": "_RP",
+        "rompath_suffix": "",
+        "build_sets": [],
+        "instruments": [],
+        "env_defaults": [],
+        "scratch_lanes": [],
+        "scratch_env": "",
+        "scratch_default": "",
+        "prereq_cite": "",
+    },
+    # the subject identity (lib/py/bbx/fingerprint.py) — kind-blind: the artifact is ONE file (D16)
+    "fingerprint": {
+        "kind": "file-sha1",
+        "program_member_regex": r"\.(\d+)$",
+        "parent_sets": [],
+        "region_rules": [],
+        "region_default": "other",
+        "file_pattern": "{set}.bin",
+        "program_command": "",
+        "wholeset_command": "",
+    },
+    # the suite keys the fingerprint reads; the suite runner itself is slice S2
+    "suite": {
+        "registry": "tests/expected/registry.tsv",
+        "default_set": "",
+    },
 }
 
 # The kind profiles: the second layer. `frame-driven` is bbh's DEFAULTS for
@@ -64,16 +106,57 @@ DEFAULTS = {
 KINDS = {
     "frame-driven": {
         "project": {"instrument_word": "emulator"},
-        "registries": {"static_needs_env": "ROMDIR"},
+        "registries": {"static_needs_env": "ROMDIR", "sweep": "tests/ci_emulator.tsv"},
         "tier": {"patterns": [r"run_(replay_)?(mame|fbneo)\.sh", r"run_replay_guarded\.sh",
                               r"MAME_BIN", r"FBNEO_BIN", r"autoboot_script", r"emu/fbneo/fbneo",
                               r"run_battery", r"run_sim_jtcps2\.sh",
                               r"run_inp_probe\.sh", r"run_inp_guarded\.sh"]},
+        # bbh's [sweep] literals verbatim (lib/py/bbh/config.py at f675710) — including the
+        # lineage's build directories in `placeholders`, the biased default of BBX-24 kept
+        # here under its kind's name so a bbh consumer config resolves as it does in bbh (D12)
+        "sweep": {
+            "lanes": ["prereq", "fbneo", "mame", "mister"],
+            "default_lanes": ["prereq", "fbneo", "mame"],
+            "cadences": ["romset", "bitstream"],
+            "freeze_cadence": "romset",
+            "cadence_drop_note": ["These follow the .rbf, not the romset (ruled 2026-09-03). A",
+                                  "RELEASE always runs them; this run does not.",
+                                  ">> IS THIS FREEZE TARGETING MiSTer? If yes, re-run with",
+                                  "   --cadence all --lane mister. If no, this is correct."],
+            "default_timeout": 5400,
+            "precondition": 'python3 tools/audit_roms.py "$ROMDIR" > /dev/null',
+            "precondition_fail_text": "ROM audit FAILED — stop (CLAUDE.md §3)",
+            "input_env": "ROMDIR",
+            "log_dir_prefix": "build/emu_sweep_",
+            "placeholders": {"MERGED": "build/m3b_merged26", "DON": "build/don_m22", "HUI": "build/hui56",
+                             "PYR": "build/pyron41", "STOCK": "build/m5_stock17"},
+            "rompath_suffix": "/rompath",
+            "build_sets": ["vsavjw", "vsavj"],
+            "instruments": [["mame-wide", "MAME_WIDE_BIN", "$HOME/.cache/vampire-saved/mame/cps2"],
+                            ["mame-ref", "MAME_REF_BIN", "$HOME/.cache/vampire-saved/mame-ref/cps2"],
+                            ["fbneo", "", "$REPO/emu/fbneo/fbneo"]],
+            "env_defaults": [["MAME_BIN", "mame-wide"]],
+            "scratch_lanes": ["mister"],
+            "scratch_env": "JTSIM_SCRATCH",
+            "scratch_default": "vampire-saved-jtsim",
+            "prereq_cite": "[CPE-24]",
+        },
+        "fingerprint": {
+            "kind": "zip-members",
+            "program_member_regex": r"\.(0[3-9]|10|4[1-4])[a-ln-z]?$",
+            "parent_sets": ["vsav"],
+            "region_rules": [[r"\.key$", "key"], [r"\.0[12]$", "z80"],
+                             [r"^vsw\..*m$", "gfx/qsnd"], [r"^vsw\.", "prg"],
+                             ["@program", "prg"]],
+            "region_default": "gfx/qsnd",
+        },
+        "suite": {"default_set": "vsavj"},
     },
     "self": {
         "project": {"gates_dir": "gates", "lib_dir": "lib/sh", "instrument_word": "instrument"},
         "registries": {"portable": "gates/portable.txt", "static": "gates/static.txt",
-                       "static_needs_env": "BBX_BBH_HOME"},
+                       "sweep": "gates/sweep.tsv", "static_needs_env": "BBX_BBH_HOME"},
+        "sweep": {"input_env": "BBX_BBH_HOME", "log_dir_prefix": "build/sweep_"},
         "controls": {"enforce": True},
     },
 }

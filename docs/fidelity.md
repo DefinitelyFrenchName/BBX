@@ -1,6 +1,6 @@
 # The fidelity plan — the F-series from F12
 
-**Shape: proposal (session 1, 2026-09-09), now partly measured: F13 runs in `gates/fidelity_bbh.sh` and diffs empty (2026-09-09); F15 is built and opt-in; F12, F14, F16–F21 are open.**
+**Shape: proposal (session 1, 2026-09-09), now partly measured: F13, F14 and F15 run in `gates/fidelity_bbh.sh` and diff empty (2026-09-09); F12, F16–F21 are open.**
 
 ## The obligation
 
@@ -42,8 +42,8 @@ itself against VampireSaved with F1–F11 (`~/Developer/blackbox-harness/selftes
 |---|---|---|---|---|---|
 | **F12** | `example/` on `roms/build-a`, `roms/base`, and the unregistered `roms/hook` (exit 1, "unregistered build fingerprint"); plus `FAKE_NONDET=1` (the NONDETERMINISTIC line) | `FAKE_ROOT=. FAKE_ROMPATH=… bin/bbh run-suite` | the BBX suite runner, same config, driver `fake` | bbh tree | **S2** (corrected 2026-09-09: the suite's verdict lines come from the comparators, which are S2's) |
 | **F13** | a synthetic repo of 10 stub gates + MISSING + orphan + emulator gate + NOTE (F13a, plain and `--strict`); `example/` portable tier (F13b), both tiers with `FAKE_ROOT=.` and NOT RUN without it (F13c), `--list` (F13d); the tier classifier `--list`/`--unregistered` and the config `dump` over `example/bbh.toml` (F13e) | `bin/bbh run-static`, `bbh.tier`, `bbh.config` | `bin/bbx-run-static`, `bbx.tier`, `bbx.config` | bbh tree | S1 — **measured 2026-09-09: all 9 pairs identical**, must-fire `verdict-text` fired (`gates/fidelity_bbh.sh`) |
-| **F14** | `example/` sweep: `--list`, `--dry-run`, `--scope all` | `bin/bbh run-sweep` | BBX sweep runner | bbh tree | S1 |
-| **F15** | bbh's own 32 selftests, each run once, its (exit, log) classified by both classifiers | `bin/bbh-classify` | `bin/bbx-classify` | bbh tree; opt-in `BBX_FIDELITY_F15=1` in `gates/fidelity_bbh.sh` (~2–6 min) | S1 — implemented, not yet run |
+| **F14** | `example/` sweep: `--list`, `--list --scope all --lane all`, `--dry-run --scope all` (log dir normalised), a real `--scope all --strict` run (bbh's example gates under each runner, `BBH_HOME` exported on both sides — G11); F14f the fingerprint over every image in `example/roms` (registry lookup incl. the refused `hook`; `--sha-only`, `--set-key`, `--full`) | `bin/bbh run-sweep`, `bbh.fingerprint` | `bin/bbx-run-sweep`, `bbx.fingerprint` | bbh tree | S1 — **measured 2026-09-09: 12 pairs identical**; the one delta found on the way is a finding about bbh's example (G11), not a fidelity failure |
+| **F15** | bbh's own 32 selftests, each run once, its (exit, log) classified by both classifiers | `bin/bbh-classify` | `bin/bbx-classify` | bbh tree; opt-in `BBX_FIDELITY_F15=1` in `gates/fidelity_bbh.sh` (~2–6 min) | S1 — **measured 2026-09-09: 32 selftests, both classifiers agree on every (exit, log)** |
 | **F16** | every `.masked` in `example/expected` (10 files, all — no sampling) | `lib/sh/masked_compare.sh` | BBX comparator dispatcher | bbh tree | S2 |
 | **F17** | synthetic point-indexed logs covering: exact PASS; flicker PASS with frozen inventory; FAIL-SHORT; first-divergence at exactly n, at n−1, absent; window with a bit-identical pair (must FAIL); composite; a nondeterministic pair | bbh `compare_*.py`, `check_diverge.py`, `describe_masked_shape.py` | BBX temporal family | bbh tree | S2 |
 | **F18** | bbh's own skill (87 rules, 9 anchor pages, `skill/skills.toml`) | `bbh check-skills -v`; `bbh skill-guide --check` | BBX skills registry | bbh tree | S5 |
@@ -52,8 +52,8 @@ itself against VampireSaved with F1–F11 (`~/Developer/blackbox-harness/selftes
 | **F21** (opt-in) | bbh's F8a–h through BBX's frame-driven kind with the real MAME/FBNeo drivers | `test_fidelity_mame.sh` | BBX | ROMs, a pinned MAME, FBNeo — SKIP otherwise, reported as *not covered* | S7 |
 
 Rows F13–F15 are the first slice's DONE condition (CLAUDE.md §7.2): until they
-diff empty, nothing in BBX is described as generic. F13 diffs empty (9 pairs,
-2026-09-09); F14 and F15 are open.
+diff empty, nothing in BBX is described as generic. **F13 (9 pairs), F14 (12
+pairs) and F15 (32 logs) diff empty, 2026-09-09.**
 
 ## What fidelity does NOT prove
 

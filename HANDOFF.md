@@ -22,8 +22,8 @@ Shape: operational map. Read this first, then `STATE.md`, then
 | the maintainer readouts (session 1; S1 step 1) | `docs/readout.md` |
 | the controls contract (must-fire grammar, R10) | `docs/controls.md` |
 | the defaults register (BBX-24) | `docs/defaults.md` |
-| the kernel | `bin/bbx` (dispatcher: `run-static classify tier config controls recount selftest`), `lib/sh/`, `lib/py/bbx/`, `bbx.toml` (BBX as its own consumer, kind `self`) |
-| BBX's gates and registries | `gates/*.sh` (7), `gates/portable.txt`, `gates/static.txt` — run with `BBX_BBH_HOME=~/Developer/blackbox-harness bin/bbx selftest` (~47 s) |
+| the kernel | `bin/bbx` (dispatcher: `run-static run-sweep classify tier config controls fingerprint recount selftest`), `lib/sh/`, `lib/py/bbx/`, `bbx.toml` (BBX as its own consumer, kind `self`) |
+| BBX's gates and registries | `gates/*.sh` (9), `gates/portable.txt`, `gates/static.txt`, `gates/sweep.tsv` (empty) — run with `BBX_BBH_HOME=~/Developer/blackbox-harness bin/bbx selftest` (~117 s) |
 | the recount tool | `bin/bbx recount <census.md> [--only A1,A2] [--root DIR]` |
 
 ## The lineage on this machine
@@ -40,9 +40,10 @@ bbh is **never modified** from here. VampireSaved and SMS are read only.
 ## What is running
 
 Nothing in the background. `BBX_BBH_HOME=~/Developer/blackbox-harness
-bin/bbx selftest` (~47 s) is GREEN: 7 gates, 9/9 controls. Run it first
-thing; the census recount inside it is the re-derivation step of the ritual
-(CLAUDE.md §6.2) made into a gate.
+bin/bbx selftest` (~117 s) is GREEN: 9 gates, 12/12 controls. Run it first
+thing, with no edits in flight (the runner's working-tree check reports a
+concurrent edit as DIRTIED); the census recount inside it is the
+re-derivation step of the ritual (CLAUDE.md §6.2) made into a gate.
 
 ## The ritual for session 2 (CLAUDE.md §6)
 
@@ -52,10 +53,10 @@ thing; the census recount inside it is the re-derivation step of the ritual
    repository moved: re-measure that census file (`bin/bbx recount … --only`)
    before anything else. A red fidelity pair means bbh or BBX moved: read
    `docs/rebaselines.md` before touching either. A red row is a finding.
-3. Continue S1 step 3 (`docs/slices.md`, `STATE.md`): lift bbh's sweep
-   runner (`bin/bbh-run-sweep`) and prove F14 over bbh's `example/`
-   (`--list`, `--dry-run`, `--scope all`); run F15 once
-   (`BBX_FIDELITY_F15=1 gates/fidelity_bbh.sh`); then the readout generator.
+3. Finish S1 (step 4): the readout generator (abstraction RO1–RO3) as a
+   tool that reads a run's results and prints the one screen, with a gate;
+   the platform gates (R3) — a Linux or WSL run of `bin/bbx selftest`
+   recorded in the readout. Then open S2 (`docs/slices.md`).
    Every lifted file cites its bbh origin in its header; every new default
    gets a row in `docs/defaults.md` before it is used; every new gate
    declares its controls (`docs/controls.md`) or the self-run goes red.

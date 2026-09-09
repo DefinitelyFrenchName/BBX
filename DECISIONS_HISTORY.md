@@ -108,3 +108,27 @@ lives — bbh `[BBH-9]`).
   comparators; the last green (`bin/bbx selftest`) means the kernel
   reproduces bbh on bbh's fixtures and BBX's own gates fire their controls —
   and nothing about any subject kind but the frame-driven one.
+
+## 2026-09-09 — slice S1 step 3: the sweep runner, the fingerprint, F14, F15
+
+- Lifted with citations: `bin/bbx-run-sweep` (bbh's 491-line sweep runner,
+  every printed line kept), `lib/py/bbx/fingerprint.py` (the subject
+  identity, settings resolved through the config layers), the [sweep],
+  [fingerprint] and [suite] sections in three layers (kind-blind D15/D16;
+  bbh's literals in the frame-driven profile, VampireSaved's build
+  directories included and labelled). Two gates lifted from bbh's ground
+  truth with controls declared (`sweep_runner`: env-default-export,
+  prereq-stop; `fingerprint`: wholeset-only-row).
+- **F14: 12 pairs identical; F15: 32 logs identical.** The one delta on the
+  way was a finding about bbh's example (G11: a sourced lib's wrong
+  fallback masked by the runner exporting BBH_HOME), disposed per
+  `[BBH-82]` — recorded, both sides given the consumer's input, BBX not
+  bent to leak the same variable.
+- The runner's working-tree check caught the orchestrator editing docs
+  during a run (readout, section 4). Run two, undisturbed, was clean.
+- Anti-hyperfocus checkpoint (BBX-27): S1's fidelity obligation (F13–F15)
+  is met; the two remaining S1 items (readout generator, platform gates)
+  are cheaper than any S2 item and unblock nothing in S2, so S2 may start
+  in parallel with them next session. The last green means: on bbh's
+  fixtures and BBX's own gates, nothing was lost in the lift — and nothing
+  yet about any comparison.

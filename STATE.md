@@ -7,16 +7,17 @@ when this page first rolls over). Read `HANDOFF.md` first.
 generalization of `blackbox-harness` (bbh) to any subject with testable inputs
 and outputs. Born 2026-09-09.
 
-**Status:** slice S1, steps 1–2 done (2026-09-09): the kernel exists and
-BBX validates BBX — `bin/bbx selftest` is GREEN (7 gates, 9/9 controls
-fired, 47 s), fidelity F13 diffs empty on 9 pairs against bbh
-(`docs/readout.md`, third section). In the tree: `bin/bbx` (`run-static`,
-`classify`, `tier`, `config`, `controls`, `recount`, `selftest`),
-`lib/sh/{classify,config,registry}.sh`, `lib/py/bbx/{toml_subset,config,
-tier,controls,recount}.py`, `bbx.toml` (the `self` kind), seven gates under
-`gates/` with two registries, `docs/controls.md`, `docs/defaults.md` D1–D14.
-No sweep runner, no comparator, no expectation register, no driver, no
-fixture yet.
+**Status:** slice S1, steps 1–3 done (2026-09-09): the kernel exists and
+BBX validates BBX — `bin/bbx selftest` is GREEN (9 gates, 12/12 controls
+fired, 117 s); fidelity F13 (9 pairs), F14 (12 pairs) and F15 (32 logs)
+diff empty against bbh (`docs/readout.md`, sections 3–4). In the tree:
+`bin/bbx` (`run-static`, `run-sweep`, `classify`, `tier`, `config`,
+`controls`, `fingerprint`, `recount`, `selftest`), `lib/sh/{classify,
+config,registry}.sh`, `lib/py/bbx/{toml_subset,config,tier,controls,
+fingerprint,recount}.py`, `bbx.toml` (the `self` kind), nine gates under
+`gates/` with three registries, `docs/controls.md`, `docs/defaults.md`
+D1–D16. No comparator, no suite runner, no expectation register, no
+driver, no fixture yet.
 
 **In force:** `DECISIONS.md` — R0–R16 and method M1–M3. **Open rulings:** none.
 BBX = Black Box harness eXpanded; GPL-3; sh + Python 3 on macOS, Linux and
@@ -44,8 +45,10 @@ Every further edit to `CLAUDE.md` needs maintainer approval (R16). The counts
 54 not recountable (VS 27, SMS 27) — the number to bring down. Grammar in
 `docs/census/README.md`.
 
-**Next in S1 (step 3):** the sweep runner (bbh `bin/bbh-run-sweep`, 491
-lines: lanes, the prereq stop, scope and cadence, placeholders, per-row
-timeouts, `--jobs`, `--resume`) and F14 over bbh's example; then F15 run
-once. F12 moved to S2 (the suite's verdict lines are the comparators').
-Then the readout generator (RO1–RO3) and the platform gates (R3).
+**Next in S1 (step 4, the last):** the readout generator (RO1–RO3 as a
+tool over a run's results: verdicts, controls, provenance histogram,
+coverage, what-is-not-asserted) and the platform gates (R3: Linux, WSL).
+Then S2 (comparators, expectation kinds, the provenance register with the
+R11 vocabulary, the suite runner, F12/F16/F17). One finding for the
+maintainer: bbh's example lib has a wrong fallback path (G11); bbh is not
+modified here.

@@ -1,14 +1,19 @@
 #!/bin/sh
-# fidelity_bbh.sh — the generic static runner, tier classifier and classifier reproduce bbh's verdict text byte for byte over bbh's own fixtures (F13, F15)
+# fidelity_bbh.sh — the generic runners, classifiers and the fingerprint reproduce bbh's verdict text byte for byte over bbh's own fixtures (F13, F14, F15)
 # THE FIDELITY OBLIGATION (CLAUDE.md §2, §7.2; docs/fidelity.md): bbh is not modified and is
 # the proof that nothing was lost. Both tools are run over the SAME input and their output is
 # diffed with only durations normalised — never expected values re-derived by hand (bbh
 # [BBH-81]). Rows here: F13a both static runners over a synthetic repo of stub gates (bbh's
 # F1 shape); F13b example/ portable tier; F13c example/ static tier (FAKE_ROOT); F13d --list;
-# F13e the tier classifier --list and --unregistered; F15 (BBX_FIDELITY_F15=1, ~2-6 min) every
-# bbh selftest's (exit, log) classified by both classifiers.
+# F13e the tier classifier --list and --unregistered; F14 the sweep runner over example/ (--list,
+# --list --scope all --lane all, --dry-run, a real --scope all --strict run, log dirs normalised);
+# F14f the fingerprint over example/roms (every flag, the registered and the refused image);
+# F15 (BBX_FIDELITY_F15=1, ~2-6 min) every bbh selftest's (exit, log) classified by both
+# classifiers.
 # Usage: BBX_BBH_HOME=~/Developer/blackbox-harness gates/fidelity_bbh.sh     (~10 s; F15 opt-in)
 # SKIP: BBX_BBH_HOME unset or not a bbh tree (exit 0; asserts nothing).
+# Usage note: F14's real run executes bbh's example gates (they call bbh's own tools) under
+# each runner; only the runners' printed lines are compared. ~25 s.
 # MUST-FIRE: perturbed-copy: verdict-text — a shadow copy of bbx-run-static with one verdict format string changed must make F13a's diff non-empty, or the diff cannot fail
 #
 set -eu
@@ -78,6 +83,46 @@ pair "F13e config dump of example/bbh.toml" \
      "cd '$B' && PYTHONPATH='$B/lib/py' python3 -m bbh.config example/bbh.toml dump" \
      "cd '$B' && PYTHONPATH='$BBX_HOME/lib/py' python3 -m bbx.config example/bbh.toml dump"
 
+echo "== F14. the sweep runner over example/ =="
+pairlog() {  # pairlog <label> <cmd-a> <cmd-b>  — like pair, with the two log dirs normalised to LOG
+    _l="$1"; _a="$2"; _b="$3"
+    (eval "$_a" 2>&1; echo "exit=$?") | norm | sed "s|$T/sw_a|LOG|g" > "$T/a.txt"
+    (eval "$_b" 2>&1; echo "exit=$?") | norm | sed "s|$T/sw_b|LOG|g" > "$T/b.txt"
+    if diff "$T/a.txt" "$T/b.txt" > "$T/d.txt"; then ok "$_l: identical ($(wc -l < "$T/a.txt" | tr -d ' ') lines)"
+    else fail "$_l: the outputs differ:"; head -12 "$T/d.txt" | sed 's/^/        /'; fi
+}
+pair "F14 --list" \
+     "cd '$B/example' && FAKE_ROOT=. '$B/bin/bbh-run-sweep' --list" \
+     "cd '$B/example' && FAKE_ROOT=. '$BBX_HOME/bin/bbx-run-sweep' --config bbh.toml --list"
+pair "F14 --list --scope all --lane all" \
+     "cd '$B/example' && FAKE_ROOT=. '$B/bin/bbh-run-sweep' --list --scope all --lane all" \
+     "cd '$B/example' && FAKE_ROOT=. '$BBX_HOME/bin/bbx-run-sweep' --config bbh.toml --list --scope all --lane all"
+pairlog "F14 --dry-run --scope all (the precondition, the fingerprinted builds, the instruments, every lane's command, the coverage report)" \
+     "cd '$B/example' && FAKE_ROOT=. '$B/bin/bbh-run-sweep' --dry-run --scope all --log '$T/sw_a'" \
+     "cd '$B/example' && FAKE_ROOT=. '$BBX_HOME/bin/bbx-run-sweep' --config bbh.toml --dry-run --scope all --log '$T/sw_b'"
+# THE ONE KNOWN DELTA, RECORDED (bbh [BBH-82]: a finding about the consumer, never a fidelity
+# failure, never fixed by weakening): example/tests/lib/needs_fake.sh computes bbh's location
+# from the GATE's path as `$(dirname "$0")/../../..` — one level too many when sourced — and
+# works under bbh only because bbh-run-sweep exports BBH_HOME into every gate. BBX exports
+# BBX_HOME, so the latent defect surfaces (g_needs_fake FAIL). The consumer's harness location
+# is the consumer's input: both sides run with BBH_HOME exported (as bbh's F4 runs both with
+# MAME_BIN unset). docs/gotchas.md G11.
+pairlog "F14 a real run: --scope all --strict (bbh's example gates under each runner; BBH_HOME exported on both sides, G11)" \
+     "cd '$B/example' && BBH_HOME='$B' FAKE_ROOT=. '$B/bin/bbh-run-sweep' --scope all --strict --log '$T/sw_a'" \
+     "cd '$B/example' && BBH_HOME='$B' FAKE_ROOT=. '$BBX_HOME/bin/bbx-run-sweep' --config bbh.toml --scope all --strict --log '$T/sw_b'"
+rm -rf "$T/sw_a" "$T/sw_b"
+echo "== F14f. the fingerprint over example/roms =="
+for _r in build-a base attract build-b hook; do
+    pair "F14f fingerprint roms/$_r (registry lookup)" \
+         "cd '$B/example' && PYTHONPATH='$B/lib/py' python3 -m bbh.fingerprint roms/$_r --config bbh.toml" \
+         "cd '$B/example' && PYTHONPATH='$BBX_HOME/lib/py' python3 -m bbx.fingerprint roms/$_r --config bbh.toml"
+done
+for _f in --sha-only --set-key --full; do
+    pair "F14f fingerprint roms/build-a $_f" \
+         "cd '$B/example' && PYTHONPATH='$B/lib/py' python3 -m bbh.fingerprint roms/build-a --config bbh.toml $_f" \
+         "cd '$B/example' && PYTHONPATH='$BBX_HOME/lib/py' python3 -m bbx.fingerprint roms/build-a --config bbh.toml $_f"
+done
+
 echo "== MUST-FIRE: a verdict-text change is visible to F13a =="
 S="$T/shadow"; mkdir -p "$S/bin" "$S/lib"
 ln -s "$BBX_HOME/lib/py" "$S/lib/py"; ln -s "$BBX_HOME/lib/sh" "$S/lib/sh"
@@ -112,4 +157,4 @@ else
 fi
 
 echo
-[ "$rc" = 0 ] && echo "PASS: BBX reproduces bbh's verdict text over bbh's own fixtures (F13a-e); F15 $([ "${BBX_FIDELITY_F15:-}" = 1 ] && echo run || echo 'not run')" || { echo "FAIL: see above"; exit 1; }
+[ "$rc" = 0 ] && echo "PASS: BBX reproduces bbh's verdict text over bbh's own fixtures (F13a-e, F14, F14f); F15 $([ "${BBX_FIDELITY_F15:-}" = 1 ] && echo run || echo 'not run')" || { echo "FAIL: see above"; exit 1; }
