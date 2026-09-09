@@ -167,6 +167,9 @@ by construction (the recount's clone) and by `fidelity_bbh`'s proof.
   porcelain move 373 → 377 and its `M` count 1 → 3 in one sitting). Never
   read a fact off its working tree; the census's clone at the recorded
   commit is the instrument.
+- A gate piped into `tail` in a `&&` chain checks nothing: the pipe's exit
+  is `tail`'s (G16: a red `close_sweeps` was committed and pushed that way).
+  Run the gate to a file, test its own exit, then read the file.
 - Two recounts running at once in one tree are not a known problem (the
   inflation seen while bisecting G9 was the grep, not the overlap), but the
   tools in the SMS tree do run for minutes; run the gate alone.

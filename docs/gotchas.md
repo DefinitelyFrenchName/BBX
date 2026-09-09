@@ -201,3 +201,19 @@ commit command chains with `&&` from the edit to the commit, and the commit
 step prints `git show --stat` so the message is read against the diffstat
 before the next step. Re-anchors: CLAUDE.md §0 ("done" must be legible
 without reading the file) and §1 (the commit was the moment of certainty).
+
+## G16 — A red gate was committed and pushed because the chain tested `tail`'s exit, not the gate's (paid: one red commit on the remote for a few minutes, corrected in the next; 2026-09-10)
+The R22 commit ran `sh gates/close_sweeps.sh 2>&1 | tail -1 && git commit
+… && gh repo create … --push`. The gate printed `FAIL: see above` — the
+new step-5 readout text named the deferral marker word in prose,
+`docs/readout.md:495` — and the chain went on: a pipeline's status is its
+last command's, and `tail` succeeded. The commit and the first push to
+the new remote carried the red. Caught by reading the output the command
+had already acted on. Fix, no loosening: the document reworded ("a
+deferral marker"), and the rule for every chain from here — a gate runs
+to a file, its own exit is tested, the file is read after (`sh gate >
+out; rc=$?`). HANDOFF hazard added. Re-anchors: BBX-1 (exit status
+decides before any text — here the text said FAIL and the status read
+was a different program's) and, again, §1 (the push was the moment of
+certainty). Same family as G15: a claim of "checked" written by the
+chain's shape, not by a measurement.
