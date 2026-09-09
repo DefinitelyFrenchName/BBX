@@ -123,3 +123,32 @@ here; the maintainer may fix the lib's fallback in bbh (`../..`). Re-anchors:
 BBX-16 (a claim reads in a view — here the view was "with the runner's
 environment", never declared) and BBX-15 (the second implementation as the
 third party).
+
+## G12 — The first opening after the first close was red: the lineage moved two commits and the census's hand-read line citations rotted with it (paid: the opening of bbx-2 — one re-measure before any work, 2026-09-09)
+`bin/bbx selftest` at the bbx-2 open: `census=vampiresaved.md head=5df1d8be
+repo_head=0cdd9726c35b verdict=HEAD-MOVED rows=127`, `PASS 8 FAIL 1`. Between
+the bbx-1 close and this open, VampireSaved committed twice (its `STATE.md`
+gained two lines at line 42; one expectation was re-frozen). Measured before
+any edit: a scratch copy of the census with the new HEAD on line 1 recounted
+99 of 100 recountable rows unchanged and one moved (A77, `wc -l < STATE.md`,
+1509 → 1511 — exactly the +3/−1 diff); every §B citation into `STATE.md`
+sits below line 42, so all thirteen shift by two, and each old line was
+diffed identical to its new line before the citation was re-pointed. Ten of
+the thirteen are `read` rows, re-pointed by hand; three are `gen:G1` rows,
+reproduced by re-running G1 (555 rows, diff empty). Header numbers: 1504
+commits, 372 untracked (both new files under `build/`). The recount at the
+new HEAD: `rows=127 match=100 mismatch=0 not_recountable=27`. Nothing in
+the bins moved (they key by id).
+
+Two lessons. (1) The recount did its job: a census is keyed by
+(repository, HEAD) and refused to compare across a moved key — BBX-29 as a
+mechanism, not a sentence. (2) A hand-read citation is a line number, and a
+line number is a claim about one file version: the ten `read` rows rotted
+on an edit that touched none of the lines they cite, while the three
+generated rows cost nothing. The design question this raises — what the
+recount should measure when the lineage moves, given that VampireSaved
+commits daily — is ruling R18, with a recommendation; the tool is
+unchanged until it is answered. Re-anchors: BBX-29 (keyed by subject
+version — the HEAD-MOVED verdict is the rule firing) and BBX-9 (a
+hand-maintained list is a smaller thing to forget: the `read` citations
+are that list).

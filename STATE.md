@@ -18,7 +18,9 @@ gates under `gates/` with three registries, `docs/controls.md`,
 `docs/defaults.md` D1–D16. No comparator, suite runner, expectation
 register, driver or fixture yet.
 
-**In force:** `DECISIONS.md` — R0–R17 and method M1–M4. **Open rulings:** none.
+**In force:** `DECISIONS.md` — R0–R17 and method M1–M4. **Open rulings:** R18
+(what the census recount measures when a lineage repository moves; raised at
+the bbx-2 open, recommendation filed, tool unchanged until answered).
 BBX = Black Box harness eXpanded; GPL-3; sh + Python 3 on macOS, Linux and
 Windows/WSL; kinds: frame-driven (bbh), document set, command-line tool, plus
 BBX itself as a subject (R14) and external test frameworks as drivers (R15).
@@ -28,12 +30,12 @@ BBX itself as a subject (R14) and external test frameworks as drivers (R15).
 | repository | HEAD | tracked | note |
 |---|---|---|---|
 | bbh | `f675710` | 190 | fidelity baseline (R8); 4 uncommitted modifications recorded |
-| VampireSaved | `5df1d8be` | 7497 | 555 rules across 8 skills; 311 gate scripts; 4,808 expectation files |
+| VampireSaved | `0cdd9726` | 7497 | 555 rules across 8 skills; 311 gate scripts; 4,808 expectation files; re-measured at bbx-2 (was `5df1d8be`: one count and 13 line citations moved) |
 | SMS-FrenchName-edition | `ecc5481` | 633 | 66 rules; 28 traps; the Measurement Rule's origin at `CLAUDE.md:19-33` |
 
 **Rules:** all 30 in CLAUDE.md §4 remain `[inherited]` in the file (edits
 need R16); incidents that re-anchor one in fact: G8 → §1, G9 → BBX-15,
-G10 → BBX-8 (`docs/gotchas.md`, G1–G10). The formal promotion is slice S5.
+G10 → BBX-8, G12 → BBX-29 (`docs/gotchas.md`, G1–G12). The formal promotion is slice S5.
 
 **Constitution:** BBX-5's citation corrected to `MJC-52` (R12, own commit).
 Every further edit to `CLAUDE.md` needs maintainer approval (R16). The counts

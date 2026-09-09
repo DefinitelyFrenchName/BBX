@@ -7,7 +7,7 @@ recorded HEAD:
 | file | repository | local path | HEAD | tracked |
 |---|---|---|---|---|
 | `bbh.md` | blackbox-harness | `~/Developer/blackbox-harness` | `f675710` | 190 |
-| `vampiresaved.md` | VampireSaved | `~/Developer/Vampire_Saved/VampireSaved` | `5df1d8be` | 7497 |
+| `vampiresaved.md` | VampireSaved | `~/Developer/Vampire_Saved/VampireSaved` | `0cdd9726` (re-measured bbx-2; born at `5df1d8be`) | 7497 |
 | `sms.md` | SMS-FrenchName-edition | `~/Developer/SailorMoonS` | `ecc5481` | 633 |
 
 ## The protocol (DECISIONS.md M2, M3)

@@ -202,3 +202,48 @@ bbh `f675710` (porcelain 4); every lifted file cites its bbh origin; F14's real 
 **Rulings this sitting:** R0–R17 (all answered). **Incidents filed with a price:** G1–G11. **Commits:** 8 including this close.
 
 **What this close does NOT assert:** anything about S2's comparators; portability beyond macOS; that the ritual's sweeps are gated (they are hand-run until S1 step 4).
+
+---
+
+# bbx-2 open — the VampireSaved re-measure (2026-09-09)
+
+## Verdict
+
+The ritual's re-derivation, run first and alone, was **NOT GREEN**: `PASS 8     SKIP 0     FAIL 1     MISSING 0`, failed `census_recount` — `census=vampiresaved.md head=5df1d8be repo_head=0cdd9726c35b verdict=HEAD-MOVED rows=127`. bbh (79 rows) and SMS (94 rows) matched; both controls fired. VampireSaved had moved two commits since the bbx-1 close.
+
+After the re-measure (`docs/census/vampiresaved.md` at `0cdd9726`), alone, no edits in flight → **GREEN**:
+
+```
+PASS 9     SKIP 0     FAIL 0     MISSING 0
+controls fired 12 / declared 12; gates with no declaration: 0; red: 0
+ok: no tracked file changed during the run
+census=vampiresaved.md head=0cdd9726 porcelain=373 rows=127 match=100 mismatch=0 not_recountable=27 nonzero_exit=0
+```
+
+## Counts, separately
+
+| | |
+|---|---|
+| commits VampireSaved moved | 2 (`git -C ~/Developer/Vampire_Saved/VampireSaved log --oneline 5df1d8be..0cdd9726 \| wc -l`) |
+| files those commits touched | 2 (`STATE.md` +3/−1 at line 42; `tests/expect/mister_prg_window.txt`) |
+| census counts that moved / recountable | 1 / 100 (A77, `wc -l < STATE.md`, 1509 → 1511) |
+| §B line citations re-pointed | 13 (all into `STATE.md`, all +2; 10 `read` by hand, 3 `gen:G1` by re-run); old line diffed identical to new line: 13 / 13 |
+| G1 re-run vs §B `gen:G1` rows | 555 / 555, diff empty |
+| not-recountable rows | 27, the same 27 (allowed to move only downward: unchanged) |
+| header numbers corrected | 3 (HEAD; 1502 → 1504 commits; 370 → 372 untracked, both new files under `build/`) |
+| bins rows changed | 0 (`docs/bins/vampiresaved.md` keys by id) |
+| gotchas filed | 1 (G12, price: the opening of bbx-2) |
+| rulings raised | 1 (R18, open, recommendation filed, tool unchanged) |
+| `census_recount` runtime | 20 s (header quotes ~21 s, D2) |
+
+## What it rests on
+
+The recount under the hermetic environment (D6) at the new HEAD, run first on a scratch copy of the census (so the measurement preceded every edit), then on the edited file; G1 re-run from the census's own §C text; the ten hand citations verified by `sed -n Lp` at `5df1d8be` against `sed -n (L+2)p` at `0cdd9726`, all identical; then the whole battery.
+
+## What this green does NOT assert
+
+- Anything about VampireSaved's two commits beyond the two files they touched; their content (an M18 release) was not read.
+- That the census's 27 not-recountable rows are still true at `0cdd9726`: they are not run by construction (the number to bring down, unchanged).
+- That the ten hand-read citations say what the rows claim: the check was old line = new line, not a re-read of the claim.
+- That the ritual's step-8/9 sweeps are gated: still hand-run (S1 step 4).
+- Anything R18 recommends: the recount is unchanged until the maintainer answers.

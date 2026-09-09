@@ -1,5 +1,5 @@
-# Census — VampireSaved @ 5df1d8be — measured 2026-09-09
-Path `/Users/koneko/Developer/Vampire_Saved/VampireSaved` · remote `https://github.com/DefinitelyFrenchName/VampireSaved.git` · 7497 tracked files · 1502 commits · working tree: 1 ` M` (submodule pointer `emu/fbneo`) + 370 `??` untracked (all under `build/`), nothing staged.
+# Census — VampireSaved @ 0cdd9726 — measured 2026-09-09 (re-measured at bbx-2 from 5df1d8be; see the last line of §D)
+Path `/Users/koneko/Developer/Vampire_Saved/VampireSaved` · remote `https://github.com/DefinitelyFrenchName/VampireSaved.git` · 7497 tracked files · 1504 commits · working tree: 1 ` M` (submodule pointer `emu/fbneo`) + 372 `??` untracked (all under `build/`), nothing staged.
 
 Read-only survey. Every number below carries the command that printed it, run from the VampireSaved repo root. No file in that tree was modified.
 
@@ -83,7 +83,7 @@ Read-only survey. Every number below carries the command that printed it, run fr
 | A74 | rot classes in the harness-rot taxonomy | 7 | `grep -cE '^[0-9]\. \*\*THE ' docs/project/harness_hardening_history.md` |
 | A75 | fidelity rows in `harness_scope.md` §5 (F1..F11 + the F8-measured row) | 12 | `sed -n '/## 5\./,/## 6\./p' docs/project/harness_scope.md \| grep -cE '^[\|] \*?\*?F[0-9]'` |
 | A76 | memory file lines — `CLAUDE.md` | 395 | `wc -l < CLAUDE.md` |
-| A77 | memory file lines — `STATE.md` | 1509 | `wc -l < STATE.md` |
+| A77 | memory file lines — `STATE.md` | 1511 | `wc -l < STATE.md` |
 | A78 | memory file lines — `HANDOFF.md` | 1515 | `wc -l < HANDOFF.md` |
 | A79 | memory file lines — `DECISIONS_HISTORY.md` | 2783 | `wc -l < DECISIONS_HISTORY.md` |
 | A80 | memory file lines — `STATE_HISTORY.md` | 28918 | `wc -l < STATE_HISTORY.md` |
@@ -451,9 +451,9 @@ Read-only survey. Every number below carries the command that printed it, run fr
 | V-R310 | R | [VSP-19] **Verdict logic is itself tested (§4)** — a classifier's verdicts are validated against ground-truth scenarios before they are tru… | CLAUDE.md:223 | gen:G1 |
 | V-R311 | R | [VSP-166] **Where the classifier LOOKS is validated too, and never from our own generator** — before re-targeting an instrument onto a new… | docs/project/gotchas.md:3619 | gen:G1 |
 | V-R312 | R | [VSP-20] **FIELD REPORTS ARE RECORDINGS (§4, maintainer-ruled 14z-111)** — every reproducible crash a human can produce is captured FIRST a… | CLAUDE.md:189 | gen:G1 |
-| V-R313 | R | [VSP-21] **STANDING PRINCIPLE: vanilla wins ties (maintainer, 2026-08-05)** — when a console port and arcade vsav differ and both would wor… | STATE.md:297 | gen:G1 |
-| V-R314 | R | [VSP-22] **THE DEADNESS REGISTER's rule for a row** — a claim of the form "legacy never reaches this, so we may reuse it" is measured by AB… | STATE.md:1242 | gen:G1 |
-| V-R315 | R | [VSP-23] **The register is the FIRST place to look** for any unexplained regression in vanilla assets, engine behaviour or rendering — befo… | STATE.md:1230 | gen:G1 |
+| V-R313 | R | [VSP-21] **STANDING PRINCIPLE: vanilla wins ties (maintainer, 2026-08-05)** — when a console port and arcade vsav differ and both would wor… | STATE.md:299 | gen:G1 |
+| V-R314 | R | [VSP-22] **THE DEADNESS REGISTER's rule for a row** — a claim of the form "legacy never reaches this, so we may reuse it" is measured by AB… | STATE.md:1244 | gen:G1 |
+| V-R315 | R | [VSP-23] **The register is the FIRST place to look** for any unexplained regression in vanilla assets, engine behaviour or rendering — befo… | STATE.md:1232 | gen:G1 |
 | V-R316 | R | [VSP-24] **Which emulator runs which oracle (§4, corrected GitHub #78)** — MAME is the per-frame whole-corpus legacy oracle (the frozen `.m… | CLAUDE.md:113 | gen:G1 |
 | V-R317 | R | [VSP-25] **Dual-track inertness means bit-identical UP TO SELECT ENTRY (ratified 14z-94, #95)** — the stock and WIDE builds carry different… | CLAUDE.md:126 | gen:G1 |
 | V-R318 | R | [VSP-26] **The two FBNeo-only phase classes are FROZEN INVENTORIES, not windows (ratified 2026-08-16, #78)** — the sound work area `$FF0500… | CLAUDE.md:140 | gen:G1 |
@@ -755,10 +755,10 @@ Read-only survey. Every number below carries the command that printed it, run fr
 | V-K17 | K | `compare_fields.py` / `check_wram_dumps.py` — the field comparator and dump checker (F10's subjects) | tools/compare_fields.py:1 | read |
 | V-K18 | K | The MASK basis file, one per expectation set (55 sets carry one) — the masked comparison's ground | tests/expected/*/MASK | read |
 | V-T1 | T | The MUST-FIRE control convention: 74 of 311 gate scripts assert their own controls fire; PROSE ONLY, no registry, 8 spellings | tests/*.sh (A32/A34/A36) | read |
-| V-T2 | T | "the claim must be measured with a POSITIVE CONTROL on the same instrument and leg (a blind instrument and a real zero look identical)" | STATE.md:1242 | read |
+| V-T2 | T | "the claim must be measured with a POSITIVE CONTROL on the same instrument and leg (a blind instrument and a real zero look identical)" | STATE.md:1244 | read |
 | V-T3 | T | `CPS2_WIDE_CANARY` — the positive control gated into the ratified WIDE profile alongside the 19-bit tile promote | CLAUDE.md:46 | read |
 | V-T4 | T | The emulator superset invariant — the patched binary running stock `vsavj` reproduces the frozen vanilla expectations bit-for-bit | CLAUDE.md:49 | read |
-| V-T5 | T | The deadness register's guard column — every "legacy never reaches this" claim names the gate that would catch it being wrong | STATE.md:1236 | read |
+| V-T5 | T | The deadness register's guard column — every "legacy never reaches this" claim names the gate that would catch it being wrong | STATE.md:1238 | read |
 | V-T6 | T | `runs_per_replay` double-run → `NONDETERMINISTIC (first divergent frame below)` on any difference between runs | tests/run_suite.sh:143 | read |
 | V-T7 | T | The fidelity gate's own control: a config copy rooted here must resolve to this tree — "the control that the input reaches the resolver" | tests/test_bbh_fidelity.sh:50 | read |
 | V-T8 | T | The rule-7 entropy tripwire on untracked files, threshold 6.0 bits/byte | .github/workflows/ci.yml:125 | read |
@@ -818,25 +818,25 @@ Read-only survey. Every number below carries the command that printed it, run fr
 | V-I8 | I | "**The diagnostic that beats all of them:** compare a red gate's RUNTIME against the runtime its own header quotes." | docs/project/harness_hardening_history.md:51 | read |
 | V-I9 | I | The `#94` reference-rot class (issue numbering, distinct from the 1-7 taxonomy) — gate `test_build_ref_rot.sh`, extended four times | HANDOFF_HISTORY.md:2378 | read |
 | V-I10 | I | "The runner found three defects in ITSELF before it found any in the suite — all class 2" (`--lane` assign vs accumulate; `^ *SKIP` before exit; subshell `wait`) | docs/project/harness_hardening_history.md:72 | read |
-| V-I11 | I | "a lineage freeze rots the harness" — bbh's `config.py` carried this project's build literals as defaults; the FIDELITY gate caught it | STATE.md:62 | read |
+| V-I11 | I | "a lineage freeze rots the harness" — bbh's `config.py` carried this project's build literals as defaults; the FIDELITY gate caught it | STATE.md:64 | read |
 | V-I12 | I | "`gfx_tiles.decode` had every 8-pixel half MIRRORED, and nothing noticed for 14 sessions" — verify synthesized data at the RENDER layer | docs/GOTCHAS.md:122 | read |
 | V-I13 | I | "two traps from the #104 re-measurement — both produced a CONFIDENT WRONG ANSWER from a working instrument (paid: 14z-99)" | docs/GOTCHAS.md:279 | read |
 | V-I14 | I | "`BUILD=... tests/<gate>.sh` is SILENTLY IGNORED by positional-arg gates — and you measure the DEFAULT build with full confidence" | docs/GOTCHAS.md:296 | read |
-| V-I15 | I | "the deadness measurement was sound but its COVERAGE was four replays" — the type-6 tripwire armed on legacy content, undetected for 18 sessions | STATE.md:1240 | read |
+| V-I15 | I | "the deadness measurement was sound but its COVERAGE was four replays" — the type-6 tripwire armed on legacy content, undetected for 18 sessions | STATE.md:1242 | read |
 | V-P1 | P | "**A RED GATE IS A QUESTION, NOT AN ANSWER**, and the first thing the question needs is which side rests on a measurement." | tests/expected/PROVENANCE.md:16 | read |
 | V-P2 | P | "**THE PRECEDENCE OF REFERENCES** … ruling > vsavj > vs2. **A build of OURS — solo or merged — is nowhere in that order.**" | tests/expected/PROVENANCE.md:38 | read |
 | V-P3 | P | "*better no test than a bad one. Let's drop*" — the maintainer's rule for a gate that can be re-pointed but whose VERDICT CONTROL cannot | DECISIONS_HISTORY.md:1656 | read |
 | V-P4 | P | The extraction question — "*would this still be true if the thing under test were not this ROM, not CPS-2, not even a game?*" | HANDOFF.md:50 | read |
 | V-P5 | P | The documentation taxonomy question — "**would this still be true if we abandoned the roster hack tomorrow?**" | CLAUDE.md:293 | read |
-| V-P6 | P | "STANDING PRINCIPLE (maintainer, 2026-08-05): **vanilla wins ties**" — a port's choice is evidence of its designers' preference, not of vanilla being wrong | STATE.md:295 | read |
-| V-P7 | P | "*to know if we should fix the gate or what it caught, we must use data we can trust, and that means measuring or relying on data … vetted by measurements*" | STATE.md:328 | read |
+| V-P6 | P | "STANDING PRINCIPLE (maintainer, 2026-08-05): **vanilla wins ties**" — a port's choice is evidence of its designers' preference, not of vanilla being wrong | STATE.md:297 | read |
+| V-P7 | P | "*to know if we should fix the gate or what it caught, we must use data we can trust, and that means measuring or relying on data … vetted by measurements*" | STATE.md:330 | read |
 | V-P8 | P | "An undocumented discovery is a discovery we will pay for twice." | CLAUDE.md:317 | read |
 | V-P9 | P | "a stale claim in a header is worse than no documentation: it is confidently wrong, and it is what a future session will act on." | CLAUDE.md:345 | read |
 | V-P10 | P | "The spec is NOT copied here on purpose — two copies drift, and that document is the one kept current." (verbatim; the source has no bold) | CLAUDE.md:52-53 | read |
 | V-P11 | P | "a gate's WHY lives in the gate" (14z-123 ruling) — which is why the gate index is generated FROM the headers | docs/project/gate_index.md:7 | read |
 | V-P12 | P | "Where the synthesis and a log disagree, **THE LOG WINS**" | docs/README.md:29 | read |
-| V-P13 | P | "Prefer designs where being wrong is *safe and loud* over designs that are merely well-measured." | STATE.md:1246 | read |
-| V-P14 | P | "Each is measured by ABSENCE, which is the weakest kind of evidence we accept" — hence the register, the guard and the fallback column | STATE.md:1230 | read |
+| V-P13 | P | "Prefer designs where being wrong is *safe and loud* over designs that are merely well-measured." | STATE.md:1248 | read |
+| V-P14 | P | "Each is measured by ABSENCE, which is the weakest kind of evidence we accept" — hence the register, the guard and the fallback column | STATE.md:1232 | read |
 | V-P15 | P | "**The file is what a triage opens.**" — provenance is kept beside the frozen file, not in a gate header or a STATE entry | tests/expected/PROVENANCE.md:20 | read |
 | V-P16 | P | "The harness is this project's most valuable artifact (CLAUDE.md §4), and it rots in ways the port does not" | docs/project/harness_hardening_history.md:8 | read |
 | V-P17 | P | "'It should be equivalent' is not a test result." | CLAUDE.md:58 | read |
@@ -861,7 +861,7 @@ Read-only survey. Every number below carries the command that printed it, run fr
 | V-X11 | X | The eight harness_scope decisions (§7), each RULED/DECIDED with the maintainer's words, a date and a veto path; the license is explicitly NOT a default | docs/project/harness_scope.md:418 | read |
 | V-X12 | X | The 19-red sweep — "155 gates, 136 PASS, 19 FAIL, ZERO SKIP … and NOT ONE red was a defect in the shipped artifact"; 8 closed in-session | docs/project/harness_hardening_history.md:80 | read |
 | V-X13 | X | The 19 reds mapped ONTO the rot classes: 1 orphan ×1, 3 dead control ×2, 4 stale reference ×7, 5 parser ×1, 6 deleted ×1, 7 operand ×3, unclassed ×4 | docs/project/harness_hardening_history.md:84 | read |
-| V-X14 | X | THE DEADNESS REGISTER — every "legacy never reaches this, so we may reuse it" claim, with guard and fallback; "the FIRST PLACES TO CHECK" | STATE.md:1228 | read |
+| V-X14 | X | THE DEADNESS REGISTER — every "legacy never reaches this, so we may reuse it" claim, with guard and fallback; "the FIRST PLACES TO CHECK" | STATE.md:1230 | read |
 | V-X15 | X | `GAME_TOKENS` (14) — `vsav vampire donovan huitzil phobos pyron tenant roster demitri jedah victor bishamon anita oboro` | tools/checkskills.py:45 | read |
 | V-X16 | X | `BUILD_TOKENS` (8) — `0xEE73 0xFFDB 0x8E57F0 0x5FFF1E 32007911 build/ merged m3b_` | tools/checkskills.py:47 | read |
 | V-X17 | X | `BOARD_TOKENS` (5) — `cps qsound jtcps vsavjw wide_en`; forbidden at level 0 only | tools/checkskills.py:52 | read |
@@ -873,7 +873,7 @@ Read-only survey. Every number below carries the command that printed it, run fr
 | V-X23 | X | The `14z-N` session key: three namespaces never conflated (sessions / milestones `M0..M12` / freeze marks); a LOOKUP KEY into the archives | CLAUDE.md:247 | read |
 | V-X24 | X | The gate-scoping method — 13 sections incl. "Widening is a measurement, not a judgement call" and "suspect the instrument" | docs/project/gate_scoping_method.md:1 | read |
 | V-X25 | X | The skill levels 0/1/2 as a liftability ladder, declared in each SKILL.md's H1 and enforced by the `forbid` token lists | .claude/skills/*/SKILL.md (A106-A108) | read |
-| V-X26 | X | The 6 `.pending` expectations still open — `donovan-m5` ×2, `huitzil-m13` ×3, `pyron-m7` ×1 — the type-6 counter awaiting a ruling | STATE.md:1240 | read |
+| V-X26 | X | The 6 `.pending` expectations still open — `donovan-m5` ×2, `huitzil-m13` ×3, `pyron-m7` ×1 — the type-6 counter awaiting a ruling | STATE.md:1242 | read |
 | V-X27 | X | `docs/project/hardening_register.md`'s measured partition — rule-4 provenance makes "the immense majority is safe" mechanical (~166,000 addresses) | docs/project/hardening_register.md:11 | read |
 | V-X28 | X | CI is DRAFTED-then-ENABLED as a policy decision, and `ci/README.md` names what the maintainer is DECIDING, not just reviewing | ci/README.md:1 | read |
 | V-X29 | X | The LIVE CROSS-REPO citation `[RH-N]` — the external `romhacking-methodology` skill; 43 files, 72 citations, 24 IDs, DEFINED NOWHERE HERE | tests/test_skill_guides.sh:16 (A124-A126) | read |
@@ -949,7 +949,7 @@ grep -c " +[0-9]* |" rules_rows.md        # 0 — no rule has a second anchor
 Named so a later pass knows the survey's edge. None of the following was opened, read for content, or counted beyond the file-level tallies in §A.
 
 - **`STATE_HISTORY.md` (28918 lines) and `HANDOFF_HISTORY.md` (2437), `DECISIONS_HISTORY.md` (2783), `docs/NEXT_SESSION_HISTORY.md` (5947), `docs/GOTCHAS_history.md` (601), and every `*_history.md` twin.** Grepped for specific strings only. Deliberately excluded from the G1 anchor lookup, because the checker forbids anchors there. These hold the incident record behind most rules; a "what did this rule cost" pass has to read them.
-- **`build/` (1043 tracked files).** Only `build/manifest/` (33 files) was listed; the ~1000 committed `.log` measurement records and the ~50 per-freeze build directories were not opened. The 370 untracked files are all here.
+- **`build/` (1043 tracked files).** Only `build/manifest/` (33 files) was listed; the ~1000 committed `.log` measurement records and the ~50 per-freeze build directories were not opened. The 372 untracked files are all here.
 - **`release/` (719 files)** — per-freeze shipped artifacts and `bitstreams/`. Not opened.
 - **ROMs, decrypted images, any binary.** `$ROMDIR` was never read; no gate was executed except `python3 tools/checkskills.py -v` (read-only, prints a tally).
 - **The emulator submodules** `emu/fbneo`, `emu/mame`, `emu/jtcores` — not initialised, not read. Only `.gitmodules` and the tracked patch series filenames.
@@ -963,3 +963,5 @@ Named so a later pass knows the survey's edge. None of the following was opened,
 - **`SPEC.md` (175), `LICENSE`, `.gitignore`** — counted, not read.
 
 Corrected 2026-09-09 after verification: A19, A21, A70 rewritten; A123, A124, A125, A126, A127 added; V-R556, V-R557 (`:7`→`:6`), V-P10 (bold removed, `:53`→`:52-53`), V-T1 (`319`→`311` gate scripts) corrected; V-X29, V-X30, V-X31 added; §D's "319 gate scripts" → 311.
+
+Re-measured 2026-09-09 (session bbx-2) at `0cdd9726`, two commits past `5df1d8be` (`STATE.md` +3/−1 at line 42; `tests/expect/mister_prg_window.txt` re-frozen): A77 1509 → 1511; the 13 §B citations into `STATE.md` shifted +2 (old line and new line diffed identical, all 13); line 2: 1504 commits, 1 ` M` + 372 `??` (both new files under `build/`). Every other recountable row (99) reproduced unchanged; G1 re-run byte-identical apart from those three `STATE.md` anchors; the 27 not-recountable rows are the same 27. The bins (`docs/bins/vampiresaved.md`) key by id and are unchanged.

@@ -48,7 +48,7 @@ re-derivation step of the ritual (CLAUDE.md §6.2) made into a gate.
 ## The ritual (ruled R17 at the bbx-1 close, 2026-09-09; adapted from VampireSaved VSP-17/VSP-18/VSP-162)
 
 Sessions are keyed `bbx-N`, one key per sitting, never renamed (pointers in
-readouts, gotchas and history resolve through it). This sitting is **bbx-1**.
+readouts, gotchas and history resolve through it). This sitting is **bbx-2** (bbx-1 closed 2026-09-09).
 
 **Open**
 1. Read this file, `STATE.md`, `docs/rulings.md`. (`CLAUDE.md` is the
@@ -88,8 +88,8 @@ readouts, gotchas and history resolve through it). This sitting is **bbx-1**.
    has a `docs/defaults.md` row; every gate declares its controls
    (`bin/bbx controls declared <gate>`).
 9. **Lineage untouched:** bbh, VampireSaved and SMS porcelain and HEAD equal
-   what the census recorded (bbh: 4 modified at f675710; VS: 1 M + 370 ??
-   at 5df1d8be; SMS: clean at ecc5481).
+   what the census recorded (bbh: 4 modified at f675710; VS: 1 M + 372 ??
+   at 0cdd9726; SMS: clean at ecc5481).
 10. **One close commit** per sitting, tally in the message; no push (R7).
 
 Steps 8 and 9 become a portable gate in S1 step 4, so the close is checked

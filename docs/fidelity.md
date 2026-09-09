@@ -20,6 +20,11 @@ itself against VampireSaved with F1–F11 (`~/Developer/blackbox-harness/selftes
   commit *and* its porcelain state at the head of every run, so a run against
   a moved bbh is visibly a different measurement.
 - VampireSaved at HEAD **5df1d8be** for the transitive row F20.
+  2026-09-09 (bbx-2): VampireSaved moved to `0cdd9726` (two commits: its
+  `STATE.md` and one re-frozen expectation, `tests/expect/mister_prg_window.txt`);
+  the census was re-measured there (`docs/census/vampiresaved.md`, last line).
+  F20 is not written yet, so no row moved; when F20 is written its baseline is
+  the HEAD measured that day, recorded here as a dated line.
 - bbh is located by an environment variable (`BBX_BBH_HOME`), never a
   submodule `[BBH-85]`; when absent every F row SKIPs, and a SKIP is reported
   as *not proved*, never as green `[BBH-16]`.
