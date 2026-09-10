@@ -109,6 +109,11 @@ DEFAULTS = {
         "hermetic_unset": [],        # scrubbed from the environment before any driver runs; the frame-driven profile carries bbh's eight
         "hash_cmd": "python3 -m bbx.sha1",   # D27: prints `<hex> <file>`; portable (bbh's `shasum` stays in the frame-driven profile)
     },
+    # the expectation REGISTER (E3; R11, R24): TOML inside the expectation tree; basenames that are not expectations (D31)
+    "provenance": {
+        "register": "PROVENANCE.toml",       # inside [suite].expected_dir
+        "exclude": ["PROVENANCE.toml", "README.md", "mask", "MASK"],
+    },
     # the expectation KINDS: [extension, family, disposition] — registered here and nowhere else (E1, R23; D25).
     # Kind-blind: the three kinds every subject can carry; a kind with a comparator family adds its own.
     "expectations": {

@@ -318,3 +318,39 @@ lives — bbh `[BBH-9]`).
   correction (R22), checked with the three document gates, not the battery
   (rulings and their ledgers; no tool changed).
 
+## bbx-4 — 2026-09-10 (session 4: S2 step 4, the suite screen; S2 complete)
+
+- Open: the battery GREEN (18 gates, 48/48) on the bbx-3 HEAD, with a new
+  NOTE: bbh's tip at `10a82d2`, one past the baseline — the maintainer
+  committed the four dirty files and fixed G11 in bbh. Measured, not
+  assumed: both fidelity gates run against the tip by the D20 override and
+  PASS (F12–F17 identical); R28 raised to re-baseline at a close, with D12's
+  five literals following. The census's bbh row A2 moved with it (a NOTE).
+- Step 4 on R24: the register tool and its gate, the readout's suite screen
+  (findings apart, the register's histogram, the real pairings by file),
+  G17's mechanism on the static screen (untracked entries in the kept run);
+  D31, D32; 11 new controls (55/55). Drafted and tested in a shadow home
+  while the opening battery ran; one defect (real pairings counted by kind)
+  caught there before the tree saw it.
+
+## bbx-4 CLOSE — 2026-09-10
+
+- Close measurements: green first, twice, kept — `PASS 19 SKIP 0 FAIL 0
+  MISSING 0`, `controls fired 55 / declared 55`, tree unchanged in both
+  (untracked 2 -> 2), BBX-14 met. Sweeps gated GREEN; the queue: 29 entries,
+  27 answered, R21 and R28 open. Lineage never entered; bbh's tip one past
+  the baseline (R28), VampireSaved ten past the census.
+- Step 10 (R27), incidents reviewed for learnings: none reached a gate this
+  sitting; the one draft defect was caught by the shadow test before the
+  tree saw it, and that practice is now the handoff's rule. No mechanism.
+- S2 is complete under CLAUDE.md §7 (its readout lists the six items); the
+  estimate was 2 sessions, it took one and a half.
+- Anti-hyperfocus checkpoint (BBX-27): the most valuable next thread is the
+  re-baseline if ruled (a stale reference is rot class 4, and it is cheap
+  now), then S3 — the first kind with no ancestor to diff against, which is
+  where "generic" starts to mean something (BBX-25). The last green means:
+  BBX runs bbh's comparison, dispatch and suite byte for byte, keeps a
+  register in a closed vocabulary, and says on one screen what a suite run
+  rests on — and that, so far, nothing rests on evidence about a real
+  subject.
+

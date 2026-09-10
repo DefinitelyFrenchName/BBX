@@ -40,4 +40,4 @@ table below is what is in force.
 | M2 | A census row's provenance is `gen:<generator>` or `read`; every count has its command; a filed count is labelled `filed:` with its source. | contributor (method) | 2026-09-09 |
 | M3 | Every load-bearing census number is produced by one agent and re-derived by a different one; unresolved mismatches are reported, never averaged. | contributor (method), from FIRST_PROMPT.md | 2026-09-09 |
 
-Open rulings: R21 (how the platform runs are obtained; the queue explains). New ones are raised in `docs/rulings.md` under `## Open` and moved under an `## Answered` heading when answered (`gates/rulings_shape.sh`).
+Open rulings: R21 (how the platform runs are obtained; the queue explains), R28 (re-baseline bbh's fidelity commit to 10a82d2; raised at the bbx-4 open). New ones are raised in `docs/rulings.md` under `## Open` and moved under an `## Answered` heading when answered (`gates/rulings_shape.sh`).

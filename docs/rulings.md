@@ -210,4 +210,11 @@ written until the ruling its slice needs is answered (CLAUDE.md §6, §9).
 - **Status:** the maintainer will produce the run "in the coming days" (2026-09-10); it blocks nothing else.
 - **Answer:** (open)
 
+### R28 — Re-baseline bbh's fidelity commit to `10a82d2` (raised bbx-4, 2026-09-10)
+- **Context measured (2026-09-10, bbx-4 open):** bbh's tip moved one commit past the baseline (`10a82d2`, "config: the M18 re-point that sat dirty since 14z-144; the example lib's root one level too high; the extraction counts dated"): 7 files, 13 insertions, 9 deletions; porcelain now 0 (the four dirty files of R8 are committed). Of the lifted or fixture files it touches `lib/py/bbh/config.py` (the `[sweep].placeholders` and `[inp].build` literals re-pointed M18: `m3b_merged25`→`26`, `don_m21`→`22`, `hui55`→`56`, `pyron40`→`41`, `m5_stock16`→`17`) and `example/tests/lib/needs_fake.sh` (G11 fixed in bbh: the lib's root two levels up, not three). Both fidelity gates run against the tip by the D20 override (`BBX_BBH_BASELINE=10a82d2`) and PASS: F13, F14, F14f, F12, F16, F17 identical — the example config overrides the re-pointed literals, so they are not exercised by any pair.
+- **Recommendation:** re-baseline to `10a82d2` at the next close, as one commit (bbh `[BBH-83]`: loud, dated, both sides): D20's value; D12's row (the frame-driven profile is "bbh's DEFAULTS verbatim" — the five `[sweep].placeholders` follow the re-point, and the profile carries no `[inp]` table, so nothing else moves); a dated line in `docs/rebaselines.md`; the census `docs/census/bbh.md` re-measured on the new tip (`bin/bbx recount`, row A2 moved); HANDOFF's hazard about bbh's four dirty files retired; G11's "bbh's to fix" closed as fixed in bbh at `10a82d2`.
+- **Declined:** staying at `f675710` indefinitely (the baseline is a commit, not a contract: a baseline behind a clean tip that fixes a finding this project filed is a stale reference, BBX-10 class 4); re-baselining silently inside a step (the loud rule).
+- **Cost of being wrong:** one commit to revert; every fidelity row is re-run on the clone in the same sitting.
+- **Answer:** (open)
+
 (A new ruling is added here with its recommendation, the alternatives declined, and `- **Answer:** (open)` until the maintainer answers, then moved.)

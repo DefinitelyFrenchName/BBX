@@ -7,28 +7,23 @@ paragraph per sitting, the outgoing status verbatim). Read `HANDOFF.md` first.
 generalization of `blackbox-harness` (bbh) to any subject with testable inputs
 and outputs. Born 2026-09-09.
 
-**Status (bbx-3 close, 2026-09-10):** slice S1 complete but for the platform
-run (R21); slice S2 steps 1–3 built and green, step 4 (the expectation
-register) waiting on R24. This sitting: the screen lists every NOTE line (the
-handoff's first fix, with a control); S2 planned on a measured census of the
-lift (`docs/plans/S2.md`), STOPPED, and ruled — R23, R25, R26 in force, R24
-revised to a TOML register (measured against the subset parser) and open;
-then built: the temporal family (`lib/py/bbx/compare_*.py`,
-`check_diverge.py`, `propose_temporal.py`, `thresholds.py` with R25's
-refusal, `logfmt.py`), the one dispatcher (`lib/sh/compare.sh`, R23: family
-by kind) and the kinds table in the profile (`lib/sh/expectation_kinds.sh`,
-`bbx.expectations`), the suite (`bin/bbx-run-suite`; `--log` keeps a FINDING
-column, `bbx.finding`, `short` apart from `diverged`; R26's driver home is
-bbh's `drivers/`). Six new gates (temporal, thresholds, compare_dispatch,
-expectation_kinds, fidelity_bbh_s2, suite). `bin/bbx selftest` GREEN twice at
-one HEAD (BBX-14 met): 18 gates, 48/48 controls, ~6 min on a loaded host.
-Fidelity F12 (17 pairs), F16 (35), F17 (52) diff empty against bbh f675710
-on the plain clone, beside F13–F15. Defaults D1–D30. Gotchas G1–G18 (G17,
-G18 this sitting, both caught by the harness). No expectation register yet;
-no driver of BBX's own; no fixture subject; `compare_fields.py` not lifted
-(BBX-25).
+**Status (bbx-4 close, 2026-09-10):** slice S2 COMPLETE (its readout in
+`docs/readout.md`); slice S1 complete but for the platform run (R21). This
+sitting: step 4 on R24 — `lib/py/bbx/provenance.py` (the TOML register,
+R11's eight classes, complete both ways, `testimony` and `fixture` named as
+not evidence), `gates/provenance.sh`; the readout's suite screen (findings
+apart, the register's histogram, the real pairings by file) and the kept
+run's untracked count on the tree line (G17's mechanism); D31, D32. bbh
+moved to `10a82d2` at the open (G11 fixed in bbh, its four dirty files
+committed); both fidelity gates PASS against it by the D20 override; R28
+raised to re-baseline. `bin/bbx selftest` GREEN twice at one HEAD (BBX-14
+met): 19 gates, 55/55 controls, ~6 min. Fidelity F12 (17), F16 (35), F17
+(52) diff empty on the plain clone at `f675710`, beside F13–F15. Defaults
+D1–D32. Gotchas G1–G18. In the tree beyond S1: the temporal family, the one
+dispatcher, the kinds table, the suite with its kept run, the register tool.
+No driver of BBX's own; no fixture subject; no consumer with a register.
 
-**In force:** `DECISIONS.md` — R0–R20, R22–R27 and method M1–M4. **Open rulings:** R21 (the platform runs: no Linux or WSL host here). R23–R27 ruled 2026-09-10 (R24 answered before the close and recorded after it); S2 step 4 may open.
+**In force:** `DECISIONS.md` — R0–R20, R22–R27 and method M1–M4. **Open rulings:** R21 (the platform runs: no Linux or WSL host here); R28 (re-baseline bbh to `10a82d2`, its tip since bbx-4's open — both fidelity gates PASS against it by the D20 override).
 In force since bbx-2: R18 (the census and the tests
 work on a clone or are explicitly, provably read-only), R19 (parallel work
 is a pull queue; the FIFO token queue is the default implementation, the
@@ -62,8 +57,8 @@ number to bring down; the two added at bbx-2 are host facts the clone
 exposed (G13, rule 7), the only exception ever allowed to move it upward. Grammar in
 `docs/census/README.md`.
 
-**Next:** S2 step 4 on R24 (the TOML expectation register,
-`gates/provenance.sh`, the screen's provenance histogram and "never PASSed on
-a real pairing" line); then the S2 slice readout and close (CLAUDE.md §7).
-The platform run when R21's host exists. One finding for the maintainer:
-bbh's example lib has a wrong fallback path (G11); bbh is not modified here.
+**Next:** R28 (the re-baseline to `10a82d2`: D12, D20, `docs/rebaselines.md`,
+the census row A2, HANDOFF's dirty-files hazard, G11 closed) as bbx-5's first
+task if ruled; then slice S3 (the document-set kind, `docs/generality.md`):
+its plan, measured, and a STOP for its rulings before any tool. The
+platform run when R21's host exists.

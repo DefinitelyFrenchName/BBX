@@ -114,6 +114,7 @@ failed=""; skipped=""; ran=""
 tree_before=""
 if git rev-parse --git-dir >/dev/null 2>&1; then
     tree_before="$(git status --porcelain -- . 2>/dev/null | grep -v '^??' || true)"
+    untracked_before="$(git status --porcelain -- . 2>/dev/null | grep -c '^??' || true)"   # the kept run only (G17); the printed block is bbh's, tracked-only
 fi
 
 run_tier() {  # run_tier <label> <names>
@@ -287,7 +288,8 @@ if [ -n "$LOG" ]; then
         echo "bbx_home=$BBX_HOME"; echo "bbx_head=$(git -C "$BBX_HOME" rev-parse --short HEAD 2>/dev/null || echo '-')"
         echo "tier=$TIER"; echo "strict=$STRICT"; echo "controls_enforced=$ENFORCE"
         echo "pass=$n_pass"; echo "skip=$n_skip"; echo "fail=$n_fail"; echo "missing=$n_miss"; echo "controls_red=$n_ctrl_red"
-        echo "tree=$_tree"; echo "verdict=$([ "$rc" = 0 ] && echo GREEN || echo 'NOT GREEN')"
+        echo "tree=$_tree"; echo "untracked_before=${untracked_before:-0}"; echo "untracked_after=$(git status --porcelain -- . 2>/dev/null | grep -c '^??' || true)"
+        echo "verdict=$([ "$rc" = 0 ] && echo GREEN || echo 'NOT GREEN')"
         echo "rebaseline=$(grep -m1 '^- ' "$BBX_HOME/docs/rebaselines.md" 2>/dev/null | cut -c3- || true)"
     } > "$LOG/run.txt"
 fi

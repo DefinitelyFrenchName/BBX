@@ -70,3 +70,21 @@ G18 this sitting, both caught by the harness). No expectation register yet;
 no driver of BBX's own; no fixture subject; `compare_fields.py` not lifted
 (BBX-25).
 
+## bbx-4 — 2026-09-10 (session 4: S2 step 4, the suite screen, S2 complete)
+
+**Status (bbx-4 close, 2026-09-10):** slice S2 COMPLETE (its readout in
+`docs/readout.md`); slice S1 complete but for the platform run (R21). This
+sitting: step 4 on R24 — `lib/py/bbx/provenance.py` (the TOML register,
+R11's eight classes, complete both ways, `testimony` and `fixture` named as
+not evidence), `gates/provenance.sh`; the readout's suite screen (findings
+apart, the register's histogram, the real pairings by file) and the kept
+run's untracked count on the tree line (G17's mechanism); D31, D32. bbh
+moved to `10a82d2` at the open (G11 fixed in bbh, its four dirty files
+committed); both fidelity gates PASS against it by the D20 override; R28
+raised to re-baseline. `bin/bbx selftest` GREEN twice at one HEAD (BBX-14
+met): 19 gates, 55/55 controls, ~6 min. Fidelity F12 (17), F16 (35), F17
+(52) diff empty on the plain clone at `f675710`, beside F13–F15. Defaults
+D1–D32. Gotchas G1–G18. In the tree beyond S1: the temporal family, the one
+dispatcher, the kinds table, the suite with its kept run, the register tool.
+No driver of BBX's own; no fixture subject; no consumer with a register.
+

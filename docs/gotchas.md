@@ -123,6 +123,7 @@ here; the maintainer may fix the lib's fallback in bbh (`../..`). Re-anchors:
 BBX-16 (a claim reads in a view — here the view was "with the runner's
 environment", never declared) and BBX-15 (the second implementation as the
 third party).
+Fixed in bbh at `10a82d2` (2026-09-10, the maintainer: "the example lib's root one level too high"); BBX's F14 keeps exporting `BBH_HOME` on both sides, which is correct either way.
 
 ## G12 — The first opening after the first close was red: the lineage moved two commits and the census's hand-read line citations rotted with it (paid: the opening of bbx-2 — one re-measure before any work, 2026-09-09)
 `bin/bbx selftest` at the bbx-2 open: `census=vampiresaved.md head=5df1d8be
