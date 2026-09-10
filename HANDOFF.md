@@ -19,7 +19,8 @@ Shape: operational map. Read this first, then `STATE.md`, then
 | the generality proof (two non-frame kinds, their fixtures) | `docs/generality.md` |
 | the fidelity plan, F12+ | `docs/fidelity.md`; re-baseline log `docs/rebaselines.md` |
 | the slice sequence with the estimate | `docs/slices.md` |
-| slice S2's plan (measured census of the lift, design, fidelity rows, controls, rulings R23–R26) | `docs/plans/S2.md` — STOPPED for rulings 2026-09-10 |
+| slice S2's plan (measured census of the lift, design, fidelity rows, controls, rulings R23–R26) | `docs/plans/S2.md` — built bbx-3/bbx-4 |
+| **slice S3's plan** (the ancestors measured, the design contract by contract, the fixture, fourteen controls, rulings R31–R34) | `docs/plans/S3.md` — **STOPPED for rulings 2026-09-10 (bbx-6)** |
 | the maintainer readouts, one section per step, the CLOSE section last | `docs/readout.md` |
 | the controls contract (must-fire grammar, R10) | `docs/controls.md` |
 | the defaults register (BBX-24) | `docs/defaults.md` |
@@ -54,7 +55,7 @@ re-derivation step of the ritual (CLAUDE.md §6.2) made into a gate.
 ## The ritual (ruled R17 at the bbx-1 close, 2026-09-09; adapted from VampireSaved VSP-17/VSP-18/VSP-162)
 
 Sessions are keyed `bbx-N`, one key per sitting, never renamed (pointers in
-readouts, gotchas and history resolve through it). The last closed sitting is **bbx-5** (2026-09-10); the next is **bbx-6**.
+readouts, gotchas and history resolve through it). The last closed sitting is **bbx-6** (2026-09-10); the next is **bbx-7**.
 
 **Open**
 1. Read this file, `STATE.md`, `docs/rulings.md`. (`CLAUDE.md` is the
@@ -122,12 +123,13 @@ readouts, gotchas and history resolve through it). The last closed sitting is **
 Steps 8 and 9 are checked, not remembered: step 8 by `close_sweeps`, step 9
 by construction (the recount's clone) and by `fidelity_bbh`'s proof.
 
-**Next-session orientation (written at the bbx-5 close, 2026-09-10)**
+**Next-session orientation (written at the bbx-6 close, 2026-09-10)**
 - Open first: `bin/bbx selftest --log build/selftest_<stamp>` and `bin/bbx readout` on it. Two `drift` NOTEs are expected: VampireSaved (past the census) and bbh (`447e5d2`, one past the baseline `10a82d2` — a README line; follow it by the R28 procedure only when a sitting needs the current tip).
-- R29 (executable controls) is ruled: the contract is on `docs/controls.md`; build it in S6 with the controls registry (the runner's `CONTROL=<name>` mode, `CONTROL LIES`, the cadence per tier); until then every FIRED is a self-report.
-- Then slice S3, the document-set kind (`docs/generality.md`, `docs/slices.md`): the plan first — measured, with the fixture's design, the claim-inventory and coverage kinds, the set/multiset and schema families plugging into R23's kinds table — and a STOP for its rulings before any tool.
-- S2 is complete: its readout (`docs/readout.md`, "S2 — the slice readout") lists what it does not assert; the sentence to carry forward is that every class has PASSed only on fixture-class pairings, and the suite screen says so.
-- A background battery: nothing under the tree changes while it runs — draft in the scratchpad, test in a shadow home (copies of `lib/` and the gate under a throwaway root), move in after (bbx-4's practice; it caught one defect before the tree saw it).
+- **S3 is planned and STOPPED** (`docs/plans/S3.md`): read its §3 (the design) and §5 (the fourteen controls) before anything else, then `docs/rulings.md` for R31–R34. **No S3 tool is written until the maintainer answers them** (CLAUDE.md §6, §9). When answered: move each entry under an Answered heading in the same edit, add its DECISIONS row, update DECISIONS' open line (the shape gate holds all three), append the story to DECISIONS_HISTORY; then S3 step 1 (§8) — the profile, `[suite].scenario_ext`, the fixture generator with `--check`, `gates/docset_fixture.sh`.
+- If the maintainer objects to a ruling, revise it in place as R24 was (the objection recorded, the revision measured, the entry stays open) — never build the declined shape.
+- G19's learning is a mechanism for S6 (a rot gate over generated and printed text for "until slice N" sentences); it is filed in the gotcha, not built.
+- R29 (executable controls) is ruled: built in S6 with the controls registry; until then every FIRED is a self-report.
+- A background battery: nothing under the tree changes while it runs — draft in the scratchpad, test in a shadow home, move in after (it kept this sitting's plan out of the tree until the open run finished).
 - R21 is still open: the maintainer produces the Linux/WSL run by the procedure in the entry.
 
 **Orientation carried from the bbx-1 close (still true where not superseded above)**

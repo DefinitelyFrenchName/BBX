@@ -257,3 +257,23 @@ path; and the two sibling defects of the same hour — `set -e` inherited by a
 pair helper's subshell, a bash process substitution in a POSIX gate — are the
 same family: a gate written faster than it was run. HANDOFF hazards carry
 all three; none needs a rule loosened or added.
+
+## G19 — The generated screen quoted a slice number as its future, and the sentence rotted the day the slice landed (paid: 0 — read off the screen at the bbx-6 open, two sittings after S2 closed; 2026-09-10)
+Every static run's readout printed `expectations relied upon: none
+registered — the expectation register with its provenance classes is slice
+S2; until then no comparison against a frozen expectation is claimed`
+(`lib/py/bbx/readout.py`, the static-run branch). True at bbx-2, false since
+bbx-4: the register exists, the suite screen reads it (D32), and the line was
+on the bbx-4 and bbx-5 close screens in `docs/readout.md` unnoticed. The gate
+(`gates/readout.sh`) held only the prefix `none registered`, so the rot was
+invisible to it — a stale reference (BBX-10, rot class 4) inside a GENERATED
+artifact, the one place a reader trusts most. Fix: the sentence says what is
+true by construction ("a static run compares against no frozen expectation;
+a kept suite run carries its register's histogram") and the gate holds the
+full clause. Re-anchors BBX-10 for the first time in this project: the rot
+classes are a checklist for generated text too, and "until slice N" is a
+sentence with an expiry date that nothing checks. Learning (R27): a
+mechanism — S6's rot gates should grep generated and printed text for
+`slice S[0-9]`, `until then`, `not yet` and refuse them outside a history
+ledger, the deferral sweep's sibling (`close_sweeps` already refuses the
+three deferral tokens in prose); filed for S6, not built here.

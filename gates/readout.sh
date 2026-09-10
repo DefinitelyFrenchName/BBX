@@ -80,7 +80,7 @@ want "the header names the kind, the root, the HEAD and the platform" "^== READO
 want "the verdict line counts separately" "^VERDICT: GREEN   PASS 2  SKIP 1  FAIL 0  TIMEOUT 0  MISSING 0   (gates 3)"
 want "controls fired / declared are summed" "^  controls: fired 1 / declared 1; dead 0; undeclared firings 0; gates red 0"
 want "gates that proved a control can fail are counted, the rest named" "^  each can fail: 1 of 3 gates proved a control fires on purpose; declaring none: g_b, g_s"
-want "the expectation line says the register does not exist yet" "^  expectations relied upon: none registered"
+want "the expectation line of a static run says no frozen expectation was compared (a suite run carries the register, D32)" "^  expectations relied upon: none registered — a static run compares against no frozen expectation"
 want "coverage comes from the gate's NOTE" "^  coverage: g_a: claims=10 checked=7 uncovered=3"
 want "every other NOTE-class line reaches the screen as a note" "^  note: g_a: drift census=x.md recorded=abc1234 tip=def5678 ahead=2"
 grep -q "^  coverage: g_a: drift" "$T/s1" && fail "a drift NOTE was read as coverage" || ok "a non-coverage NOTE is not counted as coverage"

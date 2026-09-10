@@ -13,7 +13,7 @@ gates can act on (CLAUDE.md §0, §3.2).
 RO1 — content: the verdict and the counts separately (BBX-1); the subject's
 identity and version; controls fired / declared, and whether each gate has
 proved its controls can fail; the expectations relied upon (a histogram by
-provenance class — none until slice S2's register exists, and the screen says
+provenance class — none for a static run, the register's histogram for a kept suite run (D32), and the screen says
 so rather than omitting the line); coverage as a number (BBX-18), taken from
 `NOTE: coverage …` lines the gates print; every OTHER NOTE-class line a gate
 printed (a lineage's drift, bbh's source) listed as a note, since a number
@@ -218,8 +218,8 @@ def main(argv=None):
     else:
         print("  controls: not enforced in this run (no controls.txt) — no gate here has proved it can fail")
     # expectations
-    print("  expectations relied upon: none registered — the expectation register with its provenance classes is slice S2; "
-          "until then no comparison against a frozen expectation is claimed")
+    print("  expectations relied upon: none registered — a static run compares against no frozen expectation; "
+          "a kept suite run (bbx-run-suite --log) carries its register's histogram (D32)")
     # NOTE-class numbers: coverage (BBX-18) on its own line, every other key as a note
     cov, notes = [], []
     for r in rows:

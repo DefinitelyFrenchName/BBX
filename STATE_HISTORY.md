@@ -106,3 +106,21 @@ S6). `bin/bbx selftest` GREEN twice at one HEAD (BBX-14 met): 19 gates,
 `10a82d2`. bbh's tip `447e5d2` (README: the remote renamed BBH-frame-based),
 a NOTE. Defaults D1–D32. Gotchas G1–G18.
 
+## bbx-6 — 2026-09-10 (session 6: S3 planned and STOPPED for R31–R34; G19, the generated sentence that outlived its slice)
+
+**Status (bbx-6 close, 2026-09-10):** slices S1 (but for R21's platform run)
+and S2 complete; **S3 planned and STOPPED** for rulings R31–R34
+(`docs/plans/S3.md`): the document-set kind, the first slice with no ancestor
+to diff against — the two ancestors (SMS `checkdocs.py`, VampireSaved
+`checkdocs_rom.py`) measured on plain clones at their census commits, nothing
+lifted verbatim, the SHAPE lifted (quote, derive, compare; a control per
+check family; coverage printed and frozen shrink-only, never fatal; a
+paraphrase declared, never skipped); the fixture `fixture/docset/` designed
+as BBX's second consumer; fourteen controls in five gates named; the three
+families (`exact`, `set`, `schema`) plugging into R23's kinds table. No tool
+written. One rot found at the open and fixed (G19: the static screen's
+generated sentence "the register is slice S2; until then …" outlived S2 by
+two closes; the gate held only its prefix) — the first re-anchor of BBX-10.
+`bin/bbx selftest` GREEN twice at one HEAD (BBX-14 met): 19 gates,
+56/56 controls. Fidelity F12–F17 diff empty on the plain clone at
+`10a82d2`. bbh's tip `447e5d2`, a NOTE. Defaults D1–D32. Gotchas G1–G19.

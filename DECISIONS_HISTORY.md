@@ -392,3 +392,40 @@ lives — bbh `[BBH-9]`).
   did, on a newer bbh, with one reader of headers instead of two.
 - After the close (2026-09-10): the maintainer agreed with R29's recommendation — the contract on `docs/controls.md` now, built in S6, the cadence per tier. Recorded and pushed as a post-close correction (R22), checked with the document gates.
 
+## bbx-6 — 2026-09-10
+
+- Open: `bin/bbx selftest` GREEN on `415c88b` (19 gates, 56 / 56 controls,
+  tree unchanged; the two expected drift NOTEs — VampireSaved `efa0d3b`,
+  14 past the census, 36 rows; bbh `447e5d2`, one past the baseline). The
+  bbx-5 close re-derived. Read off the screen: the static run's generated
+  sentence "the expectation register … is slice S2; until then …" — false
+  since bbx-4, unnoticed on two close screens, the gate holding only its
+  prefix. Fixed (the sentence true by construction; the gate holds the full
+  clause; `gates/readout.sh` green, 7 controls); filed G19 — BBX-10's first
+  re-anchor here; its learning, a rot gate over generated text for
+  "until slice N" sentences, filed for S6.
+- S3 planned (`docs/plans/S3.md`) and STOPPED. Measured on plain clones at
+  the census commits: SMS `checkdocs.py` 1,500 lines, 37 hand checks, 17
+  table validators, 5 sentence forms, 55 quotations, 4 control families
+  (A35–A41 re-derived by the recount on the clone: 7 of 7 match);
+  VampireSaved `checkdocs_rom.py` 815 lines, 15 checks, 14 PARAPHRASE
+  mentions, a 205-line gate with 5 must-fire controls, a 31-row covered set
+  compared as a multiset. Nothing lifted verbatim; no F row. Four rulings
+  raised: R31 (the observation point is an integer index; logfmt stays
+  bbh's), R32 (`[suite].scenario_ext` per kind; several expectation kinds
+  per scenario; bbh's precedence verbatim under frame-driven, F12 the
+  control), R33 (the coverage contract: five closed statuses, the
+  denominator from `END <n>`, the covered set shrink-only, PARAPHRASE never
+  BOUND, coverage never fatal), R34 (`schema … tsv` with four types and a
+  rows line, checked before any value; `multiset … inventory | shrink-only`;
+  `exact` by index; verdict text frozen by the family's own gate). DECISIONS'
+  open line lists R21, R31–R34 (the shape gate caught the stale line first,
+  as designed).
+- Anti-hyperfocus checkpoint (BBX-27): the sitting did what HANDOFF named —
+  the plan for the first kind with no ancestor — and one rot fix the screen
+  handed it. Is S3 still the most valuable thread? Yes: two non-frame kinds
+  are the proof of generality (CLAUDE.md §5), and S3 is the one with no
+  executable. Does the last green mean what it is treated as meaning? It
+  means the kernel and S2 are unchanged and BBX-14 is met on this host; it
+  says nothing about the document-set kind, which has no gate yet — the
+  plan's counts are DESIGN numbers until the fixture exists, and §4 says so.
