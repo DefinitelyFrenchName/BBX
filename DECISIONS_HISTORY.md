@@ -717,3 +717,14 @@ lives — bbh `[BBH-9]`).
   `docs/plans/S3.md`'s status line, under the table in `docs/readout.md`,
   STATE and HANDOFF; pushed as a post-close correction with this entry (R22).
   S4 now waits on R35–R40 only.
+- **Post-close (2026-09-10), the S4 rulings:** the maintainer answered R35–R40
+  one by one in the session. R35 (the `.cli` scenario and the observation
+  grammar; a tool's non-zero exit an observation, a signal death the guard),
+  R36 (the `band` kind), R37 (`unittest` and BBX's own gate battery), R38 (the
+  self subject's `command` identity, a reviewed refreeze at the close) and R39
+  (the file census as a generated document and a shrink-only static gate on
+  the first sweep row) validated as recommended. R40 (the JSON schema format)
+  validated with a caveat in the maintainer's words — "no caveat on R40 but a caveat on the use of TSV elsewhere" — the
+  same caveat R34 carried; applied: every file S4 introduces is a TOML-subset file (the `.cli` scenario, the `unordered`, `schema`, `band` expectations, `expected/file_census.toml`); the kernel's pre-existing TSVs (`results.tsv` D30, `notes.tsv` D44, `registry.tsv`, `gates/sweep.tsv`) are not multiplied, and the gates adapter reads `results.tsv` by column name only, never the printed rows. Before R35 was recorded,
+  `docs/generality.md`'s crash row was corrected in its own commit (X13,
+  BBX-19). S4 step 1 may open; the STOP is lifted.
