@@ -1650,7 +1650,7 @@ Gates by derived kind: K 13, F 6 (`compare_dispatch`, `temporal`, `thresholds`, 
 | 5 | rules re-anchored or still marked inherited — never silently promoted | all 30 still `[inherited]` in CLAUDE.md; six incidents re-anchor in fact (point 8); promotion is S5 | yes |
 | 6 | STATE, HANDOFF, gotchas, rulings reflect it; registries complete both ways | rewritten this close; G25 filed with its price; R21 the one open ruling; MISSING 0, unregistered 0 in both runs | yes |
 
-**"Fully validated" is a load rating (§7):** the six hold for the document-set kind AS A FIXTURE. Nothing above is claimed for a real document set, and the second non-frame kind that would make the abstraction a proof rather than one instance is S4's. The maintainer rules S3 closed or not on this table.
+**"Fully validated" is a load rating (§7):** the six hold for the document-set kind AS A FIXTURE. Nothing above is claimed for a real document set, and the second non-frame kind that would make the abstraction a proof rather than one instance is S4's. The maintainer rules S3 closed or not on this table. **Ruled DONE by the maintainer, 2026-09-10** (after the bbx-12 close, on the bbx-11 table: "From what I see, S3 looks done").
 
 ## Counts, separately
 

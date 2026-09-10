@@ -711,3 +711,9 @@ lives — bbh `[BBH-9]`).
   control firing, on this host; it is not a statement about S3's DONE (the
   maintainer's), nor about any S4 tool (none exists), and the readout says
   so in its own words.
+- **Post-close (2026-09-10):** the maintainer ruled **S3 DONE** on the bbx-11
+  table ("From what I see, S3 looks done") — CLAUDE.md §7's six conditions for
+  the document-set kind as a fixture. Recorded in `docs/slices.md`'s S3 row,
+  `docs/plans/S3.md`'s status line, under the table in `docs/readout.md`,
+  STATE and HANDOFF; pushed as a post-close correction with this entry (R22).
+  S4 now waits on R35–R40 only.

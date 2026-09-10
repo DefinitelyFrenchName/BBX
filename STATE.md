@@ -8,9 +8,7 @@ generalization of `blackbox-harness` (bbh) to any subject with testable inputs
 and outputs. Born 2026-09-09.
 
 **Status (bbx-12 close, 2026-09-10):** slices S1 (but for R21's platform run)
-and S2 complete; **S3 steps 1–5 built and laid before the maintainer for the
-DONE ruling** (unchanged since bbx-11: the table in `docs/readout.md`'s bbx-11
-section; nothing of S3 moved this sitting). **S4 is planned and STOPPED:**
+and S2 complete; **S3 DONE** — steps 1–5 built (bbx-7 … bbx-11); **Ruled DONE by the maintainer, 2026-09-10** (after the bbx-12 close, on the bbx-11 table: "From what I see, S3 looks done"), for the document-set kind as a fixture. **S4 is planned and STOPPED:**
 `docs/plans/S4.md` (bbx-12, written while S3's ruling is pending — the plan
 says so and waits if S3 is ruled not done, BBX-26), in the S3 plan's shape,
 with rulings **R35–R40** queued (`docs/rulings.md`: the `.cli` scenario and
@@ -72,10 +70,8 @@ number to bring down; the two added at bbx-2 are host facts the clone
 exposed (G13, rule 7), the only exception ever allowed to move it upward. Grammar in
 `docs/census/README.md`.
 
-**Next:** the maintainer's two rulings, in this order — S3 DONE (the table in
-`docs/readout.md`, bbx-11; if not done, the condition named is the first task,
-BBX-26) and R35–R40 (`docs/rulings.md`; the S4 plan waits on them, CLAUDE.md
-§6). When both are in: S4 step 1 (`docs/plans/S4.md` §8) — and first, R35's
+**Next:** S3 is ruled DONE; the one ruling pending is R35–R40 (`docs/rulings.md`;
+the S4 plan waits on them, CLAUDE.md §6). When they are in: S4 step 1 (`docs/plans/S4.md` §8) — and first, R35's
 correction of `docs/generality.md`'s crash row in its own commit with a
 retraction row (BBX-19). The platform run when R21's host exists. bbh's tip
 past the baseline follows the R28 procedure when a sitting needs it.
