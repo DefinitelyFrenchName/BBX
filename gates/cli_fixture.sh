@@ -44,7 +44,7 @@ echo "== 2. the consumer config resolves to the command-line profile =="
 k="$(python3 -m bbx.config "$F/bbx.toml" kind)"; [ "$k" = command-line ] && ok "kind = command-line" || fail "kind resolved to '$k'"
 kinds="$(BBX_CONFIG="$F/bbx.toml" python3 -m bbx.expectations kinds)"
 [ "$(printf '%s\n' "$kinds" | wc -l | tr -d ' ')" = 7 ] && ok "seven kinds under the profile (the kind-blind three + truth, unordered, schema, band)" || fail "kinds table: $(printf '%s' "$kinds" | tr '\n' ' ')"
-for want in "truth	exact	EVAL" "unordered	set	EVAL" "schema	schema	EVAL" "band	tolerant-numeric	EVAL"; do
+for want in "truth	exact	EVAL	log" "unordered	set	EVAL	log" "schema	schema	EVAL	json" "band	tolerant-numeric	EVAL	bands"; do
     printf '%s\n' "$kinds" | grep -qx "$want" && ok "kind row: $(printf '%s' "$want" | tr '\t' ' ')" || fail "missing kind row: $want"
 done
 printf '%s\n' "$kinds" | cut -f2 | grep -qx temporal && fail "the command-line profile carries a temporal family" || ok "no temporal family under the profile (a temporal comparator is REFUSED, D23)"

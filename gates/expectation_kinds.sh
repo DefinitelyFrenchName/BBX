@@ -26,7 +26,7 @@ echo "exact basis -" > "$W/exp/a.masked"; : > "$W/exp/b.skip"; : > "$W/exp/c.sha
 
 echo "== 1. the frame-driven profile's five kinds (bbh's) =="
 t="$(python3 -m bbx.expectations kinds | tr '\t' ':' | tr '\n' ' ')"
-[ "$t" = "skip:-:SKIP sha1:exact:N/A pending:-:NOT-EVALUATED masked:temporal:EVAL diverge:temporal:EVAL " ] && ok "the table: $t" || fail "the table: '$t'"
+[ "$t" = "skip:-:SKIP:- sha1:exact:N/A:log pending:-:NOT-EVALUATED:- masked:temporal:EVAL:log diverge:temporal:EVAL:log " ] && ok "the table (extension, family, disposition, view — D57): $t" || fail "the table: '$t'"
 out="$(enumerate_expectations "$W/exp" "$W/root")" && r=0 || r=$?
 [ "$r" = 0 ] && ok "four known kinds, no pending -> exit 0" || fail "exit $r on a clean dir"
 [ "$out" = "$(printf 'a|masked|EVAL\nb|skip|SKIP\nc|sha1|N/A\nd|diverge|EVAL')" ] && ok "one line per expectation, kind and disposition named (bbh's lines)" || fail "output: $(printf '%s' "$out" | tr '\n' ';')"

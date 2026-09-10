@@ -24,3 +24,4 @@ cli_fixture
 cli_driver
 band
 json_schema
+cli_suite

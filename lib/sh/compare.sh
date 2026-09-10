@@ -60,8 +60,9 @@ compare_mask_for() {
 # compare_check <expdir> <name> <kind> <spec> <runmask> <log> [<scenario> <artifact>]
 #   The kind's family decides; prints the verdict line(s); returns 0 on PASS, 1 on FAIL.
 #   <spec> and <runmask> are the temporal family's (bbh's); the set family needs <scenario> and
-#   <artifact>, the schema family <artifact>; the exact family reads the expectation file only; the
-#   tolerant-numeric family reads the log's band view only.
+#   <artifact>, the schema family <artifact>, the tolerant-numeric family <artifact> = the band view
+#   (`<log>.bands`, D53 — resolved by the caller from the kind's view column, D57); the exact family
+#   reads the expectation file and the log only.
 compare_check() {
     _ck_kind="$3"
     _ck_family="$(python3 -m bbx.expectations family "$_ck_kind" 2>/dev/null || echo '-')"
@@ -70,7 +71,7 @@ compare_check() {
     exact)    compare_exact "$1" "$2" "$_ck_kind" "$6" ;;
     set)      compare_set "$1" "$2" "$_ck_kind" "$6" "${7:-}" "${8:-}" ;;
     schema)   compare_schema "$1" "$2" "$_ck_kind" "${8:-}" ;;
-    tolerant-numeric) compare_band "$1" "$2" "$_ck_kind" "$6" ;;
+    tolerant-numeric) compare_band "$1" "$2" "$_ck_kind" "${8:-}" ;;
     *)        echo "FAIL kind '$_ck_kind' has no comparator family in the kind profile in force (R23: a kind is registered in the profile's table or not at all)"; return 1 ;;
     esac
 }
@@ -109,12 +110,15 @@ compare_schema() {
     python3 -m bbx.compare_schema "$_cm_spec" "$4"
 }
 
-# compare_band <expdir> <name> <kind> <log>   (S4 step 3)
-#   The band view is <log>.bands (D53); the spec is the expectation file (D48). One line, then the NOTE; 0 PASS, 1 FAIL.
+# compare_band <expdir> <name> <kind> <band-view>   (S4 step 3; the view handed by the caller since step 4, D57)
+#   The band view is the driver's <log>.bands (D53), resolved by the caller from the kind's view column — the
+#   family reads what it is handed and derives no path; the spec is the expectation file (D48). One line, then
+#   the NOTE; 0 PASS, 1 FAIL.
 compare_band() {
     _cb_spec="$1/$2.$3"
     [ -f "$_cb_spec" ] || { echo "FAIL band: $_cb_spec is not a band spec (no such file)"; return 1; }
-    python3 -m bbx.compare_band "$_cb_spec" "$4.bands"
+    [ -n "${4:-}" ] || { echo "FAIL band: the tolerant-numeric family needs the band view (compare_check's trailing argument)"; return 1; }
+    python3 -m bbx.compare_band "$_cb_spec" "$4"
 }
 
 # compare_temporal <expdir> <name> <spec> <runmask> <log>   (bbh: masked_check)

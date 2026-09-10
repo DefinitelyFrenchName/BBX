@@ -116,10 +116,13 @@ DEFAULTS = {
         "register": "PROVENANCE.toml",       # inside [suite].expected_dir
         "exclude": ["PROVENANCE.toml", "README.md", "mask", "MASK"],
     },
-    # the expectation KINDS: [extension, family, disposition] — registered here and nowhere else (E1, R23; D25).
-    # Kind-blind: the three kinds every subject can carry; a kind with a comparator family adds its own.
+    # the expectation KINDS: [extension, family, disposition, view] — registered here and nowhere else (E1, R23; D25).
+    # Kind-blind: the three kinds every subject can carry; a kind with a comparator family adds its own. The VIEW
+    # (fourth column, D57) is what the kinds loop hands the family as its artifact — `log` the run log itself,
+    # `subject` the subject file the identity was computed from, `json` / `bands` the driver's views beside the
+    # log (`<log>.json`, `<log>.bands`), `-` none — resolved in ONE place, bin/bbx-run-suite view_path (BBX-16).
     "expectations": {
-        "kinds": [["skip", "-", "SKIP"], ["sha1", "exact", "N/A"], ["pending", "-", "NOT-EVALUATED"]],
+        "kinds": [["skip", "-", "SKIP", "-"], ["sha1", "exact", "N/A", "log"], ["pending", "-", "NOT-EVALUATED", "-"]],
     },
 }
 
@@ -181,8 +184,8 @@ KINDS = {
                   "hermetic_unset": ["POKES", "DUMPS", "SNAP_FRAMES", "TAIL_FRAMES", "VIDEO_OUT", "INPUT_OUT", "INPUT_INJECT_TEST", "NO_INPUT_CHECK"]},
         # bbh's five kinds (enumerate_expectations.sh at f675710): masked and diverge are the temporal family over the
         # checksum-log view; fidelity F16c diffs the enumeration lines
-        "expectations": {"kinds": [["skip", "-", "SKIP"], ["sha1", "exact", "N/A"], ["pending", "-", "NOT-EVALUATED"],
-                                   ["masked", "temporal", "EVAL"], ["diverge", "temporal", "EVAL"]]},
+        "expectations": {"kinds": [["skip", "-", "SKIP", "-"], ["sha1", "exact", "N/A", "log"], ["pending", "-", "NOT-EVALUATED", "-"],
+                                   ["masked", "temporal", "EVAL", "log"], ["diverge", "temporal", "EVAL", "log"]]},
         # the temporal family's thresholds: bbh's [thresholds] defaults verbatim (D23; R25 makes a
         # looser consumer value need a ruling). A kind with no temporal family carries none.
         "thresholds": {"flicker_max": 2, "reconverge": 60, "flicker_max_total": 8},
@@ -199,9 +202,9 @@ KINDS = {
                   "hermetic_unset": ["DOCSET_FORMS", "DOCSET_NONDET", "DOCSET_VIEW"],
                   "log_summary": "python3 -m bbx.docset summary"},     # D43: NOTE: coverage / paraphrase / unbindable / stale / mismatch (D42)
         "fingerprint": {"kind": "file-sha1", "file_pattern": "{set}.tsv"},
-        "expectations": {"kinds": [["skip", "-", "SKIP"], ["sha1", "exact", "N/A"], ["pending", "-", "NOT-EVALUATED"],
-                                   ["truth", "exact", "EVAL"], ["claims", "set", "EVAL"],
-                                   ["covered", "set", "EVAL"], ["schema", "schema", "EVAL"]]},
+        "expectations": {"kinds": [["skip", "-", "SKIP", "-"], ["sha1", "exact", "N/A", "log"], ["pending", "-", "NOT-EVALUATED", "-"],
+                                   ["truth", "exact", "EVAL", "log"], ["claims", "set", "EVAL", "subject"],
+                                   ["covered", "set", "EVAL", "subject"], ["schema", "schema", "EVAL", "subject"]]},
     },
     # the COMMAND-LINE kind (docs/plans/S4.md §3 S1; D45; R35–R40): an executable plus its declared interface; no
     # instrument (portable); the scenario is an INVOCATION (.cli, R35); the identity is file-sha1 over the tool with the
@@ -216,9 +219,9 @@ KINDS = {
                   "hermetic_unset": ["CLI_NONDET", "CLI_TIMEOUT", "CLI_KEEP_ENV"],
                   "log_summary": "python3 -m bbx.cli summary"},         # D43: NOTE: exit / band-fields / emitted-files (S4 step 2)
         "fingerprint": {"kind": "file-sha1", "file_pattern": "{set}.py"},
-        "expectations": {"kinds": [["skip", "-", "SKIP"], ["sha1", "exact", "N/A"], ["pending", "-", "NOT-EVALUATED"],
-                                   ["truth", "exact", "EVAL"], ["unordered", "set", "EVAL"],
-                                   ["schema", "schema", "EVAL"], ["band", "tolerant-numeric", "EVAL"]]},
+        "expectations": {"kinds": [["skip", "-", "SKIP", "-"], ["sha1", "exact", "N/A", "log"], ["pending", "-", "NOT-EVALUATED", "-"],
+                                   ["truth", "exact", "EVAL", "log"], ["unordered", "set", "EVAL", "log"],
+                                   ["schema", "schema", "EVAL", "json"], ["band", "tolerant-numeric", "EVAL", "bands"]]},
     },
     "self": {
         "project": {"gates_dir": "gates", "lib_dir": "lib/sh", "instrument_word": "instrument"},

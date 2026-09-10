@@ -879,3 +879,64 @@ lives — bbh `[BBH-9]`).
   over the fixture) is the next most valuable thread, and its first decision
   is already measured: the loop hands the schema family the wrong artifact
   for this kind, so the "zero lines" target is corrected before it is built.
+
+## bbx-16 — S4 step 4 built: the suite over the command-line fixture — the kinds table's VIEW column (D57), the loop's one resolver, `gates/cli_suite.sh`; R41 raised (2026-09-10)
+
+- Opened on the bbx-15 HEAD `4a5cc61` with the battery GREEN (27 gates,
+  98/98, tree unchanged; the two drift NOTEs the handoff predicted —
+  `build/selftest_20260910T195936Z`) — the re-derivation step of the ritual.
+  R21 the only open ruling; step 4 needs R35, answered at bbx-12.
+- The decision the handoff left measured and open — how the loop hands the
+  JSON view to the schema family — taken as recommended, under R23's answer
+  ("the family and the VIEW are declared by the kind"): the kinds table
+  gains a fourth column, the view (D57: `-`, `log`, `subject`, `json`,
+  `bands`), read off the table by `bin/bbx-run-suite` and resolved to a path
+  in ONE function, `view_path`, checked at the entrance after the identity
+  and before any scenario runs; passed as `compare_check`'s artifact argument
+  to every family, the tolerant-numeric branch included (`compare_band`
+  takes the band view and derives no path — one resolver instead of two).
+  Not a new ruling: R23 ruled it; D25 and D45 amended by D57's row (the
+  amendment recorded here, BBX-24).
+- Built (the readout's bbx-16 section): the column in `config.py`'s four
+  tables; `expectations.py` reading four fields (a three-field row refused
+  on one line, exit 1), printing four, `view <ext>`; the loop's `view_of` /
+  `view_path` (29 lines added, 5 removed — the plan's zero-line target
+  retracted, X22); `compare.sh`'s tolerant-numeric branch handing `${8}`
+  (X23; the four S2/S3 dispatcher functions untouched, measured: no diff
+  line names them); `gates/band.sh`'s 24 dispatcher calls handing the view,
+  one new frozen line (22); the kinds print's three readers updated
+  (`expectation_kinds`, `cli_fixture`, `docset_fixture`); `gates/cli_suite.sh`
+  (portable, the 28th gate, 7 controls: identity-before-any-scenario,
+  nondeterministic-before-any-class three ways, crash-vs-refusal,
+  wrong-truth, schema-before-any-value over the JSON view,
+  band-through-the-loop, unknown-view — 43 printed lines frozen, 15 suite
+  runs, ~99 s).
+- The plan first (BBX-19), in its own commit `3d98d1d`: X22 (the loop is
+  not unchanged), X23 (the band branch derives no path), X24 (the screen
+  reads `band, exact, multiset, schema` and `fixture 21` — the spec's class
+  word, and the registry row outside the set's histogram); D57 written
+  there, before its first use.
+- **R41 raised (open):** the first suite run over the fixture printed
+  `NOTE: band-fields 1` twice under `04_band` — the comparator's (R36's
+  letter) and the log summary's (D43's) — two writers of one key. The screen
+  is frozen as printed until the maintainer chooses; recommendation the
+  summary alone (the observation side, survives a FAIL, counts a band nobody
+  froze). The gate states it as NOT-ASSERTED and checks the duplicate is
+  visible, not hidden.
+- Incidents: G28 (the entrance check's unbound variable, caught by the
+  neighbouring document-set suite gate in the shadow — the first consumer
+  never reaches the `subject` branch) and G29 (the gate's frozen text typed,
+  not copied: three defects in one gate run). Both priced; two hazards in
+  `HANDOFF.md`; one small fix queued for the next sitting (the suite gates
+  guard the kept run's existence before copying it); one more instance for
+  S6's rot-gate queue (headers' quoted counts against the kept logs).
+- Step 10 (R27): re-read for learnings — above.
+- Close: GREEN twice at one HEAD (`build/selftest_20260910T203200Z`, `build/selftest_20260910T204058Z`): 28 gates, 105/105 controls, tree unchanged, BBX-14 met; close_sweeps and rulings_shape PASS on the final tree; one plan-first commit (`3d98d1d`) and one close commit, pushed (R22).
+- Anti-hyperfocus (BBX-27): the thread was step 4 as the handoff framed it,
+  and its one decision was taken as recommended because R23 had already
+  ruled its principle; the pull was R41 — the duplicate NOTE line — which
+  was not fixed on the spot precisely because either fix rewrites a ruling's
+  letter or a default's, and the screen is the maintainer's to rule. The
+  next most valuable thread is step 5 (the two adapters, R37/R38), the part
+  of S4 with no precedent in the tree; R41's answer is a one-line change in
+  two gates whenever it comes.

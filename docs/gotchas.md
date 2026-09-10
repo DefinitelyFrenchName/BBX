@@ -444,3 +444,42 @@ candidate for S6's rot-gate queue (with G19, G24): a close gate that greps
 the HEAD message's `close_sweeps PASS (…)` tuple against the kept
 `close_sweeps.log` of the run it names. Rule re-anchored in fact: §1 ("when
 you think you know, you measure to check" — the exact case).
+
+## G28 — The kinds loop's new entrance check read a variable defined further down, and only the consumer whose table reaches that branch saw it: the command-line suite ran GREEN, the document-set suite gate died on `SUBJECT_FILE: unbound variable` (paid: 1 shadow gate run, 63 s, and 1 direct run; 2026-09-10)
+The view column's check — every EVAL kind's view resolves before any
+scenario runs — was placed right after the table was read, and `view_path
+subject` echoes `$SUBJECT_FILE`, which the runner resolves forty lines
+later. Under `set -eu` that is an abort. `fixture/fakecli/` declares no
+`subject` view (its schema reads `json`, its band `bands`), so the first
+consumer's suite ran GREEN twice and the readout came out clean; the
+neighbouring gate `docset_suite.sh` in the shadow was the detector, and
+even it named nothing: its helper copied a kept run that did not exist and
+the gate ended under `set -e` with one `cp:` line and no FAIL of its own —
+the suite run directly printed the cause. The check moved to just after the
+identity is resolved (still before any scenario runs; the FAIL goes through
+`finish RED` so the kept run says so). Learning (R27): G26's family in the
+mirror — a branch a consumer never reaches is unmeasured on that consumer,
+which is exactly why the shadow runs every neighbouring gate and not only
+the new one; a hazard line in `HANDOFF.md`. Mechanism candidate, small,
+for the next sitting's first fix: the two suite gates' positive section
+guards `[ -d "$LOGDIR" ]` before copying, so a suite that never created its
+kept run is a named FAIL line, not a dead helper (G18's family). Rule
+re-anchored in fact: BBX-5 (prove the instrument on a known positive AND a
+known negative — here the second consumer was the negative) and §1.
+
+## G29 — The suite gate's frozen text was typed from a screen read, not copied from the run: one NOTE value wrong (`emitted-files 0` for the scenario that emits one file), a verdict cut at a fixed column that the 9-wide kind `unordered` overruns, and a header count typed as 16 where the run printed 15 (paid: 1 gate run, 95 s; 2026-09-10)
+Three defects of the gate, none of the code, all found by the gate's first
+run in the shadow: the 43-line frozen text differed at one character;
+`cut -c34-` on the `unordered` pairing line began at the kind's last
+letter, so `finding.py` read `unclassified` for one of twelve lines; and the
+header's "16 suite runs" was written before the run's own NOTE printed 15.
+The text is now the run's output file pasted; the verdict is taken after the
+24-wide scenario field and past the kind's word, never at a column; the
+count is the NOTE's. Learning (R27): G27's third instance (a commit message's
+tuple, now a header's count and a frozen text) — a number or a text that a
+gate freezes is READ FROM THE RUN that produced it, by the command that
+writes it where possible (`cp`, not retyping); a hazard line in `HANDOFF.md`.
+Mechanism candidate for S6's rot-gate queue, with G19, G24 and G27: a close
+gate over every header's quoted counts (`~N s`, `N suite runs`, `N controls`)
+against the kept logs' NOTE lines. Rule re-anchored in fact: §1 ("an
+unmeasured figure is a guess wearing a citation").

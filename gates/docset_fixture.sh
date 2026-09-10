@@ -35,7 +35,7 @@ echo "== 2. the consumer config resolves to the document-set profile =="
 k="$(python3 -m bbx.config "$F/bbx.toml" kind)"; [ "$k" = document-set ] && ok "kind = document-set" || fail "kind resolved to '$k'"
 kinds="$(BBX_CONFIG="$F/bbx.toml" python3 -m bbx.expectations kinds)"
 [ "$(printf '%s\n' "$kinds" | wc -l | tr -d ' ')" = 7 ] && ok "seven kinds under the profile (the kind-blind three + truth, claims, covered, schema)" || fail "kinds table: $(printf '%s' "$kinds" | tr '\n' ' ')"
-for want in "truth	exact	EVAL" "claims	set	EVAL" "covered	set	EVAL" "schema	schema	EVAL"; do
+for want in "truth	exact	EVAL	log" "claims	set	EVAL	subject" "covered	set	EVAL	subject" "schema	schema	EVAL	subject"; do
     printf '%s\n' "$kinds" | grep -qx "$want" && ok "kind row: $(printf '%s' "$want" | tr '\t' ' ')" || fail "missing kind row: $want"
 done
 printf '%s\n' "$kinds" | cut -f2 | grep -qx temporal && fail "the document-set profile carries a temporal family" || ok "no temporal family under the profile (a temporal comparator is REFUSED, D23)"

@@ -46,9 +46,13 @@
 #   verdict line and its own kept-run row keyed (scenario, kind), the `schema` family FIRST (the artifact's
 #   shape before any value, R34), then the table's order, then the self-frozen `.sha1` last (E4). On a
 #   schema FAIL the scenario's value kinds print the suite's own `NOT-EVALUATED (schema failed)` (finding
-#   `pending`: an unevaluated pairing is red, never silently passed — E2). The comparators that read the
-#   artifact get it through `compare_check`'s two trailing arguments (the scenario file and the SUBJECT
-#   FILE the fingerprint resolved, `bbx.fingerprint --path`: the file the identity was computed from).
+#   `pending`: an unevaluated pairing is red, never silently passed — E2). The comparators get their
+#   artifact through `compare_check`'s two trailing arguments: the scenario file and the VIEW the kind
+#   declares in the table's fourth column (D57, R23, BBX-16; S4 step 4, bbx-16) — `subject` the SUBJECT
+#   FILE the fingerprint resolved (`bbx.fingerprint --path`: the file the identity was computed from),
+#   `log` the run log itself, `json` / `bands` the driver's views beside it (`<log>.json`, `<log>.bands`,
+#   D53, D54), `-` none — resolved by `view_path` and nowhere else; a view the loop cannot resolve is a
+#   FAIL at the entrance, before any scenario runs.
 #   --freeze under the kinds loop rewrites the shrink-only set kinds from the run (`frozen set-covered
 #   (<n> rows)`, R33) and leaves every other authored kind alone (`authored .<kind> expectation — not
 #   self-frozen`); the `.sha1` self-freeze runs ONLY for a scenario with no authored kind, because
@@ -120,6 +124,19 @@ if [ "$LOOP" = kinds ]; then    # the schema family first, then the table's orde
     EVAL_KINDS="$(printf '%s\n' "$KINDS_TABLE" | awk -F'\t' '$3 == "EVAL" && $2 == "schema" { print $1 }'
                   printf '%s\n' "$KINDS_TABLE" | awk -F'\t' '$3 == "EVAL" && $2 != "schema" { print $1 }')"
 fi
+# view_of <kind> — the table's fourth column; view_path <view> — its path for the scenario in hand (header: D57).
+# THE ONE RESOLVER: a family reads what it is handed and derives no path of its own.
+view_of()   { printf '%s\n' "$KINDS_TABLE" | awk -F'\t' -v e="$1" '$1 == e { print $4; exit }'; }
+view_path() {
+    case "$1" in
+    log)     echo "$_kp_log" ;;
+    subject) echo "$SUBJECT_FILE" ;;
+    json)    echo "$_kp_log.json" ;;
+    bands)   echo "$_kp_log.bands" ;;
+    -)       echo "" ;;
+    *)       return 1 ;;
+    esac
+}
 LOG_SUMMARY="$(bbx_cfg suite.log_summary "")"
 
 # The reference-input variable is demanded, and made ABSOLUTE (the lineage,
@@ -196,6 +213,12 @@ echo "build fingerprint -> expectation set '$EXPSET'"
 # the kinds loop's comparators may read the SUBJECT FILE — the one the identity above was computed from
 SUBJECT_FILE=""
 [ "$LOOP" = precedence ] || SUBJECT_FILE="$(python3 -m bbx.fingerprint "$ROMPATH" --set "$SET" --path)" || { echo "FAIL: the subject file could not be resolved (bbx.fingerprint --path)"; finish RED; exit 1; }
+# every EVAL kind's view resolves — checked here, after the identity and before any scenario runs (a kind whose view the
+# loop cannot resolve is RED at the entrance, never a pairing that silently compares nothing; D57)
+for _k in $EVAL_KINDS; do
+    _v="$(view_of "$_k")"; _kp_log=-
+    view_path "$_v" > /dev/null || { echo "FAIL: kind '$_k' declares view '$_v', which the kinds loop cannot resolve (log, subject, json, bands or -; D57)"; finish RED; exit 1; }
+done
 
 check_diverge() {   # check_diverge <log> <spec-file> -> prints verdict, returns 0/1
     python3 -m bbx.check_diverge "$1" "$2" "$EXPROOT"
@@ -226,10 +249,11 @@ kinds_pairings() {
     for _k in $_kp_present; do
         [ "$_kp_first" = 1 ] || printf '%-24s ' ""; _kp_first=0; printf '%-8s ' "$_k"
         _fam="$(python3 -m bbx.expectations family "$_k" 2>/dev/null || echo '-')"
+        _kp_art="$(view_path "$(view_of "$_k")")"    # the kind's view, the family's artifact (D57)
         class="$(compare_spec_field "$EXPDIR/$name.$_k" class)"; [ -n "$class" ] || class=-
         if [ "$FREEZE" = 1 ]; then
             if [ "$_fam" = set ] && [ "$(compare_spec_field "$EXPDIR/$name.$_k" mode)" = shrink-only ]; then
-                if v=$(python3 -m bbx.compare_set --freeze "$EXPDIR/$name.$_k" "$_kp_log" "$SUBJECT_FILE" "$rpl"); then
+                if v=$(python3 -m bbx.compare_set --freeze "$EXPDIR/$name.$_k" "$_kp_log" "$_kp_art" "$rpl"); then
                     echo "$v"; keep "$name" "$_k" "$class" "$v"; n_other=$((n_other + 1))
                 else
                     echo "$v"; keep "$name" "$_k" "$class" "$v"; n_fail=$((n_fail + 1)); fail=1
@@ -242,7 +266,7 @@ kinds_pairings() {
         if [ "$_kp_schema_failed" = 1 ]; then
             v="NOT-EVALUATED (schema failed)"; echo "$v"; keep "$name" "$_k" "$class" "$v"; n_fail=$((n_fail + 1)); continue
         fi
-        if v=$(compare_check "$EXPDIR" "$name" "$_k" - "" "$_kp_log" "$rpl" "$SUBJECT_FILE"); then
+        if v=$(compare_check "$EXPDIR" "$name" "$_k" - "" "$_kp_log" "$rpl" "$_kp_art"); then
             echo "$v"; keep "$name" "$_k" "$class" "$v"; n_pass=$((n_pass + 1)); notes "$name" "$v"
         else
             echo "$v"; keep "$name" "$_k" "$class" "$v"; n_fail=$((n_fail + 1)); fail=1
