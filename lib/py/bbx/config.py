@@ -206,14 +206,15 @@ KINDS = {
     # the COMMAND-LINE kind (docs/plans/S4.md §3 S1; D45; R35–R40): an executable plus its declared interface; no
     # instrument (portable); the scenario is an INVOCATION (.cli, R35); the identity is file-sha1 over the tool with the
     # whole-set key over the tool's own directory; the driver family scrubbed (the search path CLI_PATH is the
-    # suite's, as DOCSET_PATH is the document-set's); no temporal family; log_summary arrives with the driver (step 2).
+    # suite's, as DOCSET_PATH is the document-set's); no temporal family; log_summary = bbx.cli summary (D43, S4 step 2).
     "command-line": {
         "project": {"instrument_word": "tool"},
         "registries": {"static_needs_env": ""},
         "tier": {"patterns": []},
         "suite": {"scenario_ext": "cli", "driver": "cli",
                   "rompath_env": "CLI_PATH", "input_env": "CLI_PATH",
-                  "hermetic_unset": ["CLI_NONDET", "CLI_TIMEOUT", "CLI_KEEP_ENV"]},
+                  "hermetic_unset": ["CLI_NONDET", "CLI_TIMEOUT", "CLI_KEEP_ENV"],
+                  "log_summary": "python3 -m bbx.cli summary"},         # D43: NOTE: exit / band-fields / emitted-files (S4 step 2)
         "fingerprint": {"kind": "file-sha1", "file_pattern": "{set}.py"},
         "expectations": {"kinds": [["skip", "-", "SKIP"], ["sha1", "exact", "N/A"], ["pending", "-", "NOT-EVALUATED"],
                                    ["truth", "exact", "EVAL"], ["unordered", "set", "EVAL"],

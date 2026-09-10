@@ -776,3 +776,48 @@ lives — bbh `[BBH-9]`).
   a tool that may not exist (BBX-5), and it is 30 lines. Step 2 is the next
   most valuable thread: nothing here is an observation until a driver writes
   one.
+
+## bbx-14 — S4 step 2 built: the command-line driver's core, `drivers/cli.sh`, `gates/cli_driver.sh` (2026-09-10)
+
+- Opened on the bbx-13 HEAD `bd8e8d0` with the battery GREEN (24 gates,
+  82/82, tree unchanged; the two drift NOTEs the handoff predicted) — the
+  re-derivation step of the ritual. R21 the only open ruling; step 2 needs
+  R35, answered at bbx-12.
+- Built (the readout's bbx-14 section): `lib/py/bbx/cli.py` grown from the
+  token vocabulary into the driver's core (the scenario reader, `resolve`
+  over `CLI_PATH`, the hermetic environment with the sandbox as HOME and
+  TMPDIR, `run` with the O5 records, the crash log, the band view, `summary`,
+  the self-test with FIPS 180-1's vectors as the reference anchor);
+  `drivers/cli.sh` with D4's four exits; `gates/cli_driver.sh`, 7 controls.
+  Defaults D51 (`CLI_TIMEOUT` 60 s, arbitrary), D52 (the subject's
+  environment: D6's set plus the `[env]` table, the sandbox, the records),
+  D53 (the crash log, the band view, a JSON stdout that is not one object
+  observed as lines): rows before first use (BBX-24). D43 and D45 amended
+  with `log_summary = python3 -m bbx.cli summary` — by D45's own text ("joins
+  the profile with the driver at step 2"), not a new decision.
+- The plan needed no correction (BBX-19 asked); the details it left open are
+  decided in the rows above and stated in the readout. HANDOFF's suggested
+  re-hash through `bbx.sha1` was not used: it is the same `hashlib` as the
+  writer; the gate re-hashes two points with `shasum` (perl's Digest::SHA).
+- The design targets: the kinds loop, the dispatcher, the three families,
+  `expectations.py`, `finding.py` and `fixture/` changed by ZERO lines
+  (measured: `git diff --stat HEAD` over them empty); the truth logs
+  regenerate byte for byte under the grown writer.
+- No ruling raised; R21 stays open. No retraction.
+- Incidents: none filed as a gotcha. One event, priced in the readout: the
+  shadow's portable tier NOT GREEN on `close_sweeps` — D51 and D52 cited by
+  the new code with their register rows written in the tree and absent from
+  the shadow built from HEAD (one shadow tier run, ~3 min). The guard is
+  BBX-24's mechanism on a sequencing fact; the tree read PASS with the rows.
+  No defect of the new code was found in the shadow or the tree.
+- Step 10 (R27): re-read for learnings — one, a hazard in `HANDOFF.md`: the
+  shadow does not carry a register row written in the tree; write the row in
+  both, or read the shadow's `close_sweeps` red as exactly that. No
+  mechanism: the guard is the mechanism, and it fired.
+- Close: GREEN twice at one HEAD (`build/selftest_20260910T180335Z`, `build/selftest_20260910T181015Z`): 25 gates, 89/89 controls, tree unchanged, BBX-14 met; close_sweeps and rulings_shape PASS; one close commit, pushed (R22).
+- Anti-hyperfocus (BBX-27): the thread was step 2 as the plan wrote it; the
+  one place it pulled — the reference-vector anchor inside the self-test —
+  was taken because a vocabulary that rests on one hash function should name
+  what that function must produce on a value nobody here chose (§3.3), and
+  it is four lines. Step 3 (the comparators over these logs) is the next most
+  valuable thread: a log nobody compares is an observation nobody has judged.
