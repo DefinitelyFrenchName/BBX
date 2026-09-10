@@ -108,7 +108,14 @@ readouts, gotchas and history resolve through it). The last closed sitting is **
    lineage's tip and porcelain from the recount summaries; they are
    reported, not required equal to the census (VampireSaved is worked on
    live by another session — its tree is nobody's baseline).
-10. **One close commit** per sitting, tally in the message, pushed to
+10. **Incidents reviewed for learnings (R27, ruled at the bbx-3 close).**
+    Every incident of the sitting — caught by a gate or discovered after
+    the fact — is re-read for a learning that would improve the harness: a
+    mechanism becomes the next sitting's first small fix (or a ruling, if
+    it changes a contract), a trap becomes a hazard below, and "no
+    learning" is written in the gotcha entry so the question is seen to
+    have been asked. Measured, never assumed (§1).
+11. **One close commit** per sitting, tally in the message, pushed to
     `origin` (R22; a post-close correction is pushed with it).
 
 Steps 8 and 9 are checked, not remembered: step 8 by `close_sweeps`, step 9
@@ -117,7 +124,7 @@ by construction (the recount's clone) and by `fidelity_bbh`'s proof.
 **Next-session orientation (written at the bbx-3 close, 2026-09-10)**
 - Open first: `bin/bbx selftest --log build/selftest_<stamp>` and `bin/bbx readout` on it. The VampireSaved `drift` NOTE is a lineage moving (6 commits past the census at this close), not a red.
 - First small fix (G17's mechanism): `bin/bbx-run-static --log` records the UNTRACKED entry count before and after the run in `run.txt` (it prints nothing — the printed working-tree block is bbh's, tracked-only, read by F13), and `readout.py` shows it on the `tree during the run:` line, so a file written under the tree during a battery is on the screen rather than in a rule.
-- S2 step 4 waits on R24 (the expectation register as TOML: one bare table per row, the file a value, every field named; measured against the subset parser). When answered: `lib/py/bbx/provenance.py` lifted from bbh's over that format with R11's eight classes, `gates/provenance.sh` (a file with no row, a row with no file, a class outside R11, a duplicate file value), the screen's "expectations relied upon" histogram read from a kept suite run's set, and the "comparator classes … never PASSed on a real pairing" line — `docs/plans/S2.md` §3 E3 and §6.
+- S2 step 4 opens on R24 (answered: the expectation register as TOML — one bare table per row, the file a value, every field named). Build: `lib/py/bbx/provenance.py` lifted from bbh's over that format with R11's eight classes, `gates/provenance.sh` (a file with no row, a row with no file, a class outside R11, a duplicate file value), the screen's "expectations relied upon" histogram read from a kept suite run's set, and the "comparator classes … never PASSed on a real pairing" line — `docs/plans/S2.md` §3 E3 and §6.
 - Then the S2 slice readout (CLAUDE.md §7: gates + controls, F12/F16/F17, every frozen expectation's class, D23–D30, what the green does not assert, rules re-anchored) and the close.
 - A background battery: nothing under the tree changes while it runs — an untracked file counts, the sweeps read it (G17).
 - R21 is still open: the maintainer produces the Linux/WSL run by the procedure in the entry; the S2 gates add two facts for that host: bytecode is kept out of the clones (`PYTHONDONTWRITEBYTECODE`), and the kind-blind `hash_cmd` is a python one-liner (D27).

@@ -309,4 +309,12 @@ lives — bbh `[BBH-9]`).
   over bbh's fixture and the lineage's synthetic shapes, BBX's own gates
   prove each control fires, and nothing yet says where any expectation's
   numbers came from — and the screen says so.
+- After the close (2026-09-10): R24 had been answered ("agreed", the
+  revised TOML register) in the maintainer's message before the close and
+  was recorded open by the contributor — corrected here, moved under
+  Answered, its DECISIONS row added; S2 step 4 may open. The maintainer
+  ruled R27: the close reviews the sitting's incidents for learnings
+  (ritual step 10; the commit is step 11). Both pushed as a post-close
+  correction (R22), checked with the three document gates, not the battery
+  (rulings and their ledgers; no tool changed).
 

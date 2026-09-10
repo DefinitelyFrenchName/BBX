@@ -28,7 +28,7 @@ G18 this sitting, both caught by the harness). No expectation register yet;
 no driver of BBX's own; no fixture subject; `compare_fields.py` not lifted
 (BBX-25).
 
-**In force:** `DECISIONS.md` — R0–R20, R22, R23, R25, R26 and method M1–M4. **Open rulings:** R21 (the platform runs: no Linux or WSL host here); R24 (the expectation register's format, revised to TOML after the maintainer's objection to TSV). R23, R25, R26 ruled 2026-09-10; S2 step 4 waits on R24.
+**In force:** `DECISIONS.md` — R0–R20, R22–R27 and method M1–M4. **Open rulings:** R21 (the platform runs: no Linux or WSL host here). R23–R27 ruled 2026-09-10 (R24 answered before the close and recorded after it); S2 step 4 may open.
 In force since bbx-2: R18 (the census and the tests
 work on a clone or are explicitly, provably read-only), R19 (parallel work
 is a pull queue; the FIFO token queue is the default implementation, the
@@ -62,7 +62,7 @@ number to bring down; the two added at bbx-2 are host facts the clone
 exposed (G13, rule 7), the only exception ever allowed to move it upward. Grammar in
 `docs/census/README.md`.
 
-**Next:** S2 step 4 when R24 is answered (the TOML expectation register,
+**Next:** S2 step 4 on R24 (the TOML expectation register,
 `gates/provenance.sh`, the screen's provenance histogram and "never PASSed on
 a real pairing" line); then the S2 slice readout and close (CLAUDE.md §7).
 The platform run when R21's host exists. One finding for the maintainer:
