@@ -1824,3 +1824,144 @@ Three batteries in the tree this sitting (the open one and the close's two), eve
 **Retractions this sitting:** none. **Incidents reviewed for learnings (R27, step 10):** one event, caught before the commit — `gates/rulings_shape.sh` red on DECISIONS.md's open-rulings line after six rulings were queued (paid: one gate run, 1 s); the gate is G14's mechanism doing what it was built for, and the learning is already its rule (the line is held to the queue both ways); no gotcha filed, the question asked and answered here. **Rulings:** R35–R40 raised; none answered; R21 open. **S3 stays laid before the maintainer for the DONE ruling** (the bbx-11 table); **S4 is STOPPED at R35–R40.**
 
 **What this close does NOT assert:** S3's DONE (pending); any S4 tool (none exists); the rightness of the six recommendations; any platform but Darwin arm64; executable controls (R29, S6); and everything the section above lists.
+
+# bbx-13 step 1 — the command-line kind profile, the `.cli` scenario, the token vocabulary, the fixture and its gate (2026-09-10)
+
+**The open.** GREEN on `a2014a2` (`build/selftest_20260910T170014Z`: `PASS 23 SKIP 0 FAIL 0 MISSING 0`; `controls fired 78 / declared 78`; `ok: no tracked file changed during the run`; the two drift NOTEs the handoff predicted — bbh `447e5d2` one past the baseline, VampireSaved past the census): the bbx-12 close re-derived. R21 the only open ruling; R35–R40 answered, S3 ruled DONE — step 1 was cleared to open.
+
+## The screen, verbatim (`bin/bbx readout build/selftest_20260910T172316Z --against build/selftest_20260910T171631Z`)
+
+```
+== READOUT — self subject at /Users/koneko/Developer/generalized-blackbox-harness/BBX @ ddeb0aa (porcelain 41) — started 2026-09-10T17:23:17Z on Darwin arm64 ==
+VERDICT: GREEN   PASS 24  SKIP 0  FAIL 0  TIMEOUT 0  MISSING 0   (gates 24)
+tree during the run: unchanged (untracked entries 0 -> 0)   harness: bbx @ ddeb0aa
+rests on:
+  controls: fired 82 / declared 82; dead 0; undeclared firings 0; gates red 0
+  each can fail: 24 of 24 gates proved a control fires on purpose
+  expectations relied upon: none registered — a static run compares against no frozen expectation; a kept suite run (bbx-run-suite --log) carries its register's histogram (D32)
+  coverage: docset_driver: 20/23
+  coverage: census_recount: rows=300 recountable=244 not_recountable=56 (BBX-18: the census claims no command re-derives)
+  note: docset_fixture: docset-fixture records=12 documents=3 claims=20 wrong=1 paraphrase=1 unbindable=2 scenarios=3 expectations=12 truth_logs=3
+  note: docset_driver: paraphrase 1
+  note: docset_driver: unbindable 2
+  note: docset_driver: stale 0
+  note: docset_driver: mismatch 1
+  note: set_schema: verdict-lines-frozen 38
+  note: docset_suite: suite-runs 17 (each kept under --log)
+  note: cli_fixture: fakecli-fixture records=9 commands=5 options=9 refusals=7 scenarios=9 expectations=12 truth_logs=9 band_fields=1
+  note: census_recount: drift census=bbh.md recorded=10a82d2 tip=447e5d26bc23 ahead=1 rows_moved=1 ids=A2
+  note: census_recount: drift census=vampiresaved.md recorded=0cdd9726 tip=6bead0196102 ahead=25 rows_moved=47 ids=A1,A2,A21,A22,A23,A24,A25,A26,A27,A28,A30,A32,A33,A35,A37,A45,A48,A51,A59,A62,A63,A64,A66,A67,A68,A69,A76,A77,A78,A80,A84,A85,A86,A87,A88,A89,A90,A91,A93,A95,A111,A114,A118,A120,A121,A122,A127
+  note: fidelity_bbh: bbh-drift baseline=10a82d2 tip=447e5d2 ahead=1
+  note: fidelity_bbh: bbh-source tip=447e5d2 porcelain=0 untouched-by-construction=clone
+  note: fidelity_bbh_s2: bbh-drift baseline=10a82d2 tip=447e5d2 ahead=1
+  note: fidelity_bbh_s2: bbh-source tip=447e5d2 porcelain=0 untouched-by-construction=clone
+  note: suite: suite-runs 25 (each kept under --log)
+  BBX-14 (more than one run): met — 24 gates, 0 verdict differences against the run started 2026-09-10T17:16:31Z at the same HEAD
+  last re-baseline: 2026-09-10 (bbx-5, R28): bbh `f675710` → `10a82d2` — bbh's commit "config: the M18 re-point that sat dirty since 14z-144; the example lib's root one level too high; the extraction counts dated" (7 files; G11 fixed there; the four dirty files of R8 committed). Measured before the move by the D20 override: F12, F13, F14, F14f, F16, F17 identical on a clone of `10a82d2`. Moved with it: D20; D12's five `[sweep].placeholders` (by definition); the census `docs/census/bbh.md` (A2 19 → 20). No verdict text changed on either side.
+what this green does NOT assert (declared by each gate's header):
+  classify: that a verdict word printed by a gate outside the runner is read at all: the classifier reads exit status first, then the log; a PASS printed after a non-zero exit is FAIL by design
+  config: the meaning of a consumer's keys: only that the layers resolve (consumer over kind profile over kind-blind default) and that dumps are stable
+  tier: that a gate reaching an instrument through a path the source regex does not match is seen: the depth and the regex are the limit
+  static_runner: the sweep runner or any gate that needs an instrument: this is the pre-commit chain only
+  static_runner: runtimes as anything but this host under this load
+  controls: that a control is RIGHT — only that a declared control fired and an undeclared one is red (docs/controls.md)
+  sweep_runner: speed-up on a real consumer: the queue is measured on stub gates with sleeps, not on an instrument-tier suite
+  sweep_runner: a gate that escapes its clone by an absolute path: clone-per-slot pins the cwd, nothing more
+  sweep_runner: portability beyond macOS: mkfifo and exec 8<> are POSIX, not yet run on Linux or WSL
+  fingerprint: the identity of any artifact that is not a single file: the kind-blind fingerprint is file-sha1 (D16)
+  rulings_shape: the prose of a ruling: only its heading, its answer line and its DECISIONS row are read
+  readout: that a declared blind spot is true or complete: the screen prints what the header says
+  readout: the sweep runner's runs: only bbx-run-static --log and bbx-run-suite --log are read
+  readout: that a register row's class is true of its file: the suite screen prints what the register says (gates/provenance.sh keeps it complete and inside the vocabulary)
+  close_sweeps: that every corrected claim has a register row: the register is written by hand at the correction (a claim nobody registered is not swept)
+  close_sweeps: step 9 of the close (the lineage untouched): that is the recount's clone and the fidelity gate's proof, not this gate
+  temporal: anything about a real log: every shape here is synthesized (fixture class); the classes' fitness for a consumer is that consumer's ratification
+  temporal: the dispatcher's spec line and the suite's dispatch (S2 steps 2 and 3): the comparators are called directly
+  temporal: that the thresholds are right for any subject: they are the frame-driven profile's (D23) and a consumer's override needs R25's ruling row (gates/thresholds.sh)
+  thresholds: that a ruling id in [thresholds].rulings names a ruling that exists: any non-empty string is accepted here; the consumer's rulings-shape gate is where an id is checked
+  thresholds: the values' fitness for any subject: 2 / 60 / 8 are bbh's ratified policy carried in the frame-driven profile (D23), not a measurement of anything here
+  compare_dispatch: the suite's dispatch around this library (which file is read, how many runs, the .sha1 and .diverge kinds' own paths): S2 step 3
+  compare_dispatch: anything about a real log or a real mask: every log is synthesized and the masks are strings the guard compares, never applied
+  expectation_kinds: the content of any expectation file: only its extension and its stem are read here
+  expectation_kinds: the suite's use of the dispositions (S2 step 3)
+  provenance: that a row's class is TRUE of its file: the register is written by hand at the freeze; only completeness and the vocabulary are checked
+  provenance: bbh's example register (markdown, a consumer list of classes): it is bbh's and F19 (S6) reads it under R11
+  docset_fixture: that any claim in the fixture is BOUND, MISMATCH or anything else (gates/docset_driver.sh and gates/set_schema.sh): only that the files are the generator's, the design is chiral, and the register is complete and tracked
+  docset_fixture: the suite over the fixture: gates/docset_suite.sh
+  docset_driver: the verdict text of the exact, set and schema comparators (S3 step 3): the truth is compared here with cmp and diff
+  docset_driver: the suite over the fixture (identity, the kinds loop, the coverage NOTE on the screen): gates/docset_suite.sh
+  docset_driver: prose, reasoning and causal claims in a document: only sentences in a declared form and the listed rows are claims
+  docset_driver: the truth of the artifact itself: a document that agrees with a wrong artifact reads BOUND
+  docset_driver: a nested document tree or a second artifact per set (DOCSET_VIEW is refused): S4 or a consumer's question
+  set_schema: the suite's loop over the kinds, the kept-run rows (scenario, kind), NOT-EVALUATED on a schema FAIL and --freeze for the shrink-only kind: gates/docset_suite.sh
+  set_schema: anything about a real document set: every input is the fixture's (fixture class) or a perturbed copy of it
+  set_schema: the schema family on a second format or a second consumer (S4's JSON): tsv is its one format and the fixture's artifact its one consumer (BBX-25 unmet, stated)
+  docset_suite: anything about a real document set: every input is the fixture's (fixture class) or a perturbed copy of it; the forms, guards and lexical classes are the fixture's (D35, D39, D40)
+  docset_suite: bbh's precedence loop and its printed text: gates/fidelity_bbh_s2.sh (F12) and gates/suite.sh
+  docset_suite: the readout screen beyond the lines checked here (the verdict, the pairings, the coverage and note lines, BBX-14, the driver's blind spots): gates/readout.sh
+  docset_suite: a second consumer of the kinds loop (S4's command-line kind): one profile drives it here (BBX-25 unmet, stated)
+  cli_fixture: the driver (S4 step 2): the tool is run here DIRECTLY by the generator's tool-check; no log in D47's grammar is produced by anything but the generator, so the truth logs describe the design, not a run
+  cli_fixture: the comparators over the new kinds (`unordered`, `schema` json, `band`: S4 step 3) and the suite over the fixture (step 4): only that the files are the generator's, the design is chiral, the tool matches it, and the register is complete and tracked
+  census_recount: the truth of the not-recountable rows at their commits: they are named and counted, never run
+  census_recount: that a hand-read citation says what its row claims: only that the line exists
+  fidelity_bbh: anything about a suite, a comparator or an expectation: slice S2
+  fidelity_bbh: bbh's example's correctness (G11 is bbh's to fix)
+  fidelity_bbh: F15 unless BBX_FIDELITY_F15=1 was set for the run
+  fidelity_bbh_s2: the kept suite run (--log) — bbh has none, so F12 diffs printed text only; the kept run's ground truth is gates/suite.sh
+  fidelity_bbh_s2: anything about a real subject: F17's and F16b's inputs are synthesized, F16a's are the fake machine's (fixture class); the shapes are the lineage's paid-for cases and nothing else
+  fidelity_bbh_s2: bbh's correctness: identical output on both sides is fidelity, not truth
+  suite: any driver but the fake: a MAME or FBNeo driver is bbh's and untested here (bbh's own F8 rows)
+  suite: the .sha1 kind's evidence: it is `self` class by construction (E4) and the register that says so is gates/provenance.sh's
+  suite: the readout's reading of a kept suite run: gates/readout.sh reads the suite screen, gates/docset_suite.sh its coverage lines
+  gates declaring no blind spot: 0   (a gate nobody has asked what its green leaves out)
+```
+
+## What changed
+
+**The plan first (BBX-19), in its own commit `ddeb0aa`.** Five wordings of `docs/plans/S4.md` the built fixture differs from, each measured on the shadow build before the tree saw it: the tool lives at `fixture/fakecli/subject/fakecli.py`, in its own directory, so the file-sha1 whole-set key (`dir_sha1` over the tool's directory, not recursive) covers the subject and never its generator or config (X14, also `docs/generality.md`); 9 options — `--sleep <s>`, needed by §5's timeout control, was missing from the row (X15); 7 refusal paths, counted by the generator, not the 2 the scenarios exercise (X16); `CLI_PATH` is the suite's search-path variable and not in `hermetic_unset`, D33's shape (X17); 5 commands — `list --unordered` is an option (X18); `stdin` is an array of lines because the TOML subset refuses `\n` in a basic string, `stdin_file` relative to the scenario file's directory (X19). And one sequencing note without a retraction: `log_summary` joins the profile with the driver at step 2, as D43 joined the document-set profile at S3 step 4.
+
+**The profile** `command-line` in `lib/py/bbx/config.py` KINDS (D45): instrument word "tool"; portable (no `static_needs_env`, no tier pattern); `scenario_ext = "cli"` (D34 amended), `driver = "cli"`, `rompath_env = input_env = CLI_PATH`, `hermetic_unset` the driver family `CLI_NONDET` / `CLI_TIMEOUT` / `CLI_KEEP_ENV`; `[fingerprint]` file-sha1 over `{set}.py`; the kinds table the kind-blind three plus `truth` (exact), `unordered` (set), `schema` (schema), `band` (tolerant-numeric) — the exact, set and schema families each gain their second consumer on paper here and in code at step 3; no temporal family, no thresholds.
+
+**The token vocabulary** `lib/py/bbx/cli.py` (D47), the S3 shape: one writer of every token, imported by the generator now and grown into the driver's core at step 2 — `0 exit:<n>` first; `<i> line:<sha1>` per stdout line, or under `fields = "json"` `<i> field:<name>:<sha1-of-canonical-JSON>` per key in sorted order and `field:<name>:band` for a band field; `<i> err:<sha1>`; `<i> file:<name>:<sha1-of-bytes>`; `END <n>` with n the last index.
+
+**The fixture** `fixture/fakecli/` (BBX's third consumer; `bbx.toml` kind `command-line`, `default_set = "fakecli"`, `replays_dir = "scenarios"`): `mkfakecli.py` writes everything from the design and re-derives under `--check` — `subject/fakecli.py` (the TOOL, generated from a template with the design table injected: 5 commands `list show stat join report`, 9 options, 7 refusal paths in cliguard's shape, `FAKECLI_SALT` the one environment variable it declares), nine `.cli` scenarios (D46), nine `truth` files with their truth logs written through `bbx.cli` from the design (never by running the tool), `02_unordered.unordered` (the multiset of the unordered listing, one bare table per row with `line` and `sha1`), `03_show_json.schema` (five keys sorted, `str str int int list`, the list with `items_op`/`items_n`; D49), `04_band.band` (`size` in `[236, 270]`, measured by the generator over seeds 1..9 of the design's `231 + (seed × 29) mod 41`; D48), `expected/registry.tsv` (the whole-set key → `fixture`) and `PROVENANCE.toml` (22 rows: 21 `fixture`, 1 `registry`). Chiral by construction (D50): D36's ten predicates plus the rank order neither the name order nor its reverse, no name, id or weight shared with `fixture/docset`'s design (read from `mkdocset.py` through the harness root — measured), the join stdin in neither sorted order. **The tool-check:** `--check` also runs the tree's tool for every scenario under D6's clean environment in a TMPDIR working directory and compares exit, stdout, stderr and emitted files with what the design says — the fixture's own BBX-5 pairing (the design the author, the tool the artifact), so the truth logs are known to describe a tool that exists.
+
+**The gate** `gates/cli_fixture.sh` (portable; the 24th gate), four controls each on a copy with the perturbation proven applied: `edited-value` (one weight in the copy's tool → `DIFFERS subject/fakecli.py`), `symmetric-fixture` (two equal weights → `weights-distinct` named), `tool-drifts-from-design` (a shadow generator with the list line's format changed, the copy regenerated from it so every file equals that generator's, then `--check` → `TOOL-DIFFERS 01_list: stdout line 1 differs`), `unknown-kind-under-profile` (a `.masked` beside a `.cli` → `UNKNOWN-KIND`, non-zero: R23's detector on the fourth profile). It also proves every TOML-subset file the fixture introduces is read by the subset parser (22 files, 0 refused — R40's caveat measured, no new TSV but the registry the kernel already had), that the registry row is `bbx.fingerprint --set-key` over `subject/`, that the register is complete both ways and every registered file is tracked by git (G22).
+
+**Built in a shadow tree first** (`git archive HEAD`, `git init`, the gate through the classifier). The shadow caught three defects of the new gate and generator before the tree saw them: the gate's two `sed` perturbations were written in the design's double-quoted form while the generated tool carries Python's repr (single quotes) — both controls read "the perturbation did not apply"; a COPIED generator resolved `fixture/docset/mkdocset.py` relative to itself, and a copy under TMPDIR has no sibling (a traceback under the `tool-drifts-from-design` control); the fix's parent depth off by one (`lib/` instead of the root). Then the tree caught what the shadow could not: with the fixture files copied in but not yet staged, `bbx.provenance` refused all 22 rows as naming files git does not track — the G22 guard, firing on the mirror case (the shadow had committed them). Staged, PASS. Paid: four gate runs of ~3 s and one battery aborted at its first minute. Learnings (R27): two hazard lines in `HANDOFF.md`.
+
+## Counts, separately (measured by `gates/cli_fixture.sh` and the generator's NOTE)
+
+| | |
+|---|---|
+| the fixture's NOTE | `records=9 commands=5 options=9 refusals=7 scenarios=9 expectations=12 truth_logs=9 band_fields=1` |
+| files under `subject/`, `scenarios/`, `expected/` | 33 (1 tool, 9 scenarios, 12 expectations, 9 truth logs, the registry, the register) |
+| TOML-subset files read by the subset parser / refused | 22 / 0 |
+| the register | 22 rows, complete both ways, every file tracked |
+| the kinds under the profile | 7 (the kind-blind three + 4); `.masked` UNKNOWN-KIND |
+| lines changed in `bin/bbx-run-suite`, `lib/sh/compare.sh`, `compare_exact.py`, `compare_set.py`, `compare_schema.py`, `expectations.py`, `finding.py` | 0 (`git diff --stat a2014a2 -- …` empty: the loop and the three families are untouched, the plan's design target for step 4 already holding at step 1) |
+| the plan's design counts vs built | commands 6 → 5, options 8 → 9, refusals 2 → 7 (each corrected in the plan first, X15/X16/X18); records 9 × 4, scenarios 9, expectations 12, truth logs 9, register 22 as designed |
+| new files' sizes | `cli.py` 90 lines, `mkfakecli.py` 557, the generated `fakecli.py` 140, `cli_fixture.sh` 95 |
+| the gate's runtime | ~3 s (measured once, not gated) |
+| gates / controls in the battery after step 1 | 24 / 82, confirmed by the close battery below |
+
+## What it rests on
+
+The gate run in the tree through the classifier with its exit tested (`cli_fixture` 4 controls), the eight neighbouring gates the same way in the shadow (`config`, `expectation_kinds`, `fingerprint`, `controls`, `readout`, `tier`, `provenance`, `static_runner`: PASS); the generator's own `--check` on the tree; `close_sweeps` PASS (`retractions=19 retraction_hits=0 deferrals=0 defaults_rows=50 citations=367 unresolved=0`) and `rulings_shape` PASS on the tree; the two close batteries below.
+
+## What this green does NOT assert
+
+- The driver (step 2): the tool is run here DIRECTLY by the generator's tool-check; no log in D47's grammar is produced by anything but the generator, so the truth logs describe the DESIGN. Step 2's gate compares the driver's log with each truth log byte for byte, and hashes one point in `sh` beside `bbx.cli` (a lineage-independent check on the one writer, BBX-15).
+- The comparators over the new kinds — `unordered` through `compare_set.py` (whose row model is the document-set's today), `schema` with `format = "json"`, `band` — and their verdict text (step 3); the suite over the fixture, the identity refusal, `--freeze`'s refusal to widen, `NOTE: band-fields` on the screen (step 4); the adapters and the self subject (step 5); the file census as a gate (step 6).
+- That a band is right for anything but the fixture: `[236, 270]` is class `fixture` (R11), a measurement of a designed function.
+- The fitness of D46's grammar or D47's vocabulary for a real tool: the first real consumer is the detector (BBX-24, BBX-25). A tool that is a directory, a non-UTF-8 stdout, an emitted TREE, a fractional band (§9 of the plan).
+- D9's default kind stays `frame-driven` with a fourth profile in the table (the plan's choice); a config for any other kind names it.
+- Any platform but Darwin arm64 (R21). Executable controls (R29, S6): every `CONTROL FIRED` here is the gate's self-report.
+
+# CLOSE — bbx-13 (2026-09-10)
+
+**Close measurements.** Green first, twice, kept (`build/selftest_20260910T171631Z`, `build/selftest_20260910T172316Z`): `PASS 24 SKIP 0 FAIL 0 MISSING 0`; `controls fired 82 / declared 82; gates with no declaration: 0; red: 0`; `ok: no tracked file changed during the run` on both; BBX-14 met on the screen above (24 gates, 0 verdict differences at one HEAD). Fidelity F12–F17 unchanged on the plain clone at `10a82d2`; bbh's tip `447e5d2` one past the baseline (a NOTE); VampireSaved past its census (a NOTE). `close_sweeps` PASS (`retractions=19 retraction_hits=0 deferrals=0 defaults_rows=50 citations=367 unresolved=0`) and `rulings_shape` PASS on the final tree. Both batteries ran on `ddeb0aa` with the step-1 files staged (porcelain 41 on the screen: the build and the ledgers this commit carries).
+
+**Retractions this sitting:** X14–X19, all the plan's (BBX-19), each corrected before step 1 landed. **Defaults:** D45–D50, D34 amended. **Incidents reviewed for learnings (R27, step 10):** four events caught before the commit, none filed as a gotcha, priced in the step-1 section above; two learnings written as hazards in `HANDOFF.md` (a generator locates a sibling fixture through the harness root; the new gate runs in the tree before the battery).
+
+**What this close does NOT assert:** anything the step-1 section's blind spots name — the driver, the comparators over the new kinds, the suite over the fixture, the adapters, the census gate (steps 2–6); bbh's tip beyond the baseline; any platform but Darwin arm64 (R21); executable controls (R29, S6).

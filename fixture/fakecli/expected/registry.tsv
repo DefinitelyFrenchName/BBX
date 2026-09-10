@@ -1,0 +1,5 @@
+# registry.tsv — whole-set key (dir-sha1 over subject/: the tool's directory) -> expectation set.
+# Written by mkfakecli.py at generation, which is the freeze (a build decision, [BBH-67]); a changed
+# tool is an UNREGISTERED identity before any scenario runs (abstraction S2).
+# sha1	expectation-set	notes
+c144d6f232c498f97c28b2bddd50f9ba575eb88b	fixture	the generated fixture; WHOLE-SET key (subject/*)

@@ -728,3 +728,51 @@ lives — bbh `[BBH-9]`).
   same caveat R34 carried; applied: every file S4 introduces is a TOML-subset file (the `.cli` scenario, the `unordered`, `schema`, `band` expectations, `expected/file_census.toml`); the kernel's pre-existing TSVs (`results.tsv` D30, `notes.tsv` D44, `registry.tsv`, `gates/sweep.tsv`) are not multiplied, and the gates adapter reads `results.tsv` by column name only, never the printed rows. Before R35 was recorded,
   `docs/generality.md`'s crash row was corrected in its own commit (X13,
   BBX-19). S4 step 1 may open; the STOP is lifted.
+
+## bbx-13 — S4 step 1 built: the command-line profile, the `.cli` scenario, the token vocabulary, the fixture and its gate (2026-09-10)
+
+- Opened on the bbx-12 HEAD `a2014a2` with the battery GREEN (23 gates,
+  78/78, tree unchanged; the two drift NOTEs the handoff predicted) — the
+  re-derivation step of the ritual. R21 the only open ruling; R35–R40 answered
+  and S3 ruled DONE after the bbx-12 close, so step 1 was cleared to open.
+- The plan corrected FIRST, in its own commit `ddeb0aa` (BBX-19), on five
+  wordings the built fixture differs from — each measured on the shadow build
+  before the tree saw it: the tool at `subject/fakecli.py` so the whole-set key
+  covers the subject alone (X14), 9 options with `--sleep` (X15), 7 refusal
+  paths (X16), `CLI_PATH` not scrubbed — D33's shape (X17), 5 commands (X18),
+  `stdin` as an array of lines under the subset's no-escape rule (X19).
+- Built (the readout's bbx-13 section): the `command-line` profile (D45), D34
+  amended with `cli`, the `.cli` grammar (D46), the token vocabulary in
+  `lib/py/bbx/cli.py` (D47 — the one writer, grown into the driver at step 2),
+  the band spec's shape (D48), the JSON schema spec's shape and seven types
+  (D49), the fixture's chirality predicates (D50); `fixture/fakecli/` with its
+  generator's `--check` (predicates on the tree's tool, regenerate-and-diff,
+  and the TOOL-CHECK: the tool run directly for every scenario against the
+  design); `gates/cli_fixture.sh`, 4 controls. Defaults D45–D50: six rows,
+  each with its class, before first use (BBX-24).
+- The design targets: the kinds loop, the dispatcher and the three existing
+  families changed by ZERO lines (measured: `git diff --stat a2014a2` over the
+  seven files empty); 22 TOML-subset files read by the subset parser, 0
+  refused (R40's caveat measured); no new TSV.
+- No ruling raised; R21 stays open. No retraction beyond the plan's six.
+- Incidents: none filed as a gotcha. Four events caught before the commit,
+  priced in the readout: three in the shadow (the gate's `sed` perturbations
+  written in the design's quoting while the generated tool carries Python's
+  repr; a copied generator locating the docset design relative to itself; the
+  fix's parent depth off by one) and one in the tree — `bbx.provenance`
+  refusing 22 rows naming files git did not yet track, the G22 guard on the
+  mirror case (the shadow had committed what the tree had not staged). Paid:
+  four gate runs of ~3 s and one battery aborted at its first minute.
+- Step 10 (R27): re-read for learnings — two, both hazards in `HANDOFF.md`:
+  a generator that reads a sibling fixture locates it through the harness
+  package root, never through its own path (a copy has no siblings); and the
+  new gate is run in the TREE, through the classifier, before the battery —
+  the shadow cannot see an unstaged file, and the battery would have gone red
+  on the same line six minutes later. No mechanism: both are the practice.
+- Close: GREEN twice at one HEAD (`build/selftest_20260910T171631Z`, `build/selftest_20260910T172316Z`): 24 gates, 82/82 controls, tree unchanged, BBX-14 met; close_sweeps and rulings_shape PASS; one close commit, pushed (R22).
+- Anti-hyperfocus (BBX-27): the thread was step 1 as the plan wrote it; the
+  one place it pulled — a tool-check inside `--check`, not in the plan — was
+  taken because a truth log written from a design nobody ran is a claim about
+  a tool that may not exist (BBX-5), and it is 30 lines. Step 2 is the next
+  most valuable thread: nothing here is an observation until a driver writes
+  one.

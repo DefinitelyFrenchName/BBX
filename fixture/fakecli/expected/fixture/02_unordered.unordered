@@ -1,0 +1,40 @@
+[spec]
+class = "multiset"
+baseset = "fixture"
+mode = "inventory"
+
+[l1]
+line = "6 Maren 4D2B 83"
+sha1 = "6821774e36f54bac676cf8d7a67678fab3e34a40"
+
+[l2]
+line = "2 Orsolya 7E19 26"
+sha1 = "70f39ed0eea8e081e58dab6f4093ccc1418192e6"
+
+[l3]
+line = "8 Perrin 1B8C 94"
+sha1 = "fc91228c398380c4b31e5376fa89568898e9fbb6"
+
+[l4]
+line = "4 Quillon 9A35 17"
+sha1 = "c422c78bd6d95c3488ec173162ead46eb027c3dd"
+
+[l5]
+line = "1 Rosalind 3F60 48"
+sha1 = "b447285ad32e4dd9ecce0707941a93aec477a57d"
+
+[l6]
+line = "9 Sable 6C97 35"
+sha1 = "c44d3d8332db4c99c2d19c4e9b550c51e78190b0"
+
+[l7]
+line = "3 Tobin 2E4A 76"
+sha1 = "9d16dea465c6405d9e5a44125a578b275f6112b0"
+
+[l8]
+line = "7 Ulric 8B13 59"
+sha1 = "f9b898f0212d595092438813ecdba1fe3446c725"
+
+[l9]
+line = "5 Vesna 5A7D 82"
+sha1 = "d75e53de7e7a51835c7e9e584a33540ad193fef3"

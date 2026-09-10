@@ -1,0 +1,7 @@
+# the scenario (R35, D46): an INVOCATION — arguments one per element (never a shell line), stdin as lines,
+# the files the tool must emit, the band fields, the variables the tool may see. Nothing here is an expected value.
+[scenario]
+args = ["list"]
+
+[env]
+FAKECLI_SALT = "9"

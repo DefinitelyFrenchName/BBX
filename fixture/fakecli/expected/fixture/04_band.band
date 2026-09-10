@@ -1,0 +1,9 @@
+[spec]
+class = "band"
+baseset = "fixture"
+measured = "mkfakecli.py: size(seed) over seeds 1..9 of the design"
+
+[b1]
+field = "size"
+min = 236
+max = 270

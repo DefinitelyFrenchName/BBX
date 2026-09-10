@@ -20,3 +20,4 @@ docset_fixture
 docset_driver
 set_schema
 docset_suite
+cli_fixture

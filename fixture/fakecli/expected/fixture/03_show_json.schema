@@ -1,0 +1,26 @@
+[spec]
+class = "schema"
+baseset = "fixture"
+format = "json"
+
+[k1]
+name = "id"
+type = "str"
+
+[k2]
+name = "name"
+type = "str"
+
+[k3]
+name = "rank"
+type = "int"
+
+[k4]
+name = "tags"
+type = "list"
+items_op = ">="
+items_n = 1
+
+[k5]
+name = "weight"
+type = "int"
