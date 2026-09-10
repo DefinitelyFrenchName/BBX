@@ -21,42 +21,78 @@ class = "fixture"
 refreeze = "python3 fixture/docset/mkdocset.py"
 
 [e4]
+file = "fixture/01_all.truth"
+describes = "the expected observation (exact, by index) of scenario 01_all"
+class = "fixture"
+refreeze = "python3 fixture/docset/mkdocset.py"
+
+[e5]
 file = "fixture/02_weights.claims"
 describes = "the claim inventory of scenario 02_weights"
 class = "fixture"
 refreeze = "python3 fixture/docset/mkdocset.py"
 
-[e5]
+[e6]
 file = "fixture/02_weights.covered"
 describes = "the covered set (shrink-only) of scenario 02_weights"
 class = "fixture"
 refreeze = "python3 fixture/docset/mkdocset.py"
 
-[e6]
+[e7]
 file = "fixture/02_weights.schema"
 describes = "the artifact's shape of scenario 02_weights"
 class = "fixture"
 refreeze = "python3 fixture/docset/mkdocset.py"
 
-[e7]
+[e8]
+file = "fixture/02_weights.truth"
+describes = "the expected observation (exact, by index) of scenario 02_weights"
+class = "fixture"
+refreeze = "python3 fixture/docset/mkdocset.py"
+
+[e9]
 file = "fixture/03_rows.claims"
 describes = "the claim inventory of scenario 03_rows"
 class = "fixture"
 refreeze = "python3 fixture/docset/mkdocset.py"
 
-[e8]
+[e10]
 file = "fixture/03_rows.covered"
 describes = "the covered set (shrink-only) of scenario 03_rows"
 class = "fixture"
 refreeze = "python3 fixture/docset/mkdocset.py"
 
-[e9]
+[e11]
 file = "fixture/03_rows.schema"
 describes = "the artifact's shape of scenario 03_rows"
 class = "fixture"
 refreeze = "python3 fixture/docset/mkdocset.py"
 
-[e10]
+[e12]
+file = "fixture/03_rows.truth"
+describes = "the expected observation (exact, by index) of scenario 03_rows"
+class = "fixture"
+refreeze = "python3 fixture/docset/mkdocset.py"
+
+[e13]
+file = "fixture/logs/01_all.log"
+describes = "the truth log, from the design of scenario 01_all"
+class = "fixture"
+refreeze = "python3 fixture/docset/mkdocset.py"
+
+[e14]
+file = "fixture/logs/02_weights.log"
+describes = "the truth log, from the design of scenario 02_weights"
+class = "fixture"
+refreeze = "python3 fixture/docset/mkdocset.py"
+
+[e15]
+file = "fixture/logs/03_rows.log"
+describes = "the truth log, from the design of scenario 03_rows"
+class = "fixture"
+refreeze = "python3 fixture/docset/mkdocset.py"
+
+[e16]
 file = "registry.tsv"
 describes = "whole-set key of subject/ -> fixture"
 class = "registry"

@@ -143,3 +143,27 @@ first, which caught one defect before the tree saw it. No driver, no
 59/59 controls. Fidelity F12–F17 diff empty on the plain clone at `10a82d2`
 after the loop change (104 pairings). bbh's tip `447e5d2`, a NOTE. Defaults
 D1–D37. Gotchas G1–G19.
+
+## bbx-8 — 2026-09-10 (session 8: S3 step 2 — the extractor, the driver, the truth kind, the driver gate)
+
+**Status (bbx-8 close, 2026-09-10):** slices S1 (but for R21's platform run)
+and S2 complete; **S3 steps 1 and 2 built** (`docs/plans/S3.md` §8.1–8.2;
+R31–R34 answered). Step 2: the extractor `lib/py/bbx/docset.py` (quote from
+the document, derive from the artifact, bind; the closed status vocabulary
+D37; the two strings and the token defined once, D38; the lexical classes and
+the record key, D39; the unlisted-claim guards, D40; a self-test on synthetic
+lines every run), the driver `drivers/docset.sh` (bbh's four arguments;
+`DOCSET_PATH`; REFUSED exit 3 on a form no extractor implements, on
+`DOCSET_VIEW`, `DOCSET_FORMS` and the frame-driven and guard families; exit 1
+DISCARDED), `drivers/README.md`, the generator writing the `truth` kind from
+the DESIGN (`expected/fixture/<s>.truth` + `logs/<s>.log`, register rows
+`fixture`), and `gates/docset_driver.sh` (7 controls, portable). Built in a
+shadow tree first, which caught one defect (G20) before the tree saw it; the
+plan's shifted-artifact prediction corrected in its own commit (G21, X9).
+Every scenario's log equals the design's truth byte for byte, twice
+(`01_all` END 23, `02_weights` END 7, `03_rows` END 7; coverage 20/23 on
+`01_all`). No `set` / `schema` / `exact` comparator, no suite loop over the
+kinds yet (steps 3–4). `bin/bbx selftest` GREEN twice at one HEAD (BBX-14
+met): 21 gates, 66/66 controls. Fidelity F12–F17 diff empty on the
+plain clone at `10a82d2` (104 pairings). bbh's tip `447e5d2`, a NOTE.
+Defaults D1–D40. Gotchas G1–G21. Retractions X1–X9.

@@ -277,3 +277,33 @@ mechanism — S6's rot gates should grep generated and printed text for
 `slice S[0-9]`, `until then`, `not yet` and refuse them outside a history
 ledger, the deferral sweep's sibling (`close_sweeps` already refuses the
 three deferral tokens in prose); filed for S6, not built here.
+
+## G20 — The extractor's self-test could not name a broken form: with a regex broken, its own true line hit the number guard and the driver printed a REFUSED line about a synthetic sentence (paid: 1 gate run, in the shadow tree; 2026-09-10)
+`lib/py/bbx/docset.py`'s self-test binds its synthetic lines through the
+same path a document takes — and that path REFUSES an unlisted line that
+carries a digit (D40). The `extractor-shadow` control (a shadow copy with the
+`of-is` regex broken) therefore made the true line "The weight of Zork is
+53." match no form and trip the number guard: the driver exited 1, the run
+was discarded — correct — but the message was `REFUSED: … synthetic.md:1 (an
+unlisted number …)`, not "form 'of-is' stopped matching", and the control
+read DEAD on its first run, in the shadow, before the tree saw it. Fix: the
+self-test catches the refusal on its true line and reports the form as not
+found. Re-anchors BBX-5 (prove the instrument on a known positive before its
+first real use: the control was written before the tool was trusted and it
+found the tool's blind spot). Learning (R27): a trap, not a mechanism — a
+self-test that runs through the tool's real path inherits the tool's real
+refusals and must catch them; the control that found it is the mechanism.
+
+## G21 — The plan predicted a positional effect from a keyed view: "the first data row deleted makes every bound claim MISMATCH" (paid: 0 — the gate's first run measured STALE at two indices; 2026-09-10)
+`docs/plans/S3.md` §5's "shifted artifact" control was written in SMS's
+`base+1` shape, where an address is positional and a shift moves everything.
+The document-set artifact view is keyed by the record's name (D39): deleting
+the artifact's first row turns the two claims about that record STALE
+(indices 1 and 10 of `01_all`) and moves nothing else — measured by
+`gates/docset_driver.sh` on its first run. The plan corrected first, in its
+own commit (BBX-19; retraction X9), then the gate asserts the measured shape.
+Re-anchors §1 (a prediction written with certainty is the one to measure)
+and BBX-16 (the VIEW decides what a perturbation means; the same deletion
+under a positional view is a shift). Learning (R27): a mechanism candidate
+for S4 — the command-line kind's output lines ARE a positional view, and
+`base+1` is its control; nothing to build here.

@@ -19,10 +19,14 @@ why every expectation it freezes is class `fixture` — evidence about no real s
   expected/fixture/<s>.claims  the claim INVENTORY per scenario (multiset, both ways; R33/R34)
   expected/fixture/<s>.covered the COVERED set per scenario (BOUND + PARAPHRASE; shrink-only)
   expected/fixture/<s>.schema  the artifact's shape (four columns, a rows line; R34)
+  expected/fixture/<s>.truth   the spec `exact fixture`: the run's log is compared BY INDEX against
+  expected/fixture/logs/<s>.log   the TRUTH log — the expected token per claim, written from the DESIGN
+                               (this table's statuses) with lib/py/bbx/docset.py's quoted/derived
+                               strings and token, so the truth and the driver's log agree by
+                               construction and disagree only when the BINDING disagrees with the
+                               design (S3 step 2; R31, D37, D38)
   expected/registry.tsv        the WHOLE-SET key of subject/ (docs + artifact, dir-sha1) -> `fixture`
-  expected/PROVENANCE.toml     every expectation file, class `fixture`; the registry row `registry`
-The `.truth` logs (the expected token per claim) need the driver's token grammar and are written by
-S3 step 2 (`--truth`, importing bbx.docset); until then the fixture has no truth kind.
+  expected/PROVENANCE.toml     every expectation file and truth log, class `fixture`; the registry row `registry`
 
 CHIRAL BY CONSTRUCTION (BBX-15): a mirror, order or orientation error in a reader cannot hide if no
 value equals its own mirror and no mirror of a value is another value. The predicates are asserted
@@ -159,6 +163,22 @@ def claims_of(scenario):
     return rows
 
 
+def truth_log(rows):
+    """The expected observation of a scenario, from the DESIGN: docset.py's strings and token over
+    the design's statuses (never from running the driver — that would freeze the binder's own answer)."""
+    from bbx import docset
+    lines = []
+    for i, (d, line, form, name, field, value, status) in enumerate(rows, start=1):
+        quoted = docset.quoted_text(DOCS[d][line - 1][0])
+        if form == "unbindable":
+            derived = docset.derived_unbindable(value)       # `value` carries the reason
+        else:
+            derived = docset.derived_text(name, field, _val(name, field))   # the ARTIFACT's value, not the claim's
+        lines.append(f"{i} {docset.token(status, quoted, derived)}")
+    lines.append(f"END {len(rows)}")
+    return "\n".join(lines) + "\n"
+
+
 def toml_rows(spec, rows, prefix):
     lines = ["[spec]"] + [f'{k} = "{v}"' for k, v in spec] + [""]
     for i, (d, line, form, _n, _f, _v, status) in enumerate(rows, start=1):
@@ -195,6 +215,8 @@ def files():
         out[f"expected/{EXPSET}/{s}.covered"] = toml_rows(
             (("class", "multiset"), ("baseset", EXPSET), ("mode", "shrink-only")),
             [r for r in rows if r[6] in ("BOUND", "PARAPHRASE")], "c")
+        out[f"expected/{EXPSET}/{s}.truth"] = f'[spec]\nclass = "exact"\nbaseset = "{EXPSET}"\n'
+        out[f"expected/{EXPSET}/logs/{s}.log"] = truth_log(rows)
         sch = ["[spec]", 'class = "schema"', f'baseset = "{EXPSET}"', 'format = "tsv"', ""]
         for i, (c, t) in enumerate(COLUMNS, start=1):
             sch += [f"[col{i}]", f'name = "{c}"', f'type = "{t}"', ""]
@@ -219,7 +241,8 @@ def registry_and_register(root, written):
         if not rel.startswith("expected/") or rel.endswith("registry.tsv"):
             continue
         i += 1
-        what = {"claims": "the claim inventory", "covered": "the covered set (shrink-only)", "schema": "the artifact's shape"}[rel.rsplit(".", 1)[1]]
+        what = {"claims": "the claim inventory", "covered": "the covered set (shrink-only)", "schema": "the artifact's shape",
+                "truth": "the expected observation (exact, by index)", "log": "the truth log, from the design"}[rel.rsplit(".", 1)[1]]
         rows += [f"[e{i}]", f'file = "{rel[len("expected/"):]}"', f'describes = "{what} of scenario {Path(rel).stem}"',
                  'class = "fixture"', 'refreeze = "python3 fixture/docset/mkdocset.py"', ""]
     i += 1
@@ -253,7 +276,8 @@ def counts():
         "paraphrase": sum(1 for r in allrows if r[6] == "PARAPHRASE"),
         "unbindable": sum(1 for r in allrows if r[6] == "UNBINDABLE"),
         "scenarios": len(SCENARIOS),
-        "expectations": 3 * len(SCENARIOS),
+        "expectations": 4 * len(SCENARIOS),
+        "truth_logs": len(SCENARIOS),
     }
 
 

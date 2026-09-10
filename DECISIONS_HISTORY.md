@@ -464,3 +464,40 @@ lives — bbh `[BBH-9]`).
   generator's and chiral, the profile resolves, and bbh's suite text is
   unchanged by the loop change; it says nothing about binding, which no
   code yet does.
+
+## bbx-8 — 2026-09-10
+
+- Open: `bin/bbx selftest` GREEN on `e398abd` (20 gates, 59 / 59 controls,
+  tree unchanged; the two expected drift NOTEs — bbh one ahead, VampireSaved
+  19 ahead). Open rulings R21 only; the maintainer said "do it" to the ritual
+  and the step.
+- S3 step 2 built (docs/plans/S3.md §8.2): `lib/py/bbx/docset.py` (the
+  extractor: quote, derive, bind; the two strings and the token in one place,
+  D38; the lexical classes and the record key, D39; the unlisted-claim guards,
+  D40; the self-test every run), `drivers/docset.sh` and `drivers/README.md`
+  (the driver home D28 now has a driver), the generator's `truth` kind from
+  the design (12 expectations + 3 truth logs, register 16 rows), and
+  `gates/docset_driver.sh` (7 controls). Built in a shadow tree first.
+- No ruling raised or answered. Two defaults classes stated as ARBITRARY
+  (D39, D40) with the first real consumer named as their detector (BBX-24).
+- Incidents: G20 (the self-test's blind spot, found by the `extractor-shadow`
+  control in the shadow — paid 1 gate run); G21 (the plan's positional
+  prediction from a keyed view — paid 0; the plan corrected in its own commit
+  `d230fc7`, BBX-19, retraction X9).
+- Close: GREEN twice at one HEAD — 21 gates, 66/66 controls
+  (`build/selftest_20260910T110237Z`, `build/selftest_20260910T110956Z`); fidelity F12–F17 unchanged.
+- Step 10 (R27): G20 — a trap (a self-test running through the tool's real
+  path inherits its refusals), the control that found it is the mechanism;
+  G21 — a mechanism candidate for S4 (the command-line kind's output lines
+  are a positional view; `base+1` is its control), nothing built here. One
+  hazard for step 4 filed in HANDOFF: `--freeze` writes `logs/<s>.log` for
+  the `.sha1` kind, the same path the `.truth` kind names — the freeze must
+  refuse to overwrite a truth log (a silent provenance downgrade otherwise).
+- Anti-hyperfocus checkpoint (BBX-27): the sitting built the first driver
+  of a kind with no executable and stopped at the step boundary. Is S3 step 3
+  still the most valuable thread? Yes: the truth is compared here by `cmp` in
+  a gate; the comparator families with frozen verdict text are what let the
+  suite say it. Does the last green mean what it is treated as meaning? It
+  means the binding agrees with the design on the fixture and the seven
+  controls can each fail; it says nothing about a real document set, and the
+  guards and forms are the fixture's.

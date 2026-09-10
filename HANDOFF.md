@@ -20,15 +20,16 @@ Shape: operational map. Read this first, then `STATE.md`, then
 | the fidelity plan, F12+ | `docs/fidelity.md`; re-baseline log `docs/rebaselines.md` |
 | the slice sequence with the estimate | `docs/slices.md` |
 | slice S2's plan (measured census of the lift, design, fidelity rows, controls, rulings R23–R26) | `docs/plans/S2.md` — built bbx-3/bbx-4 |
-| **slice S3's plan** (the ancestors measured, the design contract by contract, the fixture, fourteen controls, rulings R31–R34) | `docs/plans/S3.md` — R31–R34 answered; **step 1 built (bbx-7), steps 2–5 next** |
+| **slice S3's plan** (the ancestors measured, the design contract by contract, the fixture, fourteen controls, rulings R31–R34) | `docs/plans/S3.md` — R31–R34 answered; **steps 1–2 built (bbx-7, bbx-8), steps 3–5 next**; §5's shifted-artifact row corrected at bbx-8 (G21) |
 | the maintainer readouts, one section per step, the CLOSE section last | `docs/readout.md` |
-| **the document-set kind (S3)** | the profile `lib/py/bbx/config.py` KINDS `document-set` (D33); `[suite].scenario_ext` (D34) via `bbx.expectations scenario-ext`; the fixture `fixture/docset/` (BBX's second consumer: `bbx.toml`, `mkdocset.py --check`, `subject/`, `claims/`, `expected/`); `gates/docset_fixture.sh` |
+| **the document-set kind (S3)** | the profile `lib/py/bbx/config.py` KINDS `document-set` (D33); `[suite].scenario_ext` (D34) via `bbx.expectations scenario-ext`; the fixture `fixture/docset/` (BBX's second consumer: `bbx.toml`, `mkdocset.py --check` — writes the `truth` kind from the design, `subject/`, `claims/`, `expected/` with `logs/<s>.log` the truth logs); `gates/docset_fixture.sh` |
+| **the document-set extractor and driver (S3 step 2)** | `lib/py/bbx/docset.py` (`selftest`, `run`, `map`, `summary`; the two strings and the token, D38; the forms' lexical classes and the record key, D39; the unlisted-claim guards, D40); `drivers/docset.sh` (`DOCSET_PATH`; REFUSED exit 3, DISCARDED exit 1); `drivers/README.md` (the contract cited from bbh; D28's driver home now populated); `gates/docset_driver.sh` (7 controls) |
 | the controls contract (must-fire grammar, R10) | `docs/controls.md` |
 | the defaults register (BBX-24) | `docs/defaults.md` |
 | the kernel | `bin/bbx` (dispatcher: `run-static run-suite run-sweep classify tier config controls fingerprint recount readout compare selftest`), `lib/sh/`, `lib/py/bbx/`, `bbx.toml` (BBX as its own consumer, kind `self`) |
 | the expectation register (S2 step 4, R24) | `lib/py/bbx/provenance.py` over `<expected_dir>/PROVENANCE.toml` (D31); `gates/provenance.sh`; the readout's suite screen for a kept `bbx-run-suite --log` run (D32) |
 | the comparison (S2 steps 1–3) | the temporal family `lib/py/bbx/compare_{flicker,window,composite}.py`, `check_diverge.py`, `propose_temporal.py`, `thresholds.py` (R25), `logfmt.py`; the one dispatcher `lib/sh/compare.sh` (R23: family by kind); the kinds table `lib/py/bbx/config.py` `[expectations].kinds` read by `lib/py/bbx/expectations.py` and `lib/sh/expectation_kinds.sh`; the suite `bin/bbx-run-suite` (`--log DIR`: results.tsv with a FINDING column, `lib/py/bbx/finding.py`; R26 driver home) |
-| BBX's gates and registries | `gates/*.sh` (20: 16 portable incl. `temporal`, `thresholds`, `compare_dispatch`, `expectation_kinds`, `provenance`, `docset_fixture`; 4 static incl. `fidelity_bbh_s2` (F12, F16, F17) and `suite`), `gates/portable.txt`, `gates/static.txt`, `gates/sweep.tsv` (empty) — run with `BBX_BBH_HOME=~/Developer/blackbox-harness bin/bbx selftest` (~6 min on a loaded host: the two S2 static gates are ~70 s and ~60 s) |
+| BBX's gates and registries | `gates/*.sh` (21: 17 portable incl. `temporal`, `thresholds`, `compare_dispatch`, `expectation_kinds`, `provenance`, `docset_fixture`, `docset_driver`; 4 static incl. `fidelity_bbh_s2` (F12, F16, F17) and `suite`), `gates/portable.txt`, `gates/static.txt`, `gates/sweep.tsv` (empty) — run with `BBX_BBH_HOME=~/Developer/blackbox-harness bin/bbx selftest` (~6 min on a loaded host: the two S2 static gates are ~100 s and ~60 s) |
 | the readout, generated | `bin/bbx selftest --log build/selftest_<stamp>` keeps the run; `bin/bbx readout <dir> [--against <dir>]` prints the one screen (RO1–RO3; BBX-14 met only with `--against` a second kept run at the same HEAD) |
 | the retractions register (BBX-22) | `docs/retractions.tsv`, read by `gates/close_sweeps.sh` |
 | the recount tool | `bin/bbx recount <census.md> [--only A1,A2] [--root DIR] [--in-place]` — runs on a plain local clone of the recorded commit (R18, R20); `--in-place` is the unproved escape hatch |
@@ -48,7 +49,7 @@ bbh is **never modified** from here. VampireSaved and SMS are read only.
 ## What is running
 
 Nothing in the background. `BBX_BBH_HOME=~/Developer/blackbox-harness
-bin/bbx selftest` (~6 min) is GREEN twice at one HEAD: 20 gates, 59/59 controls. Run it first
+bin/bbx selftest` (~6 min) is GREEN twice at one HEAD: 21 gates, 66/66 controls. Run it first
 thing, with `--log build/selftest_<stamp>` and no edits in flight (the runner's working-tree check reports a
 concurrent edit as DIRTIED); the census recount inside it is the
 re-derivation step of the ritual (CLAUDE.md §6.2) made into a gate.
@@ -56,7 +57,7 @@ re-derivation step of the ritual (CLAUDE.md §6.2) made into a gate.
 ## The ritual (ruled R17 at the bbx-1 close, 2026-09-09; adapted from VampireSaved VSP-17/VSP-18/VSP-162)
 
 Sessions are keyed `bbx-N`, one key per sitting, never renamed (pointers in
-readouts, gotchas and history resolve through it). The last closed sitting is **bbx-7** (2026-09-10); the next is **bbx-8**.
+readouts, gotchas and history resolve through it). The last closed sitting is **bbx-8** (2026-09-10); the next is **bbx-9**.
 
 **Open**
 1. Read this file, `STATE.md`, `docs/rulings.md`. (`CLAUDE.md` is the
@@ -124,11 +125,11 @@ readouts, gotchas and history resolve through it). The last closed sitting is **
 Steps 8 and 9 are checked, not remembered: step 8 by `close_sweeps`, step 9
 by construction (the recount's clone) and by `fidelity_bbh`'s proof.
 
-**Next-session orientation (written at the bbx-7 close, 2026-09-10)**
+**Next-session orientation (written at the bbx-8 close, 2026-09-10)**
 - Open first: `bin/bbx selftest --log build/selftest_<stamp>` and `bin/bbx readout` on it. Two `drift` NOTEs are expected: VampireSaved (past the census) and bbh (`447e5d2`, one past the baseline `10a82d2` — a README line; follow it by the R28 procedure only when a sitting needs the current tip).
-- **S3 step 2** (`docs/plans/S3.md` §8.2, §3 "D1–D5", "O1", "the claim set"; rulings R31, R33; defaults D35, D37): `lib/py/bbx/docset.py` (extract the three forms from the claim set's documents, derive from the artifact, bind; the status vocabulary; the token `<status>:<sha1-of-quoted>:<sha1-of-derived>`; the self-tests on synthetic lines every run), `drivers/docset.sh` (the four arguments; `DOCSET_PATH` the search path; REFUSED exit 3 on an unknown form, on `DOCSET_VIEW`, on any frame-driven variable; `DOCSET_NONDET`), the generator's `--truth` importing `bbx.docset` to write `expected/fixture/<s>.truth` (`exact fixture`) and `logs/<s>.log`, and `gates/docset_driver.sh` with the plan's seven driver controls. The quoted string and the derived string must be defined in ONE place (`docset.py`) so the generator's truth and the driver's log agree by construction.
-- Then step 3 (the `set`, `schema`, `exact` comparators under `compare.sh`; R34: TOML-subset expectation files, `[spec]` then named rows; a wrong column count in the artifact is a schema FAIL — the fifteenth control) and step 4 (the suite loop over the profile's kinds per scenario, R32; `--freeze` for the shrink-only kind; the coverage NOTEs).
-- Build each step in a shadow tree first (`git archive HEAD | tar -x -C <scratch>`, apply, run the touched gates there, then the two static gates): it caught one silent defect this sitting before the tree saw it.
+- **S3 step 3** (`docs/plans/S3.md` §8.3, §3 "C1, C2", "C3", "E1"; ruling R34; D37, D38): `lib/py/bbx/compare_exact.py` (the truth log against the run log BY INDEX — the first differing index named, never `cmp`'s byte offset; a run log shorter than the truth is `short`, BBX-4, C3), `compare_set.py` (multiset both ways over the TOML-subset rows of `.claims` inventory and `.covered` shrink-only; a duplicate row named as hand-editing; growth a NOTE), `compare_schema.py` (the artifact resolved from the run's `DOCSET_PATH`; header names in order, one type per column from `int | hex | str | nonempty`, the `rows` line; the FIRST violation named; a wrong column count in the artifact is a schema FAIL — the plan's fifteenth control); the three branches `exact) set) schema)` in `lib/sh/compare.sh` (the family from the kind, R23); `gates/set_schema.sh` (both directions of every class, the verdict text frozen by the gate with a shadow-tool control, C4 with no ancestor); `gates/expectation_kinds.sh` extended with the third profile. `finding.py` must classify every new verdict line (a line reading `unclassified` fails the gate). The run log a comparator reads comes from `drivers/docset.sh`; `bbx.docset map` is the triage table and `split_token` the only splitter.
+- Then step 4 (the suite loop over the profile's kinds per scenario, R32, kept-run rows `(scenario, kind)`; the coverage NOTEs from `bbx.docset summary`; `--freeze` for the shrink-only kind — and the hazard below on `logs/<s>.log`) and step 5 (the slice readout with the first file census).
+- Build each step in a shadow tree first (`git archive HEAD | tar -x -C <scratch>`, apply, run the touched gates there — `close_sweeps` needs a git tree and is run in the tree — then the two static gates or the battery): it caught one defect at bbx-7 and one at bbx-8 before the tree saw either.
 - G19's learning is a mechanism for S6 (a rot gate over generated and printed text for "until slice N" sentences); R29 (executable controls) is built in S6; R21 is still open.
 
 **Orientation carried from the bbx-1 close (still true where not superseded above)**
@@ -173,6 +174,8 @@ by construction (the recount's clone) and by `fidelity_bbh`'s proof.
 - The suite's derived configs must live IN the consumer copy: `[project].root = "."` resolves against the config file (a config under TMPDIR reads "unregistered build" because the registry is unreachable — `gates/suite.sh`'s own second defect).
 - A parameter abort under an armed EXIT trap exits 0 on this host's `/bin/sh` (G18); the classifier's shell-error clause reads it as FAIL, but a chain that tests only the exit does not.
 - A subshell that inherits `set -e` ends at its first failing command, before an `echo "exit=$?"` that follows it: a pair helper capturing a tool's exit needs `set +e` inside the subshell (the S2 fidelity gate's first defect); a state-setting helper called inside `$(…)` sets nothing the parent can read (G18).
+- `--freeze` in `bin/bbx-run-suite` writes `logs/<name>.log` under the expectation set for the `.sha1` kind — the SAME path the `.truth` kind's spec names for its truth log (`expected/fixture/logs/<s>.log`, written by the generator from the design). A freeze over a scenario that carries a `.truth` would overwrite a design-derived truth with a self-measured log: a silent provenance downgrade (BBX-3's spirit, R11). Step 4 must make the freeze refuse it (or the truth kind name another directory — a plan change, not a ruling, unless the maintainer wants one).
+- A self-test that runs through a tool's REAL path inherits the tool's real refusals (G20): `docset.py`'s guards refused its own synthetic line once a regex was broken. Catch them in the self-test, or the control reads DEAD for the wrong reason.
 - Two recounts running at once in one tree are not a known problem (the
   inflation seen while bisecting G9 was the grep, not the overlap), but the
   tools in the SMS tree do run for minutes; run the gate alone.
