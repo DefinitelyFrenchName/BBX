@@ -429,3 +429,4 @@ lives — bbh `[BBH-9]`).
   means the kernel and S2 are unchanged and BBX-14 is met on this host; it
   says nothing about the document-set kind, which has no gate yet — the
   plan's counts are DESIGN numbers until the fixture exists, and §4 says so.
+- After the close (2026-09-10): the maintainer validated R31, R32, R33 (to be reworked only if experience proves the contract insufficient) and R34 (validated with the caveat that TSV breaks silently). On the caveat the contributor revised one design point of the plan with the answer recorded: the `claims`, `covered` and `schema` expectation files carry their rows as TOML-subset tables with named fields (R24's shape), the fixture's artifact stays a TSV as the subject R34's schema check guards, and a wrong column count becomes a fifteenth control. Recorded and pushed as a post-close correction (R22), checked with the document gates. S3 step 1 may open.

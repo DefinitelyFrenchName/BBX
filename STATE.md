@@ -8,7 +8,7 @@ generalization of `blackbox-harness` (bbh) to any subject with testable inputs
 and outputs. Born 2026-09-09.
 
 **Status (bbx-6 close, 2026-09-10):** slices S1 (but for R21's platform run)
-and S2 complete; **S3 planned and STOPPED** for rulings R31–R34
+and S2 complete; **S3 planned, STOPPED, and its rulings R31–R34 answered after the close**
 (`docs/plans/S3.md`): the document-set kind, the first slice with no ancestor
 to diff against — the two ancestors (SMS `checkdocs.py`, VampireSaved
 `checkdocs_rom.py`) measured on plain clones at their census commits, nothing
@@ -24,15 +24,13 @@ two closes; the gate held only its prefix) — the first re-anchor of BBX-10.
 56/56 controls. Fidelity F12–F17 diff empty on the plain clone at
 `10a82d2`. bbh's tip `447e5d2`, a NOTE. Defaults D1–D32. Gotchas G1–G19.
 
-**In force:** `DECISIONS.md` — R0–R20, R22–R30 and method M1–M4. **Open
-rulings:** R21 (the platform runs: no Linux or WSL host here); R31 (the
-observation point of a non-frame kind is an integer index; logfmt stays
-bbh's), R32 (the scenario extension is a kind-profile key; a scenario may
-carry several expectation kinds), R33 (the document-set coverage contract:
-closed binding statuses, the denominator from the log, the covered set
-frozen shrink-only, PARAPHRASE never BOUND), R34 (the schema and set specs;
-verdict text frozen by the family's own gate) — raised 2026-09-10 with the
-S3 plan; S3's first tool waits on them.
+**In force:** `DECISIONS.md` — R0–R20, R22–R34 and method M1–M4. **Open
+rulings:** R21 (the platform runs: no Linux or WSL host here). R31–R34
+(the S3 plan's: the integer observation point, the scenario contract per
+kind, the document-set coverage contract, the schema and set specs)
+validated 2026-09-10 after the bbx-6 close — R33 to be reworked only if
+experience proves it insufficient, R34 with the TSV caveat (the frozen rows
+of the new kinds are TOML-subset tables, R24's shape). S3 step 1 may open.
 In force since bbx-2: R18 (the census and the tests
 work on a clone or are explicitly, provably read-only), R19 (parallel work
 is a pull queue; the FIFO token queue is the default implementation, the
@@ -67,7 +65,7 @@ number to bring down; the two added at bbx-2 are host facts the clone
 exposed (G13, rule 7), the only exception ever allowed to move it upward. Grammar in
 `docs/census/README.md`.
 
-**Next:** the maintainer's rulings on R31–R34; then S3 step 1
+**Next:** S3 step 1
 (`docs/plans/S3.md` §8: the profile, the scenario extension, the fixture and
 its generator with `--check`). The platform run when R21's host exists. bbh's
 tip past the baseline follows the R28 procedure when a sitting needs it.

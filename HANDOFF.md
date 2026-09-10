@@ -20,7 +20,7 @@ Shape: operational map. Read this first, then `STATE.md`, then
 | the fidelity plan, F12+ | `docs/fidelity.md`; re-baseline log `docs/rebaselines.md` |
 | the slice sequence with the estimate | `docs/slices.md` |
 | slice S2's plan (measured census of the lift, design, fidelity rows, controls, rulings R23–R26) | `docs/plans/S2.md` — built bbx-3/bbx-4 |
-| **slice S3's plan** (the ancestors measured, the design contract by contract, the fixture, fourteen controls, rulings R31–R34) | `docs/plans/S3.md` — **STOPPED for rulings 2026-09-10 (bbx-6)** |
+| **slice S3's plan** (the ancestors measured, the design contract by contract, the fixture, fourteen controls, rulings R31–R34) | `docs/plans/S3.md` — STOPPED at bbx-6; **R31–R34 answered 2026-09-10, step 1 may open** |
 | the maintainer readouts, one section per step, the CLOSE section last | `docs/readout.md` |
 | the controls contract (must-fire grammar, R10) | `docs/controls.md` |
 | the defaults register (BBX-24) | `docs/defaults.md` |
@@ -125,8 +125,7 @@ by construction (the recount's clone) and by `fidelity_bbh`'s proof.
 
 **Next-session orientation (written at the bbx-6 close, 2026-09-10)**
 - Open first: `bin/bbx selftest --log build/selftest_<stamp>` and `bin/bbx readout` on it. Two `drift` NOTEs are expected: VampireSaved (past the census) and bbh (`447e5d2`, one past the baseline `10a82d2` — a README line; follow it by the R28 procedure only when a sitting needs the current tip).
-- **S3 is planned and STOPPED** (`docs/plans/S3.md`): read its §3 (the design) and §5 (the fourteen controls) before anything else, then `docs/rulings.md` for R31–R34. **No S3 tool is written until the maintainer answers them** (CLAUDE.md §6, §9). When answered: move each entry under an Answered heading in the same edit, add its DECISIONS row, update DECISIONS' open line (the shape gate holds all three), append the story to DECISIONS_HISTORY; then S3 step 1 (§8) — the profile, `[suite].scenario_ext`, the fixture generator with `--check`, `gates/docset_fixture.sh`.
-- If the maintainer objects to a ruling, revise it in place as R24 was (the objection recorded, the revision measured, the entry stays open) — never build the declined shape.
+- **S3 is planned and its four rulings are answered** (`docs/plans/S3.md`; R31–R34 validated 2026-09-10 after the bbx-6 close, R34 with a caveat and a recorded revision: the `claims`, `covered` and `schema` expectation files are TOML-subset tables with named fields, never tab-separated rows; the artifact stays a TSV as the subject the schema check guards; a wrong column count is the fifteenth control). Read the plan's §3 and §5 and the four entries in `docs/rulings.md` (the R34 revision is in its entry), then **S3 step 1** (§8): the profile, `[suite].scenario_ext`, the fixture generator with `--check`, `gates/docset_fixture.sh`. Every default gets its `docs/defaults.md` row before use; every gate declares its controls.
 - G19's learning is a mechanism for S6 (a rot gate over generated and printed text for "until slice N" sentences); it is filed in the gotcha, not built.
 - R29 (executable controls) is ruled: built in S6 with the controls registry; until then every FIRED is a self-report.
 - A background battery: nothing under the tree changes while it runs — draft in the scratchpad, test in a shadow home, move in after (it kept this sitting's plan out of the tree until the open run finished).
