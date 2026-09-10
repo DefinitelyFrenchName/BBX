@@ -31,7 +31,17 @@
 # frozen by gates/set_schema.sh (C4 with no ancestor: the gate is the freeze); a second
 # `NOTE: covered-grew <k>` line follows a shrink-only PASS that grew (R33).
 #
-# Ground truth: gates/compare_dispatch.sh (temporal, the dispatch), gates/set_schema.sh (the three).
+# THE TOLERANT-NUMERIC FAMILY OF THE COMMAND-LINE KIND (S4 step 3, bbx-15, 2026-09-10; R36): `band`
+# (compare_band — a band field's VALUE against the inclusive band measured on a named reference, over the
+# driver's band VIEW `<log>.bands` — D53, BBX-16; lib/py/bbx/compare_band.py). Its spec is the expectation file
+# (D48); it reads the log's view and nothing else, so it takes neither trailing argument. The same step gives the
+# schema family its second FORMAT (json, D49: the artifact is the driver's JSON view `<log>.json`, D54 — the
+# CALLER passes it as the trailing artifact argument; how the suite hands it over is S4 step 4's) and the set
+# family its second ROW SHAPE (the `unordered` kind's line rows, D56: the two trailing arguments accepted and
+# not read). The three S3 functions below changed by zero lines for it (BBX-25: a consumer each).
+#
+# Ground truth: gates/compare_dispatch.sh (temporal, the dispatch), gates/set_schema.sh (the three),
+# gates/band.sh (tolerant-numeric), gates/json_schema.sh (the json format, the line shape).
 
 [ -n "${BBX_HOME:-}" ] && case ":${PYTHONPATH:-}:" in
     *":$BBX_HOME/lib/py:"*) ;;
@@ -50,7 +60,8 @@ compare_mask_for() {
 # compare_check <expdir> <name> <kind> <spec> <runmask> <log> [<scenario> <artifact>]
 #   The kind's family decides; prints the verdict line(s); returns 0 on PASS, 1 on FAIL.
 #   <spec> and <runmask> are the temporal family's (bbh's); the set family needs <scenario> and
-#   <artifact>, the schema family <artifact>; the exact family reads the expectation file only.
+#   <artifact>, the schema family <artifact>; the exact family reads the expectation file only; the
+#   tolerant-numeric family reads the log's band view only.
 compare_check() {
     _ck_kind="$3"
     _ck_family="$(python3 -m bbx.expectations family "$_ck_kind" 2>/dev/null || echo '-')"
@@ -59,6 +70,7 @@ compare_check() {
     exact)    compare_exact "$1" "$2" "$_ck_kind" "$6" ;;
     set)      compare_set "$1" "$2" "$_ck_kind" "$6" "${7:-}" "${8:-}" ;;
     schema)   compare_schema "$1" "$2" "$_ck_kind" "${8:-}" ;;
+    tolerant-numeric) compare_band "$1" "$2" "$_ck_kind" "$6" ;;
     *)        echo "FAIL kind '$_ck_kind' has no comparator family in the kind profile in force (R23: a kind is registered in the profile's table or not at all)"; return 1 ;;
     esac
 }
@@ -95,6 +107,14 @@ compare_schema() {
     [ -f "$_cm_spec" ] || { echo "FAIL schema: $_cm_spec is not a schema spec (no such file)"; return 1; }
     [ -n "${4:-}" ] || { echo "FAIL schema: the schema family needs the artifact (compare_check's trailing argument)"; return 1; }
     python3 -m bbx.compare_schema "$_cm_spec" "$4"
+}
+
+# compare_band <expdir> <name> <kind> <log>   (S4 step 3)
+#   The band view is <log>.bands (D53); the spec is the expectation file (D48). One line, then the NOTE; 0 PASS, 1 FAIL.
+compare_band() {
+    _cb_spec="$1/$2.$3"
+    [ -f "$_cb_spec" ] || { echo "FAIL band: $_cb_spec is not a band spec (no such file)"; return 1; }
+    python3 -m bbx.compare_band "$_cb_spec" "$4.bands"
 }
 
 # compare_temporal <expdir> <name> <spec> <runmask> <log>   (bbh: masked_check)

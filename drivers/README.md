@@ -34,7 +34,7 @@ kind but `frame-driven`, whose drivers stay bbh's under `$BBX_BBH_HOME/drivers`
 | driver | kind | search-path variable | its own family (scrubbed by the suite, D33) | since |
 |---|---|---|---|---|
 | `docset.sh` | `document-set` | `DOCSET_PATH` (resolved by `bbx.docset resolve`, the one resolver the schema comparator shares — S3 step 3) | `DOCSET_NONDET` (honoured), `DOCSET_VIEW`, `DOCSET_FORMS` (refused) | S3 step 2 (bbx-8, 2026-09-10) |
-| `cli.sh` | `command-line` | `CLI_PATH` (resolved by `bbx.cli resolve`: per directory an executable `<set>` over `<set>.py`, the first directory that has either) | `CLI_NONDET` (honoured), `CLI_TIMEOUT` (honoured, D51), `CLI_KEEP_ENV` (refused, D52) | S4 step 2 (bbx-14, 2026-09-10) |
+| `cli.sh` | `command-line` | `CLI_PATH` (resolved by `bbx.cli resolve`: per directory an executable `<set>` over `<set>.py`, the first directory that has either) | `CLI_NONDET` (honoured), `CLI_TIMEOUT` (honoured, D51), `CLI_KEEP_ENV` (refused, D52) | S4 step 2 (bbx-14, 2026-09-10); beside the log it writes the band view `<out>.bands` (D53) and the JSON view `<out>.json` (D54, step 3) |
 
 Every driver here refuses the frame-driven replay family (`MASK_RANGES`,
 `DUMPS`, `POKES`, …), the guard family (`GUARD_*`, `CRASH_VECTORS`,

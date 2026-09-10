@@ -9,6 +9,15 @@ ways (docs/plans/S3.md §3 "E1", "C1, C2"; rulings R33, R34; abstraction E5, BBX
         the shrink-only set rewritten from the run (the suite's --freeze, S3 step 4): `frozen set-covered (<n> rows)`;
         an inventory is authored and REFUSED
 
+Two ROW SHAPES, told apart by the fields the frozen rows carry (R34's caveat: named fields, so the shape
+is what the file says): the CLAIM row `(document, line, form, status)` of the document-set kind (S3), and
+since S4 step 3 the LINE row `(line, sha1)` of the command-line kind's `unordered` expectation (D56): the
+multiset of a tool's stdout lines, compared by the sha1 the log carries (D47's `line:<sha1>` points), the
+frozen text the name a triage reads; a frozen row whose sha1 is not its line's is hand-editing. Under the
+line shape the artifact and the scenario-file arguments are accepted and not read (the log is the whole
+observation), and the shrink-only mode is refused (a stream is an inventory). A file that mixes the two
+shapes is malformed; a file with no rows is read as the claim shape (S3's behaviour, unchanged).
+
 Two consumers inside one family (BBX-25): the `claims` kind (mode `inventory`: the frozen rows and
 the run's rows are the same multiset, a difference in EITHER direction fails naming the row and the
 direction) and the `covered` kind (mode `shrink-only`, R33: every frozen row must still be covered
@@ -29,6 +38,7 @@ Verdicts (stdout; the text is FROZEN by gates/set_schema.sh — C4 with no ances
   FAIL set-covered: no longer covers <doc>:<line> <form> <status> (<k> frozen row(s) lost)
   FAIL set-inventory|set-covered: frozen row <doc>:<line> <form> <status> appears <k> times (a duplicate is hand-editing, BBX-17)
   FAIL set-inventory|set-covered: run row <doc>:<line> <form> <status> appears <k> times (the binder produced a duplicate)
+  (the line shape names a frozen row "<line>" and a run row sha1 <hex>: the log holds hashes, never text)
   FAIL set-covered: frozen row <doc>:<line> <form> <status> is not a covered status (BOUND or PARAPHRASE)
   FAIL set: frozen row [<table>] is malformed (<why>)
   FAIL set: <spec> is not a set spec (<why>)
@@ -39,21 +49,33 @@ Verdicts (stdout; the text is FROZEN by gates/set_schema.sh — C4 with no ances
 import sys
 from collections import Counter
 
+from . import cli
 from . import docset
 from . import toml_subset
 
 MODES = ("inventory", "shrink-only")
 LABEL = {"inventory": "set-inventory", "shrink-only": "set-covered"}   # the verdict word is the KIND's, not the mode's
 FIELDS = ("document", "line", "form", "status")
+LINE_FIELDS = ("line", "sha1")
+SHAPES = ("claim", "line")
+_NAMES = {}      # the line shape: sha1 -> the frozen text, for the verdict's naming
 
 
 def _fmt(row):
+    if len(row) == 1:                          # the line shape: a row is its sha1
+        return f'"{_NAMES[row[0]]}"' if row[0] in _NAMES else f"sha1 {row[0]}"
     d, ln, form, status = row
     return f"{d}:{ln} {form} {status}"
 
 
 def load_frozen(path):
-    """-> (mode, [rows]) or raise ValueError with the verdict line."""
+    """-> (mode, [rows]) or raise ValueError with the verdict line; the row shape is in load_shape."""
+    mode, _shape, rows = load_shape(path)
+    return mode, rows
+
+
+def load_shape(path):
+    """-> (mode, shape, [rows]) or raise ValueError with the verdict line."""
     try:
         t = toml_subset.load(path)
     except (OSError, toml_subset.SubsetError) as e:
@@ -67,17 +89,60 @@ def load_frozen(path):
     if mode not in MODES:
         raise ValueError(f"FAIL unknown set mode '{mode}'")
     rows = []
+    shape = None
     for name, row in t.items():
         if name == "spec":
             continue
-        if not isinstance(row, dict) or any(k not in row for k in FIELDS):
+        if not isinstance(row, dict):
             raise ValueError(f"FAIL set: frozen row [{name}] is malformed (needs {', '.join(FIELDS)})")
+        this = "line" if set(row) == set(LINE_FIELDS) else "claim" if all(k in row for k in FIELDS) else None
+        if this is None:
+            raise ValueError(f"FAIL set: frozen row [{name}] is malformed (needs {', '.join(FIELDS)}, or line and sha1)")
+        if shape is None:
+            shape = this
+        elif this != shape:
+            raise ValueError(f"FAIL set: frozen row [{name}] is malformed (a {this} row in a file of {shape} rows)")
+        if this == "line":
+            if not isinstance(row["line"], str) or not isinstance(row["sha1"], str):
+                raise ValueError(f"FAIL set: frozen row [{name}] is malformed (line and sha1 are strings)")
+            if row["sha1"] != cli.sha1_text(row["line"]):
+                raise ValueError(f"FAIL set: frozen row [{name}] is malformed (sha1 is not the line's: hand-editing, BBX-17)")
+            _NAMES[row["sha1"]] = row["line"]
+            rows.append((row["sha1"],))
+            continue
         if not isinstance(row["line"], int) or not all(isinstance(row[k], str) for k in ("document", "form", "status")):
             raise ValueError(f"FAIL set: frozen row [{name}] is malformed (line is an integer, the rest strings)")
         if row["status"] not in docset.STATUSES:
             raise ValueError(f"FAIL set: frozen row [{name}] is malformed (status {row['status']!r} is outside the closed vocabulary)")
         rows.append((row["document"], row["line"], row["form"], row["status"]))
-    return mode, rows
+    shape = shape or "claim"
+    if shape == "line" and mode != "inventory":
+        raise ValueError(f"FAIL set: {path} is not a set spec (the line shape has no {mode} mode: a stream is an inventory)")
+    return mode, shape, rows
+
+
+def line_rows(log_path):
+    """The run's rows under the line shape: one (sha1,) per `line:` point of a log in D47's grammar, in log order.
+    ValueError on a log that is not one (a crash log, a token outside the vocabulary, no END)."""
+    with open(log_path, encoding="utf-8") as fh:
+        lines = fh.read().splitlines()
+    if not lines or not lines[-1].startswith("END "):
+        raise ValueError("the log has no END line last (a crash log is never compared)")
+    n = int(lines[-1].split()[1])
+    out, last = [], 0
+    for l in lines[:-1]:
+        f = l.split()
+        if len(f) != 2 or not f[0].isdigit():
+            raise ValueError(f"not a point line: {l!r}")
+        tok = cli.split_token(f[1])          # ValueError names a token outside the vocabulary
+        if tok["kind"] == "exit":
+            continue
+        last = int(f[0])
+        if tok["kind"] == "line":
+            out.append((tok["sha1"],))
+    if last != n:
+        raise ValueError(f"END {n} but the last index is {last}")
+    return out
 
 
 def _duplicate(rows, side, mode):
@@ -92,20 +157,24 @@ def _duplicate(rows, side, mode):
 def compare(spec_path, log_path, artifact_path, claims_path):
     """-> (verdict lines, exit status)."""
     try:
-        mode, frozen = load_frozen(spec_path)
+        mode, shape, frozen = load_shape(spec_path)
     except ValueError as e:
         return [str(e)], 1
     try:
-        run = [(d, ln, form, status) for _i, d, ln, form, status in docset.run_rows(artifact_path, claims_path, log_path)]
+        if shape == "line":
+            run = line_rows(log_path)
+        else:
+            run = [(d, ln, form, status) for _i, d, ln, form, status in docset.run_rows(artifact_path, claims_path, log_path)]
     except (docset.Unreadable, docset.Refused, ValueError, OSError) as e:
         return [f"FAIL set: the run rows cannot be derived ({e})"], 1
-    dup = _duplicate(frozen, "frozen", mode) or _duplicate(run, "run", mode)
+    # a run duplicate under the line shape is a stream's multiset, judged by the count below, never by this guard
+    dup = _duplicate(frozen, "frozen", mode) or (None if shape == "line" else _duplicate(run, "run", mode))
     if dup:
         return [dup], 1
     if mode == "inventory":
         fc, rc = Counter(frozen), Counter(run)
-        lost = [r for r in frozen if fc[r] > rc[r]]
-        new = [r for r in run if rc[r] > fc[r]]
+        lost = [r for r in frozen if r in (fc - rc)]      # the multiset difference: a surplus counts once per surplus copy
+        new = [r for r in run if r in (rc - fc)][:sum((rc - fc).values())]
         if lost or new:
             parts = []
             if lost:

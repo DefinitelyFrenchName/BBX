@@ -33,12 +33,17 @@ THE BAND VIEW `<out>.bands` (O4; D47): `<i> <name>=<canonical-json-value>` per b
 carries, in sorted key order, i = 1..k; `END <k>` — k is the band inventory's size (BBX-13's watch). Written
 only when stdout was read as one JSON object and the scenario declares `bands`.
 
+THE JSON VIEW `<out>.json` (D54; S4 step 3): the CANONICAL text of the ONE object stdout held (`canon()`, the same
+text the field hashes are over), written whenever the observation was read as fields — the artifact the schema
+family's json format reads (lib/py/bbx/compare_schema.py), so the object's SHAPE is judged from the run and never
+re-derived from the log's hashes. Removed with the log before every run.
+
 THE CRASH (D4, exit 2 — the guard; bbh's guarded grammar `CRASH … END-CRASH`): a tool that DIES BY A SIGNAL
 has no exit status, so the log has no `0 exit:` line; the points it did produce (stdout, then stderr) are
 kept, then `CRASH signal:<n>:<NAME>` and `END-CRASH <last index>`. The log is the bug report and is never
 compared (logfmt.frames does not read it: an `END-CRASH` log is RUN-FAIL to the suite, BBX-4's spirit).
 
-WHAT THE RUN DOES (run()): the out file and its band view are REMOVED first (D5, [BBH-27]); the sandbox is
+WHAT THE RUN DOES (run()): the out file, its band view and its JSON view are REMOVED first (D5, [BBH-27]); the sandbox is
 the tool's working directory (`cwd` under it), its HOME and its TMPDIR (D52, [BBH-36]); the environment is
 EXACTLY D6's hermetic set plus the scenario's `[env]` table — nothing from the caller (the subprocess is
 started with that dict, `env -i`'s effect); what was fed is RECORDED in the sandbox — `argv.txt` (the
@@ -337,7 +342,8 @@ def _split_lines(text):
 
 
 def run(tool, scenario_path, out, sandbox, nondet=False, timeout=DEFAULT_TIMEOUT):
-    """One run: the log at `out` (and `<out>.bands` when there are band fields). Raises Refused / Unreadable /
+    """One run: the log at `out` (`<out>.json` when stdout was one JSON object, `<out>.bands` when there are band
+    fields). Raises Refused / Unreadable /
     Crashed; returns the tool's exit status on a complete observation."""
     sc = load_scenario(scenario_path)
     sandbox = Path(sandbox).resolve()
@@ -351,7 +357,8 @@ def run(tool, scenario_path, out, sandbox, nondet=False, timeout=DEFAULT_TIMEOUT
             raise Refused(f"emitted file '{name}'", "it escapes the sandbox (D52)")
     out = Path(out)
     bands_path = Path(str(out) + ".bands")
-    for p in (out, bands_path):                              # D5, [BBH-27]: never a previous run's file
+    json_path = Path(str(out) + ".json")
+    for p in (out, bands_path, json_path):                   # D5, [BBH-27]: never a previous run's file
         if p.exists():
             p.unlink()
     tool_path = Path(tool)
@@ -400,6 +407,8 @@ def run(tool, scenario_path, out, sandbox, nondet=False, timeout=DEFAULT_TIMEOUT
                                stderr_lines=stderr_lines, files=files, salt=salt), encoding="utf-8")
     if fields is not None and sc.bands:
         bands_path.write_text(band_view(fields, sc.bands), encoding="utf-8")
+    if fields is not None:                                   # D54: the object's shape, for the schema family
+        json_path.write_text(canon(fields) + "\n", encoding="utf-8")
     return p.returncode
 
 

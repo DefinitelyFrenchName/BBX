@@ -10,7 +10,7 @@
 #   bbx controls declared <gate.sh> | report <gates_dir> <logs_dir> <name>...   (lib/py/bbx/controls.py)
 #   bbx recount <census.md> [--only A1,A2] [--root DIR]            (lib/py/bbx/recount.py)
 #   bbx readout <run-dir> [--against <run-dir>]                   the one screen (lib/py/bbx/readout.py)
-#   bbx compare <class-tool> [args]   a comparator directly: flicker | window | composite | diverge | propose (temporal); exact | set | schema (S3)
+#   bbx compare <class-tool> [args]   a comparator directly: flicker | window | composite | diverge | propose (temporal); exact | set | schema (S3); band (S4)
 #   bbx selftest [--strict]       BBX's own gate chain, through its own runner (R14)
 #
 # Every subcommand finds the harness from THIS file's location, so the
@@ -31,7 +31,7 @@ config)       exec python3 -m bbx.config "$@" ;;
 controls)     exec python3 -m bbx.controls "$@" ;;
 recount)      exec python3 -m bbx.recount "$@" ;;
 readout)      exec python3 -m bbx.readout "$@" ;;
-compare)      _t="${1:?bbx compare <flicker|window|composite|diverge|propose> ...}"; shift; case "$_t" in flicker|window|composite|exact|set|schema) exec python3 -m "bbx.compare_$_t" "$@" ;; diverge) exec python3 -m bbx.check_diverge "$@" ;; propose) exec python3 -m bbx.propose_temporal "$@" ;; *) echo "bbx compare: unknown class tool '$_t'" >&2; exit 2 ;; esac ;;
+compare)      _t="${1:?bbx compare <flicker|window|composite|diverge|propose> ...}"; shift; case "$_t" in flicker|window|composite|exact|set|schema|band) exec python3 -m "bbx.compare_$_t" "$@" ;; diverge) exec python3 -m bbx.check_diverge "$@" ;; propose) exec python3 -m bbx.propose_temporal "$@" ;; *) echo "bbx compare: unknown class tool '$_t'" >&2; exit 2 ;; esac ;;
 selftest)     cd "$BBX_HOME" && exec "$BBX_HOME/bin/bbx-run-static" --config "$BBX_HOME/bbx.toml" "$@" ;;
 -h|--help|help) sed -n '2,17p' "$0"; exit 0 ;;
 *) echo "bbx: unknown command '$cmd' (try bbx help)" >&2; exit 2 ;;

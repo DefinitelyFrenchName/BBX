@@ -20,6 +20,9 @@ Verdicts (stdout, one line; the text is FROZEN by gates/set_schema.sh — C4 wit
   FAIL exact: the run has index <j> the truth does not (<m> indices, truth <n>)
   FAIL exact: index <i> appears twice in the <truth|run>
   FAIL exact: the <truth|run> END <n> does not equal its <m> indices
+      — the indices ABOVE ZERO: the command-line grammar's exit point is index 0 and its END is the last
+      index (D47), so END counts the points after it; a document-set log has no index 0 and END is its
+      count (D38) — one rule, both grammars (S4 step 3: the family's second consumer, X20)
   FAIL exact: the truth has no indices — nothing compared        (lineage bbh 14z-90, GitHub #54: two
                                                                   empty logs must not read PASS)
   NO-BASE-LOG <path>                                              (bbh check_diverge's line, the same finding)
@@ -42,8 +45,9 @@ def _index_map(path, side):
         seen[idx] = tok
     ends = [l for l in logfmt.lines(path) if l.startswith("END ")]
     end = int(ends[-1].split()[1]) if ends else None
-    if end is not None and end != len(seen):
-        return None, None, f"FAIL exact: the {side} END {end} does not equal its {len(seen)} indices"
+    above = sum(1 for i in seen if i > 0)        # index 0 is the command-line exit point, not counted by END (D47)
+    if end is not None and end != above:
+        return None, None, f"FAIL exact: the {side} END {end} does not equal its {above} indices"
     return seen, end, None
 
 

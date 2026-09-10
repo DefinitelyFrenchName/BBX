@@ -821,3 +821,61 @@ lives — bbh `[BBH-9]`).
   what that function must produce on a value nobody here chose (§3.3), and
   it is four lines. Step 3 (the comparators over these logs) is the next most
   valuable thread: a log nobody compares is an observation nobody has judged.
+
+## bbx-15 — S4 step 3 built: the comparators over a command-line log — `compare_band.py`, the json schema format, the line-shaped inventory, the exact family's END rule (2026-09-10)
+
+- Opened on the bbx-14 HEAD `99016e3` with the battery GREEN (25 gates,
+  89/89, tree unchanged; the two drift NOTEs the handoff predicted —
+  `build/selftest_20260910T185053Z`) — the re-derivation step of the ritual.
+  R21 the only open ruling; step 3 needs R36 and R40, answered at bbx-12.
+- Built (the readout's bbx-15 section): `lib/py/bbx/compare_band.py` (the
+  tolerant-numeric family over the driver's band view; the inventory both
+  ways before any value; `--freeze <frozen> <proposed>` refusing to widen
+  without a `rulings` entry and refusing any inventory move, exit 3, the file
+  unchanged; narrowing free; the written text the generator's byte for byte),
+  the `tolerant-numeric)` branch of `lib/sh/compare.sh` and `bin/bbx compare
+  band`; the json format of `compare_schema.py` (D49: keys both ways, then
+  one type each from R40's seven; `items_op`/`items_n`; a type of the other
+  format's vocabulary unknown); the line row shape of `compare_set.py` (D56);
+  the driver's JSON view `<out>.json` (D54 — the plan's silence on where the
+  object lives, decided as a view beside the band view, D53's shape);
+  `gates/band.sh` (4 controls) and `gates/json_schema.sh` (5 controls), every
+  verdict line frozen and classified, `finding.py` unchanged. Defaults D54,
+  D55, D56: rows before first use (BBX-24), written in the shadow too.
+- The finding: the exact family's first run over a command-line log FAILed
+  every scenario on `END 9 … 10 indices` — D47's exit point is index 0 and
+  END is the last index; `compare_exact.py`'s END rule counted indices. One
+  rule generalized (END counts the indices above zero); the document-set
+  verdicts byte-identical (`set_schema` PASS, 38 lines). The plan had said
+  "UNCHANGED (its second consumer)": corrected FIRST in its own commit
+  `9567d7c` (X20, with the §2 ancestors row; BBX-19), G26 filed. X21 in the
+  same commit: the suite's `NOT-EVALUATED` line belongs to step 4's gate.
+- The design targets: `bin/bbx-run-suite`, `expectations.py`, `finding.py`,
+  `config.py` and `fixture/` changed by ZERO lines (measured: `git diff
+  --stat 99016e3` over them empty); the four functions of `compare.sh`
+  (`compare_exact`, `compare_set`, `compare_schema`, `compare_temporal`)
+  byte-identical (their text hashed on both sides); `compare_exact.py`
+  changed by 8 lines for X20, stated.
+- No ruling raised; R21 stays open. Two retractions (X20, X21).
+- Incidents: G26 (above) and G27 — the plan-first commit's message quoted
+  `citations=546` typed before the sweep printed `547`; amended before the
+  push (paid: 1 amend). One gate defect caught in the shadow, priced in the
+  readout and not filed: `json_schema.sh`'s key-swap `sed` cancelled itself
+  (two plain substitutions), one shadow gate run of 7 s.
+- Step 10 (R27): re-read for learnings — two hazards in `HANDOFF.md` (an
+  "unchanged for its second consumer" claim is measured by running the
+  second consumer's input through the component; a commit message's numbers
+  are read off the printed line) and one mechanism candidate each for S6's
+  rot-gate queue (G26: the driver gate feeds one log through the exact
+  family the sitting a grammar lands; G27: a close gate over the HEAD
+  message's sweep tuple).
+- Close: GREEN twice at one HEAD (`build/selftest_20260910T193009Z`, `build/selftest_20260910T193718Z`): 27 gates, 98/98 controls, tree unchanged, BBX-14 met; close_sweeps and rulings_shape PASS on the final tree; one plan-first commit (`9567d7c`) and one close commit, pushed (R22).
+- Anti-hyperfocus (BBX-27): the thread was step 3 as the plan wrote it; the
+  one place it pulled — where the JSON object lives for the schema family —
+  was decided as a view beside the log (D54) because the alternative, a
+  re-derivation from hashes, cannot judge a type, and a second run of the
+  tool would judge a different run. The END rule was not a pull: it was the
+  step's own input failing on the step's own comparator. Step 4 (the suite
+  over the fixture) is the next most valuable thread, and its first decision
+  is already measured: the loop hands the schema family the wrong artifact
+  for this kind, so the "zero lines" target is corrected before it is built.

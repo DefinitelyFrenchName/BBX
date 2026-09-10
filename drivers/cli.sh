@@ -27,11 +27,11 @@
 # silently not measure [BBH-28]. A scenario key the grammar does not have is refused the same way (D46).
 #
 # What the run does, in order: the core's SELF-TEST (exit 1 naming what broke — before the tool is run);
-# the out file and `<out>.bands` removed [BBH-27]; the tool run under the scrub in the sandbox; the log
-# written in D47's grammar — `0 exit:<n>` first (A TOOL'S NON-ZERO EXIT IS AN OBSERVATION, never a driver
-# failure), then stdout as lines or, under `fields = "json"`, as the object's keys in sorted order (a band
-# field's token the constant `band`, its value in `<out>.bands`), stderr, the declared emitted files,
-# `END <n>`.
+# the out file, `<out>.bands` and `<out>.json` removed [BBH-27]; the tool run under the scrub in the sandbox;
+# the log written in D47's grammar — `0 exit:<n>` first (A TOOL'S NON-ZERO EXIT IS AN OBSERVATION, never a
+# driver failure), then stdout as lines or, under `fields = "json"`, as the object's keys in sorted order (a
+# band field's token the constant `band`, its value in `<out>.bands`; the object's canonical text in
+# `<out>.json`, the schema family's artifact — D54), stderr, the declared emitted files, `END <n>`.
 #
 # Exit 0 only if the log ends with an END line; 2 the tool DIED BY A SIGNAL — the guard: `END-CRASH <n>`
 # written, the points before the death kept, the log is the bug report (the fixture's `--crash-at`);
@@ -79,7 +79,7 @@ else SANDBOX="$(mktemp -d)"; FRESH=1; fi
 TOOL="$(python3 -m bbx.cli resolve "$SET")" || { echo "$TOOL"; [ "$FRESH" = 0 ] || rm -rf "$SANDBOX"; exit 1; }
 
 # Clear the artifact BEFORE the run: "no END line" must never be satisfied by a previous run's file [BBH-27]
-rm -f "$OUT" "$OUT.bands"
+rm -f "$OUT" "$OUT.bands" "$OUT.json"
 
 # the self-test first: a vocabulary or a scenario reader that stopped behaving is named before the tool runs
 python3 -m bbx.cli selftest > "$SANDBOX/cli_selftest.txt" 2>&1 || { cat "$SANDBOX/cli_selftest.txt"; [ "$FRESH" = 0 ] || rm -rf "$SANDBOX"; exit 1; }

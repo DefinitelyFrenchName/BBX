@@ -398,3 +398,49 @@ at once, and only the gate that happened to read the driver's header saw it.
 The shadow-through-the-classifier practice is the mechanism, fourth time it
 fired (bbx-7, bbx-8, bbx-10, bbx-11). Rules re-anchored in fact: BBX-5,
 BBX-16, R30.
+
+## G26 — The exact family failed every command-line log on its END rule: the plan had promised `compare_exact.py` unchanged for its second consumer, and a `git diff` of zero lines would have proved currency, not fitness (paid: 1 smoke run and the plan corrected, X20; 2026-09-10)
+S4 step 3's first run of `compare_check … truth` over a driver log of the
+command-line fixture printed `FAIL exact: the truth END 9 does not equal its
+10 indices` for every scenario. The grammar D47 (ruled R35 at bbx-12, built
+at bbx-13) puts the tool's exit status at index 0 and defines `END <n>` as
+the LAST index; `compare_exact.py` (S3, bbx-9) checked END against the
+NUMBER of indices, which the document-set grammar D38 makes the same thing
+(indices 1..n) and the command-line grammar does not (0..n). The plan's §3
+E1 row said "`compare_exact.py` UNCHANGED (its second consumer)" and its C3
+paragraph repeated it; the design-target measurement planned for the close
+(`git diff --stat` empty over the shared files) would have read GREEN on
+that file while the family failed on every log of the kind — a measurement
+on our own build locks currency, never correctness (CLAUDE.md §3.3). Nobody
+had run the family over such a log: step 2's gate compared the driver's log
+with `cmp` and DECLARED it — `NOT-ASSERTED: the verdict text of the exact,
+set, schema and band comparators over these logs (S4 step 3)` — so the
+blind spot was on the screen for one close and closed by the step that
+owned it. The fix is one rule, `END` counts the indices ABOVE ZERO, under
+which every document-set verdict is byte-identical (`gates/set_schema.sh`
+PASS, its 38 frozen lines unchanged) and the five command-line truths PASS;
+the plan was corrected FIRST in its own commit (X20, BBX-19), the §2
+ancestors row included. Learning (R27): "unchanged for its second consumer"
+is a CLAIM until the second consumer's input has been run through the
+component — write "expected unchanged, measured at step N" in a plan, and
+make the step that lands a new input grammar run every family that claims
+to be grammar-blind over it (the mechanism candidate: a line in the driver
+gate that feeds one log through `compare_exact`, so the blind spot is
+measured the sitting the grammar lands, not declared). Rules re-anchored
+in fact: §1, §3.3 (currency is not correctness), BBX-19, BBX-25 (the second
+consumer is the detector — here of the plan's promise).
+
+## G27 — A close-commit message carried a sweep count typed before the sweep printed it: `citations=546` written, `547` measured (paid: 1 amend of an unpushed commit; 2026-09-10)
+The plan-first commit of bbx-15 was written in the same command that ran
+`close_sweeps` and `rulings_shape`, and its message quoted the sweep's
+tuple from the previous run's shape with a number the author expected; the
+gate printed `citations=547`. Read back beside the message one line later,
+amended before the push. Nothing downstream read the wrong number, and the
+commit's other counts were the printed ones. Learning (R27): a commit
+message's numbers are assembled FROM the run's printed line — pasted, or
+read by the command that writes the message — never typed from
+expectation, however close; a hazard line in `HANDOFF.md`. Mechanism
+candidate for S6's rot-gate queue (with G19, G24): a close gate that greps
+the HEAD message's `close_sweeps PASS (…)` tuple against the kept
+`close_sweeps.log` of the run it names. Rule re-anchored in fact: §1 ("when
+you think you know, you measure to check" — the exact case).
