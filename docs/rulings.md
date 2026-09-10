@@ -304,4 +304,11 @@ written until the ruling its slice needs is answered (CLAUDE.md §6, §9).
 - **Status:** the maintainer will produce the run "in the coming days" (2026-09-10); it blocks nothing else.
 - **Answer:** (open)
 
+### R41 — One writer of the `band-fields` NOTE key: the log summary (D43) or the comparator (R36) (raised bbx-16, S4 step 4)
+- **Context measured (2026-09-10):** the first suite run over `fixture/fakecli/` printed `NOTE: band-fields 1` TWICE under `04_band` — once from `compare_band.py` after its PASS (R36's text: "the comparator … prints `NOTE: band-fields <n>`") and once from `bbx.cli summary` through `[suite].log_summary` (D43's command-line value, joined at S4 step 2). `notes.tsv` keeps both rows and the readout's screen prints `note: 04_band: band-fields 1` twice (`gates/cli_suite.sh` freezes both as printed). Under a band FAIL only the summary's row survives (the comparator prints no NOTE on FAIL — the gate's `band-through-the-loop` control). Both texts are the contributor's; the maintainer never chose between them because no plan section showed them together (`docs/plans/S4.md` §3 S1 gives the key to the summary, §3 E1's band row and R36 to the comparator).
+- **Recommendation:** ONE writer — the summary (the observation side: it counts the band tokens the log holds, survives a band FAIL, and reports a band field nobody froze — BBX-13's watch where it is most useful); the comparator's NOTE retired, its PASS line alone. R36's letter is amended by this ruling; `gates/band.sh`, `gates/cli_suite.sh`'s frozen text, `compare_band.py`'s docstring and the plan's band row are corrected with a retraction row when it is answered.
+- **Declined:** the comparator as the one writer (no count on a FAIL, none where no `.band` is frozen); two keys, one per writer (two names for one number on the screen); the suite de-duplicating identical NOTE rows (hides the day the two disagree); leaving both (the screen shows one number twice — today's state, frozen as printed until this is answered).
+- **Cost of being wrong:** one frozen line in two gates and one docstring; nothing measured changes either way.
+- **Answer:** (open)
+
 (A new ruling is added here with its recommendation, the alternatives declined, and `- **Answer:** (open)` until the maintainer answers, then moved.)
