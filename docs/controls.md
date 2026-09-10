@@ -72,4 +72,7 @@ screen's RO2 section (BBX-30). A gate with no `NOT-ASSERTED:` line is not an
 error — it is COUNTED on the screen as "declaring no blind spot", which is the
 number the maintainer asks about. `NOTE: <key> <value>` at column 0 of a
 gate's OUTPUT is the NOTE-class number (never fatal); the key `coverage` is
-what the screen reads as coverage (BBX-18).
+what the screen reads as coverage (BBX-18), and every other key (`drift`,
+`bbh-source`, `bbh-drift`, …) is listed on the screen as a note, one line per
+NOTE — since bbx-3, whose first run found VampireSaved's drift in the census
+log and not on the screen.

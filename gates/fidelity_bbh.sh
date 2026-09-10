@@ -28,6 +28,9 @@
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME
+# no bytecode into the clone: on this host python writes it to a user cache (sys.pycache_prefix), on Linux it
+# would land in the clone and fail the clean check for a reason that is not bbh's (measured 2026-09-10, bbx-3)
+PYTHONDONTWRITEBYTECODE=1; export PYTHONDONTWRITEBYTECODE
 B_SRC="${BBX_BBH_HOME:-}"
 [ -n "$B_SRC" ] && [ -x "$B_SRC/bin/bbh-run-static" ] || { echo "SKIP: BBX_BBH_HOME is not a bbh tree (${B_SRC:-unset}); fidelity needs it"; exit 0; }
 B_SRC="$(cd "$B_SRC" && pwd)"

@@ -8,6 +8,7 @@
 # MUST-FIRE: perturbed-copy: verdict-follows-run — a kept run with one PASS row rewritten as FAIL must read NOT GREEN with exit 1, or the screen decorates instead of reporting
 # MUST-FIRE: known-bad: bbx-14-unmet — --against a copy of the run with one verdict changed must report BBX-14 UNMET naming that gate, or "met" is silence
 # MUST-FIRE: known-bad: undeclared-blind-spot — a gate with no NOT-ASSERTED line must be COUNTED and named on the screen, or a silent gate reads as a complete one
+# MUST-FIRE: perturbed-copy: note-follows-log — a kept run with g_a's drift NOTE rewritten to ahead=9 must show ahead=9 and no longer ahead=2, or the note line is decoration, not the log
 # NOT-ASSERTED: that a declared blind spot is true or complete: the screen prints what the header says
 # NOT-ASSERTED: the sweep runner's runs: only bbx-run-static --log is read
 #
@@ -31,16 +32,17 @@ patterns = []
 [controls]
 enforce = true
 TOML
-# g_a: a control that fires, two blind spots declared, a coverage NOTE; g_b: declares nothing beyond its control; g_s: SKIPs
+# g_a: a control that fires, two blind spots declared, a coverage NOTE and a drift NOTE; g_b: declares nothing beyond its control; g_s: SKIPs
 cat > "$FR/tests/g_a.sh" <<'G'
 #!/bin/sh
-# g_a.sh — passes, proves its control, declares two blind spots, reports coverage
+# g_a.sh — passes, proves its control, declares two blind spots, reports coverage and a drift
 # MUST-FIRE: known-bad: shadow — a shadow must fail
 # NOT-ASSERTED: anything about the moon
 # NOT-ASSERTED: the weather tomorrow
 #
 echo "CONTROL FIRED: shadow — the shadow failed as it must"
 echo "NOTE: coverage claims=10 checked=7 uncovered=3"
+echo "NOTE: drift census=x.md recorded=abc1234 tip=def5678 ahead=2"
 echo "PASS: fine"
 G
 cat > "$FR/tests/g_b.sh" <<'G'
@@ -76,6 +78,8 @@ want "controls fired / declared are summed" "^  controls: fired 1 / declared 1; 
 want "gates that proved a control can fail are counted, the rest named" "^  each can fail: 1 of 3 gates proved a control fires on purpose; declaring none: g_b, g_s"
 want "the expectation line says the register does not exist yet" "^  expectations relied upon: none registered"
 want "coverage comes from the gate's NOTE" "^  coverage: g_a: claims=10 checked=7 uncovered=3"
+want "every other NOTE-class line reaches the screen as a note" "^  note: g_a: drift census=x.md recorded=abc1234 tip=def5678 ahead=2"
+grep -q "^  coverage: g_a: drift" "$T/s1" && fail "a drift NOTE was read as coverage" || ok "a non-coverage NOTE is not counted as coverage"
 want "one run alone leaves BBX-14 UNMET, and says how to meet it" "^  BBX-14 (more than one run): UNMET in this screen — one run only"
 want "g_a's two blind spots are listed" "^  g_a: the weather tomorrow"
 want "the skipping gate's declared blind spot is listed" "^  g_s: everything, when it skips"
@@ -99,6 +103,12 @@ else fail "CONTROL DEAD: bbx-14-unmet — $(grep BBX-14 "$T/c2")"; fi
 # 3. undeclared-blind-spot: g_b declares none and must be counted by name
 if grep -q "^  gates declaring no blind spot: 1 — g_b" "$T/s1"; then echo "CONTROL FIRED: undeclared-blind-spot — $(grep 'declaring no blind spot' "$T/s1" | cut -c1-60)"
 else fail "CONTROL DEAD: undeclared-blind-spot — $(grep 'declaring no blind spot' "$T/s1")"; fi
+
+# 4. note-follows-log: g_a's drift NOTE rewritten in the kept log
+cp -R "$T/r1" "$T/r1n"; sed -i.bak 's/ ahead=2$/ ahead=9/' "$T/r1n/g_a.log"
+python3 -m bbx.readout "$T/r1n" > "$T/c4" 2>&1 || true
+if grep -q "^  note: g_a: drift census=x.md recorded=abc1234 tip=def5678 ahead=9" "$T/c4" && ! grep -q "ahead=2" "$T/c4"; then echo "CONTROL FIRED: note-follows-log — $(grep '^  note: g_a' "$T/c4" | cut -c1-70)"
+else fail "CONTROL DEAD: note-follows-log — $(grep '^  note' "$T/c4" | tr '\n' ' ')"; fi
 
 echo
 [ "$rc" = 0 ] && echo "PASS: the readout screen reports the kept run and nothing else" || { echo "FAIL: see above"; exit 1; }

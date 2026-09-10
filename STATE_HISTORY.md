@@ -46,3 +46,27 @@ suite runner, expectation register, driver or fixture yet.
 
 Close tally (`bin/bbx selftest --log`, twice, alone): `PASS 12    SKIP 0     FAIL 0     MISSING 0`;
 `controls fired 26 / declared 26; gates with no declaration: 0; red: 0`; BBX-14 met (0 verdict differences).
+
+## bbx-3 — 2026-09-10 (session 3: the NOTE fix; S2 planned, STOPPED, ruled; S2 steps 1–3)
+
+**Status (bbx-3 close, 2026-09-10):** slice S1 complete but for the platform
+run (R21); slice S2 steps 1–3 built and green, step 4 (the expectation
+register) waiting on R24. This sitting: the screen lists every NOTE line (the
+handoff's first fix, with a control); S2 planned on a measured census of the
+lift (`docs/plans/S2.md`), STOPPED, and ruled — R23, R25, R26 in force, R24
+revised to a TOML register (measured against the subset parser) and open;
+then built: the temporal family (`lib/py/bbx/compare_*.py`,
+`check_diverge.py`, `propose_temporal.py`, `thresholds.py` with R25's
+refusal, `logfmt.py`), the one dispatcher (`lib/sh/compare.sh`, R23: family
+by kind) and the kinds table in the profile (`lib/sh/expectation_kinds.sh`,
+`bbx.expectations`), the suite (`bin/bbx-run-suite`; `--log` keeps a FINDING
+column, `bbx.finding`, `short` apart from `diverged`; R26's driver home is
+bbh's `drivers/`). Six new gates (temporal, thresholds, compare_dispatch,
+expectation_kinds, fidelity_bbh_s2, suite). `bin/bbx selftest` GREEN twice at
+one HEAD (BBX-14 met): 18 gates, 48/48 controls, ~6 min on a loaded host.
+Fidelity F12 (17 pairs), F16 (35), F17 (52) diff empty against bbh f675710
+on the plain clone, beside F13–F15. Defaults D1–D30. Gotchas G1–G18 (G17,
+G18 this sitting, both caught by the harness). No expectation register yet;
+no driver of BBX's own; no fixture subject; `compare_fields.py` not lifted
+(BBX-25).
+

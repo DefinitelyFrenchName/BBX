@@ -11,3 +11,7 @@ fingerprint
 rulings_shape
 readout
 close_sweeps
+temporal
+thresholds
+compare_dispatch
+expectation_kinds

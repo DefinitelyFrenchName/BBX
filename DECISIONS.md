@@ -17,6 +17,9 @@ table below is what is in force.
 | R6 | The repository root is `BBX/`. | maintainer | 2026-09-09 |
 | R7 | Session 1 ends in one commit; no remote, no push. *("no remote, no push" superseded by R22, 2026-09-10; the one close commit per sitting stands.)* | maintainer | 2026-09-09 |
 | R22 | **A GitHub remote:** `github.com/DefinitelyFrenchName/BBX` (private until ruled otherwise), `origin`; the close commit and any post-close correction are pushed. Supersedes R7's "no remote, no push". | maintainer | 2026-09-10 |
+| R23 | **Comparator family and view are declared by the expectation KIND** (the registered file extension, in the kind profile's kinds table), never inside the spec line; bbh's `<class> <baseset> <args>` line is the temporal family's, verbatim; a new family is a new kind. | maintainer | 2026-09-10 |
+| R25 | **A loosened threshold needs a ruling id:** a consumer value looser than its kind profile's (larger `flicker_max` / `flicker_max_total`, smaller `reconverge`) needs a `[thresholds].rulings` entry naming the key and a ruling, or every comparator, the proposer and the suite refuse to run (exit 3, one line); tighter needs nothing. | maintainer | 2026-09-10 |
+| R26 | **A bare driver name resolves in a per-kind driver home** (`[suite].driver_home`): kind-blind `$BBX_HOME/drivers` (absent until S3), frame-driven `$BBX_BBH_HOME/drivers` — bbh stays the frame-driven consumer's driver home; a path from the consumer root and `--driver` win; nothing is copied out of bbh. | maintainer | 2026-09-10 |
 | R8 | bbh fidelity baseline is HEAD `f675710`; its 4 uncommitted modifications are a recorded finding, never touched. | maintainer | 2026-09-09 |
 | R9 | The census recount gate is the first gate of slice S1 and the first self-validation gate (R14). | maintainer | 2026-09-09 |
 | R10 | Must-fire controls are a machine-readable contract (abstraction G3): declared in one header grammar, a controls registry complete both ways, a dead control refuses the verdict, the readout counts fired / declared. | maintainer | 2026-09-09 |
@@ -35,4 +38,4 @@ table below is what is in force.
 | M2 | A census row's provenance is `gen:<generator>` or `read`; every count has its command; a filed count is labelled `filed:` with its source. | contributor (method) | 2026-09-09 |
 | M3 | Every load-bearing census number is produced by one agent and re-derived by a different one; unresolved mismatches are reported, never averaged. | contributor (method), from FIRST_PROMPT.md | 2026-09-09 |
 
-Open rulings: R21 (how the platform runs are obtained; the queue explains). New ones are raised in `docs/rulings.md` under `## Open` and moved under an `## Answered` heading when answered (`gates/rulings_shape.sh`).
+Open rulings: R21 (how the platform runs are obtained; the queue explains), R24 (the expectation register's format — revised to a TOML register after the maintainer's objection to TSV; `docs/plans/S2.md`). New ones are raised in `docs/rulings.md` under `## Open` and moved under an `## Answered` heading when answered (`gates/rulings_shape.sh`).

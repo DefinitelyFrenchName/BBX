@@ -19,11 +19,13 @@ Shape: operational map. Read this first, then `STATE.md`, then
 | the generality proof (two non-frame kinds, their fixtures) | `docs/generality.md` |
 | the fidelity plan, F12+ | `docs/fidelity.md`; re-baseline log `docs/rebaselines.md` |
 | the slice sequence with the estimate | `docs/slices.md` |
+| slice S2's plan (measured census of the lift, design, fidelity rows, controls, rulings R23–R26) | `docs/plans/S2.md` — STOPPED for rulings 2026-09-10 |
 | the maintainer readouts, one section per step, the CLOSE section last | `docs/readout.md` |
 | the controls contract (must-fire grammar, R10) | `docs/controls.md` |
 | the defaults register (BBX-24) | `docs/defaults.md` |
-| the kernel | `bin/bbx` (dispatcher: `run-static run-sweep classify tier config controls fingerprint recount selftest`), `lib/sh/`, `lib/py/bbx/`, `bbx.toml` (BBX as its own consumer, kind `self`) |
-| BBX's gates and registries | `gates/*.sh` (12: 10 portable incl. `rulings_shape`, `readout`, `close_sweeps`; 2 static), `gates/portable.txt`, `gates/static.txt`, `gates/sweep.tsv` (empty) — run with `BBX_BBH_HOME=~/Developer/blackbox-harness bin/bbx selftest` (~222 s on a loaded host, D14) |
+| the kernel | `bin/bbx` (dispatcher: `run-static run-suite run-sweep classify tier config controls fingerprint recount readout compare selftest`), `lib/sh/`, `lib/py/bbx/`, `bbx.toml` (BBX as its own consumer, kind `self`) |
+| the comparison (S2 steps 1–3) | the temporal family `lib/py/bbx/compare_{flicker,window,composite}.py`, `check_diverge.py`, `propose_temporal.py`, `thresholds.py` (R25), `logfmt.py`; the one dispatcher `lib/sh/compare.sh` (R23: family by kind); the kinds table `lib/py/bbx/config.py` `[expectations].kinds` read by `lib/py/bbx/expectations.py` and `lib/sh/expectation_kinds.sh`; the suite `bin/bbx-run-suite` (`--log DIR`: results.tsv with a FINDING column, `lib/py/bbx/finding.py`; R26 driver home) |
+| BBX's gates and registries | `gates/*.sh` (18: 14 portable incl. `temporal`, `thresholds`, `compare_dispatch`, `expectation_kinds`; 4 static incl. `fidelity_bbh_s2` (F12, F16, F17) and `suite`), `gates/portable.txt`, `gates/static.txt`, `gates/sweep.tsv` (empty) — run with `BBX_BBH_HOME=~/Developer/blackbox-harness bin/bbx selftest` (~6 min on a loaded host: the two S2 static gates are ~70 s and ~60 s) |
 | the readout, generated | `bin/bbx selftest --log build/selftest_<stamp>` keeps the run; `bin/bbx readout <dir> [--against <dir>]` prints the one screen (RO1–RO3; BBX-14 met only with `--against` a second kept run at the same HEAD) |
 | the retractions register (BBX-22) | `docs/retractions.tsv`, read by `gates/close_sweeps.sh` |
 | the recount tool | `bin/bbx recount <census.md> [--only A1,A2] [--root DIR] [--in-place]` — runs on a plain local clone of the recorded commit (R18, R20); `--in-place` is the unproved escape hatch |
@@ -43,7 +45,7 @@ bbh is **never modified** from here. VampireSaved and SMS are read only.
 ## What is running
 
 Nothing in the background. `BBX_BBH_HOME=~/Developer/blackbox-harness
-bin/bbx selftest` (~222 s) is GREEN: 12 gates, 26/26 controls. Run it first
+bin/bbx selftest` (~6 min) is GREEN twice at one HEAD: 18 gates, 48/48 controls. Run it first
 thing, with `--log build/selftest_<stamp>` and no edits in flight (the runner's working-tree check reports a
 concurrent edit as DIRTIED); the census recount inside it is the
 re-derivation step of the ritual (CLAUDE.md §6.2) made into a gate.
@@ -51,7 +53,7 @@ re-derivation step of the ritual (CLAUDE.md §6.2) made into a gate.
 ## The ritual (ruled R17 at the bbx-1 close, 2026-09-09; adapted from VampireSaved VSP-17/VSP-18/VSP-162)
 
 Sessions are keyed `bbx-N`, one key per sitting, never renamed (pointers in
-readouts, gotchas and history resolve through it). The last closed sitting is **bbx-2** (2026-09-10); the next is **bbx-3**.
+readouts, gotchas and history resolve through it). The last closed sitting is **bbx-3** (2026-09-10); the next is **bbx-4**.
 
 **Open**
 1. Read this file, `STATE.md`, `docs/rulings.md`. (`CLAUDE.md` is the
@@ -112,22 +114,13 @@ readouts, gotchas and history resolve through it). The last closed sitting is **
 Steps 8 and 9 are checked, not remembered: step 8 by `close_sweeps`, step 9
 by construction (the recount's clone) and by `fidelity_bbh`'s proof.
 
-**Next-session orientation (written at the bbx-2 close, 2026-09-10)**
-- Open first: `bin/bbx selftest --log build/selftest_<stamp>` (twice if the
-  close's screen is wanted at the open); `bin/bbx readout` on it. A `drift`
-  NOTE is a lineage moving, not a red — VampireSaved was 2 commits past the
-  census at this close (tip `e25e6f7`), by design not re-measured.
-- First small fix: `lib/py/bbx/readout.py` prints only the `coverage` NOTE;
-  every other NOTE line (drift, bbh-source) belongs on the screen too.
-- R21 is the only open ruling: the maintainer produces the Linux/WSL run by
-  the procedure in the entry; when the kept run arrives, commit it under
-  `docs/platforms/<platform>/` and generate its screen. It blocks nothing.
-- S2 starts in bbx-3: lift bbh's comparators and `bbh-run-suite` (see below),
-  every printed verdict line frozen, F12/F16/F17 as the proof. The expectation
-  register's provenance vocabulary is R11; the screen's "expectations relied
-  upon" line is where S2 becomes visible to the maintainer.
-- Rulings go under `## Open` with `- **Answer:** (open)` exactly; the shape
-  gate reads that literal.
+**Next-session orientation (written at the bbx-3 close, 2026-09-10)**
+- Open first: `bin/bbx selftest --log build/selftest_<stamp>` and `bin/bbx readout` on it. The VampireSaved `drift` NOTE is a lineage moving (6 commits past the census at this close), not a red.
+- First small fix (G17's mechanism): `bin/bbx-run-static --log` records the UNTRACKED entry count before and after the run in `run.txt` (it prints nothing — the printed working-tree block is bbh's, tracked-only, read by F13), and `readout.py` shows it on the `tree during the run:` line, so a file written under the tree during a battery is on the screen rather than in a rule.
+- S2 step 4 waits on R24 (the expectation register as TOML: one bare table per row, the file a value, every field named; measured against the subset parser). When answered: `lib/py/bbx/provenance.py` lifted from bbh's over that format with R11's eight classes, `gates/provenance.sh` (a file with no row, a row with no file, a class outside R11, a duplicate file value), the screen's "expectations relied upon" histogram read from a kept suite run's set, and the "comparator classes … never PASSed on a real pairing" line — `docs/plans/S2.md` §3 E3 and §6.
+- Then the S2 slice readout (CLAUDE.md §7: gates + controls, F12/F16/F17, every frozen expectation's class, D23–D30, what the green does not assert, rules re-anchored) and the close.
+- A background battery: nothing under the tree changes while it runs — an untracked file counts, the sweeps read it (G17).
+- R21 is still open: the maintainer produces the Linux/WSL run by the procedure in the entry; the S2 gates add two facts for that host: bytecode is kept out of the clones (`PYTHONDONTWRITEBYTECODE`), and the kind-blind `hash_cmd` is a python one-liner (D27).
 
 **Orientation carried from the bbx-1 close (still true where not superseded above)**
 - S1 has two items left: the readout generator (abstraction RO1–RO3 as a
@@ -170,6 +163,9 @@ by construction (the recount's clone) and by `fidelity_bbh`'s proof.
 - A gate piped into `tail` in a `&&` chain checks nothing: the pipe's exit
   is `tail`'s (G16: a red `close_sweeps` was committed and pushed that way).
   Run the gate to a file, test its own exit, then read the file.
+- The suite's derived configs must live IN the consumer copy: `[project].root = "."` resolves against the config file (a config under TMPDIR reads "unregistered build" because the registry is unreachable — `gates/suite.sh`'s own second defect).
+- A parameter abort under an armed EXIT trap exits 0 on this host's `/bin/sh` (G18); the classifier's shell-error clause reads it as FAIL, but a chain that tests only the exit does not.
+- A subshell that inherits `set -e` ends at its first failing command, before an `echo "exit=$?"` that follows it: a pair helper capturing a tool's exit needs `set +e` inside the subshell (the S2 fidelity gate's first defect); a state-setting helper called inside `$(…)` sets nothing the parent can read (G18).
 - Two recounts running at once in one tree are not a known problem (the
   inflation seen while bisecting G9 was the grep, not the overlap), but the
   tools in the SMS tree do run for minutes; run the gate alone.

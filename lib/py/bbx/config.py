@@ -93,10 +93,26 @@ DEFAULTS = {
         "program_command": "",
         "wholeset_command": "",
     },
-    # the suite keys the fingerprint reads; the suite runner itself is slice S2
+    # the suite keys the fingerprint and the comparison libraries read; the suite runner is S2 step 3
     "suite": {
         "registry": "tests/expected/registry.tsv",
         "default_set": "",
+        "replays_dir": "tests/replays",
+        "expected_dir": "tests/expected",
+        "driver": "",                # a consumer names its driver (a path from its root, or a name under driver_home); none = FAIL at the entrance
+        "driver_home": "$BBX_HOME/drivers",   # D28 (R26): where a bare driver NAME resolves — absent until S3 gives BBX a driver
+        "runs_per_replay": 2,        # D29: every scenario runs twice; a difference is NONDETERMINISTIC before any class (BBX-14)
+        "mask_env": "MASK_RANGES",   # the variable a driver reads the mask from (bbh drivers/README.md)
+        "mask_default": "",          # D26: kind-blind, a set without a mask file runs UNMASKED; the frame-driven profile carries bbh's literal
+        "rompath_env": "",           # the driver's search-path variable; empty = the input directory is the search path
+        "input_env": "BBX_INPUT",    # the reference-input directory, demanded at the entrance and made absolute
+        "hermetic_unset": [],        # scrubbed from the environment before any driver runs; the frame-driven profile carries bbh's eight
+        "hash_cmd": "python3 -m bbx.sha1",   # D27: prints `<hex> <file>`; portable (bbh's `shasum` stays in the frame-driven profile)
+    },
+    # the expectation KINDS: [extension, family, disposition] — registered here and nowhere else (E1, R23; D25).
+    # Kind-blind: the three kinds every subject can carry; a kind with a comparator family adds its own.
+    "expectations": {
+        "kinds": [["skip", "-", "SKIP"], ["sha1", "exact", "N/A"], ["pending", "-", "NOT-EVALUATED"]],
     },
 }
 
@@ -151,7 +167,18 @@ KINDS = {
                              ["@program", "prg"]],
             "region_default": "gfx/qsnd",
         },
-        "suite": {"default_set": "vsavj"},
+        # bbh's [suite] defaults verbatim (lib/py/bbh/config.py at f675710; D26-D29), plus the driver home: bbh's own drivers/ (R26)
+        "suite": {"default_set": "vsavj", "mask_default": "043c-043d,4182-41a2,7f00-8000",
+                  "driver": "tools/run_replay_mame.sh", "driver_home": "$BBX_BBH_HOME/drivers",
+                  "rompath_env": "MAME_ROMPATH", "input_env": "ROMDIR", "hash_cmd": "shasum",
+                  "hermetic_unset": ["POKES", "DUMPS", "SNAP_FRAMES", "TAIL_FRAMES", "VIDEO_OUT", "INPUT_OUT", "INPUT_INJECT_TEST", "NO_INPUT_CHECK"]},
+        # bbh's five kinds (enumerate_expectations.sh at f675710): masked and diverge are the temporal family over the
+        # checksum-log view; fidelity F16c diffs the enumeration lines
+        "expectations": {"kinds": [["skip", "-", "SKIP"], ["sha1", "exact", "N/A"], ["pending", "-", "NOT-EVALUATED"],
+                                   ["masked", "temporal", "EVAL"], ["diverge", "temporal", "EVAL"]]},
+        # the temporal family's thresholds: bbh's [thresholds] defaults verbatim (D23; R25 makes a
+        # looser consumer value need a ruling). A kind with no temporal family carries none.
+        "thresholds": {"flicker_max": 2, "reconverge": 60, "flicker_max_total": 8},
     },
     "self": {
         "project": {"gates_dir": "gates", "lib_dir": "lib/sh", "instrument_word": "instrument"},

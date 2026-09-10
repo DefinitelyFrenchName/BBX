@@ -247,3 +247,66 @@ lives — bbh `[BBH-9]`).
   R21's bundle step replaced by a clone of the remote. Checked before the
   push with the two document gates, not the whole battery (a ruling and
   its ledgers; no tool changed).
+
+## bbx-3 — 2026-09-10 (session 3: the NOTE fix; S2 planned, STOPPED, three of four rulings answered)
+
+- Open: `bin/bbx selftest` GREEN, 12 gates, 26/26 controls, on the bbx-2 HEAD;
+  the drift NOTE (VampireSaved 4 commits past the census, 16 rows moved) was
+  in the census log and not on the screen — the handoff's first fix.
+  `lib/py/bbx/readout.py` now lists every NOTE-class line; `gates/readout.sh`
+  gained a perturbed-copy control (`note-follows-log`), proved both ways (a
+  shadow generator with the feature stripped fails the gate). Battery GREEN
+  after the fix: 12 gates, 27/27 controls.
+- S2 planned before any tool (`docs/plans/S2.md`): the lift measured on the
+  plain clone at `f675710` (11 files, 1,102 lines; 8 selftests; 62 frozen
+  verdict lines; the example's expectation tree by kind); four rulings
+  raised (R23–R26) and the STOP taken.
+- The maintainer, same day: R23 agreed (family and view by kind); R25 agreed
+  (a loosened threshold needs a ruling id — "thank you for respecting the
+  rules"); R26 agreed (a per-kind driver home, bbh's for the frame-driven
+  kind); R24 objected — a TSV register is a format that can break on a
+  mishandled spacer character. Measured against the subset parser BBX
+  already trusts: a TOML register with the file as a value and every field
+  named parses, survives a tab or a pipe inside a string, and refuses a
+  duplicate table; R24 revised to that form and left open for the answer.
+- In force from this entry: R23, R25, R26. S2 steps 1–3 may open on them;
+  step 4 (the register) waits on R24.
+- Later the same sitting: S2 steps 1–3 built on R23/R25/R26 — the temporal
+  family, the dispatcher with the kinds table, the suite with its kept run —
+  every printed line bbh's (F12 17, F16 35, F17 52 pairs identical on the
+  clone), 21 new controls, D23–D30. Two incidents filed with prices (G17: a
+  default cited before its row, caught by the sweeps inside the battery; G18:
+  a parameter abort exiting 0 under a trap, caught by the classifier's
+  shell-error clause). Battery GREEN twice at one HEAD: 18 gates, 48/48.
+- Anti-hyperfocus checkpoint (BBX-27), mid-sitting: the thread is still the
+  most valuable one — S2 is what puts "what this green rests on" beyond
+  controls onto the screen, and step 4 is the line that does it. The last
+  green means: bbh's comparison vocabulary, dispatcher and suite loop run in
+  BBX byte for byte over bbh's fixture and synthetic shapes; it does not yet
+  mean any expectation's provenance is stated, and it says so.
+
+## bbx-3 CLOSE — 2026-09-10
+
+- Close measurements: green first, twice, kept — `PASS 18 SKIP 0 FAIL 0
+  MISSING 0`, `controls fired 48 / declared 48`, tree unchanged in both,
+  BBX-14 met on the generated screen (0 verdict differences at one HEAD).
+  Sweeps gated (`close_sweeps` GREEN: 8 retraction rows, 0 hits outside the
+  ledgers, 0 deferrals, 30 defaults rows, 86 citations resolved); no claim
+  retracted this sitting (the TSV recommendation of R24 is declined, not
+  false, and stays in the queue as such). Lineage: never entered (clones);
+  bbh at f675710 porcelain 4; VampireSaved 6 commits past the census.
+- The maintainer at the close: the two incidents are "working as intended";
+  asked whether they carry a learning for the harness. Answer filed in G17
+  (a mechanism: the kept run recording untracked entries, bbx-4's first
+  small fix) and G18 (an authoring trap, no mechanism: the one that exists
+  fired). Pushed at the maintainer's word ("push").
+- Anti-hyperfocus checkpoint (BBX-27): the sitting built three of S2's four
+  steps on the day's rulings and stopped where the fourth needs one; the
+  most valuable next thread is step 4 — the register is the line that turns
+  "expectations relied upon: none registered" into a histogram, which is
+  what S2 exists to put on the screen. The last green means: bbh's
+  comparison vocabulary, dispatcher and suite loop run in BBX byte for byte
+  over bbh's fixture and the lineage's synthetic shapes, BBX's own gates
+  prove each control fires, and nothing yet says where any expectation's
+  numbers came from — and the screen says so.
+

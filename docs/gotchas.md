@@ -217,3 +217,42 @@ decides before any text — here the text said FAIL and the status read
 was a different program's) and, again, §1 (the push was the moment of
 certainty). Same family as G15: a claim of "checked" written by the
 chain's shape, not by a measurement.
+
+## G17 — A default was cited before its register row existed, and the close sweeps went red inside the battery (paid: one battery run, ~4 min; 2026-09-10)
+While the step-2 battery ran, S2 step 3's helper `lib/py/bbx/sha1.py` was
+written citing `D27` — a row not yet in `docs/defaults.md`. The sweep walks
+the tree, tracked or not, and the kept run's `close_sweeps.log` read
+`cited-not-registered D27 in lib/py/bbx/sha1.py:2`: PASS 16, FAIL 1, NOT
+GREEN. The row was written minutes later, in the same edit that added D28–D30
+and the suite keys — the rule (BBX-24: "every new default gets a row before it
+is used") was honoured in intent and broken in order, and the gate does not
+read intent. Fix: the row; nothing loosened. The order for a background
+battery from here: nothing under the tree changes while it runs — an
+untracked file counts, because the sweeps read it. Re-anchors: BBX-24, and
+BBX-26 (the red halted step 3 until it was understood). The learning worth a
+mechanism (asked by the maintainer at the close): the runner's working-tree
+check is bbh's, tracked-only (`grep -v '^??'`) and read by F13, so it cannot
+change what it prints; the kept run can — `run.txt` recording the untracked
+count before and after, the screen showing it on the `tree during the run:`
+line. Filed as bbx-4's first small fix in HANDOFF.
+
+## G18 — A gate's parameter abort under an armed EXIT trap exited 0 on this host, and the classifier read it as FAIL (paid: 1 gate run; 2026-09-10)
+`gates/suite.sh` set its kept-run directory inside `suite_()`, which every
+call ran in a command substitution; the parent's `$LOGDIR` was unbound. Under
+`set -u` the parent printed `gates/suite.sh: line 50: LOGDIR: unbound
+variable` and stopped a third of the way through — and its exit status was 0,
+because an EXIT trap was armed: bbh `[BBH-14]`'s shape, reproduced here on
+macOS `/bin/sh` (bash 3.2). Measured: `bin/bbx classify 0 <that output>` →
+`FAIL exit 0 after a shell error: gates/suite.sh: line 41: LOGDIR: unbound
+variable` — the kernel's `shell_error_regex` (D-row in `docs/defaults.md`,
+lifted from bbh) turns the false green into a FAIL before any human reads
+it. Fix: one fixed kept-run directory the parent knows. Re-anchors BBX-1
+(exit status decides first — and the classifier's shell-error clause is what
+makes a lying exit 0 decide FAIL). First time this lineage's rule fired on a
+BBX gate rather than a fixture. The learning is an authoring trap, not a
+mechanism (the mechanism already exists and fired): a helper called inside
+`$(…)` sets nothing the parent reads, so per-run state lives in a fixed
+path; and the two sibling defects of the same hour — `set -e` inherited by a
+pair helper's subshell, a bash process substitution in a POSIX gate — are the
+same family: a gate written faster than it was run. HANDOFF hazards carry
+all three; none needs a rule loosened or added.

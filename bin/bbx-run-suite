@@ -1,0 +1,249 @@
+#!/bin/sh
+# bbx-run-suite — THE SUITE, auto-detecting: fingerprint the subject the driver's search path
+# resolves, look it up in the registry, run every scenario against that expectation set.
+#
+# Usage: <INPUT_ENV>=... [<ROMPATH_ENV>="build;ref"] bbx-run-suite [--config bbx.toml]
+#            [--driver <path|name>] [--freeze] [--log DIR] [set]
+#
+# Lifted from bbh bin/bbh-run-suite at f675710 (BBX slice S2 step 3, bbx-3, 2026-09-10), whose
+# lineage is VampireSaved's tests/run_suite.sh. EVERY PRINTED VERDICT LINE IS THAT SCRIPT'S TEXT,
+# character for character (abstraction C4) — fidelity F12 diffs the two over the same expectation
+# trees. The loop: the build under test is whatever the driver's search path resolves (the
+# reference input by default; set the rompath variable to front a build); its fingerprint
+# (lib/py/bbx/fingerprint.py: whole-set key first, program key second) selects
+# <expected_dir>/<expset>/, and an unregistered fingerprint FAILS LOUDLY (registry rows are added
+# only at freeze time, as a build decision). For every <replays_dir>/*.rpl: run `runs_per_replay`
+# times through the driver, fail on nondeterminism (BBX-14: before any class is consulted), then
+# dispatch on the expectation KIND (lib/sh/expectation_kinds.sh's table, R23):
+#   <name>.skip      not applicable to this set; body = the reason, printed
+#   <name>.pending   MEASURED but no ratified class: a FAILURE that names the reason (BBX-3)
+#   <name>.masked    `<class> <baseset> <args>` — the temporal family through lib/sh/compare.sh
+#                    (exact / flicker / diverge / window / composite), both runs under the set's mask
+#   <name>.diverge   `<baseset> <frame>` — line-identical to the frozen full log through frame-1,
+#                    first divergence EXACTLY there
+#   <name>.sha1      whole-log SHA-1 equality (the default)
+#   (none)           NO-EXPECTATION, a failure
+#   --freeze         write .sha1 + a full log copy instead of comparing; authored .skip/.masked are
+#                    left alone; a self-frozen .diverge is RETIRED to .diverge.superseded
+#   SUITE_ONLY="a b" run only the named scenarios — an authoring aid, never a verdict (FILTERED)
+#
+# WHAT BBX ADDS, printing nothing (S2 plan §3):
+#   --log DIR        keep the run (D22's shape): results.tsv — scenario, kind, class, verdict,
+#                    FINDING (lib/py/bbx/finding.py: `short` counted apart from `diverged`, BBX-4)
+#                    — and run.txt (subject, set, driver, HEAD, platform, the suite's verdict)
+#   R25              at the entrance, a looser [thresholds] value with no ruling row is REFUSED
+#                    (lib/py/bbx/thresholds.py prints the one line; exit 3) — only when the kind's
+#                    table carries a temporal family
+#   R26              a bare driver NAME resolves in [suite].driver_home — the frame-driven profile's
+#                    is bbh's own drivers/ through $BBX_BBH_HOME — a path from the consumer root and
+#                    --driver win; nothing is copied out of bbh
+# Config: [suite] replays_dir, expected_dir, registry, default_set, driver, driver_home,
+# runs_per_replay, mask_env, mask_default, rompath_env, input_env, hermetic_unset, hash_cmd;
+# [machine].profile (exported to bbh's drivers as BBH_PROFILE, their variable; none = none).
+set -eu
+BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME
+. "$BBX_HOME/lib/sh/config.sh"
+
+CONFIG=""; FREEZE=0; DRIVER_ARG=""; SET=""; LOG=""
+while [ $# -gt 0 ]; do
+    case "$1" in
+    --config) shift; CONFIG="${1:?--config needs a file}" ;;
+    --driver) shift; DRIVER_ARG="${1:?--driver needs a path or a driver name}" ;;
+    --freeze) FREEZE=1 ;;
+    --log)    shift; LOG="${1:?--log needs a dir}" ;;
+    -h|--help) sed -n '2,40p' "$0"; exit 0 ;;
+    -*) echo "unknown argument '$1' (try --help)" >&2; exit 2 ;;
+    *) SET="$1" ;;
+    esac
+    shift
+done
+
+bbx_config_init "$CONFIG"
+RUN_START="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+REPLAYS_DIR="$(bbx_cfg suite.replays_dir)"
+EXPECTED_DIR="$(bbx_cfg suite.expected_dir)"
+[ -n "$SET" ] || SET="$(bbx_cfg suite.default_set)"
+DRIVER="${DRIVER_ARG:-$(bbx_cfg suite.driver)}"
+DRIVER_HOME="$(bbx_cfg suite.driver_home)"
+RUNS="$(bbx_cfg suite.runs_per_replay)"
+MASK_ENV="$(bbx_cfg suite.mask_env)"
+ROMPATH_ENV="$(bbx_cfg suite.rompath_env "")"
+INPUT_ENV="$(bbx_cfg suite.input_env)"
+HERMETIC="$(bbx_cfg suite.hermetic_unset "")"
+HASH_CMD="$(bbx_cfg suite.hash_cmd)"
+BBX_MASK_DEFAULT="$(bbx_cfg suite.mask_default "")"; export BBX_MASK_DEFAULT
+KIND="$(bbx_cfg project.kind "-")"
+# the machine profile bbh's MAME drivers run under: the caller's BBH_PROFILE wins, else
+# [machine].profile; neither = none exported (the fake driver needs none; a MAME driver REFUSES
+# to run without one). The variable is the DRIVERS' — they are bbh's (R26).
+if [ -z "${BBH_PROFILE:-}" ]; then _mp="$(bbx_cfg machine.profile "")"; [ -z "$_mp" ] || { BBH_PROFILE="$_mp"; export BBH_PROFILE; }; fi
+. "$BBX_HOME/lib/sh/compare.sh"
+
+# R25 at the entrance: the thresholds module prints ONE REFUSED line and exits 3 on a loosened
+# value with no ruling row — checked only when this kind's table carries a temporal family
+if python3 -m bbx.expectations kinds | cut -f2 | grep -qx temporal; then
+    _thr="$(python3 -m bbx.thresholds)" || { echo "$_thr"; exit 3; }
+fi
+
+# The reference-input variable is demanded, and made ABSOLUTE (the lineage,
+# 14z-132: gates cd into work dirs and then compose paths that still contain
+# it; a relative value silently resolves to nothing). Kept a VARIABLE — only
+# absolutised, and only if it exists.
+eval "INPUT=\${$INPUT_ENV:-}"
+[ -n "$INPUT" ] || { echo "FAIL: set $INPUT_ENV to the reference-input directory"; exit 1; }
+if [ -d "$INPUT" ]; then INPUT="$(cd "$INPUT" && pwd)"; eval "$INPUT_ENV=\"\$INPUT\""; export "$INPUT_ENV"; fi
+if [ -n "$ROMPATH_ENV" ]; then eval "ROMPATH=\${$ROMPATH_ENV:-\$INPUT}"; else ROMPATH="$INPUT"; fi
+
+# R26: the driver home. Two tokens are expanded, nothing else: $BBX_HOME (the kind-blind default)
+# and $BBX_BBH_HOME (the frame-driven profile's: bbh stays the frame-driven consumer's driver home).
+case "$DRIVER_HOME" in
+'$BBX_BBH_HOME'|'$BBX_BBH_HOME'/*)
+    [ -n "${BBX_BBH_HOME:-}" ] || { echo "FAIL: [suite].driver_home is $DRIVER_HOME and BBX_BBH_HOME is unset — the $KIND kind's drivers are bbh's (R26); set BBX_BBH_HOME or name a driver path"; exit 1; }
+    DRIVER_HOME="$BBX_BBH_HOME${DRIVER_HOME#\$BBX_BBH_HOME}" ;;
+'$BBX_HOME'|'$BBX_HOME'/*) DRIVER_HOME="$BBX_HOME${DRIVER_HOME#\$BBX_HOME}" ;;
+esac
+[ -n "$DRIVER" ] || { echo "FAIL: [suite].driver names no driver — a consumer names its own (a path from its root, or a name under $DRIVER_HOME), or pass --driver"; exit 1; }
+case "$DRIVER" in
+*/*) case "$DRIVER" in /*) ;; *) DRIVER="$BBX_ROOT/$DRIVER" ;; esac ;;
+*)   DRIVER="$DRIVER_HOME/$DRIVER.sh" ;;
+esac
+[ -x "$DRIVER" ] || { echo "FAIL: driver '$DRIVER' is not executable (see drivers/README.md)"; exit 1; }
+
+cd "$BBX_ROOT"
+WORK="$(mktemp -d)"
+trap 'rm -rf "$WORK"' EXIT
+
+# HERMETIC (the lineage, 14z-90 issue #3): nothing from the caller's shell may
+# reach a frozen log — the freeze side scrubs these before writing a basis,
+# and the compare side must be equally hermetic or the two are not measuring
+# the same thing.
+# shellcheck disable=SC2086
+[ -z "$HERMETIC" ] || unset $HERMETIC || true
+
+# --log: the kept run (BBX-29: keyed by subject version and start time). Nothing printed changes.
+n_pass=0; n_fail=0; n_skip=0; n_other=0
+if [ -n "$LOG" ]; then
+    mkdir -p "$LOG" && LOG="$(CDPATH= cd "$LOG" && pwd)" || { echo "cannot create --log $LOG" >&2; exit 2; }
+    printf 'scenario\tkind\tclass\tverdict\tfinding\n' > "$LOG/results.tsv"
+fi
+keep() {  # keep <name> <kind> <class> <verdict-text>
+    [ -n "$LOG" ] || return 0
+    _k_f="$(python3 -m bbx.finding "$4")"
+    printf '%s\t%s\t%s\t%s\t%s\n' "$1" "$2" "$3" "$(printf '%s' "$4" | head -1 | tr '\t' ' ')" "$_k_f" >> "$LOG/results.tsv"
+}
+finish() {  # finish <verdict> — run.txt, then exit with the suite's status
+    if [ -n "$LOG" ]; then
+        {
+            echo "config=$BBX_CONFIG"; echo "root=$BBX_ROOT"; echo "kind=$KIND"; echo "set=$SET"; echo "expset=${EXPSET:-}"
+            echo "driver=$DRIVER"; echo "runs_per_replay=$RUNS"; echo "mask=${MASK:-}"; echo "freeze=$FREEZE"; echo "filtered=$([ -n "${SUITE_ONLY:-}" ] && echo 1 || echo 0)"
+            echo "head=$(git rev-parse --short HEAD 2>/dev/null || echo '-')"; echo "porcelain=$(git status --porcelain 2>/dev/null | wc -l | tr -d ' ')"
+            echo "started=$RUN_START"; echo "platform=$(uname -sm)"
+            echo "bbx_home=$BBX_HOME"; echo "bbx_head=$(git -C "$BBX_HOME" rev-parse --short HEAD 2>/dev/null || echo '-')"
+            echo "pass=$n_pass"; echo "skip=$n_skip"; echo "fail=$n_fail"; echo "other=$n_other"
+            echo "verdict=$1"
+        } > "$LOG/run.txt"
+    fi
+}
+
+EXPSET=$(python3 -m bbx.fingerprint "$ROMPATH" --set "$SET") \
+    || { echo "unregistered build fingerprint — see message above"; finish UNREGISTERED; exit 1; }
+EXPDIR="$BBX_ROOT/$EXPECTED_DIR/$EXPSET"
+EXPROOT="$BBX_ROOT/$EXPECTED_DIR"
+mkdir -p "$EXPDIR"
+echo "build fingerprint -> expectation set '$EXPSET'"
+
+check_diverge() {   # check_diverge <log> <spec-file> -> prints verdict, returns 0/1
+    python3 -m bbx.check_diverge "$1" "$2" "$EXPROOT"
+}
+
+MASK="$(compare_mask_for "$EXPDIR")"
+if [ -f "$EXPDIR/mask" ]; then
+    echo "per-set mask: $MASK"
+fi
+
+run_driver() {   # run_driver <mask> <rpl> <out>
+    env "$MASK_ENV=$1" "$DRIVER" "$SET" "$2" "$3"
+}
+
+fail=0
+[ -n "${SUITE_ONLY:-}" ] && echo "FILTERED RUN (SUITE_ONLY) — not a suite verdict"
+for rpl in "$BBX_ROOT/$REPLAYS_DIR"/*.rpl; do
+    [ -f "$rpl" ] || continue
+    name="$(basename "$rpl" .rpl)"
+    if [ -n "${SUITE_ONLY:-}" ]; then
+        case " $SUITE_ONLY " in *" $name "*) ;; *) continue ;; esac
+    fi
+    printf '%-24s ' "$name"
+    if [ -f "$EXPDIR/$name.skip" ]; then
+        v="SKIP ($(cat "$EXPDIR/$name.skip"))"; echo "$v"; keep "$name" skip - "$v"; n_skip=$((n_skip + 1))
+        continue
+    fi
+    if [ -f "$EXPDIR/$name.pending" ]; then
+        echo "PENDING — not validated"
+        sed 's/^/                         /' "$EXPDIR/$name.pending"
+        keep "$name" pending - "PENDING — not validated"; n_fail=$((n_fail + 1))
+        fail=1
+        continue
+    fi
+    RUNMASK=""; kind=sha1; class=sha1
+    [ -f "$EXPDIR/$name.masked" ] && { RUNMASK="$MASK"; kind=masked; class="$(cut -d' ' -f1 "$EXPDIR/$name.masked")"; }
+    [ "$kind" = sha1 ] && [ -f "$EXPDIR/$name.diverge" ] && { kind=diverge; class=diverge; }
+    i=1; runfail=0
+    while [ "$i" -le "$RUNS" ]; do
+        run_driver "$RUNMASK" "$rpl" "$WORK/$name.$i.log" || { runfail=1; break; }
+        i=$((i + 1))
+    done
+    if [ "$runfail" = 1 ]; then echo "RUN-FAIL"; keep "$name" "$kind" "$class" "RUN-FAIL"; n_fail=$((n_fail + 1)); fail=1; continue; fi
+    i=2; nondet=0
+    while [ "$i" -le "$RUNS" ]; do
+        if ! cmp -s "$WORK/$name.1.log" "$WORK/$name.$i.log"; then
+            echo "NONDETERMINISTIC (first divergent frame below)"
+            diff "$WORK/$name.1.log" "$WORK/$name.$i.log" | head -3
+            nondet=1; break
+        fi
+        i=$((i + 1))
+    done
+    if [ "$nondet" = 1 ]; then keep "$name" "$kind" "$class" "NONDETERMINISTIC (first divergent frame below)"; n_fail=$((n_fail + 1)); fail=1; continue; fi
+    sha=$($HASH_CMD "$WORK/$name.1.log" | cut -d' ' -f1)
+    if [ "$FREEZE" = 1 ] && [ -n "$RUNMASK" ]; then
+        echo "authored .masked expectation — not self-frozen"; keep "$name" "$kind" "$class" "authored .masked expectation — not self-frozen"; n_other=$((n_other + 1))
+    elif [ "$FREEZE" = 1 ]; then
+        echo "$sha" > "$EXPDIR/$name.sha1"
+        mkdir -p "$EXPDIR/logs"
+        cp "$WORK/$name.1.log" "$EXPDIR/logs/$name.log"
+        if [ -f "$EXPDIR/$name.diverge" ]; then
+            mv "$EXPDIR/$name.diverge" "$EXPDIR/$name.diverge.superseded"
+            echo "  RETIRED $name.diverge ($(cat "$EXPDIR/$name.diverge.superseded"))"
+            echo "  -> kept as $name.diverge.superseded; the new .sha1 now governs."
+        fi
+        echo "frozen $sha"; keep "$name" sha1 sha1 "frozen $sha"; n_other=$((n_other + 1))
+    elif [ -n "$RUNMASK" ]; then
+        if verdict=$(compare_check "$EXPDIR" "$name" masked \
+                        "$(cat "$EXPDIR/$name.masked")" \
+                        "$RUNMASK" "$WORK/$name.1.log"); then
+            echo "$verdict"; keep "$name" masked "$class" "$verdict"; n_pass=$((n_pass + 1))
+        else
+            echo "$verdict"; keep "$name" masked "$class" "$verdict"; n_fail=$((n_fail + 1)); fail=1
+        fi
+    elif [ -f "$EXPDIR/$name.diverge" ]; then
+        if verdict=$(check_diverge "$WORK/$name.1.log" "$EXPDIR/$name.diverge"); then
+            echo "$verdict"; keep "$name" diverge diverge "$verdict"; n_pass=$((n_pass + 1))
+        else
+            echo "$verdict"; keep "$name" diverge diverge "$verdict"; n_fail=$((n_fail + 1)); fail=1
+        fi
+    elif [ ! -f "$EXPDIR/$name.sha1" ]; then
+        echo "NO-EXPECTATION (freeze after review, as a STATE.md decision)"
+        keep "$name" - - "NO-EXPECTATION (freeze after review, as a STATE.md decision)"; n_fail=$((n_fail + 1))
+        fail=1
+    elif [ "$sha" = "$(cat "$EXPDIR/$name.sha1")" ]; then
+        echo "PASS"; keep "$name" sha1 sha1 "PASS"; n_pass=$((n_pass + 1))
+    else
+        v="FAIL expected $(cat "$EXPDIR/$name.sha1") got $sha"; echo "$v"; keep "$name" sha1 sha1 "$v"; n_fail=$((n_fail + 1))
+        cp "$WORK/$name.1.log" "$WORK/$name.divergent.log" 2>/dev/null || true
+        fail=1
+    fi
+done
+
+[ "$fail" = 0 ] && echo "SUITE GREEN" || echo "SUITE RED"
+finish "$([ "$fail" = 0 ] && echo GREEN || echo RED)"
+exit "$fail"

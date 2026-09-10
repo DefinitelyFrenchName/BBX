@@ -15,7 +15,9 @@ identity and version; controls fired / declared, and whether each gate has
 proved its controls can fail; the expectations relied upon (a histogram by
 provenance class — none until slice S2's register exists, and the screen says
 so rather than omitting the line); coverage as a number (BBX-18), taken from
-`NOTE: coverage …` lines the gates print; BBX-14 met or unmet — met only when
+`NOTE: coverage …` lines the gates print; every OTHER NOTE-class line a gate
+printed (a lineage's drift, bbh's source) listed as a note, since a number
+left in a log is a number the maintainer never saw (bbx-3's first fix); BBX-14 met or unmet — met only when
 `--against` names a second kept run of the same subject version and no gate's
 verdict differs; the newest re-baseline line.
 RO2 — what this green does NOT assert (BBX-30): every gate declares it in its
@@ -34,7 +36,7 @@ import re
 import sys
 
 NOT_ASSERTED = re.compile(r"^# NOT-ASSERTED: (.+)$")
-NOTE_COVERAGE = re.compile(r"^NOTE: coverage (.+)$")
+NOTE_LINE = re.compile(r"^NOTE: (\S+) ?(.*)$")   # every NOTE-class number a gate prints (docs/controls.md); key `coverage` is BBX-18
 CTRL = re.compile(r"^controls=(\S+) declared=(\d+) fired=(\d+) dead=(\d+) undeclared=(\d+) verdict=(\S+)")
 
 
@@ -135,20 +137,29 @@ def main(argv=None):
     # expectations
     print("  expectations relied upon: none registered — the expectation register with its provenance classes is slice S2; "
           "until then no comparison against a frozen expectation is claimed")
-    # coverage
-    cov = []
+    # NOTE-class numbers: coverage (BBX-18) on its own line, every other key as a note
+    cov, notes = [], []
     for r in rows:
         lp = os.path.join(run, r["gate"] + ".log")
         if os.path.exists(lp):
             for line in open(lp, encoding="utf-8", errors="replace"):
-                m = NOTE_COVERAGE.match(line)
-                if m:
-                    cov.append(f"{r['gate']}: {m.group(1).strip()}")
+                m = NOTE_LINE.match(line.rstrip("\n"))
+                if not m:
+                    continue
+                if m.group(1) == "coverage":
+                    cov.append(f"{r['gate']}: {m.group(2).strip()}")
+                else:
+                    notes.append(f"{r['gate']}: {m.group(1)} {m.group(2).strip()}".rstrip())
     if cov:
         for c in cov:
             print(f"  coverage: {c}")
     else:
         print("  coverage: no gate reported a coverage number (NOTE: coverage …) — uncovered claims are not counted in this run")
+    if notes:
+        for n in notes:
+            print(f"  note: {n}")
+    else:
+        print("  note: none — no gate printed a NOTE-class number other than coverage (a moved lineage would be listed here)")
     # BBX-14
     if against:
         try:
