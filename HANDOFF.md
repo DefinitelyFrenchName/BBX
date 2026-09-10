@@ -14,13 +14,14 @@ Shape: operational map. Read this first, then `STATE.md`, then
 | the open rulings queue | `docs/rulings.md` |
 | the incident ledger with prices | `docs/gotchas.md` |
 | the measured census (3 files + protocol + verifier records) | `docs/census/` |
+| **the FILE CENSUS** (which harness files each gate executes, by the kind of the gate; shared vs kind-specific; the generator in its §C) | `docs/census/bbx_files.md` — measured once at bbx-11, NOT gated (the gate is S4's plan); not read by `gates/census_recount.sh` |
 | the four bins, every item | `docs/bins.md` (index + totals) → `docs/bins/{bbh,vampiresaved,sms}.md` |
 | the abstraction as contracts | `docs/abstraction.md` |
 | the generality proof (two non-frame kinds, their fixtures) | `docs/generality.md` |
 | the fidelity plan, F12+ | `docs/fidelity.md`; re-baseline log `docs/rebaselines.md` |
 | the slice sequence with the estimate | `docs/slices.md` |
 | slice S2's plan (measured census of the lift, design, fidelity rows, controls, rulings R23–R26) | `docs/plans/S2.md` — built bbx-3/bbx-4 |
-| **slice S3's plan** (the ancestors measured, the design contract by contract, the fixture, fourteen controls, rulings R31–R34) | `docs/plans/S3.md` — R31–R34 answered; **steps 1–4 built (bbx-7, bbx-8, bbx-9, bbx-10), step 5 next**; §5's shifted-artifact row corrected at bbx-8 (G21), §5/§8.3's control placement at bbx-9 (X10), §5's nondeterminism row at bbx-10 (X11) |
+| **slice S3's plan** (the ancestors measured, the design contract by contract, the fixture, fourteen controls, rulings R31–R34) | `docs/plans/S3.md` — R31–R34 answered; **steps 1–5 built (bbx-7 … bbx-11); S3 awaits the maintainer's DONE ruling** (`docs/readout.md`, bbx-11: §7's six conditions in a table); §5's shifted-artifact row corrected at bbx-8 (G21), §5/§8.3's control placement at bbx-9 (X10), §5's nondeterminism row at bbx-10 (X11), §6's screen line at bbx-11 (X12) |
 | the maintainer readouts, one section per step, the CLOSE section last | `docs/readout.md` |
 | **the document-set kind (S3)** | the profile `lib/py/bbx/config.py` KINDS `document-set` (D33); `[suite].scenario_ext` (D34) via `bbx.expectations scenario-ext`; the fixture `fixture/docset/` (BBX's second consumer: `bbx.toml`, `mkdocset.py --check` — writes the `truth` kind from the design, `subject/`, `claims/`, `expected/` with `logs/<s>.log` the truth logs); `gates/docset_fixture.sh` |
 | **the document-set extractor and driver (S3 step 2)** | `lib/py/bbx/docset.py` (`selftest`, `run`, `map`, `summary`, and since step 3 `rows` — the run's rows joined by index with the map, proven the log's — and `resolve`, the ONE artifact resolver over `DOCSET_PATH`; the two strings and the token, D38; the forms' lexical classes and the record key, D39; the unlisted-claim guards, D40); `drivers/docset.sh` (`DOCSET_PATH` through `bbx.docset resolve`; REFUSED exit 3, DISCARDED exit 1); `drivers/README.md`; `gates/docset_driver.sh` (7 controls) |
@@ -51,7 +52,7 @@ bbh is **never modified** from here. VampireSaved and SMS are read only.
 ## What is running
 
 Nothing in the background. `BBX_BBH_HOME=~/Developer/blackbox-harness
-bin/bbx selftest` (~6 min) is GREEN twice at one HEAD: 23 gates, 78/78 controls (the bbx-10 close; the tally is quoted verbatim in `docs/readout.md`). Run it first
+bin/bbx selftest` (~6–9 min on a loaded host) is GREEN twice at one HEAD: 23 gates, 78/78 controls (`build/selftest_20260910T141218Z`, `build/selftest_20260910T142107Z`) (the bbx-11 close; the tally is quoted verbatim in `docs/readout.md`). Run it first
 thing, with `--log build/selftest_<stamp>` and no edits in flight (the runner's working-tree check reports a
 concurrent edit as DIRTIED); the census recount inside it is the
 re-derivation step of the ritual (CLAUDE.md §6.2) made into a gate.
@@ -59,7 +60,7 @@ re-derivation step of the ritual (CLAUDE.md §6.2) made into a gate.
 ## The ritual (ruled R17 at the bbx-1 close, 2026-09-09; adapted from VampireSaved VSP-17/VSP-18/VSP-162)
 
 Sessions are keyed `bbx-N`, one key per sitting, never renamed (pointers in
-readouts, gotchas and history resolve through it). The last closed sitting is **bbx-10** (2026-09-10); the next is **bbx-11**.
+readouts, gotchas and history resolve through it). The last closed sitting is **bbx-11** (2026-09-10); the next is **bbx-12**.
 
 **Open**
 1. Read this file, `STATE.md`, `docs/rulings.md`. (`CLAUDE.md` is the
@@ -127,11 +128,12 @@ readouts, gotchas and history resolve through it). The last closed sitting is **
 Steps 8 and 9 are checked, not remembered: step 8 by `close_sweeps`, step 9
 by construction (the recount's clone) and by `fidelity_bbh`'s proof.
 
-**Next-session orientation (written at the bbx-10 close, 2026-09-10)**
+**Next-session orientation (written at the bbx-11 close, 2026-09-10)**
 - Open first: `bin/bbx selftest --log build/selftest_<stamp>` and `bin/bbx readout` on it. Two `drift` NOTEs are expected: VampireSaved (past the census) and bbh (`447e5d2`, one past the baseline `10a82d2` — a README line; follow it by the R28 procedure only when a sitting needs the current tip).
-- **S3 step 5** (`docs/plans/S3.md` §8.5, §6 "The slice readout"; CLAUDE.md §7): the slice readout — the families per kind (A = 3 for the document-set kind: exact / set / schema, `docs/generality.md` "What the proof measures"), controls declared / fired per gate, the provenance classes relied upon (every document-set expectation `fixture` class; the screen's own sentence), the defaults rows the slice introduced (D33–D44), and the **first shared-vs-kind-specific FILE CENSUS**: which files under `lib/`, `bin/`, `drivers/`, `gates/` are read by one kind and which by two — MEASURED by the kinds' gates (e.g. the files each gate sources or calls, `grep`-derived and recounted), printed as numbers, never estimated; then what the slice's green does not assert, and the six DONE conditions of §7 answered one by one so the maintainer can rule S3 closed. No tool is written in step 5; if the census wants a tool, that is S4's plan. Then the STOP: S4's plan (R2's third kind, a command-line tool with deterministic output — the second consumer of `schema` (JSON) and of the kinds loop) written and stopped for rulings before anything is built (CLAUDE.md §6).
-- The shadow practice stands: `git archive HEAD | tar -x -C <scratch>`, `git init` there, apply, run every touched gate THROUGH THE CLASSIFIER (`sh gates/<g>.sh > <log>; bin/bbx classify $? <log>`), then the battery in the tree. It caught one defect at bbx-7, one at bbx-8, G22 and a label at bbx-9, and two defects of the new gate at bbx-10.
-- G19's learning (a rot gate over generated and printed text for "until slice N" / "is step N" sentences) now has two instances (G24) and is S6's; R29 (executable controls) is built in S6; R21 is still open.
+- **S3 awaits the maintainer's DONE ruling** on the table in `docs/readout.md` (bbx-11, "CLAUDE.md §7 — the six DONE conditions"). If the maintainer rules it done, `docs/slices.md`'s S3 row and `docs/plans/S3.md`'s status line record it (no tool). If not, the condition named is the next sitting's first task (BBX-26).
+- **Then the STOP: S4's plan** (`docs/slices.md` S4; `docs/generality.md` kind B; `docs/plans/S3.md` §9 for what S3 left undecided) — R2's third kind, the command-line tool: the second consumer of `schema` (JSON) and of the kinds loop, the tolerant-numeric family (a MEASURED band frozen as an expectation, never a tolerance; R25's ruling row for any loosening), `fixture/fakecli/` (deterministic, chiral, `--emit-json` / `--unordered` / `--band` / `--nondet` / `--crash-at`, the unknown-option refusal), the cli driver with sandbox and env scrub, the adapter contract (D7, R15) over two frameworks, BBX's own runners as subjects (R14), and **the file census as a gate** — `docs/census/bbx_files.md` §C is the instrument to lift; its two "+kernel" rows (`bin/bbx` executed by ONE gate, `gates/set_schema.sh`; the static and sweep runners by no document-set gate) are what S4's kind must exercise, and a file reached by no gate or by one kind where two are expected is the gate's FAIL. Written as `docs/plans/S4.md` in the S3 plan's shape (the ancestors measured, the design contract by contract, the fixture, the controls, the defaults, the steps, the rulings) and STOPPED for rulings before anything is built (CLAUDE.md §6). The S3 plan took one sitting (bbx-6).
+- The shadow practice stands: `git archive HEAD | tar -x -C <scratch>`, `git init` there, apply, run every touched gate THROUGH THE CLASSIFIER (`sh gates/<g>.sh > <log>; bin/bbx classify $? <log>`), then the battery in the tree. It caught one defect at bbx-7, one at bbx-8, G22 and a label at bbx-9, two defects of the new gate at bbx-10, and the census instrument's header defect at bbx-11 (G25).
+- G19's learning (a rot gate over generated and printed text for "until slice N" / "is step N" sentences) has two instances (G24) and is S6's; R29 (executable controls) is built in S6; R21 is still open.
 
 **Orientation carried from the bbx-1 close (still true where not superseded above)**
 - S1 has two items left: the readout generator (abstraction RO1–RO3 as a
@@ -178,6 +180,7 @@ by construction (the recount's clone) and by `fidelity_bbh`'s proof.
 - `--freeze` under the kinds loop never self-freezes a scenario that carries an authored kind (`gates/docset_suite.sh` control `freeze-keeps-the-truth-log`), so a `.truth`'s log at `logs/<name>.log` is safe beside it — but a scenario with NO authored kind is self-frozen and its `logs/<name>.log` WRITTEN: author the kinds before the first freeze, never after, or a later `.truth` would pair with a self-measured log (BBX-3, R11).
 - The document-set profile scrubs the driver family (`DOCSET_NONDET`, `DOCSET_FORMS`, `DOCSET_VIEW`; D33): a control that needs one of them goes through a wrapper driver passed with `--driver`, never through the caller's environment (X11: the plan had assumed the environment reaches the driver).
 - `.gitignore` says `*.log` (build output) with `docs/` and `fixture/` excepted: an expectation log anywhere else is IGNORED and silently absent from every clone (G22: the fixture's truth logs, one sitting). `bbx.provenance` now refuses a registered file git does not track; a new expectation tree under a new path needs its exception in `.gitignore` before its first freeze, and the shadow (a git tree built from HEAD) is where an ignored file shows.
+- The header is the LEADING COMMENT BLOCK after the shebang (R30) and three readers share it (controls, readout, tier): a line inserted between the shebang and the block ENDS the header — an instrument, a shim, a `set -x` added on line 2 makes every `MUST-FIRE:` and `NOT-ASSERTED:` line below it invisible, and only a gate that reads that file's header notices (G25: the census instrument, caught by `gates/docset_suite.sh` through the driver's blind-spot lines). Insert after the block, and prove the instrument on the gates before reading a number off it.
 - A self-test that runs through a tool's REAL path inherits the tool's real refusals (G20): `docset.py`'s guards refused its own synthetic line once a regex was broken. Catch them in the self-test, or the control reads DEAD for the wrong reason.
 - Two recounts running at once in one tree are not a known problem (the
   inflation seen while bisecting G9 was the grep, not the overlap), but the

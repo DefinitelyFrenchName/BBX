@@ -231,3 +231,29 @@ shadow first; two defects of the new gate caught there (paid 1 shadow run).
 controls. Fidelity F12–F17 diff empty on the plain clone at `10a82d2` (104
 pairings). bbh's tip `447e5d2`, a NOTE. Defaults D1–D44. Gotchas G1–G24.
 Retractions X1–X11.
+
+## bbx-11 (2026-09-10)
+
+**Status (bbx-11 close, 2026-09-10):** slices S1 (but for R21's platform run)
+and S2 complete; **S3 steps 1–5 built** (`docs/plans/S3.md` §8.1–8.5;
+R31–R34 answered) — **S3 is laid before the maintainer for the DONE ruling**
+(CLAUDE.md §7's six conditions answered one by one in `docs/readout.md`, the
+bbx-11 section; the contributor's reading: all six hold for the document-set
+kind AS A FIXTURE). Step 5 wrote no tool: the slice readout — comparator
+families per kind measured off the kinds tables (document-set 3: exact / set
+/ schema; frame-driven 1: temporal), controls declared / fired per gate off
+the kept run (the four S3 gates 21 / 21; the plan's design said fourteen),
+the fixture register's 16 rows (fixture 15, registry 1), the defaults
+D33–D44 by class (principled 6, ruled 2, arbitrary 2, split 2) — and the
+first shared-vs-kind-specific FILE CENSUS, `docs/census/bbx_files.md`,
+measured at runtime in a shadow tree (37 harness files: 11 executed by both
+kinds' gates, 7 + 7 by one kind only, 5 + 3 by one kind and the kernel, 4 by
+the kernel only, 0 by no gate; gates K 13 / F 6 / D 4), **measured once, not
+gated** — the generator is in the census's §C and the gate is S4's plan to
+decide. The plan's §6 screen line corrected in its own commit (X12, BBX-19).
+G25: the instrument's first version ended every header (R30) and
+`gates/docset_suite.sh` caught it in the shadow (paid 1 shadow gate run).
+`bin/bbx selftest` GREEN twice at one HEAD (BBX-14 met): 23 gates, 78/78 controls (`build/selftest_20260910T141218Z`, `build/selftest_20260910T142107Z`).
+Fidelity F12–F17 diff empty on the plain clone at `10a82d2` (104 pairings;
+F13/F14 21). bbh's tip `447e5d2`, a NOTE. Defaults D1–D44. Gotchas G1–G25.
+Retractions X1–X12.

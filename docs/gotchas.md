@@ -370,3 +370,31 @@ N" sentences, S6 — now has two instances behind it; a blind-spot line that
 names a future step should name the gate that will close it instead, so the
 sentence is checkable by the registry (a named gate exists or not) rather
 than by memory.
+
+## G25 — The file-census instrument inserted its trace line right after the shebang, which ENDED the header, and the document-set suite gate went red because the readout found no blind-spot line in the driver (paid: 1 shadow gate run, 86 s; 2026-09-10)
+S3 step 5's file census (`docs/census/bbx_files.md`) measures which harness
+files each gate executes, by instrumenting a shadow tree: one line per
+`bin/*`, `drivers/*.sh` and `lib/sh/*.sh` that appends its own path to a
+trace. The first version of the instrument put that line on line 2, after
+the shebang. R30 defines the header as the LEADING COMMENT BLOCK — every `#`
+line after the shebang up to the first non-comment line — so the inserted
+line ended every header at line 1, and `drivers/docset.sh` had, for the
+readout, no `NOT-ASSERTED:` line at all. `gates/docset_suite.sh`'s check
+"the driver's blind spots on the screen (RO2)" failed on exactly that: the
+missing line named. Twenty-two gates were green in the same shadow; the one
+that reads a header through the readout was the one that caught it. The
+gate's trace from that run was contaminated tooling (CLAUDE.md §1:
+discarded, never adjusted); the instrument was corrected to insert after the
+header (an `awk` over the leading block), the gate re-run green (83 s), and
+the whole census run a second time with the corrected generator so the
+recorded procedure is the one that produced the numbers, the two runs
+compared byte for byte (BBX-14). Learning (R27): an instrument that touches
+a file is a header edit unless it is proven not to be — prove the
+instrument on the gates before reading a number off it (BBX-5: the first
+run was that proof, and it failed where it should); the header is a VIEW of
+the file (BBX-16) that every header reader — controls, readout, tier —
+shares, so a line in the wrong place is plausible garbage in three readers
+at once, and only the gate that happened to read the driver's header saw it.
+The shadow-through-the-classifier practice is the mechanism, fourth time it
+fired (bbx-7, bbx-8, bbx-10, bbx-11). Rules re-anchored in fact: BBX-5,
+BBX-16, R30.

@@ -605,3 +605,56 @@ lives — bbh `[BBH-9]`).
   it says nothing about a real document set (every expectation is fixture
   class), and the kinds loop has one profile driving it (BBX-25 unmet, stated
   in the gate's header).
+
+## bbx-11 — S3 step 5: the slice readout and the first file census; S3 laid before the maintainer for the DONE ruling (2026-09-10)
+
+- Opened on the bbx-10 HEAD with the battery GREEN (23 gates, 78/78, tree
+  unchanged; the two drift NOTEs the handoff predicted) — the re-derivation
+  step of the ritual.
+- Step 5 as planned (`docs/plans/S3.md` §8.5): no tool written. The slice
+  readout in `docs/readout.md` (families per kind measured off the kinds
+  tables — document-set 3, frame-driven 1; controls declared / fired per
+  gate off the kept run — the S3 gates 21 / 21 against the plan's design of
+  fourteen; the fixture register's 16 rows — fixture 15, registry 1; the
+  defaults D33–D44 by class; CLAUDE.md §7's six conditions answered one by
+  one in a table the maintainer rules on).
+- The first shared-vs-kind-specific FILE CENSUS, `docs/census/bbx_files.md`:
+  measured at RUNTIME in a shadow tree (an instrumented copy; every gate run
+  once with a fresh trace), a gate's kind derived from what it executed —
+  a grep over the gates' words was measured first and declined (it mis-files
+  three kernel gates on the word `masked` in their synthetic fixtures). 37
+  files: 11 executed by both kinds' gates (the contracts), 7 + 7 by one kind
+  only (the two comparator families with their driver and helper), 5 + 3 by
+  one kind and the kernel, 4 by the kernel only, 0 by no gate. Measured once,
+  not gated — the generator is reproduced verbatim in the census's §C and
+  the gate is S4's plan to decide (the handoff's rule).
+- Plan corrected in its own commit before the readout quoted it (BBX-19):
+  §6's `fixture 10, registry 1` is `fixture 15, registry 1` (12 expectation
+  files + 3 truth logs); retraction X12.
+- No ruling raised or answered; R21 stays open. No default added.
+- Incident: G25 — the census instrument's first version inserted its trace
+  line after the shebang, ending every header (R30); `gates/docset_suite.sh`
+  went red in the shadow on the driver's missing blind-spot line; the trace
+  discarded as contaminated tooling, the instrument corrected (insert after
+  the leading comment block), the gate re-run green and the census run a
+  second time end to end (paid 1 shadow gate run, 86 s).
+- Step 10 (R27): G25's learning — an instrument that touches a file is a
+  header edit until proven otherwise; prove the instrument on the gates
+  before reading a number off it (BBX-5); the header is one VIEW shared by
+  three readers (BBX-16). The shadow-through-the-classifier practice fired a
+  fourth time. The learning that would improve the harness: a file-census
+  gate that reads the traces and fails on a file reached by no gate or by
+  one kind only where two are expected — S4's plan, with the third kind.
+- Anti-hyperfocus checkpoint (BBX-27): the sitting did the slice's
+  accounting and stopped at the slice boundary. Is S4's plan — the
+  command-line kind, the second consumer of `schema` and of the kinds loop,
+  the third instance the abstraction needs — the most valuable next thread?
+  Yes: S3's green is one non-frame instance, and CLAUDE.md §5 says one
+  proves nothing; the file census already names what S4 must exercise (the
+  dispatcher `bin/bbx` reached by one gate, the runners by no document-set
+  gate). Does the last green mean what it is treated as meaning? It means
+  the fixture's twelve pairings pass twice, every control fails where it
+  must, bbh's 104 pairings are unchanged, and the harness files split as the
+  design said — on a fixture, on this host, with self-reported controls; it
+  is not a statement about any real document set, and the readout says so
+  in its own words.
