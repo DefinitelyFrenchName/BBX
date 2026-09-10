@@ -8,8 +8,9 @@ VampireSaved lacked: a machine reader for the declaration
 registry).
 
 **The declaration.** A gate that asserts a property declares every must-fire
-control it runs as one header line, in the header (line 2 to the first bare
-`#`), in exactly this grammar:
+control it runs as one header line, in the header — the LEADING COMMENT BLOCK,
+every `#` line after the shebang up to the first non-comment line; a bare `#`
+does not end it (R30, 2026-09-10) — in exactly this grammar:
 
 ```
 # MUST-FIRE: <shape>: <name> — <what must fail, and why that proves the gate can fail>
@@ -63,8 +64,8 @@ reader's own first defect — a firing nobody declared, in a gate with no
 declarations, classed UNDECLARED instead of RED — was caught by
 `gates/controls.sh` before the reader's first real use (BBX-5).
 
-**The rest of the header API (abstraction G2), read by the same rule — line 2
-to the first bare `#`.** `# SKIP: <when this gate asserts nothing, and exits
+**The rest of the header API (abstraction G2), read by the same rule — the
+leading comment block.** `# SKIP: <when this gate asserts nothing, and exits
 0>`; `# READ-ONLY (<rulings>): <which tree is never written, and how that is
 proved>`; and, from bbx-2, `# NOT-ASSERTED: <one blind spot of this gate's
 green>`, one line per blind spot, read by `lib/py/bbx/readout.py` for the

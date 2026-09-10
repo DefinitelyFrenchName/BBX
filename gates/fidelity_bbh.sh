@@ -15,7 +15,7 @@
 # Usage note: F14's real run executes bbh's example gates (they call bbh's own tools) under
 # each runner; only the runners' printed lines are compared. ~25 s.
 # READ-ONLY (R18, R20): bbh is measured on a PLAIN LOCAL CLONE of the baseline commit under TMPDIR
-# (BBX_BBH_BASELINE, default f675710 — R8; docs/defaults.md D20), never in its working tree; after
+# (BBX_BBH_BASELINE, default 10a82d2 since 2026-09-10 — R8, R28; docs/defaults.md D20, docs/rebaselines.md), never in its working tree; after
 # the run the clone must be clean of tracked, untracked AND ignored changes, or FAIL. bbh's tip past
 # the baseline is a NOTE (bbh-drift ahead=N), never a verdict. BBX_FIDELITY_IN_PLACE=1 runs in the
 # working tree instead (the R8 dirty files as input, on purpose): read-only declared, tracked
@@ -34,7 +34,7 @@ PYTHONDONTWRITEBYTECODE=1; export PYTHONDONTWRITEBYTECODE
 B_SRC="${BBX_BBH_HOME:-}"
 [ -n "$B_SRC" ] && [ -x "$B_SRC/bin/bbh-run-static" ] || { echo "SKIP: BBX_BBH_HOME is not a bbh tree (${B_SRC:-unset}); fidelity needs it"; exit 0; }
 B_SRC="$(cd "$B_SRC" && pwd)"
-BASELINE="${BBX_BBH_BASELINE:-f675710}"   # ruling R8; docs/defaults.md D20
+BASELINE="${BBX_BBH_BASELINE:-10a82d2}"   # ruling R8, re-baselined 2026-09-10 (R28; docs/rebaselines.md); docs/defaults.md D20
 rc=0
 ok()   { printf '  ok    %s\n' "$1"; }
 fail() { printf '  FAIL  %s\n' "$1"; rc=1; }

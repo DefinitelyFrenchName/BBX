@@ -778,3 +778,102 @@ This is the sentence S2 exists to put on a screen, in its honest first form: fiv
 
 **What this close does NOT assert:** any expectation's provenance for any real consumer (bbh's example has no BBX register and never will from here); any class PASSed on a pairing that is not fixture-class; any driver but bbh's fake; any platform but Darwin arm64 (R21); the mapped-state comparator (BBX-25); that a ruling id in `[thresholds].rulings` names a ruling; the re-baseline (R28: recommended, not done).
 
+# bbx-5 — the re-baseline to `10a82d2` as a procedure; R29 raised, R30 built (2026-09-10)
+
+## The screen, verbatim (`bin/bbx readout build/selftest_20260910T092412 --against build/selftest_20260910T091729`)
+
+```
+== READOUT — self subject at /Users/koneko/Developer/generalized-blackbox-harness/BBX @ f303454 (porcelain 14) — started 2026-09-10T07:24:13Z on Darwin arm64 ==
+VERDICT: GREEN   PASS 19  SKIP 0  FAIL 0  TIMEOUT 0  MISSING 0   (gates 19)
+tree during the run: unchanged (untracked entries 0 -> 0)   harness: bbx @ f303454
+rests on:
+  controls: fired 56 / declared 56; dead 0; undeclared firings 0; gates red 0
+  each can fail: 19 of 19 gates proved a control fires on purpose
+  expectations relied upon: none registered — the expectation register with its provenance classes is slice S2; until then no comparison against a frozen expectation is claimed
+  coverage: census_recount: rows=300 recountable=244 not_recountable=56 (BBX-18: the census claims no command re-derives)
+  note: census_recount: drift census=bbh.md recorded=10a82d2 tip=447e5d26bc23 ahead=1 rows_moved=1 ids=A2
+  note: census_recount: drift census=vampiresaved.md recorded=0cdd9726 tip=47a78a6a0028 ahead=13 rows_moved=35 ids=A21,A22,A23,A24,A25,A26,A27,A28,A32,A33,A35,A37,A45,A51,A59,A62,A63,A66,A67,A68,A77,A80,A84,A85,A86,A87,A88,A89,A90,A91,A93,A95,A120,A121,A127
+  note: fidelity_bbh: bbh-drift baseline=10a82d2 tip=447e5d2 ahead=1
+  note: fidelity_bbh: bbh-source tip=447e5d2 porcelain=0 untouched-by-construction=clone
+  note: fidelity_bbh_s2: bbh-drift baseline=10a82d2 tip=447e5d2 ahead=1
+  note: fidelity_bbh_s2: bbh-source tip=447e5d2 porcelain=0 untouched-by-construction=clone
+  note: suite: suite-runs 25 (each kept under --log)
+  BBX-14 (more than one run): met — 19 gates, 0 verdict differences against the run started 2026-09-10T07:17:29Z at the same HEAD
+  last re-baseline: 2026-09-10 (bbx-5, R28): bbh `f675710` → `10a82d2` — bbh's commit "config: the M18 re-point that sat dirty since 14z-144; the example lib's root one level too high; the extraction counts dated" (7 files; G11 fixed there; the four dirty files of R8 committed). Measured before the move by the D20 override: F12, F13, F14, F14f, F16, F17 identical on a clone of `10a82d2`. Moved with it: D20; D12's five `[sweep].placeholders` (by definition); the census `docs/census/bbh.md` (A2 19 → 20). No verdict text changed on either side.
+what this green does NOT assert (declared by each gate's header):
+  classify: that a verdict word printed by a gate outside the runner is read at all: the classifier reads exit status first, then the log; a PASS printed after a non-zero exit is FAIL by design
+  config: the meaning of a consumer's keys: only that the layers resolve (consumer over kind profile over kind-blind default) and that dumps are stable
+  tier: that a gate reaching an instrument through a path the source regex does not match is seen: the depth and the regex are the limit
+  static_runner: the sweep runner or any gate that needs an instrument: this is the pre-commit chain only
+  static_runner: runtimes as anything but this host under this load
+  controls: that a control is RIGHT — only that a declared control fired and an undeclared one is red (docs/controls.md)
+  sweep_runner: speed-up on a real consumer: the queue is measured on stub gates with sleeps, not on an instrument-tier suite
+  sweep_runner: a gate that escapes its clone by an absolute path: clone-per-slot pins the cwd, nothing more
+  sweep_runner: portability beyond macOS: mkfifo and exec 8<> are POSIX, not yet run on Linux or WSL
+  fingerprint: the identity of any artifact that is not a single file: the kind-blind fingerprint is file-sha1 (D16)
+  rulings_shape: the prose of a ruling: only its heading, its answer line and its DECISIONS row are read
+  readout: that a declared blind spot is true or complete: the screen prints what the header says
+  readout: the sweep runner's runs: only bbx-run-static --log and bbx-run-suite --log are read
+  readout: that a register row's class is true of its file: the suite screen prints what the register says (gates/provenance.sh keeps it complete and inside the vocabulary)
+  close_sweeps: that every corrected claim has a register row: the register is written by hand at the correction (a claim nobody registered is not swept)
+  close_sweeps: step 9 of the close (the lineage untouched): that is the recount's clone and the fidelity gate's proof, not this gate
+  temporal: anything about a real log: every shape here is synthesized (fixture class); the classes' fitness for a consumer is that consumer's ratification
+  temporal: the dispatcher's spec line and the suite's dispatch (S2 steps 2 and 3): the comparators are called directly
+  temporal: that the thresholds are right for any subject: they are the frame-driven profile's (D23) and a consumer's override needs R25's ruling row (gates/thresholds.sh)
+  thresholds: that a ruling id in [thresholds].rulings names a ruling that exists: any non-empty string is accepted here; the consumer's rulings-shape gate is where an id is checked
+  thresholds: the values' fitness for any subject: 2 / 60 / 8 are bbh's ratified policy carried in the frame-driven profile (D23), not a measurement of anything here
+  compare_dispatch: the suite's dispatch around this library (which file is read, how many runs, the .sha1 and .diverge kinds' own paths): S2 step 3
+  compare_dispatch: anything about a real log or a real mask: every log is synthesized and the masks are strings the guard compares, never applied
+  expectation_kinds: the content of any expectation file: only its extension and its stem are read here
+  expectation_kinds: the suite's use of the dispositions (S2 step 3)
+  provenance: that a row's class is TRUE of its file: the register is written by hand at the freeze; only completeness and the vocabulary are checked
+  provenance: bbh's example register (markdown, a consumer list of classes): it is bbh's and F19 (S6) reads it under R11
+  census_recount: the truth of the not-recountable rows at their commits: they are named and counted, never run
+  census_recount: that a hand-read citation says what its row claims: only that the line exists
+  fidelity_bbh: anything about a suite, a comparator or an expectation: slice S2
+  fidelity_bbh: bbh's example's correctness (G11 is bbh's to fix)
+  fidelity_bbh: F15 unless BBX_FIDELITY_F15=1 was set for the run
+  fidelity_bbh_s2: the kept suite run (--log) — bbh has none, so F12 diffs printed text only; the kept run's ground truth is gates/suite.sh
+  fidelity_bbh_s2: anything about a real subject: F17's and F16b's inputs are synthesized, F16a's are the fake machine's (fixture class); the shapes are the lineage's paid-for cases and nothing else
+  fidelity_bbh_s2: bbh's correctness: identical output on both sides is fidelity, not truth
+  suite: any driver but the fake: a MAME or FBNeo driver is bbh's and untested here (bbh's own F8 rows)
+  suite: the .sha1 kind's evidence: it is `self` class by construction (E4) and the register that says so is S2 step 4
+  suite: the readout's reading of a kept suite run: the screen reads bbx-run-static runs only until step 4
+  gates declaring no blind spot: 0   (a gate nobody has asked what its green leaves out)
+```
+
+## What changed
+
+**The re-baseline (R28, reclassified by the maintainer: a procedure under R8/R20, not a ruling).** Measured first by the D20 override: F12, F13, F14, F14f, F16, F17 identical on a clone of `10a82d2`. Then moved in one commit: both fidelity gates' default (`BBX_BBH_BASELINE:-10a82d2`); D20; D12's five `[sweep].placeholders` in the frame-driven profile (by the row's definition: bbh's defaults verbatim at the baseline); the dated line in `docs/rebaselines.md` (printed at the head of every fidelity run); the census `docs/census/bbh.md` re-measured (A2 19 → 20, every other row and citation unchanged; the recount at the new HEAD: 79 rows, 78 match, 1 not recountable); HANDOFF's dirty-tree hazard retired (bbh is clean); G11 closed as fixed in bbh. bbh moved once more during the sitting (`447e5d2`: its README names the renamed remote, BBH-frame-based): a NOTE on the screen, nothing BBX measures.
+
+**Two findings raised from bbh's work on its own must-fire contract, the maintainer's.** R30, ruled and built: the gate header is the LEADING COMMENT BLOCK — every `#` line after the shebang up to the first non-comment line; a bare `#` no longer ends it (bbh measured 264 of its 315 gates with a bare separator within five lines, colliding with its gate index). BBX had two readers of that block; now one (`controls.py` `header_lines`, imported by `readout.py`); `gates/controls.sh` proves a declaration after a bare `#` is read and one after the first code line is not (the control `body-is-not-header`); over the 19 gates the old and the new reader agree: 55 declarations. R29, raised and open: executable controls — the runner invokes a gate with `CONTROL=<name>`, the gate perturbs its REAL input and runs to its verdict, and the runner requires the gate's own FAIL, because a self-reported FIRED can be printed by a control that tests nothing (bbh's 14z-144 case). Recommended for slice S6 with the cadence left to the tier.
+
+## Counts, separately
+
+| | |
+|---|---|
+| gates / controls | 19 / 56 (controls.sh gained `body-is-not-header`) |
+| fidelity on the new baseline | F13a–e, F14, F14f (`fidelity_bbh`), F12 17 + F16 35 + F17 52 (`fidelity_bbh_s2`): every diff empty on the plain clone at `10a82d2` |
+| the census at `10a82d2` | bbh.md 79 rows: 78 match, 0 mismatch, 1 not recountable; A2 moved 19 → 20 |
+| kept battery runs this sitting | 4: the open GREEN 19/55 (bbh at `10a82d2`, a NOTE); after the re-baseline GREEN 19/55; the two close runs above |
+| rulings | R28 answered and reclassified; R30 answered and built; R29 open; R21 open |
+| bbh's tip at the close | `447e5d2`, 1 past the baseline (README only); porcelain 0; remote renamed BBH-frame-based (the old URL redirects) |
+
+## What it rests on
+
+The two fidelity gates on a plain clone of the new baseline, clean after; the recount on a clone of the new census HEAD; the controls gate's two new cases and its control; every other gate unchanged and green twice.
+
+## What this green does NOT assert
+
+- Everything the screen lists; plus: R29 is a contract on the page's future, not a mechanism — no control here is yet driven by the runner on the gate's real path; every FIRED is still the gate's self-report.
+- bbh at `447e5d2` is measured by nothing but a NOTE; the procedure follows it when a sitting needs to (R28).
+- Platform: Darwin arm64 only (R21).
+
+# CLOSE — bbx-5 (2026-09-10)
+
+**Close measurements.** Green first, twice, kept (`build/selftest_20260910T091729`, `build/selftest_20260910T092412`): `PASS 19 SKIP 0 FAIL 0 MISSING 0`; `controls fired 56 / declared 56; gates with no declaration: 0; red: 0`; `ok: no tracked file changed during the run` in both; BBX-14 met (0 verdict differences at one HEAD). **Sweeps:** `close_sweeps` GREEN; `rulings_shape` GREEN (31 entries, 29 answered, 2 open — R21, R29; it caught its author once more: "R10 work" in the open line read as an open id, reworded). **Lineage untouched, by construction and by proof:** bbh baseline=10a82d2 tip=447e5d2 ahead=1 porcelain=0 (clones only, clean after); vampiresaved recorded=0cdd9726 (past the census, not re-measured by design); sms recorded=ecc5481 tip=ecc5481 ahead=0.
+
+**Retractions this sitting:** none (R28's entry keeps its first recommendation as history; its answer reclassifies it). **Incidents reviewed for learnings (R27, step 10):** none reached a gate; the shape gate's catch was a wording, fixed in the same minute; no mechanism.
+
+**What this close does NOT assert:** anything R29 would prove (no executable control exists); bbh's tip beyond the baseline; any platform but Darwin arm64; and everything S2's slice readout listed.
+

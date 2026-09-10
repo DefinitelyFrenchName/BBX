@@ -66,20 +66,9 @@ def read_results(path):
 
 
 def header_block(path):
-    """The gate's header: line 2 to the first bare `#` (the same block MUST-FIRE lives in)."""
-    out = []
-    try:
-        with open(path, encoding="utf-8", errors="replace") as f:
-            lines = f.read().split("\n")
-    except OSError:
-        return out
-    for line in lines[1:]:
-        if line.strip() == "#":
-            break
-        if not line.startswith("#"):
-            break
-        out.append(line)
-    return out
+    """The gate's header, read by the ONE reader (lib/py/bbx/controls.py header_lines, R30)."""
+    from .controls import header_lines
+    return header_lines(path)
 
 
 def not_asserted(gate_path):

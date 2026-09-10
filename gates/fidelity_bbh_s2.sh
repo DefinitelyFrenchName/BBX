@@ -24,7 +24,7 @@
 # Usage: BBX_BBH_HOME=~/Developer/blackbox-harness gates/fidelity_bbh_s2.sh     (~70 s measured 2026-09-10 with F12, F16 and F17 — F12 is 17 suite pairs; static tier)
 # SKIP: BBX_BBH_HOME unset or not a bbh tree (exit 0; asserts nothing).
 # READ-ONLY (R18, R20): bbh is measured on a PLAIN LOCAL CLONE of the baseline commit under TMPDIR (BBX_BBH_BASELINE,
-# default f675710 — R8; docs/defaults.md D20); after the run the clone must be clean of tracked, untracked AND ignored
+# default 10a82d2 since 2026-09-10 — R8, R28; docs/defaults.md D20, docs/rebaselines.md); after the run the clone must be clean of tracked, untracked AND ignored
 # entries, or FAIL. PYTHONDONTWRITEBYTECODE=1 is exported for the whole gate: on this host python writes bytecode to a
 # user cache (sys.pycache_prefix, measured 2026-09-10), on Linux it would write __pycache__ INTO the clone and the
 # clean check would fail there for a reason that is not bbh's.
@@ -42,7 +42,7 @@ unset BBX_CONFIG BBH_CONFIG 2>/dev/null || true
 B_SRC="${BBX_BBH_HOME:-}"
 [ -n "$B_SRC" ] && [ -x "$B_SRC/bin/bbh-run-static" ] || { echo "SKIP: BBX_BBH_HOME is not a bbh tree (${B_SRC:-unset}); fidelity needs it"; exit 0; }
 B_SRC="$(cd "$B_SRC" && pwd)"
-BASELINE="${BBX_BBH_BASELINE:-f675710}"   # ruling R8; docs/defaults.md D20
+BASELINE="${BBX_BBH_BASELINE:-10a82d2}"   # ruling R8, re-baselined 2026-09-10 (R28; docs/rebaselines.md); docs/defaults.md D20
 rc=0
 ok()   { printf '  ok    %s\n' "$1"; }
 fail() { printf '  FAIL  %s\n' "$1"; rc=1; }

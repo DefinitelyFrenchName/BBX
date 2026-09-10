@@ -1,10 +1,11 @@
 #!/bin/sh
 # controls.sh — a declared must-fire control that does not fire, or a firing nobody declared, makes the runner NOT GREEN; silence is red under enforcement and invisible without it
 # Ground truth for lib/py/bbx/controls.py and the runner's controls block (docs/controls.md,
-# ruled R10): the grammar reader, the report line per gate, and the runner's verdict on it —
+# ruled R10; the header's extent ruled R30): the grammar reader, the report line per gate, and the runner's verdict on it —
 # against a SYNTHETIC consumer of stub gates. The gap this closes was measured in VampireSaved
 # (74 of 311 gates carry the marker as prose, 15+ spellings, no reader; gotcha G5). Portable, ~2 s.
 # Usage: gates/controls.sh
+# MUST-FIRE: known-bad: body-is-not-header — a MUST-FIRE line after the first code line must declare nothing, or the header is the whole file and a comment anywhere declares a control
 # MUST-FIRE: known-bad: dead-control — a gate that declares a control and never prints CONTROL FIRED for it must turn the enforcing runner NOT GREEN with exit 1
 # NOT-ASSERTED: that a control is RIGHT — only that a declared control fired and an undeclared one is red (docs/controls.md)
 #
@@ -47,6 +48,15 @@ d="$(python3 -m bbx.controls declared "$FR/tests/g_ok.sh")"
 d="$(python3 -m bbx.controls declared "$FR/tests/g_none.sh")"
 [ "$d" = "none	-	this gate lists a registry and asserts no property" ] && ok "'none — reason' reads as the explicit no-control declaration" || fail "none: $d"
 [ -z "$(python3 -m bbx.controls declared "$FR/tests/g_silent.sh")" ] && ok "a header with no MUST-FIRE line declares nothing" || fail "silent gate declared something"
+
+echo "== 1b. the header is the leading comment block (R30): a bare # does not end it, the first code line does =="
+printf '#!/bin/sh\n# g_late.sh — declares after a bare separator\n#\n# MUST-FIRE: known-bad: late-decl — declared after the bare line\nset -eu\necho "CONTROL FIRED: late-decl — fine"\necho "PASS: ok"\n' > "$FR/tests/g_late.sh"; chmod +x "$FR/tests/g_late.sh"
+[ "$(python3 -m bbx.controls declared "$FR/tests/g_late.sh")" = "known-bad	late-decl	declared after the bare line" ] && ok "a declaration after a bare # line is read (bbh: 264 of 315 gates have one within five lines)" || fail "late declaration: $(python3 -m bbx.controls declared "$FR/tests/g_late.sh")"
+# CONTROL body-is-not-header
+printf '#!/bin/sh\n# g_body.sh — a declaration in the BODY is not a declaration\nset -eu\n# MUST-FIRE: known-bad: in-body — this line is code territory\necho "CONTROL FIRED: in-body — but nobody declared me"\necho "PASS: ok"\n' > "$FR/tests/g_body.sh"; chmod +x "$FR/tests/g_body.sh"
+if [ -z "$(python3 -m bbx.controls declared "$FR/tests/g_body.sh")" ]; then echo "CONTROL FIRED: body-is-not-header — a MUST-FIRE line after the first code line declares nothing (its firing will read as undeclared)"
+else fail "CONTROL DEAD: body-is-not-header — a body line was read as a declaration: $(python3 -m bbx.controls declared "$FR/tests/g_body.sh")"; fi
+rm "$FR/tests/g_late.sh" "$FR/tests/g_body.sh"
 
 echo "== 2. the runner's controls block, one gate at a time =="
 one() {  # one <gate> <expected-verdict-word> <expected-exit>

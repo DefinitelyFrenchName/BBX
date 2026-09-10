@@ -354,3 +354,40 @@ lives — bbh `[BBH-9]`).
   rests on — and that, so far, nothing rests on evidence about a real
   subject.
 
+## bbx-5 — 2026-09-10 (session 5: the re-baseline as a procedure; two findings from bbh)
+
+- The maintainer validated R28 and asked whether a re-baseline is a ruling on
+  BBX at all — it is not: R8 and R20 already decide it, and D12 follows the
+  baseline by its own definition. Recorded as R28's answer: a re-baseline is
+  a procedure (`docs/rebaselines.md`, D20, D12, the census), never a queue
+  entry. Done for `f675710` → `10a82d2` after both fidelity gates passed on
+  the tip by the D20 override; the census re-measured (A2 19 → 20).
+- Raised by the maintainer from bbh's work on its own must-fire contract:
+  R29 (executable controls: a self-reported FIRED can be printed by a control
+  that tests nothing — bbh's 14z-144 case; the runner driving the gate with
+  `CONTROL=<name>` on its real path and requiring its own FAIL is strictly
+  stronger and compatible) — recommended for S6, cadence per tier, open;
+  R30 (the header is the leading comment block — bbh measured 264 of 315
+  gates with a bare `#` within five lines) — ruled and built the same
+  sitting: one reader, the readout importing it, a control that a body line
+  declares nothing; the 19 gates' 55 declarations unchanged under both
+  readers.
+- bbh moved once more mid-sitting (`447e5d2`, README: the remote renamed
+  BBH-frame-based); a NOTE.
+
+## bbx-5 CLOSE — 2026-09-10
+
+- Close measurements: green first, twice, kept — `PASS 19 SKIP 0 FAIL 0
+  MISSING 0`, `controls fired 56 / declared 56`, tree unchanged in both
+  (untracked 0 -> 0), BBX-14 met. Sweeps GREEN; the queue: 31 entries, 29
+  answered, R21 and R29 open (the shape gate caught "R10 work" in the open
+  line as an open id — reworded).
+- Step 10 (R27): no incident reached a gate; no learning beyond the wording.
+- Anti-hyperfocus checkpoint (BBX-27): the sitting spent itself on bbh's
+  movement and two contract findings that came back from the lineage —
+  the right use of a sitting, since a stale baseline is rot and a header
+  rule that collides with the ancestor's own index would have been
+  inherited unpaid. The most valuable next thread is S3's plan: the first
+  kind with no ancestor to diff against. The last green means what bbx-4's
+  did, on a newer bbh, with one reader of headers instead of two.
+

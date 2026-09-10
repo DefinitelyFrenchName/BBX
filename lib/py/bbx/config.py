@@ -133,7 +133,7 @@ KINDS = {
                               r"MAME_BIN", r"FBNEO_BIN", r"autoboot_script", r"emu/fbneo/fbneo",
                               r"run_battery", r"run_sim_jtcps2\.sh",
                               r"run_inp_probe\.sh", r"run_inp_guarded\.sh"]},
-        # bbh's [sweep] literals verbatim (lib/py/bbh/config.py at f675710) — including the
+        # bbh's [sweep] literals verbatim (lib/py/bbh/config.py at 10a82d2, the M18 re-point; f675710 before 2026-09-10) — including the
         # lineage's build directories in `placeholders`, the biased default of BBX-24 kept
         # here under its kind's name so a bbh consumer config resolves as it does in bbh (D12)
         "sweep": {

@@ -10,7 +10,8 @@ A gate DECLARES each of its must-fire controls as one header line:
 
 with <shape> one of perturbed-copy | shadow-tool | known-bad, or the
 explicit `# MUST-FIRE: none — <why this gate asserts no property>`. The
-header is line 2 to the first bare `#` line (bbh [BBH-18]). When a control
+header is the LEADING COMMENT BLOCK — every `#` line after the shebang up to
+the first non-comment line (R30; a bare `#` does not end it). When a control
 fails for its stated reason the gate prints `CONTROL FIRED: <name> — …`;
 when it does not, `CONTROL DEAD: <name> — …`.
 
@@ -37,7 +38,10 @@ DEAD = re.compile(r"^CONTROL DEAD: ([a-z0-9-]+)")
 
 
 def header_lines(path):
-    """Line 2 up to the first bare `#` line, as bbh's gate contract defines the header."""
+    """THE header: the leading comment block — every `#` line after the shebang up to the first
+    non-comment line (a bare `#` is a comment line and does not end it). Ruled R30 (2026-09-10, a
+    finding raised from bbh: 264 of its 315 gates carry a bare `#` within five lines, and its own
+    two header readers already read the leading block). The ONE reader: readout.py imports it."""
     out = []
     try:
         with open(path, errors="replace") as f:
@@ -45,8 +49,6 @@ def header_lines(path):
     except OSError:
         return out
     for line in lines[1:]:
-        if line.strip() == "#":
-            break
         if not line.startswith("#"):
             break
         out.append(line)

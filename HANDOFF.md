@@ -36,7 +36,7 @@ Shape: operational map. Read this first, then `STATE.md`, then
 | repository | path | remote |
 |---|---|---|
 | **BBX (this tree)** | `~/Developer/generalized-blackbox-harness/BBX` | github.com/DefinitelyFrenchName/BBX (private, R22) |
-| bbh | `~/Developer/blackbox-harness` | github.com/DefinitelyFrenchName/blackbox-harness |
+| bbh | `~/Developer/blackbox-harness` | github.com/DefinitelyFrenchName/BBH-frame-based (renamed 2026-09-10; the old blackbox-harness URL redirects) |
 | VampireSaved | `~/Developer/Vampire_Saved/VampireSaved` | github.com/DefinitelyFrenchName/VampireSaved |
 | SMS-FrenchName-edition | `~/Developer/SailorMoonS` (directory name differs) | github.com/DefinitelyFrenchName/SMS-FrenchName-edition |
 | bbh's skill | `~/.claude/skills/blackbox-harness` → symlink into bbh | load it before touching any gate, driver or comparator |
@@ -46,7 +46,7 @@ bbh is **never modified** from here. VampireSaved and SMS are read only.
 ## What is running
 
 Nothing in the background. `BBX_BBH_HOME=~/Developer/blackbox-harness
-bin/bbx selftest` (~6 min) is GREEN twice at one HEAD: 19 gates, 55/55 controls. Run it first
+bin/bbx selftest` (~6 min) is GREEN twice at one HEAD: 19 gates, 56/56 controls. Run it first
 thing, with `--log build/selftest_<stamp>` and no edits in flight (the runner's working-tree check reports a
 concurrent edit as DIRTIED); the census recount inside it is the
 re-derivation step of the ritual (CLAUDE.md §6.2) made into a gate.
@@ -54,7 +54,7 @@ re-derivation step of the ritual (CLAUDE.md §6.2) made into a gate.
 ## The ritual (ruled R17 at the bbx-1 close, 2026-09-09; adapted from VampireSaved VSP-17/VSP-18/VSP-162)
 
 Sessions are keyed `bbx-N`, one key per sitting, never renamed (pointers in
-readouts, gotchas and history resolve through it). The last closed sitting is **bbx-4** (2026-09-10); the next is **bbx-5**.
+readouts, gotchas and history resolve through it). The last closed sitting is **bbx-5** (2026-09-10); the next is **bbx-6**.
 
 **Open**
 1. Read this file, `STATE.md`, `docs/rulings.md`. (`CLAUDE.md` is the
@@ -122,9 +122,9 @@ readouts, gotchas and history resolve through it). The last closed sitting is **
 Steps 8 and 9 are checked, not remembered: step 8 by `close_sweeps`, step 9
 by construction (the recount's clone) and by `fidelity_bbh`'s proof.
 
-**Next-session orientation (written at the bbx-4 close, 2026-09-10)**
-- Open first: `bin/bbx selftest --log build/selftest_<stamp>` and `bin/bbx readout` on it. Two `drift` NOTEs are expected: VampireSaved (10 commits past the census at this close) and bbh (`10a82d2`, 1 past the baseline — R28).
-- R28 first, if ruled: re-baseline to `10a82d2` in one commit — D20's value and D12's five `[sweep].placeholders` (`m3b_merged26`, `don_m22`, `hui56`, `pyron41`, `m5_stock17`), a dated line in `docs/rebaselines.md`, `bin/bbx recount docs/census/bbh.md` for row A2, this file's hazard about bbh's dirty tree retired (porcelain 0 now), G11 closed as fixed in bbh; then both fidelity gates on the new baseline, the battery twice.
+**Next-session orientation (written at the bbx-5 close, 2026-09-10)**
+- Open first: `bin/bbx selftest --log build/selftest_<stamp>` and `bin/bbx readout` on it. Two `drift` NOTEs are expected: VampireSaved (past the census) and bbh (`447e5d2`, one past the baseline `10a82d2` — a README line; follow it by the R28 procedure only when a sitting needs the current tip).
+- R29 (executable controls) is open with a recommendation: build it in S6 with the controls registry; until then every FIRED is a self-report and the readout says so.
 - Then slice S3, the document-set kind (`docs/generality.md`, `docs/slices.md`): the plan first — measured, with the fixture's design, the claim-inventory and coverage kinds, the set/multiset and schema families plugging into R23's kinds table — and a STOP for its rulings before any tool.
 - S2 is complete: its readout (`docs/readout.md`, "S2 — the slice readout") lists what it does not assert; the sentence to carry forward is that every class has PASSed only on fixture-class pairings, and the suite screen says so.
 - A background battery: nothing under the tree changes while it runs — draft in the scratchpad, test in a shadow home (copies of `lib/` and the gate under a throwaway root), move in after (bbx-4's practice; it caught one defect before the tree saw it).
@@ -154,7 +154,7 @@ by construction (the recount's clone) and by `fidelity_bbh`'s proof.
 
 - `/Users/koneko/.git` exists: HOME is a git repository. Commands run outside
   a nested repository see the whole home tree. Not ours; do not touch.
-- bbh's working tree was dirty (4 files) until `10a82d2` committed them; bbh's HEAD is now one past the baseline `f675710` (R28 open). The fidelity baseline is the commit, not the tree (R8): a moved tip is a NOTE, measured by the D20 override, re-baselined only by a ruling with a dated line.
+- The fidelity baseline is the commit, not the tree (R8): a moved bbh tip is a NOTE, measured first by the D20 override (`BBX_BBH_BASELINE=<tip>` on both fidelity gates), then followed by the procedure in `docs/rebaselines.md` (R28: a dated line, D20, D12 by definition, the census) — never a queue entry.
 - Three counters inside VampireSaved's own docs are stale (see
   `docs/census/vampiresaved.md`); do not quote VampireSaved's prose numbers,
   quote its commands.

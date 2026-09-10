@@ -88,3 +88,21 @@ D1–D32. Gotchas G1–G18. In the tree beyond S1: the temporal family, the one
 dispatcher, the kinds table, the suite with its kept run, the register tool.
 No driver of BBX's own; no fixture subject; no consumer with a register.
 
+## bbx-5 — 2026-09-10 (session 5: the re-baseline as a procedure; R29 raised, R30 built)
+
+**Status (bbx-5 close, 2026-09-10):** slices S1 (but for R21's platform run)
+and S2 complete. This sitting: the re-baseline of bbh to `10a82d2` as a
+PROCEDURE (R28 answered and reclassified by the maintainer: R8/R20 applied,
+never a queue entry) — measured first by the D20 override, then both fidelity
+gates' default, D20, D12's five literals by definition, the dated line in
+`docs/rebaselines.md`, the census re-measured (A2 19 → 20), G11 closed as
+fixed in bbh. Two findings raised from bbh's own must-fire work: R30 ruled
+and built (the gate header is the LEADING COMMENT BLOCK; one reader,
+`controls.py`, imported by the readout; `body-is-not-header` control), R29
+raised and open (executable controls — the runner drives each declared
+control on the gate's real path and requires its own FAIL; recommended for
+S6). `bin/bbx selftest` GREEN twice at one HEAD (BBX-14 met): 19 gates,
+56/56 controls. Fidelity F12–F17 diff empty on the plain clone at
+`10a82d2`. bbh's tip `447e5d2` (README: the remote renamed BBH-frame-based),
+a NOTE. Defaults D1–D32. Gotchas G1–G18.
+

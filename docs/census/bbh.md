@@ -1,5 +1,5 @@
-# Census — blackbox-harness (bbh) @ f675710 — measured 2026-09-09
-`/Users/koneko/Developer/blackbox-harness` · remote `https://github.com/DefinitelyFrenchName/blackbox-harness.git` · **190** tracked files · **19** commits · dirty: `docs/config.md example/consumers/bbh.vampire.toml lib/py/bbh/config.py selftest/test_fidelity_vampire.sh` — `4 files changed, 6 insertions(+), 6 deletions(-)`
+# Census — blackbox-harness (bbh) @ 10a82d2 — measured 2026-09-09 (re-measured at bbx-5 from f675710; see the last line of §D)
+`/Users/koneko/Developer/blackbox-harness` · remote `https://github.com/DefinitelyFrenchName/blackbox-harness.git` · **190** tracked files · **20** commits · clean at `10a82d2` (the four files dirty at `f675710` — `docs/config.md example/consumers/bbh.vampire.toml lib/py/bbh/config.py selftest/test_fidelity_vampire.sh` — are that commit)
 
 Read-only survey. Every count in §A carries the command that reproduces it at this HEAD.
 Purpose: enumerate everything a generalization of bbh to non-frame subjects must decide about.
@@ -9,7 +9,7 @@ Purpose: enumerate everything a generalization of bbh to non-frame subjects must
 | id | dimension | count | command (run from repo root) |
 |---|---|---|---|
 | A1 | tracked files (total) | 190 | `git ls-files \| wc -l` |
-| A2 | commits on HEAD | 19 | `git log --oneline \| wc -l` |
+| A2 | commits on HEAD | 20 | `git log --oneline \| wc -l` |
 | A3 | dirty files in the working tree — a HOST fact, not a fact of `f675710` (rule 7): on the clone the recount runs on this is 0 by construction; the live tree's porcelain is on every recount summary line (`porcelain=`) and the four files are named in `README.md` and `docs/fidelity.md` (R8) | host: 4 on 2026-09-09 | not recountable (rule 7); was `git status --porcelain \| wc -l` run in place |
 | A4 | tracked files in example/ | 83 | `git ls-files example \| wc -l` |
 | A5 | tracked files in selftest/ | 33 | `git ls-files selftest \| wc -l` |
@@ -552,3 +552,6 @@ Measured nothing about, and therefore claim nothing about:
   repo's own recorded figures.
 - **The dirty working tree was not diffed line by line** — only `git status --porcelain` and
   `git diff --stat`. What the 6 changed lines say was inferred from the previous commit message.
+
+Re-measured 2026-09-10 (session bbx-5, R28) at `10a82d2`, one commit past `f675710` (7 files, 13 insertions, 9 deletions: the M18 re-point of five `[sweep]` literals and `[inp].build` in `lib/py/bbh/config.py`, the example lib's root fixed — BBX's G11 —, three docs lines): A2 19 → 20; every other row and every §B line citation unchanged (the recount's drift run at bbx-4's open and this sitting's battery: rows_moved=1 ids=A2). The dirty-tree row A3 now reads 0 in place as on the clone.
+
