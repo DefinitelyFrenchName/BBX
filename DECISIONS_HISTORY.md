@@ -658,3 +658,56 @@ lives — bbh `[BBH-9]`).
   design said — on a fixture, on this host, with self-reported controls; it
   is not a statement about any real document set, and the readout says so
   in its own words.
+
+## bbx-12 — the S4 plan written and STOPPED at R35–R40 while S3's DONE ruling is pending (2026-09-10)
+
+- Opened on the bbx-11 HEAD with the battery GREEN (23 gates, 78/78, tree
+  unchanged; the two drift NOTEs the handoff predicted) — the re-derivation
+  step of the ritual.
+- The maintainer's instruction: "do what you can until I can give you my
+  ruling on S3 DONE." What does not depend on that ruling is the next STOP
+  (HANDOFF's orientation: "then the STOP: S4's plan"), so the sitting wrote
+  `docs/plans/S4.md` in the S3 plan's shape and queued R35–R40. The plan's
+  header records that it was written before S3's ruling and waits if S3 is
+  ruled not done. No tool written (CLAUDE.md §6, §9).
+- The ancestors measured at the census commits, each count with its command
+  (the plan's §2): bbh's fixture and driver by line, SMS `cliguard.py` (the
+  incident behind refusing an unknown option: a typo that regenerated the
+  file it was meant to check), VampireSaved's MiSTer band "+/- 30, root-cause
+  rather than widen" (the tolerant-numeric family's ancestor: a band is an
+  expectation, never a knob — 0 tools take a tolerance option), the host's
+  tooling (pytest, bats, docker absent: the adapters are proven over
+  `unittest` and BBX's own gate battery, both on R3's floor), BBX's plug-in
+  points by line.
+- Six rulings raised, each with the declined alternatives: R35 (the `.cli`
+  scenario and the observation grammar; a tool's non-zero exit an observation,
+  a signal death the guard, exit 2 — which corrects `docs/generality.md`'s
+  "exit 1" row after the ruling), R36 (the `band` kind: inclusive measured
+  band, `--freeze` refuses to widen without a ruling id, `NOTE: band-fields`),
+  R37 (the two frameworks), R38 (the self subject's `command` identity over
+  the tree hash of `bin`, `lib`, `drivers`; the refreeze a reviewed close
+  step), R39 (the file census as a generated document and a shrink-only
+  static gate on the first sweep row, plus a portable gate on the instrument
+  with G25 as a mode), R40 (the JSON schema's seven types).
+- None answered; R21 stays open. No default added (ids are assigned when the
+  rows are written). No retraction.
+- Incident: none filed. One event caught before the commit —
+  `gates/rulings_shape.sh` red on DECISIONS.md's open-rulings line after the
+  six entries were queued (`open-line-mismatch listed=R21 actual=R21,R35,…`);
+  the line updated in DECISIONS.md and STATE.md, the gate PASS
+  (`entries=41 open=7 answered=34`). Paid: one gate run, 1 s.
+- Step 10 (R27): the event re-read for a learning — the gate is G14's
+  mechanism (an answered ruling moved, an open one listed) holding a hand
+  step to the queue both ways; it fired on the first sitting that queued more
+  than one ruling at once, which is the design; no learning beyond its own
+  rule, and no gotcha, since nothing was paid that a gate did not refund.
+- Anti-hyperfocus checkpoint (BBX-27): is the next thread still the most
+  valuable one? The next thread is not the contributor's to choose — two
+  rulings are pending (S3 DONE, R35–R40) and both are the maintainer's;
+  writing the plan while waiting was the one thing that did not pre-empt
+  either, and the plan says in its header which ruling it waits on. Does the
+  last green mean what it is treated as meaning? It means the bbx-11 tree
+  plus one plan and six queue entries still passes 23 gates with every
+  control firing, on this host; it is not a statement about S3's DONE (the
+  maintainer's), nor about any S4 tool (none exists), and the readout says
+  so in its own words.

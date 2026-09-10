@@ -257,3 +257,28 @@ G25: the instrument's first version ended every header (R30) and
 Fidelity F12–F17 diff empty on the plain clone at `10a82d2` (104 pairings;
 F13/F14 21). bbh's tip `447e5d2`, a NOTE. Defaults D1–D44. Gotchas G1–G25.
 Retractions X1–X12.
+
+## bbx-12 (2026-09-10)
+
+**Status (bbx-12 close, 2026-09-10):** slices S1 (but for R21's platform run)
+and S2 complete; **S3 steps 1–5 built and laid before the maintainer for the
+DONE ruling** (unchanged since bbx-11: the table in `docs/readout.md`'s bbx-11
+section; nothing of S3 moved this sitting). **S4 is planned and STOPPED:**
+`docs/plans/S4.md` (bbx-12, written while S3's ruling is pending — the plan
+says so and waits if S3 is ruled not done, BBX-26), in the S3 plan's shape,
+with rulings **R35–R40** queued (`docs/rulings.md`: the `.cli` scenario and
+observation contract; the tolerant-numeric `band` kind; the two adapter
+frameworks — `unittest` and BBX's own gate battery; the self subject's
+`command` identity; the file census as a generated, `--check`ed document and
+a shrink-only static gate; the JSON schema format). No tool written. The
+ancestors measured at the census commits (bbh's fixture 5 knobs / 1 option and
+its driver's four exits by line; SMS `cliguard.py` 108 lines, 12 self-test
+cases; VampireSaved's `+/- 30` band kept through two re-centres, 0 tools with
+a tolerance option; the host without pytest, bats, docker; BBX's plug-in
+points by line). One inconsistency named for R35, not corrected before the
+ruling: `docs/generality.md`'s "`--crash-at` → exit 1" against D4's exit 2.
+`bin/bbx selftest` GREEN three times at two HEADs this sitting — the open run
+on `ce3191d` and the close's two on `13cc141` (BBX-14 met): 23 gates, 78/78
+controls (`build/selftest_20260910T151030Z`, `build/selftest_20260910T151653Z`). Fidelity F12–F17 diff empty on the plain clone
+at `10a82d2`. bbh's tip `447e5d2`, a NOTE. Defaults D1–D44. Gotchas G1–G25.
+Retractions X1–X12.

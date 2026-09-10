@@ -7,28 +7,27 @@ paragraph per sitting, the outgoing status verbatim). Read `HANDOFF.md` first.
 generalization of `blackbox-harness` (bbh) to any subject with testable inputs
 and outputs. Born 2026-09-09.
 
-**Status (bbx-11 close, 2026-09-10):** slices S1 (but for R21's platform run)
-and S2 complete; **S3 steps 1–5 built** (`docs/plans/S3.md` §8.1–8.5;
-R31–R34 answered) — **S3 is laid before the maintainer for the DONE ruling**
-(CLAUDE.md §7's six conditions answered one by one in `docs/readout.md`, the
-bbx-11 section; the contributor's reading: all six hold for the document-set
-kind AS A FIXTURE). Step 5 wrote no tool: the slice readout — comparator
-families per kind measured off the kinds tables (document-set 3: exact / set
-/ schema; frame-driven 1: temporal), controls declared / fired per gate off
-the kept run (the four S3 gates 21 / 21; the plan's design said fourteen),
-the fixture register's 16 rows (fixture 15, registry 1), the defaults
-D33–D44 by class (principled 6, ruled 2, arbitrary 2, split 2) — and the
-first shared-vs-kind-specific FILE CENSUS, `docs/census/bbx_files.md`,
-measured at runtime in a shadow tree (37 harness files: 11 executed by both
-kinds' gates, 7 + 7 by one kind only, 5 + 3 by one kind and the kernel, 4 by
-the kernel only, 0 by no gate; gates K 13 / F 6 / D 4), **measured once, not
-gated** — the generator is in the census's §C and the gate is S4's plan to
-decide. The plan's §6 screen line corrected in its own commit (X12, BBX-19).
-G25: the instrument's first version ended every header (R30) and
-`gates/docset_suite.sh` caught it in the shadow (paid 1 shadow gate run).
-`bin/bbx selftest` GREEN twice at one HEAD (BBX-14 met): 23 gates, 78/78 controls (`build/selftest_20260910T141218Z`, `build/selftest_20260910T142107Z`).
-Fidelity F12–F17 diff empty on the plain clone at `10a82d2` (104 pairings;
-F13/F14 21). bbh's tip `447e5d2`, a NOTE. Defaults D1–D44. Gotchas G1–G25.
+**Status (bbx-12 close, 2026-09-10):** slices S1 (but for R21's platform run)
+and S2 complete; **S3 steps 1–5 built and laid before the maintainer for the
+DONE ruling** (unchanged since bbx-11: the table in `docs/readout.md`'s bbx-11
+section; nothing of S3 moved this sitting). **S4 is planned and STOPPED:**
+`docs/plans/S4.md` (bbx-12, written while S3's ruling is pending — the plan
+says so and waits if S3 is ruled not done, BBX-26), in the S3 plan's shape,
+with rulings **R35–R40** queued (`docs/rulings.md`: the `.cli` scenario and
+observation contract; the tolerant-numeric `band` kind; the two adapter
+frameworks — `unittest` and BBX's own gate battery; the self subject's
+`command` identity; the file census as a generated, `--check`ed document and
+a shrink-only static gate; the JSON schema format). No tool written. The
+ancestors measured at the census commits (bbh's fixture 5 knobs / 1 option and
+its driver's four exits by line; SMS `cliguard.py` 108 lines, 12 self-test
+cases; VampireSaved's `+/- 30` band kept through two re-centres, 0 tools with
+a tolerance option; the host without pytest, bats, docker; BBX's plug-in
+points by line). One inconsistency named for R35, not corrected before the
+ruling: `docs/generality.md`'s "`--crash-at` → exit 1" against D4's exit 2.
+`bin/bbx selftest` GREEN three times at two HEADs this sitting — the open run
+on `ce3191d` and the close's two on `13cc141` (BBX-14 met): 23 gates, 78/78
+controls (`build/selftest_20260910T151030Z`, `build/selftest_20260910T151653Z`). Fidelity F12–F17 diff empty on the plain clone
+at `10a82d2`. bbh's tip `447e5d2`, a NOTE. Defaults D1–D44. Gotchas G1–G25.
 Retractions X1–X12.
 
 **In force:** `DECISIONS.md` — R0–R20, R22–R34 and method M1–M4. **Open
@@ -73,11 +72,10 @@ number to bring down; the two added at bbx-2 are host facts the clone
 exposed (G13, rule 7), the only exception ever allowed to move it upward. Grammar in
 `docs/census/README.md`.
 
-**Next:** the maintainer's ruling on S3 DONE (the table in `docs/readout.md`,
-bbx-11); then the STOP for S4's plan (R2's third kind, the command-line tool:
-the second consumer of `schema` and of the kinds loop; the tolerant-numeric
-family; the adapter contract; the file census as a gate — its two "+kernel"
-rows, `bin/bbx` executed by one gate and the runners by no document-set gate,
-are what S4 must exercise) — written and stopped for rulings before anything
-is built (CLAUDE.md §6). The platform run when R21's host exists. bbh's tip
+**Next:** the maintainer's two rulings, in this order — S3 DONE (the table in
+`docs/readout.md`, bbx-11; if not done, the condition named is the first task,
+BBX-26) and R35–R40 (`docs/rulings.md`; the S4 plan waits on them, CLAUDE.md
+§6). When both are in: S4 step 1 (`docs/plans/S4.md` §8) — and first, R35's
+correction of `docs/generality.md`'s crash row in its own commit with a
+retraction row (BBX-19). The platform run when R21's host exists. bbh's tip
 past the baseline follows the R28 procedure when a sitting needs it.
