@@ -1,0 +1,25 @@
+# the claim set (the scenario; R32): which documents, which sentence forms, which view (D35)
+[claims]
+documents = ["overview.md", "weights.md", "ranks.md"]
+forms = ["has", "of-is", "row"]
+view = "artifact"
+
+[p1]
+kind = "paraphrase"
+document = "overview.md"
+line = 5
+name = "Corvin"
+field = "weight"
+literal = 37
+
+[u1]
+kind = "unbindable"
+document = "overview.md"
+line = 9
+reason = "absence"
+
+[u2]
+kind = "unbindable"
+document = "overview.md"
+line = 11
+reason = "no-source"

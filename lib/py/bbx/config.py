@@ -98,6 +98,7 @@ DEFAULTS = {
         "registry": "tests/expected/registry.tsv",
         "default_set": "",
         "replays_dir": "tests/replays",
+        "scenario_ext": "rpl",       # D34 (R32): the scenario file extension per kind; bbh's literal is the kind-blind value
         "expected_dir": "tests/expected",
         "driver": "",                # a consumer names its driver (a path from its root, or a name under driver_home); none = FAIL at the entrance
         "driver_home": "$BBX_HOME/drivers",   # D28 (R26): where a bare driver NAME resolves — absent until S3 gives BBX a driver
@@ -184,6 +185,21 @@ KINDS = {
         # the temporal family's thresholds: bbh's [thresholds] defaults verbatim (D23; R25 makes a
         # looser consumer value need a ruling). A kind with no temporal family carries none.
         "thresholds": {"flicker_max": 2, "reconverge": 60, "flicker_max_total": 8},
+    },
+    # the DOCUMENT-SET kind (docs/plans/S3.md §3; D33; R31–R34): a directory of documents plus the ARTIFACT they
+    # describe; no instrument (portable); the scenario is a CLAIM SET (.claims, R32); the identity is file-sha1 over
+    # the artifact with the whole-set key over its directory (documents + artifact); no temporal family.
+    "document-set": {
+        "project": {"instrument_word": "extractor"},
+        "registries": {"static_needs_env": ""},
+        "tier": {"patterns": []},
+        "suite": {"scenario_ext": "claims", "driver": "docset",
+                  "rompath_env": "DOCSET_PATH", "input_env": "DOCSET_PATH",
+                  "hermetic_unset": ["DOCSET_FORMS", "DOCSET_NONDET", "DOCSET_VIEW"]},
+        "fingerprint": {"kind": "file-sha1", "file_pattern": "{set}.tsv"},
+        "expectations": {"kinds": [["skip", "-", "SKIP"], ["sha1", "exact", "N/A"], ["pending", "-", "NOT-EVALUATED"],
+                                   ["truth", "exact", "EVAL"], ["claims", "set", "EVAL"],
+                                   ["covered", "set", "EVAL"], ["schema", "schema", "EVAL"]]},
     },
     "self": {
         "project": {"gates_dir": "gates", "lib_dir": "lib/sh", "instrument_word": "instrument"},

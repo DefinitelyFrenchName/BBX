@@ -1,0 +1,24 @@
+[spec]
+class = "schema"
+baseset = "fixture"
+format = "tsv"
+
+[col1]
+name = "name"
+type = "str"
+
+[col2]
+name = "id"
+type = "hex"
+
+[col3]
+name = "weight"
+type = "int"
+
+[col4]
+name = "rank"
+type = "int"
+
+[rows]
+op = ">="
+n = 12

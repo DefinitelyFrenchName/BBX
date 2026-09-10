@@ -1,0 +1,124 @@
+[spec]
+class = "multiset"
+baseset = "fixture"
+mode = "shrink-only"
+
+[c1]
+document = "overview.md"
+line = 3
+form = "has"
+status = "BOUND"
+
+[c2]
+document = "overview.md"
+line = 4
+form = "has"
+status = "BOUND"
+
+[c3]
+document = "overview.md"
+line = 5
+form = "paraphrase"
+status = "PARAPHRASE"
+
+[c4]
+document = "overview.md"
+line = 6
+form = "has"
+status = "BOUND"
+
+[c5]
+document = "overview.md"
+line = 7
+form = "has"
+status = "BOUND"
+
+[c6]
+document = "overview.md"
+line = 8
+form = "has"
+status = "BOUND"
+
+[c7]
+document = "overview.md"
+line = 10
+form = "has"
+status = "BOUND"
+
+[c8]
+document = "weights.md"
+line = 3
+form = "of-is"
+status = "BOUND"
+
+[c9]
+document = "weights.md"
+line = 4
+form = "of-is"
+status = "BOUND"
+
+[c10]
+document = "weights.md"
+line = 6
+form = "of-is"
+status = "BOUND"
+
+[c11]
+document = "weights.md"
+line = 7
+form = "of-is"
+status = "BOUND"
+
+[c12]
+document = "weights.md"
+line = 8
+form = "of-is"
+status = "BOUND"
+
+[c13]
+document = "weights.md"
+line = 9
+form = "of-is"
+status = "BOUND"
+
+[c14]
+document = "ranks.md"
+line = 5
+form = "row"
+status = "BOUND"
+
+[c15]
+document = "ranks.md"
+line = 6
+form = "row"
+status = "BOUND"
+
+[c16]
+document = "ranks.md"
+line = 7
+form = "row"
+status = "BOUND"
+
+[c17]
+document = "ranks.md"
+line = 8
+form = "row"
+status = "BOUND"
+
+[c18]
+document = "ranks.md"
+line = 9
+form = "row"
+status = "BOUND"
+
+[c19]
+document = "ranks.md"
+line = 10
+form = "row"
+status = "BOUND"
+
+[c20]
+document = "ranks.md"
+line = 11
+form = "row"
+status = "BOUND"

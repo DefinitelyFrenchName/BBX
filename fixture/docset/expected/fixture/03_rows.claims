@@ -1,0 +1,46 @@
+[spec]
+class = "multiset"
+baseset = "fixture"
+mode = "inventory"
+
+[c1]
+document = "ranks.md"
+line = 5
+form = "row"
+status = "BOUND"
+
+[c2]
+document = "ranks.md"
+line = 6
+form = "row"
+status = "BOUND"
+
+[c3]
+document = "ranks.md"
+line = 7
+form = "row"
+status = "BOUND"
+
+[c4]
+document = "ranks.md"
+line = 8
+form = "row"
+status = "BOUND"
+
+[c5]
+document = "ranks.md"
+line = 9
+form = "row"
+status = "BOUND"
+
+[c6]
+document = "ranks.md"
+line = 10
+form = "row"
+status = "BOUND"
+
+[c7]
+document = "ranks.md"
+line = 11
+form = "row"
+status = "BOUND"

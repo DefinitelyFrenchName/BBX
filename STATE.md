@@ -7,30 +7,29 @@ paragraph per sitting, the outgoing status verbatim). Read `HANDOFF.md` first.
 generalization of `blackbox-harness` (bbh) to any subject with testable inputs
 and outputs. Born 2026-09-09.
 
-**Status (bbx-6 close, 2026-09-10):** slices S1 (but for R21's platform run)
-and S2 complete; **S3 planned, STOPPED, and its rulings R31–R34 answered after the close**
-(`docs/plans/S3.md`): the document-set kind, the first slice with no ancestor
-to diff against — the two ancestors (SMS `checkdocs.py`, VampireSaved
-`checkdocs_rom.py`) measured on plain clones at their census commits, nothing
-lifted verbatim, the SHAPE lifted (quote, derive, compare; a control per
-check family; coverage printed and frozen shrink-only, never fatal; a
-paraphrase declared, never skipped); the fixture `fixture/docset/` designed
-as BBX's second consumer; fourteen controls in five gates named; the three
-families (`exact`, `set`, `schema`) plugging into R23's kinds table. No tool
-written. One rot found at the open and fixed (G19: the static screen's
-generated sentence "the register is slice S2; until then …" outlived S2 by
-two closes; the gate held only its prefix) — the first re-anchor of BBX-10.
-`bin/bbx selftest` GREEN twice at one HEAD (BBX-14 met): 19 gates,
-56/56 controls. Fidelity F12–F17 diff empty on the plain clone at
-`10a82d2`. bbh's tip `447e5d2`, a NOTE. Defaults D1–D32. Gotchas G1–G19.
+**Status (bbx-7 close, 2026-09-10):** slices S1 (but for R21's platform run)
+and S2 complete; **S3 step 1 built** (`docs/plans/S3.md` §8.1; R31–R34
+answered, R34's TOML revision validated at this open): the `document-set`
+kind profile (D33), `[suite].scenario_ext` per kind (D34, R32) read by the
+suite loop and the enumeration helper, the fixture generator
+`fixture/docset/mkdocset.py` with `--check` and ten named chirality
+predicates (D35–D37), the fixture `fixture/docset/` as BBX's second consumer
+(the artifact, three documents, three claim sets, nine expectations — every
+register row `fixture` — the registry row on the whole-set key), and
+`gates/docset_fixture.sh` (3 controls, portable). Built in a shadow tree
+first, which caught one defect before the tree saw it. No driver, no
+`set`/`schema`/`exact` comparator, no `.truth` kind yet (steps 2–4).
+`bin/bbx selftest` GREEN twice at one HEAD (BBX-14 met): 20 gates,
+59/59 controls. Fidelity F12–F17 diff empty on the plain clone at `10a82d2`
+after the loop change (104 pairings). bbh's tip `447e5d2`, a NOTE. Defaults
+D1–D37. Gotchas G1–G19.
 
 **In force:** `DECISIONS.md` — R0–R20, R22–R34 and method M1–M4. **Open
 rulings:** R21 (the platform runs: no Linux or WSL host here). R31–R34
-(the S3 plan's: the integer observation point, the scenario contract per
-kind, the document-set coverage contract, the schema and set specs)
-validated 2026-09-10 after the bbx-6 close — R33 to be reworked only if
-experience proves it insufficient, R34 with the TSV caveat (the frozen rows
-of the new kinds are TOML-subset tables, R24's shape). S3 step 1 may open.
+(the S3 plan's) validated 2026-09-10 — R33 to be reworked only if
+experience proves it insufficient, R34 with the TSV caveat and its TOML
+revision validated (the frozen rows of the new kinds are TOML-subset
+tables, R24's shape).
 In force since bbx-2: R18 (the census and the tests
 work on a clone or are explicitly, provably read-only), R19 (parallel work
 is a pull queue; the FIFO token queue is the default implementation, the
@@ -65,7 +64,6 @@ number to bring down; the two added at bbx-2 are host facts the clone
 exposed (G13, rule 7), the only exception ever allowed to move it upward. Grammar in
 `docs/census/README.md`.
 
-**Next:** S3 step 1
-(`docs/plans/S3.md` §8: the profile, the scenario extension, the fixture and
-its generator with `--check`). The platform run when R21's host exists. bbh's
+**Next:** S3 step 2 (`docs/plans/S3.md` §8.2: `lib/py/bbx/docset.py`, `drivers/docset.sh`,
+`gates/docset_driver.sh`; the generator's `--truth`). The platform run when R21's host exists. bbh's
 tip past the baseline follows the R28 procedure when a sitting needs it.

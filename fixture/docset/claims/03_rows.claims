@@ -1,0 +1,5 @@
+# the claim set (the scenario; R32): which documents, which sentence forms, which view (D35)
+[claims]
+documents = ["ranks.md"]
+forms = ["row"]
+view = "artifact"

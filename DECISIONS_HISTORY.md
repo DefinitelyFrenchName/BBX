@@ -430,3 +430,37 @@ lives — bbh `[BBH-9]`).
   says nothing about the document-set kind, which has no gate yet — the
   plan's counts are DESIGN numbers until the fixture exists, and §4 says so.
 - After the close (2026-09-10): the maintainer validated R31, R32, R33 (to be reworked only if experience proves the contract insufficient) and R34 (validated with the caveat that TSV breaks silently). On the caveat the contributor revised one design point of the plan with the answer recorded: the `claims`, `covered` and `schema` expectation files carry their rows as TOML-subset tables with named fields (R24's shape), the fixture's artifact stays a TSV as the subject R34's schema check guards, and a wrong column count becomes a fifteenth control. Recorded and pushed as a post-close correction (R22), checked with the document gates. S3 step 1 may open.
+
+## bbx-7 — 2026-09-10
+
+- Open: `bin/bbx selftest` GREEN on `d9b363b` (19 gates, 56 / 56 controls,
+  tree unchanged; the two expected drift NOTEs). The maintainer validated
+  R34's TOML revision at the open ("TOML is better in my experience") and
+  voted to continue at 28 % context.
+- S3 step 1 built (docs/plans/S3.md §8.1): the `document-set` kind profile
+  (D33), `[suite].scenario_ext` (D34, R32) read by the suite loop and the
+  enumeration helper, the fixture generator with `--check` and its named
+  chirality predicates (D35, D36), the status vocabulary (D37), the fixture
+  `fixture/docset/` as BBX's second consumer (20 files: the artifact, three
+  documents, three claim sets, nine expectations, the registry row on the
+  whole-set key, the register — every row `fixture`), `gates/docset_fixture.sh`
+  (3 controls). Built and tested in a shadow tree first: the shadow caught
+  one defect before the tree saw it (the enumeration helper reused the name
+  `_ee_ext` for each file's extension and clobbered the scenario extension,
+  so every enumeration went empty and exit 0 — two gates red in the shadow,
+  none in the tree); fidelity F12 / F16 / F17 (104 pairings) and the suite
+  gate (5 controls) green in the shadow after the loop change.
+- Close: green first, twice, kept — `PASS 20 SKIP 0 FAIL 0 MISSING 0`, `controls fired 59 / declared 59; gates with no declaration: 0; red: 0`, tree
+  unchanged in both, BBX-14 met. Sweeps GREEN; the queue: 35 entries, 34
+  answered, R21 open.
+- Step 10 (R27): the shadow's catch (the `_ee_ext` clash) — no mechanism;
+  the practice held.
+- Anti-hyperfocus checkpoint (BBX-27): the sitting built the first tool of
+  the first kind with no ancestor and closed at the step boundary the
+  maintainer chose ("close" at the pacing check). Is S3 step 2 still the
+  most valuable thread? Yes: the driver is what turns the fixture from files
+  into observations, and every later step reads its log. Does the last green
+  mean what it is treated as meaning? It means the fixture is its
+  generator's and chiral, the profile resolves, and bbh's suite text is
+  unchanged by the loop change; it says nothing about binding, which no
+  code yet does.

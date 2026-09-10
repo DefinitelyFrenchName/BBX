@@ -17,7 +17,7 @@
 #
 # enumerate_expectations <expect-dir> <consumer-root> [<replays-dir>]
 #   prints one `<name>|<kind>|<disposition>` line per expectation whose stem is a real
-#   scenario (<consumer-root>/<replays-dir>/<stem>.rpl; the dir defaults to
+#   scenario (<consumer-root>/<replays-dir>/<stem>.<ext>, the profile's [suite].scenario_ext — R32, rpl for bbh; the dir defaults to
 #   $BBX_REPLAYS_DIR, then tests/replays), and returns non-zero if any is pending
 #   (NOT-EVALUATED) or of an unknown kind.
 
@@ -29,11 +29,12 @@ esac
 enumerate_expectations() {
     _ee_dir="$1"; _ee_repo="$2"; _ee_rpl="${3:-${BBX_REPLAYS_DIR:-tests/replays}}"; _ee_bad=0
     _ee_table="$(python3 -m bbx.expectations kinds)" || { echo "FAIL: the kinds table could not be read (bbx.expectations kinds)"; return 3; }
+    _ee_sext="$(python3 -m bbx.expectations scenario-ext)" || { echo "FAIL: the scenario extension could not be read (bbx.expectations scenario-ext)"; return 3; }
     for _ee_f in "$_ee_dir"/*; do
         [ -f "$_ee_f" ] || continue
         _ee_b="$(basename "$_ee_f")"
         _ee_stem="${_ee_b%.*}"; _ee_ext="${_ee_b##*.}"
-        [ -f "$_ee_repo/$_ee_rpl/$_ee_stem.rpl" ] || continue
+        [ -f "$_ee_repo/$_ee_rpl/$_ee_stem.$_ee_sext" ] || continue
         _ee_disp="$(printf '%s\n' "$_ee_table" | awk -F'\t' -v e="$_ee_ext" '$1 == e { print $3; exit }')"
         case "$_ee_disp" in
             "")            echo "$_ee_stem|$_ee_ext|UNKNOWN-KIND"; _ee_bad=1 ;;

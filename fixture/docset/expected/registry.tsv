@@ -1,0 +1,5 @@
+# registry.tsv — whole-set key (dir-sha1 over subject/: the documents AND the artifact) -> expectation set.
+# Written by mkdocset.py at generation, which is the freeze (a build decision, [BBH-67]); a changed
+# document or artifact is an UNREGISTERED identity before any claim is read (abstraction S2).
+# sha1	expectation-set	notes
+767c96b32d907a6a0d7b88a03dc8de624b14c44b	fixture	the generated fixture; WHOLE-SET key (subject/*)

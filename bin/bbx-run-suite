@@ -12,7 +12,7 @@
 # reference input by default; set the rompath variable to front a build); its fingerprint
 # (lib/py/bbx/fingerprint.py: whole-set key first, program key second) selects
 # <expected_dir>/<expset>/, and an unregistered fingerprint FAILS LOUDLY (registry rows are added
-# only at freeze time, as a build decision). For every <replays_dir>/*.rpl: run `runs_per_replay`
+# only at freeze time, as a build decision). For every <replays_dir>/*.<scenario_ext> (R32): run `runs_per_replay`
 # times through the driver, fail on nondeterminism (BBX-14: before any class is consulted), then
 # dispatch on the expectation KIND (lib/sh/expectation_kinds.sh's table, R23):
 #   <name>.skip      not applicable to this set; body = the reason, printed
@@ -61,6 +61,7 @@ done
 bbx_config_init "$CONFIG"
 RUN_START="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 REPLAYS_DIR="$(bbx_cfg suite.replays_dir)"
+EXT="$(bbx_cfg suite.scenario_ext)"     # R32 (D34): rpl under frame-driven, claims under document-set
 EXPECTED_DIR="$(bbx_cfg suite.expected_dir)"
 [ -n "$SET" ] || SET="$(bbx_cfg suite.default_set)"
 DRIVER="${DRIVER_ARG:-$(bbx_cfg suite.driver)}"
@@ -167,9 +168,9 @@ run_driver() {   # run_driver <mask> <rpl> <out>
 
 fail=0
 [ -n "${SUITE_ONLY:-}" ] && echo "FILTERED RUN (SUITE_ONLY) — not a suite verdict"
-for rpl in "$BBX_ROOT/$REPLAYS_DIR"/*.rpl; do
+for rpl in "$BBX_ROOT/$REPLAYS_DIR"/*."$EXT"; do
     [ -f "$rpl" ] || continue
-    name="$(basename "$rpl" .rpl)"
+    name="$(basename "$rpl" ".$EXT")"
     if [ -n "${SUITE_ONLY:-}" ]; then
         case " $SUITE_ONLY " in *" $name "*) ;; *) continue ;; esac
     fi

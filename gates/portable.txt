@@ -16,3 +16,4 @@ thresholds
 compare_dispatch
 expectation_kinds
 provenance
+docset_fixture

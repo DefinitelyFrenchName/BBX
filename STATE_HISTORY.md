@@ -124,3 +124,22 @@ two closes; the gate held only its prefix) — the first re-anchor of BBX-10.
 `bin/bbx selftest` GREEN twice at one HEAD (BBX-14 met): 19 gates,
 56/56 controls. Fidelity F12–F17 diff empty on the plain clone at
 `10a82d2`. bbh's tip `447e5d2`, a NOTE. Defaults D1–D32. Gotchas G1–G19.
+
+## bbx-7 — 2026-09-10 (session 7: S3 step 1 — the document-set profile, the scenario extension, the fixture)
+
+**Status (bbx-7 close, 2026-09-10):** slices S1 (but for R21's platform run)
+and S2 complete; **S3 step 1 built** (`docs/plans/S3.md` §8.1; R31–R34
+answered, R34's TOML revision validated at this open): the `document-set`
+kind profile (D33), `[suite].scenario_ext` per kind (D34, R32) read by the
+suite loop and the enumeration helper, the fixture generator
+`fixture/docset/mkdocset.py` with `--check` and ten named chirality
+predicates (D35–D37), the fixture `fixture/docset/` as BBX's second consumer
+(the artifact, three documents, three claim sets, nine expectations — every
+register row `fixture` — the registry row on the whole-set key), and
+`gates/docset_fixture.sh` (3 controls, portable). Built in a shadow tree
+first, which caught one defect before the tree saw it. No driver, no
+`set`/`schema`/`exact` comparator, no `.truth` kind yet (steps 2–4).
+`bin/bbx selftest` GREEN twice at one HEAD (BBX-14 met): 20 gates,
+59/59 controls. Fidelity F12–F17 diff empty on the plain clone at `10a82d2`
+after the loop change (104 pairings). bbh's tip `447e5d2`, a NOTE. Defaults
+D1–D37. Gotchas G1–G19.

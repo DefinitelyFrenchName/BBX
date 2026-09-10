@@ -4,6 +4,7 @@ through the consumer config (ruled R23, 2026-09-10; abstraction E1).
     python3 -m bbx.expectations kinds           one `<ext>\\t<family>\\t<disposition>` line per kind
     python3 -m bbx.expectations family <ext>    the family of one kind, or `-` (exit 1) if unregistered
     python3 -m bbx.expectations mask-default    [suite].mask_default for the kind in force
+    python3 -m bbx.expectations scenario-ext    [suite].scenario_ext for the kind in force (R32: rpl / claims)
 
 THE ONE PLACE. A kind is registered in the kind profile's `[expectations].kinds` table
 (`lib/py/bbx/config.py`) and nowhere else, so an unknown extension is REPORTED, never ignored
@@ -42,6 +43,9 @@ def main(argv):
         return 1
     if cmd == "mask-default":
         print(C.get(cfg, "suite.mask_default"))
+        return 0
+    if cmd == "scenario-ext":
+        print(C.get(cfg, "suite.scenario_ext"))
         return 0
     print(f"bbx expectations: unknown command {argv!r}", file=sys.stderr)
     return 2

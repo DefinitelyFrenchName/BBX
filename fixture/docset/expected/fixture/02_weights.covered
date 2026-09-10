@@ -1,0 +1,40 @@
+[spec]
+class = "multiset"
+baseset = "fixture"
+mode = "shrink-only"
+
+[c1]
+document = "weights.md"
+line = 3
+form = "of-is"
+status = "BOUND"
+
+[c2]
+document = "weights.md"
+line = 4
+form = "of-is"
+status = "BOUND"
+
+[c3]
+document = "weights.md"
+line = 6
+form = "of-is"
+status = "BOUND"
+
+[c4]
+document = "weights.md"
+line = 7
+form = "of-is"
+status = "BOUND"
+
+[c5]
+document = "weights.md"
+line = 8
+form = "of-is"
+status = "BOUND"
+
+[c6]
+document = "weights.md"
+line = 9
+form = "of-is"
+status = "BOUND"
