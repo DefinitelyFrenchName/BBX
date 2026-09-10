@@ -124,7 +124,7 @@ by construction (the recount's clone) and by `fidelity_bbh`'s proof.
 
 **Next-session orientation (written at the bbx-5 close, 2026-09-10)**
 - Open first: `bin/bbx selftest --log build/selftest_<stamp>` and `bin/bbx readout` on it. Two `drift` NOTEs are expected: VampireSaved (past the census) and bbh (`447e5d2`, one past the baseline `10a82d2` — a README line; follow it by the R28 procedure only when a sitting needs the current tip).
-- R29 (executable controls) is open with a recommendation: build it in S6 with the controls registry; until then every FIRED is a self-report and the readout says so.
+- R29 (executable controls) is ruled: the contract is on `docs/controls.md`; build it in S6 with the controls registry (the runner's `CONTROL=<name>` mode, `CONTROL LIES`, the cadence per tier); until then every FIRED is a self-report.
 - Then slice S3, the document-set kind (`docs/generality.md`, `docs/slices.md`): the plan first — measured, with the fixture's design, the claim-inventory and coverage kinds, the set/multiset and schema families plugging into R23's kinds table — and a STOP for its rulings before any tool.
 - S2 is complete: its readout (`docs/readout.md`, "S2 — the slice readout") lists what it does not assert; the sentence to carry forward is that every class has PASSed only on fixture-class pairings, and the suite screen says so.
 - A background battery: nothing under the tree changes while it runs — draft in the scratchpad, test in a shadow home (copies of `lib/` and the gate under a throwaway root), move in after (bbx-4's practice; it caught one defect before the tree saw it).

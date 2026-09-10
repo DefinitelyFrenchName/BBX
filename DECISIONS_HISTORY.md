@@ -390,4 +390,5 @@ lives — bbh `[BBH-9]`).
   inherited unpaid. The most valuable next thread is S3's plan: the first
   kind with no ancestor to diff against. The last green means what bbx-4's
   did, on a newer bbh, with one reader of headers instead of two.
+- After the close (2026-09-10): the maintainer agreed with R29's recommendation — the contract on `docs/controls.md` now, built in S6, the cadence per tier. Recorded and pushed as a post-close correction (R22), checked with the document gates.
 

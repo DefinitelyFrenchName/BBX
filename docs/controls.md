@@ -77,3 +77,21 @@ what the screen reads as coverage (BBX-18), and every other key (`drift`,
 `bbh-source`, `bbh-drift`, …) is listed on the screen as a note, one line per
 NOTE — since bbx-3, whose first run found VampireSaved's drift in the census
 log and not on the screen.
+
+**Executable controls (ruled R29, 2026-09-10; built in slice S6).** A declared
+control is also a MODE: the runner invokes the gate with `CONTROL=<name>`, the
+gate applies that control's perturbation to its REAL input and runs to its
+verdict, and the runner requires the gate's own FAIL. A gate that stays green
+under its own perturbation has a control that lies, whatever it printed
+(`CONTROL LIES: <name>`, the run NOT GREEN); a gate that does not honour the
+mode prints `REFUSED: CONTROL=<name> is not a mode of this gate`, exit 3,
+read as a dead control. Why (bbh's 14z-144 case, raised by the maintainer):
+`CONTROL FIRED` is the gate's self-report, and a control can print it while
+testing nothing — it wrote a value and asserted the value was not something
+else. The executable form is strictly stronger and compatible: the lines
+above stay, the runner does one more thing. Cadence is the tier's, not the
+contract's: every battery in the portable tier (a gate may short-circuit to
+the affected section under the mode), the static tier under release until
+measured. Until S6 lands, every FIRED in this tree is a self-report, and the
+readout says so.
+

@@ -23,7 +23,7 @@ S6). `bin/bbx selftest` GREEN twice at one HEAD (BBX-14 met): 19 gates,
 `10a82d2`. bbh's tip `447e5d2` (README: the remote renamed BBH-frame-based),
 a NOTE. Defaults D1–D32. Gotchas G1–G18.
 
-**In force:** `DECISIONS.md` — R0–R20, R22–R28, R30 and method M1–M4. **Open rulings:** R21 (the platform runs: no Linux or WSL host here); R29 (executable controls, raised from bbh — recommended for S6). R28 answered (a re-baseline is a procedure, done); R30 answered and built (the header is the leading comment block).
+**In force:** `DECISIONS.md` — R0–R20, R22–R30 and method M1–M4. **Open rulings:** R21 (the platform runs: no Linux or WSL host here). R28 (a re-baseline is a procedure, done), R29 (executable controls: on the page, built in S6) and R30 (the header is the leading comment block, built) answered 2026-09-10.
 In force since bbx-2: R18 (the census and the tests
 work on a clone or are explicitly, provably read-only), R19 (parallel work
 is a pull queue; the FIFO token queue is the default implementation, the
