@@ -1344,3 +1344,144 @@ what this green does NOT assert (declared by each gate's header):
 **Retractions this sitting:** X10 (the plan's control placement; the plan corrected in its own commit `08c9fef`, BBX-19). **Incidents reviewed for learnings (R27, step 10):** three — G22 (the untracked truth logs, paid 1 shadow run: a mechanism built, `bbx.provenance` tracked-ness with its control, and the shadow-as-git-tree practice written down), the set family's duplicate label (paid 0, caught by the gate's frozen text in the shadow: the mechanism is the freeze), G23 (the backticked word, paid 2 close batteries: a practice — the shadow runs gates through `bin/bbx classify` — the mechanism exists and fired).
 
 **What this close does NOT assert:** the suite over the fixture (step 4: no suite run has printed one of the new verdict lines or a coverage number on the screen; `coverage: docset_driver: 20/23` is still a gate's NOTE); a real document set (every expectation is `fixture` class, the forms and guards the fixture's); the schema family beyond one format and one consumer (BBX-25 unmet); that a tracked file is the right file; bbh's tip beyond the baseline; any platform but Darwin arm64 (R21); executable controls (R29, S6); and everything S2's slice readout listed.
+
+# bbx-10 step 4 — the suite's kinds loop: the document-set kind runs end to end and its coverage reaches the screen (2026-09-10)
+
+**The open.** GREEN on `46cbe6f` (`build/selftest_20260910_144737`: 22 gates, 72 / 72 controls, porcelain 0, tree unchanged; the two drift NOTEs: bbh one ahead at `447e5d2`, VampireSaved 22 ahead): the bbx-9 close re-derived. R21 the only open ruling.
+
+## What changed
+
+**Measured before anything was built (§1):** the plan's §5 row said a caller's `DOCSET_NONDET=1` reads NONDETERMINISTIC through the suite. It does not: the document-set profile lists the driver family in `hermetic_unset` (D33), so the suite scrubs it — the two runs were byte-identical and the suite stayed on its verdicts — while the driver called directly under it wrote two logs differing at the first token. The plan corrected in its own commit `35c8007` (BBX-19; retraction X11) before the gate asserted the corrected shape; the control now goes through a wrapper driver passed with `--driver`, and the scrub is proven in the same control. D33 stands: a salted token must never reach a freeze.
+
+**Step 4, as planned (§8.4), built in a shadow tree first and moved into the tree once every touched gate was green there through `bin/bbx classify`:**
+
+- `bin/bbx-run-suite` — the KINDS LOOP. Which loop a run gets is read off the kinds table, never configured: a table that carries the temporal family (the frame-driven profile's `masked` / `diverge`) gets bbh's loop unchanged — one kind per scenario, `masked` > `diverge` > `sha1`, the printed text bbh's — and F12 (17 suite pairs among the 104 fidelity pairings) is the control that nothing moved for bbh; any other table gets the kinds loop: every EVAL kind whose file exists is its own pairing, the `schema` family FIRST (the artifact's shape before any value, R34), then the table's order, the self-frozen `.sha1` last (E4). The printed shape is `<scenario> <kind> <verdict>` with the scenario named once; run-level lines (SKIP, PENDING, RUN-FAIL, NONDETERMINISTIC, NO-EXPECTATION) print as bbh prints them, kept with kind `-`. On a schema FAIL the scenario's value kinds print the suite's own `NOT-EVALUATED (schema failed)` — finding `pending`, counted as failures, no NOTE kept for the scenario (a coverage of a wrong shape is a number about nothing). The comparators that read the artifact get it through `compare_check`'s two trailing arguments: the scenario file and the SUBJECT FILE the fingerprint resolved (`bbx.fingerprint --path`, new: the file the identity was computed from — proven equal to the driver's own resolver on the fixture). After a scenario's pairings `[suite].log_summary` (D43) prints the log's own numbers at column 0 — the document-set profile's `bbx.docset summary`, kind-blind none, so the frame-driven text is untouched — and every `NOTE:` line the scenario printed is kept in `notes.tsv` (D44). `--freeze` under the kinds loop rewrites the shrink-only kind from the run (`bbx.compare_set --freeze`: the `[spec]` kept, one table per covered row in extraction order — on the fixture the rewritten file equals the generator's byte for byte) and leaves every other authored kind alone (`authored .<kind> expectation — not self-frozen`); the `.sha1` self-freeze runs ONLY for a scenario with no authored kind, so `logs/<name>.log` — where an exact kind's truth log lives — is never overwritten beside a `.truth`: the bbx-9 HANDOFF hazard closed by construction, and proven in both directions.
+- `lib/py/bbx/finding.py` — `NOT-EVALUATED` → `pending` (E2's disposition) and `authored ` as the prefix (bbh's `.masked` line is one of them); no new word.
+- `lib/py/bbx/readout.py` — the suite screen counts scenarios and pairings apart, prints `coverage:` per scenario and every other key as a note from `notes.tsv`, meets BBX-14 over pairings `(scenario, kind)`, and lists the DRIVER's `NOT-ASSERTED` lines under "what this green does NOT assert" (RO2 — bbh's fake driver declares none, and the screen says so). `gates/readout.sh`'s three frozen lines moved with it.
+- `gates/docset_suite.sh` (portable, 6 controls, 17 suite runs, ~55 s): the tree's fixture GREEN with all 29 printed lines frozen and the 12 verdict lines classified `pass`; the kept run's 12 rows keyed `(scenario, kind)` in the loop's order, the 15 notes, `loop=kinds`; the second run byte-identical and the readout over both exit 0 with the eight screen lines checked; the six controls below; the `.sha1` beside the authored kinds as a fifth pairing; NO-EXPECTATION; the fixture's every file checksummed before and after (untouched).
+- Headers: the four blind-spot lines that said "S3 step 4" now name `gates/docset_suite.sh`; `gates/suite.sh`'s two that had named "S2 step 4" since bbx-4 (G24) name `gates/readout.sh` and `gates/provenance.sh`. `docs/defaults.md` D43, D44. `gates/portable.txt` +1.
+
+**One thing the plan's §6 words differently from the screen:** §6 says `comparator classes: exact / set / schema`; the screen's class column carries the spec's `class` field — `exact, multiset, schema` — because `set` is the family and `multiset` its one class (as `masked` is the kind and `flicker` the class). Not a retraction: the sentence names families and the screen names classes; recorded here so the next reader is not surprised.
+
+## Counts, separately (measured by `gates/docset_suite.sh`; the shadow's runs quoted where the gate does not print the number)
+
+| | |
+|---|---|
+| the tree's fixture through the suite | GREEN; 12 pairings: `01_all` schema 4 columns 12 rows / exact 23 indices / inventory 23 rows / covered 20; `02_weights` schema / 7 / 7 / 6; `03_rows` schema / 7 / 7 / 7; coverage `20/23`, `6/7`, `7/7`; paraphrase 1, unbindable 2, mismatch 1 + 1 (the planted wrong claim in two scenarios) |
+| printed lines frozen / verdict lines classified `pass` / kept rows / notes rows | 29 / 12 / 12 / 15 |
+| twice (BBX-14) | the second run's `results.tsv` and `notes.tsv` byte-identical; the readout `--against`: `met — 12 pairings, 0 verdict differences`, exit 0 |
+| identity-before-any-claim | `weight` → `mass` in a copied `overview.md` → `UNREGISTERED build: whole-set …`, exit 1, `verdict=UNREGISTERED`, `results.tsv` the header alone; restored → set `fixture`, SUITE GREEN |
+| nondeterministic-before-any-class | a wrapper driver exporting `DOCSET_NONDET=1` → NONDETERMINISTIC on all 3 scenarios, 0 PASS lines, kept kind `-` finding `nondeterministic`, RED; the caller's `DOCSET_NONDET=1` → SUITE GREEN (scrubbed, D33); the driver directly under it → two logs differing at char 50 of line 1 |
+| covered-shrink-only | a row added (`weights.md:5 of-is BOUND`) → `FAIL set-covered: no longer covers weights.md:5 of-is BOUND (1 frozen row(s) lost)`, `diverged`, RED; `c6` removed → `PASS set-covered (5 frozen rows still covered; the run covers 1 more)` + `NOTE: covered-grew 1` kept; `--freeze` → `frozen set-covered (6 rows)`, the file equal to the generator's byte for byte, the other two covered files and all three truth logs untouched, no `.sha1` written; the next plain run GREEN, 0 growth notes |
+| wrong-truth | the green run keeps `02_weights mismatch 1` and its exact pairing PASSes; index 3 of the truth log rewritten `BOUND` → `FAIL exact: index 3 differs (truth BOUND, run MISMATCH; quoted same, derived same)`, `diverged`, RED, while schema / claims / covered PASS |
+| schema-before-any-value | `weight` → `mass` in a copied `01_all.schema` → `FAIL schema: column 3 is 'weight' (frozen 'mass')`; truth, claims, covered each `NOT-EVALUATED (schema failed)` (`pending`); `pass=8 fail=4`; 0 notes kept for `01_all`, 5 for `02_weights`; SUITE RED |
+| freeze-keeps-the-truth-log | a `MARKER` line appended to a copied `logs/03_rows.log`: `--freeze` with the four kinds present → `authored .schema … not self-frozen`, `frozen set-covered (7 rows)`, the marker still the last line, no `.sha1`; the four kinds removed → `03_rows sha1 frozen <sha>`, the log's last line `END 7` (overwritten), `03_rows.sha1` written |
+| the self-frozen kind beside the authored kinds | a `.sha1` → a fifth pairing `sha1 PASS`, 13 rows; `--freeze` with both → `authored kinds present — .sha1 not self-frozen (logs/03_rows.log is theirs)`; nothing of any kind → `NO-EXPECTATION …`, `no-expectation` |
+| F12 (bbh's loop, the control that nothing moved) | `gates/fidelity_bbh_s2.sh` PASS: 104 pairings identical on the plain clone at `10a82d2`; `gates/suite.sh` PASS (57 checks, 5 controls) |
+| runtimes (this host, loaded; measured once, not gated) | docset_suite 55.0 s (17 suite runs); the shadow's other touched gates: readout, set_schema, docset_driver, docset_fixture, expectation_kinds, compare_dispatch, close_sweeps, rulings_shape, controls, static_runner, config, provenance, fingerprint, classify, tier — all PASS through the classifier |
+| gates / controls in the tree after step 4 | 23 / 78 / 78 (the new gate's 6), confirmed by the close batteries below |
+
+## What it rests on
+
+Every touched gate run in the shadow (a git tree built from HEAD) to a file and read through `bin/bbx classify` — the two static ones with `BBX_BBH_HOME` — then the two close batteries below in the tree. The kinds loop's first green was read from its printed values (the 29 lines above) before the gate froze them (BBX-2).
+
+## What this green does NOT assert
+
+- Anything about a real document set: every input is the fixture's (fixture class) or a perturbed copy of it; the forms, guards and lexical classes are the fixture's (D35, D39, D40). `PASSed on a real pairing: none` is the screen's own sentence.
+- A second consumer of the kinds loop: one profile drives it (S4's command-line kind is the second; BBX-25 unmet, stated in the gate's header). The schema family still has one format and one consumer.
+- The readout screen beyond the lines the gate checks (the verdict, the pairings, the coverage and note lines, BBX-14, the driver's blind spots): the rest is `gates/readout.sh`'s.
+- That a register row's class is true of its file; that a tracked file is the right file.
+- The slice's own accounting (step 5): families per kind, controls declared / fired per gate, provenance classes, defaults rows, the first shared-vs-kind-specific file census, and what the slice's green does not assert — the readout that lets the maintainer rule S3 done (§7).
+- Executable controls (R29, S6): every `CONTROL FIRED` here is the gate's self-report.
+
+## The screen, verbatim (`bin/bbx readout build/selftest_20260910T131501Z --against build/selftest_20260910T130844Z`)
+
+```
+== READOUT — self subject at /Users/koneko/Developer/generalized-blackbox-harness/BBX @ 35c8007 (porcelain 14) — started 2026-09-10T13:15:01Z on Darwin arm64 ==
+VERDICT: GREEN   PASS 23  SKIP 0  FAIL 0  TIMEOUT 0  MISSING 0   (gates 23)
+tree during the run: unchanged (untracked entries 1 -> 1)   harness: bbx @ 35c8007
+rests on:
+  controls: fired 78 / declared 78; dead 0; undeclared firings 0; gates red 0
+  each can fail: 23 of 23 gates proved a control fires on purpose
+  expectations relied upon: none registered — a static run compares against no frozen expectation; a kept suite run (bbx-run-suite --log) carries its register's histogram (D32)
+  coverage: docset_driver: 20/23
+  coverage: census_recount: rows=300 recountable=244 not_recountable=56 (BBX-18: the census claims no command re-derives)
+  note: docset_fixture: docset-fixture records=12 documents=3 claims=20 wrong=1 paraphrase=1 unbindable=2 scenarios=3 expectations=12 truth_logs=3
+  note: docset_driver: paraphrase 1
+  note: docset_driver: unbindable 2
+  note: docset_driver: stale 0
+  note: docset_driver: mismatch 1
+  note: set_schema: verdict-lines-frozen 38
+  note: docset_suite: suite-runs 17 (each kept under --log)
+  note: census_recount: drift census=bbh.md recorded=10a82d2 tip=447e5d26bc23 ahead=1 rows_moved=1 ids=A2
+  note: census_recount: drift census=vampiresaved.md recorded=0cdd9726 tip=77f54e929962 ahead=23 rows_moved=40 ids=A21,A22,A23,A24,A25,A26,A27,A28,A32,A33,A35,A37,A45,A48,A51,A59,A62,A63,A64,A66,A67,A68,A69,A76,A77,A80,A84,A85,A86,A87,A88,A89,A90,A91,A93,A95,A111,A120,A121,A127
+  note: fidelity_bbh: bbh-drift baseline=10a82d2 tip=447e5d2 ahead=1
+  note: fidelity_bbh: bbh-source tip=447e5d2 porcelain=0 untouched-by-construction=clone
+  note: fidelity_bbh_s2: bbh-drift baseline=10a82d2 tip=447e5d2 ahead=1
+  note: fidelity_bbh_s2: bbh-source tip=447e5d2 porcelain=0 untouched-by-construction=clone
+  note: suite: suite-runs 25 (each kept under --log)
+  BBX-14 (more than one run): met — 23 gates, 0 verdict differences against the run started 2026-09-10T13:08:44Z at the same HEAD
+  last re-baseline: 2026-09-10 (bbx-5, R28): bbh `f675710` → `10a82d2` — bbh's commit "config: the M18 re-point that sat dirty since 14z-144; the example lib's root one level too high; the extraction counts dated" (7 files; G11 fixed there; the four dirty files of R8 committed). Measured before the move by the D20 override: F12, F13, F14, F14f, F16, F17 identical on a clone of `10a82d2`. Moved with it: D20; D12's five `[sweep].placeholders` (by definition); the census `docs/census/bbh.md` (A2 19 → 20). No verdict text changed on either side.
+what this green does NOT assert (declared by each gate's header):
+  classify: that a verdict word printed by a gate outside the runner is read at all: the classifier reads exit status first, then the log; a PASS printed after a non-zero exit is FAIL by design
+  config: the meaning of a consumer's keys: only that the layers resolve (consumer over kind profile over kind-blind default) and that dumps are stable
+  tier: that a gate reaching an instrument through a path the source regex does not match is seen: the depth and the regex are the limit
+  static_runner: the sweep runner or any gate that needs an instrument: this is the pre-commit chain only
+  static_runner: runtimes as anything but this host under this load
+  controls: that a control is RIGHT — only that a declared control fired and an undeclared one is red (docs/controls.md)
+  sweep_runner: speed-up on a real consumer: the queue is measured on stub gates with sleeps, not on an instrument-tier suite
+  sweep_runner: a gate that escapes its clone by an absolute path: clone-per-slot pins the cwd, nothing more
+  sweep_runner: portability beyond macOS: mkfifo and exec 8<> are POSIX, not yet run on Linux or WSL
+  fingerprint: the identity of any artifact that is not a single file: the kind-blind fingerprint is file-sha1 (D16)
+  rulings_shape: the prose of a ruling: only its heading, its answer line and its DECISIONS row are read
+  readout: that a declared blind spot is true or complete: the screen prints what the header says
+  readout: the sweep runner's runs: only bbx-run-static --log and bbx-run-suite --log are read
+  readout: that a register row's class is true of its file: the suite screen prints what the register says (gates/provenance.sh keeps it complete and inside the vocabulary)
+  close_sweeps: that every corrected claim has a register row: the register is written by hand at the correction (a claim nobody registered is not swept)
+  close_sweeps: step 9 of the close (the lineage untouched): that is the recount's clone and the fidelity gate's proof, not this gate
+  temporal: anything about a real log: every shape here is synthesized (fixture class); the classes' fitness for a consumer is that consumer's ratification
+  temporal: the dispatcher's spec line and the suite's dispatch (S2 steps 2 and 3): the comparators are called directly
+  temporal: that the thresholds are right for any subject: they are the frame-driven profile's (D23) and a consumer's override needs R25's ruling row (gates/thresholds.sh)
+  thresholds: that a ruling id in [thresholds].rulings names a ruling that exists: any non-empty string is accepted here; the consumer's rulings-shape gate is where an id is checked
+  thresholds: the values' fitness for any subject: 2 / 60 / 8 are bbh's ratified policy carried in the frame-driven profile (D23), not a measurement of anything here
+  compare_dispatch: the suite's dispatch around this library (which file is read, how many runs, the .sha1 and .diverge kinds' own paths): S2 step 3
+  compare_dispatch: anything about a real log or a real mask: every log is synthesized and the masks are strings the guard compares, never applied
+  expectation_kinds: the content of any expectation file: only its extension and its stem are read here
+  expectation_kinds: the suite's use of the dispositions (S2 step 3)
+  provenance: that a row's class is TRUE of its file: the register is written by hand at the freeze; only completeness and the vocabulary are checked
+  provenance: bbh's example register (markdown, a consumer list of classes): it is bbh's and F19 (S6) reads it under R11
+  docset_fixture: that any claim in the fixture is BOUND, MISMATCH or anything else (gates/docset_driver.sh and gates/set_schema.sh): only that the files are the generator's, the design is chiral, and the register is complete and tracked
+  docset_fixture: the suite over the fixture: gates/docset_suite.sh
+  docset_driver: the verdict text of the exact, set and schema comparators (S3 step 3): the truth is compared here with cmp and diff
+  docset_driver: the suite over the fixture (identity, the kinds loop, the coverage NOTE on the screen): gates/docset_suite.sh
+  docset_driver: prose, reasoning and causal claims in a document: only sentences in a declared form and the listed rows are claims
+  docset_driver: the truth of the artifact itself: a document that agrees with a wrong artifact reads BOUND
+  docset_driver: a nested document tree or a second artifact per set (DOCSET_VIEW is refused): S4 or a consumer's question
+  set_schema: the suite's loop over the kinds, the kept-run rows (scenario, kind), NOT-EVALUATED on a schema FAIL and --freeze for the shrink-only kind: gates/docset_suite.sh
+  set_schema: anything about a real document set: every input is the fixture's (fixture class) or a perturbed copy of it
+  set_schema: the schema family on a second format or a second consumer (S4's JSON): tsv is its one format and the fixture's artifact its one consumer (BBX-25 unmet, stated)
+  docset_suite: anything about a real document set: every input is the fixture's (fixture class) or a perturbed copy of it; the forms, guards and lexical classes are the fixture's (D35, D39, D40)
+  docset_suite: bbh's precedence loop and its printed text: gates/fidelity_bbh_s2.sh (F12) and gates/suite.sh
+  docset_suite: the readout screen beyond the lines checked here (the verdict, the pairings, the coverage and note lines, BBX-14, the driver's blind spots): gates/readout.sh
+  docset_suite: a second consumer of the kinds loop (S4's command-line kind): one profile drives it here (BBX-25 unmet, stated)
+  census_recount: the truth of the not-recountable rows at their commits: they are named and counted, never run
+  census_recount: that a hand-read citation says what its row claims: only that the line exists
+  fidelity_bbh: anything about a suite, a comparator or an expectation: slice S2
+  fidelity_bbh: bbh's example's correctness (G11 is bbh's to fix)
+  fidelity_bbh: F15 unless BBX_FIDELITY_F15=1 was set for the run
+  fidelity_bbh_s2: the kept suite run (--log) — bbh has none, so F12 diffs printed text only; the kept run's ground truth is gates/suite.sh
+  fidelity_bbh_s2: anything about a real subject: F17's and F16b's inputs are synthesized, F16a's are the fake machine's (fixture class); the shapes are the lineage's paid-for cases and nothing else
+  fidelity_bbh_s2: bbh's correctness: identical output on both sides is fidelity, not truth
+  suite: any driver but the fake: a MAME or FBNeo driver is bbh's and untested here (bbh's own F8 rows)
+  suite: the .sha1 kind's evidence: it is `self` class by construction (E4) and the register that says so is gates/provenance.sh's
+  suite: the readout's reading of a kept suite run: gates/readout.sh reads the suite screen, gates/docset_suite.sh its coverage lines
+  gates declaring no blind spot: 0   (a gate nobody has asked what its green leaves out)
+```
+
+# CLOSE — bbx-10 (2026-09-10)
+
+**Close measurements.** Green first, twice, kept (`build/selftest_20260910T130844Z`, `build/selftest_20260910T131501Z`): `PASS 23 SKIP 0 FAIL 0 MISSING 0` (23 gates); `controls fired 78 / declared 78`; `ok: no tracked file changed during the run` in both; BBX-14 met (23 gates, 0 verdict differences at one HEAD). **Sweeps:** `close_sweeps` and `rulings_shape` inside both batteries, re-run once more on the final tree after these ledgers were written (the commit message quotes the two verdicts). **Lineage untouched, by construction and by proof:** bbh baseline=10a82d2 tip=447e5d2 ahead=1 porcelain=0 (clones only, clean after); VampireSaved past the census (not re-measured by design); the tips as the recount summaries printed them are in the kept runs' `census_recount.log`.
+
+**Retractions this sitting:** X11 (the plan's §5 nondeterminism row; the plan corrected in its own commit `35c8007`, BBX-19). **Incidents reviewed for learnings (R27, step 10):** G24 (two blind-spot lines naming "S2 step 4" as their future since bbx-4; paid 0; G19's mechanism, now with two instances, and a practice: a blind-spot line names the gate that will close it); the new gate's two defects caught in the shadow (paid 1 shadow run; the shadow-through-the-classifier practice is the mechanism and it fired).
+
+**What this close does NOT assert:** a real document set (every expectation is `fixture` class; the screen says `PASSed on a real pairing: none`); a second consumer of the kinds loop or of the schema family (BBX-25 unmet, stated in `gates/docset_suite.sh`); the slice's own accounting and the file census (step 5); bbh's tip beyond the baseline; any platform but Darwin arm64 (R21); executable controls (R29, S6); and everything S2's slice readout listed.

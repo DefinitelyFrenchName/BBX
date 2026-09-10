@@ -37,8 +37,34 @@
 #   R26              a bare driver NAME resolves in [suite].driver_home — the frame-driven profile's
 #                    is bbh's own drivers/ through $BBX_BBH_HOME — a path from the consumer root and
 #                    --driver win; nothing is copied out of bbh
+#
+# THE KINDS LOOP (S3 step 4, bbx-10, 2026-09-10; docs/plans/S3.md §3 "E1", "O6", "RO1", §8.4; R32, R33):
+#   which loop a run gets is READ OFF THE KINDS TABLE, never configured: a table that carries the temporal
+#   family (the frame-driven profile's `masked` / `diverge`) gets bbh's loop above — ONE kind per scenario,
+#   masked > diverge > sha1, the printed text bbh's (F12 is the control that nothing moved); any other table
+#   gets the kinds loop — every EVAL kind whose file `<name>.<kind>` exists is its own PAIRING with its own
+#   verdict line and its own kept-run row keyed (scenario, kind), the `schema` family FIRST (the artifact's
+#   shape before any value, R34), then the table's order, then the self-frozen `.sha1` last (E4). On a
+#   schema FAIL the scenario's value kinds print the suite's own `NOT-EVALUATED (schema failed)` (finding
+#   `pending`: an unevaluated pairing is red, never silently passed — E2). The comparators that read the
+#   artifact get it through `compare_check`'s two trailing arguments (the scenario file and the SUBJECT
+#   FILE the fingerprint resolved, `bbx.fingerprint --path`: the file the identity was computed from).
+#   --freeze under the kinds loop rewrites the shrink-only set kinds from the run (`frozen set-covered
+#   (<n> rows)`, R33) and leaves every other authored kind alone (`authored .<kind> expectation — not
+#   self-frozen`); the `.sha1` self-freeze runs ONLY for a scenario with no authored kind, because
+#   `logs/<name>.log` is where an exact kind's truth log lives — a self-measured log over a design-derived
+#   truth would be a silent provenance downgrade (BBX-3, R11; the bbx-9 HANDOFF hazard).
+#   After a scenario's pairings the log's OWN numbers are printed at column 0 by [suite].log_summary
+#   (D43: the document-set profile's `python3 -m bbx.docset summary` — `NOTE: coverage <n>/<m>` and D42's
+#   keys; kind-blind none) and every `NOTE:` line the scenario printed is kept in notes.tsv (D44) — the
+#   screen's `coverage:` line (RO1, BBX-18) — unless the shape failed (a number about a wrong shape is a
+#   number about nothing).
+# Printed shape of the kinds loop: `<scenario, 24 wide> <kind, 8 wide> <verdict>` per pairing, the scenario
+# name once; run-level lines (SKIP, PENDING, RUN-FAIL, NONDETERMINISTIC, NO-EXPECTATION) as bbh prints them.
+# Ground truth: gates/docset_suite.sh (the kinds loop on the document-set fixture); gates/suite.sh and F12 (bbh's).
+#
 # Config: [suite] replays_dir, expected_dir, registry, default_set, driver, driver_home,
-# runs_per_replay, mask_env, mask_default, rompath_env, input_env, hermetic_unset, hash_cmd;
+# runs_per_replay, mask_env, mask_default, rompath_env, input_env, hermetic_unset, hash_cmd, log_summary;
 # [machine].profile (exported to bbh's drivers as BBH_PROFILE, their variable; none = none).
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME
@@ -82,9 +108,19 @@ if [ -z "${BBH_PROFILE:-}" ]; then _mp="$(bbx_cfg machine.profile "")"; [ -z "$_
 
 # R25 at the entrance: the thresholds module prints ONE REFUSED line and exits 3 on a loosened
 # value with no ruling row — checked only when this kind's table carries a temporal family
-if python3 -m bbx.expectations kinds | cut -f2 | grep -qx temporal; then
+KINDS_TABLE="$(python3 -m bbx.expectations kinds)" || { echo "FAIL: the kinds table could not be read (bbx.expectations kinds)"; exit 1; }
+HAS_TEMPORAL=0; printf '%s\n' "$KINDS_TABLE" | cut -f2 | grep -qx temporal && HAS_TEMPORAL=1
+if [ "$HAS_TEMPORAL" = 1 ]; then
     _thr="$(python3 -m bbx.thresholds)" || { echo "$_thr"; exit 3; }
 fi
+# THE LOOP is read off the table (header): the temporal family means bbh's precedence loop, anything else the kinds loop
+LOOP=precedence; [ "$HAS_TEMPORAL" = 1 ] || LOOP=kinds
+EVAL_KINDS=""
+if [ "$LOOP" = kinds ]; then    # the schema family first, then the table's order (the .sha1 kind is not EVAL; handled last)
+    EVAL_KINDS="$(printf '%s\n' "$KINDS_TABLE" | awk -F'\t' '$3 == "EVAL" && $2 == "schema" { print $1 }'
+                  printf '%s\n' "$KINDS_TABLE" | awk -F'\t' '$3 == "EVAL" && $2 != "schema" { print $1 }')"
+fi
+LOG_SUMMARY="$(bbx_cfg suite.log_summary "")"
 
 # The reference-input variable is demanded, and made ABSOLUTE (the lineage,
 # 14z-132: gates cd into work dirs and then compose paths that still contain
@@ -126,17 +162,22 @@ n_pass=0; n_fail=0; n_skip=0; n_other=0
 if [ -n "$LOG" ]; then
     mkdir -p "$LOG" && LOG="$(CDPATH= cd "$LOG" && pwd)" || { echo "cannot create --log $LOG" >&2; exit 2; }
     printf 'scenario\tkind\tclass\tverdict\tfinding\n' > "$LOG/results.tsv"
+    printf 'scenario\tkey\tvalue\n' > "$LOG/notes.tsv"
 fi
 keep() {  # keep <name> <kind> <class> <verdict-text>
     [ -n "$LOG" ] || return 0
     _k_f="$(python3 -m bbx.finding "$4")"
     printf '%s\t%s\t%s\t%s\t%s\n' "$1" "$2" "$3" "$(printf '%s' "$4" | head -1 | tr '\t' ' ')" "$_k_f" >> "$LOG/results.tsv"
 }
+notes() {  # notes <scenario> <text> — every `NOTE: <key> <value>` line of <text> into the kept run's notes.tsv (D44)
+    [ -n "$LOG" ] || return 0
+    printf '%s\n' "$2" | awk -v s="$1" '/^NOTE: / { line = substr($0, 7); k = line; sub(/ .*/, "", k); v = ""; if (index(line, " ") > 0) v = substr(line, index(line, " ") + 1); printf "%s\t%s\t%s\n", s, k, v }' >> "$LOG/notes.tsv"
+}
 finish() {  # finish <verdict> — run.txt, then exit with the suite's status
     if [ -n "$LOG" ]; then
         {
             echo "config=$BBX_CONFIG"; echo "root=$BBX_ROOT"; echo "kind=$KIND"; echo "set=$SET"; echo "expset=${EXPSET:-}"
-            echo "driver=$DRIVER"; echo "runs_per_replay=$RUNS"; echo "mask=${MASK:-}"; echo "freeze=$FREEZE"; echo "filtered=$([ -n "${SUITE_ONLY:-}" ] && echo 1 || echo 0)"
+            echo "driver=$DRIVER"; echo "runs_per_replay=$RUNS"; echo "mask=${MASK:-}"; echo "freeze=$FREEZE"; echo "filtered=$([ -n "${SUITE_ONLY:-}" ] && echo 1 || echo 0)"; echo "loop=$LOOP"
             echo "head=$(git rev-parse --short HEAD 2>/dev/null || echo '-')"; echo "porcelain=$(git status --porcelain 2>/dev/null | wc -l | tr -d ' ')"
             echo "started=$RUN_START"; echo "platform=$(uname -sm)"
             echo "bbx_home=$BBX_HOME"; echo "bbx_head=$(git -C "$BBX_HOME" rev-parse --short HEAD 2>/dev/null || echo '-')"
@@ -152,6 +193,9 @@ EXPDIR="$BBX_ROOT/$EXPECTED_DIR/$EXPSET"
 EXPROOT="$BBX_ROOT/$EXPECTED_DIR"
 mkdir -p "$EXPDIR"
 echo "build fingerprint -> expectation set '$EXPSET'"
+# the kinds loop's comparators may read the SUBJECT FILE — the one the identity above was computed from
+SUBJECT_FILE=""
+[ "$LOOP" = precedence ] || SUBJECT_FILE="$(python3 -m bbx.fingerprint "$ROMPATH" --set "$SET" --path)" || { echo "FAIL: the subject file could not be resolved (bbx.fingerprint --path)"; finish RED; exit 1; }
 
 check_diverge() {   # check_diverge <log> <spec-file> -> prints verdict, returns 0/1
     python3 -m bbx.check_diverge "$1" "$2" "$EXPROOT"
@@ -164,6 +208,72 @@ fi
 
 run_driver() {   # run_driver <mask> <rpl> <out>
     env "$MASK_ENV=$1" "$DRIVER" "$SET" "$2" "$3"
+}
+
+# kinds_pairings — the kinds loop's pairings for ONE scenario (header). Reads the loop's name, rpl, sha and the
+# first run's log; prints one line per pairing after the scenario's own prefix (already printed); keeps a row
+# per (scenario, kind); sets fail. The scenario's run-level verdicts (RUN-FAIL, NONDETERMINISTIC) were decided
+# before this is reached.
+kinds_pairings() {
+    _kp_log="$WORK/$name.1.log"; _kp_present=""; _kp_first=1; _kp_schema_failed=0; _kp_sha1=0
+    for _k in $EVAL_KINDS; do [ -f "$EXPDIR/$name.$_k" ] && _kp_present="$_kp_present $_k"; done
+    [ -f "$EXPDIR/$name.sha1" ] && _kp_sha1=1
+    if [ -z "$_kp_present" ] && [ "$_kp_sha1" = 0 ] && [ "$FREEZE" != 1 ]; then
+        echo "NO-EXPECTATION (freeze after review, as a STATE.md decision)"
+        keep "$name" - - "NO-EXPECTATION (freeze after review, as a STATE.md decision)"; n_fail=$((n_fail + 1)); fail=1
+        return 0
+    fi
+    for _k in $_kp_present; do
+        [ "$_kp_first" = 1 ] || printf '%-24s ' ""; _kp_first=0; printf '%-8s ' "$_k"
+        _fam="$(python3 -m bbx.expectations family "$_k" 2>/dev/null || echo '-')"
+        class="$(compare_spec_field "$EXPDIR/$name.$_k" class)"; [ -n "$class" ] || class=-
+        if [ "$FREEZE" = 1 ]; then
+            if [ "$_fam" = set ] && [ "$(compare_spec_field "$EXPDIR/$name.$_k" mode)" = shrink-only ]; then
+                if v=$(python3 -m bbx.compare_set --freeze "$EXPDIR/$name.$_k" "$_kp_log" "$SUBJECT_FILE" "$rpl"); then
+                    echo "$v"; keep "$name" "$_k" "$class" "$v"; n_other=$((n_other + 1))
+                else
+                    echo "$v"; keep "$name" "$_k" "$class" "$v"; n_fail=$((n_fail + 1)); fail=1
+                fi
+            else
+                v="authored .$_k expectation — not self-frozen"; echo "$v"; keep "$name" "$_k" "$class" "$v"; n_other=$((n_other + 1))
+            fi
+            continue
+        fi
+        if [ "$_kp_schema_failed" = 1 ]; then
+            v="NOT-EVALUATED (schema failed)"; echo "$v"; keep "$name" "$_k" "$class" "$v"; n_fail=$((n_fail + 1)); continue
+        fi
+        if v=$(compare_check "$EXPDIR" "$name" "$_k" - "" "$_kp_log" "$rpl" "$SUBJECT_FILE"); then
+            echo "$v"; keep "$name" "$_k" "$class" "$v"; n_pass=$((n_pass + 1)); notes "$name" "$v"
+        else
+            echo "$v"; keep "$name" "$_k" "$class" "$v"; n_fail=$((n_fail + 1)); fail=1
+            [ "$_fam" = schema ] && _kp_schema_failed=1
+        fi
+    done
+    # the self-frozen kind, last (E4: `self` class — currency, never correctness)
+    if [ "$FREEZE" = 1 ]; then
+        if [ -n "$_kp_present" ]; then
+            # never self-frozen beside an authored kind: logs/<name>.log may be an exact kind's truth log (header)
+            [ "$_kp_sha1" = 0 ] || { printf '%-24s %-8s ' "" sha1; v="authored kinds present — .sha1 not self-frozen (logs/$name.log is theirs)"; echo "$v"; keep "$name" sha1 sha1 "$v"; n_other=$((n_other + 1)); }
+        else
+            echo "$sha" > "$EXPDIR/$name.sha1"; mkdir -p "$EXPDIR/logs"; cp "$_kp_log" "$EXPDIR/logs/$name.log"
+            printf '%-8s ' sha1; echo "frozen $sha"; keep "$name" sha1 sha1 "frozen $sha"; n_other=$((n_other + 1))
+        fi
+    elif [ "$_kp_sha1" = 1 ]; then
+        [ "$_kp_first" = 1 ] || printf '%-24s ' ""; _kp_first=0; printf '%-8s ' sha1
+        if [ "$_kp_schema_failed" = 1 ]; then
+            v="NOT-EVALUATED (schema failed)"; echo "$v"; keep "$name" sha1 sha1 "$v"; n_fail=$((n_fail + 1))
+        elif [ "$sha" = "$(cat "$EXPDIR/$name.sha1")" ]; then
+            echo "PASS"; keep "$name" sha1 sha1 "PASS"; n_pass=$((n_pass + 1))
+        else
+            v="FAIL expected $(cat "$EXPDIR/$name.sha1") got $sha"; echo "$v"; keep "$name" sha1 sha1 "$v"; n_fail=$((n_fail + 1)); fail=1
+        fi
+    fi
+    # the log's own numbers (D43) at column 0 — the observation's, unless the shape failed (header)
+    if [ -n "$LOG_SUMMARY" ] && [ "$_kp_schema_failed" = 0 ]; then
+        if _s="$($LOG_SUMMARY "$_kp_log")"; then printf '%s\n' "$_s"; notes "$name" "$_s"
+        else printf '%s\n' "$_s"; echo "FAIL: [suite].log_summary failed on $name's log ($LOG_SUMMARY)"; fail=1; fi
+    fi
+    return 0
 }
 
 fail=0
@@ -187,8 +297,12 @@ for rpl in "$BBX_ROOT/$REPLAYS_DIR"/*."$EXT"; do
         continue
     fi
     RUNMASK=""; kind=sha1; class=sha1
-    [ -f "$EXPDIR/$name.masked" ] && { RUNMASK="$MASK"; kind=masked; class="$(cut -d' ' -f1 "$EXPDIR/$name.masked")"; }
-    [ "$kind" = sha1 ] && [ -f "$EXPDIR/$name.diverge" ] && { kind=diverge; class=diverge; }
+    if [ "$LOOP" = precedence ]; then
+        [ -f "$EXPDIR/$name.masked" ] && { RUNMASK="$MASK"; kind=masked; class="$(cut -d' ' -f1 "$EXPDIR/$name.masked")"; }
+        [ "$kind" = sha1 ] && [ -f "$EXPDIR/$name.diverge" ] && { kind=diverge; class=diverge; }
+    else
+        kind=-; class=-     # the kinds loop: no kind is known before the pairings; a run-level row carries none
+    fi
     i=1; runfail=0
     while [ "$i" -le "$RUNS" ]; do
         run_driver "$RUNMASK" "$rpl" "$WORK/$name.$i.log" || { runfail=1; break; }
@@ -206,6 +320,7 @@ for rpl in "$BBX_ROOT/$REPLAYS_DIR"/*."$EXT"; do
     done
     if [ "$nondet" = 1 ]; then keep "$name" "$kind" "$class" "NONDETERMINISTIC (first divergent frame below)"; n_fail=$((n_fail + 1)); fail=1; continue; fi
     sha=$($HASH_CMD "$WORK/$name.1.log" | cut -d' ' -f1)
+    if [ "$LOOP" = kinds ]; then kinds_pairings; continue; fi
     if [ "$FREEZE" = 1 ] && [ -n "$RUNMASK" ]; then
         echo "authored .masked expectation — not self-frozen"; keep "$name" "$kind" "$class" "authored .masked expectation — not self-frozen"; n_other=$((n_other + 1))
     elif [ "$FREEZE" = 1 ]; then

@@ -15,7 +15,7 @@
 # MUST-FIRE: shadow-tool: extractor-shadow — a shadow copy of docset.py with one form's regex broken must make the driver exit 1 naming the form before any document is read (no log written), or an extractor that stopped matching reads as a document with fewer claims
 # MUST-FIRE: known-bad: refused-form-and-family — a claim set declaring a form no extractor implements, and each of MASK_RANGES, POKES and DOCSET_VIEW in the environment, must be REFUSED with exit 3 and no log, or a run silently measures less than its caller asked (BBH-28, C6)
 # NOT-ASSERTED: the verdict text of the exact, set and schema comparators (S3 step 3): the truth is compared here with cmp and diff
-# NOT-ASSERTED: the suite over the fixture (identity, the kinds loop, the coverage NOTE on the screen): S3 step 4
+# NOT-ASSERTED: the suite over the fixture (identity, the kinds loop, the coverage NOTE on the screen): gates/docset_suite.sh
 # NOT-ASSERTED: prose, reasoning and causal claims in a document: only sentences in a declared form and the listed rows are claims
 # NOT-ASSERTED: the truth of the artifact itself: a document that agrees with a wrong artifact reads BOUND
 # NOT-ASSERTED: a nested document tree or a second artifact per set (DOCSET_VIEW is refused): S4 or a consumer's question
@@ -59,7 +59,7 @@ statuses "$LOG" | awk '{print $2}' | grep -vxE 'BOUND|PARAPHRASE|UNBINDABLE|STAL
 [ -s "$W/unknown" ] && fail "a status outside the closed vocabulary: $(tr '\n' ' ' < "$W/unknown")" || ok "every status is in the closed vocabulary (R33, D37)"
 python3 -m bbx.docset map "$F/subject/records.tsv" "$F/claims/01_all.claims" > "$W/map.tsv" && ok "map: $(wc -l < "$W/map.tsv" | tr -d ' ') rows, index -> (document, line, form, status, quoted, derived)" || fail "map failed"
 drv "$F/subject" "$F/claims/01_all.claims" "$W/sb.log" DOCSET_NONDET=1; drv "$F/subject" "$F/claims/01_all.claims" "$W/sb2.log" DOCSET_NONDET=1
-{ [ "$s" = 0 ] && ! cmp -s "$W/sb.log" "$W/sb2.log"; } && ok "DOCSET_NONDET=1: two runs differ (the kind's nondeterminism knob is live; the suite's control is step 4)" || fail "DOCSET_NONDET=1 did not move the log"
+{ [ "$s" = 0 ] && ! cmp -s "$W/sb.log" "$W/sb2.log"; } && ok "DOCSET_NONDET=1: two runs differ (the kind's nondeterminism knob is live; gates/docset_suite.sh carries it through the suite)" || fail "DOCSET_NONDET=1 did not move the log"
 mkdir -p "$W/sbx"; drv "$F/subject" "$F/claims/02_weights.claims" "$W/sbx.log" ; : "$s"
 if out="$(env DOCSET_PATH="$W/nowhere;$F/subject" "$DRV" records "$F/claims/02_weights.claims" "$W/sp.log" "$W/sbx" 2>&1)"; then
     cmp -s "$W/sp.log" "$TRUTH/02_weights.log" && [ -f "$W/sbx/docset_selftest.txt" ] && ok "a two-component search path resolves the second; the sandbox holds the self-test's output" || fail "search path / sandbox: $out"

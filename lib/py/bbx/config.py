@@ -109,6 +109,7 @@ DEFAULTS = {
         "input_env": "BBX_INPUT",    # the reference-input directory, demanded at the entrance and made absolute
         "hermetic_unset": [],        # scrubbed from the environment before any driver runs; the frame-driven profile carries bbh's eight
         "hash_cmd": "python3 -m bbx.sha1",   # D27: prints `<hex> <file>`; portable (bbh's `shasum` stays in the frame-driven profile)
+        "log_summary": "",           # D43: the command that prints a run log's OWN NOTE-class numbers (the kinds loop, S3 step 4); none kind-blind
     },
     # the expectation REGISTER (E3; R11, R24): TOML inside the expectation tree; basenames that are not expectations (D31)
     "provenance": {
@@ -195,7 +196,8 @@ KINDS = {
         "tier": {"patterns": []},
         "suite": {"scenario_ext": "claims", "driver": "docset",
                   "rompath_env": "DOCSET_PATH", "input_env": "DOCSET_PATH",
-                  "hermetic_unset": ["DOCSET_FORMS", "DOCSET_NONDET", "DOCSET_VIEW"]},
+                  "hermetic_unset": ["DOCSET_FORMS", "DOCSET_NONDET", "DOCSET_VIEW"],
+                  "log_summary": "python3 -m bbx.docset summary"},     # D43: NOTE: coverage / paraphrase / unbindable / stale / mismatch (D42)
         "fingerprint": {"kind": "file-sha1", "file_pattern": "{set}.tsv"},
         "expectations": {"kinds": [["skip", "-", "SKIP"], ["sha1", "exact", "N/A"], ["pending", "-", "NOT-EVALUATED"],
                                    ["truth", "exact", "EVAL"], ["claims", "set", "EVAL"],

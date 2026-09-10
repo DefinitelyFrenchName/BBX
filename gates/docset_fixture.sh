@@ -9,7 +9,7 @@
 # MUST-FIRE: perturbed-copy: symmetric-fixture — two records given the same weight in a copy must make --check FAIL naming the predicate `weights-distinct`, or a fixture can stop being chiral without anyone reading which predicate broke (BBX-15)
 # MUST-FIRE: known-bad: unknown-kind-under-profile — a `.masked` beside a `.claims` scenario under the fixture's config must enumerate UNKNOWN-KIND and non-zero, or the document-set profile inherits the temporal family it never declared (R23)
 # NOT-ASSERTED: that any claim in the fixture is BOUND, MISMATCH or anything else (gates/docset_driver.sh and gates/set_schema.sh): only that the files are the generator's, the design is chiral, and the register is complete and tracked
-# NOT-ASSERTED: the suite over the fixture: step 4
+# NOT-ASSERTED: the suite over the fixture: gates/docset_suite.sh
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME

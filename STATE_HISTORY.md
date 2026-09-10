@@ -197,3 +197,37 @@ fixed, the shadow practice now runs gates through `bin/bbx classify`). No suite 
 Fidelity F12–F17 diff empty on the plain clone at `10a82d2` (104 pairings).
 bbh's tip `447e5d2`, a NOTE. Defaults D1–D42. Gotchas G1–G23. Retractions
 X1–X10.
+
+## bbx-10 (2026-09-10)
+
+**Status (bbx-10 close, 2026-09-10):** slices S1 (but for R21's platform run)
+and S2 complete; **S3 steps 1–4 built** (`docs/plans/S3.md` §8.1–8.4;
+R31–R34 answered). Step 4: the suite's KINDS LOOP in `bin/bbx-run-suite` —
+read off the kinds table, never configured: a table carrying the temporal
+family gets bbh's precedence loop verbatim (F12 unchanged, 104 pairings
+identical, the control that nothing moved for bbh), any other table gets every
+EVAL kind present as its own pairing, `schema` first, then the table's order,
+the self-frozen `.sha1` last; the printed shape `<scenario> <kind> <verdict>`
+with the scenario named once; the kept run's rows keyed `(scenario, kind)`
+and its `notes.tsv` (D44) carrying every `NOTE:` the scenario printed; on a
+schema FAIL the value kinds print the suite's own `NOT-EVALUATED (schema
+failed)` (finding `pending`, `finding.py`'s new prefix rule); `--freeze`
+rewrites the shrink-only kind from the run (`bbx.compare_set --freeze`,
+byte-identical to the generator's file on the fixture) and never self-freezes
+beside an authored kind, which closes the bbx-9 HANDOFF hazard by
+construction; `[suite].log_summary` (D43: the document-set profile's
+`bbx.docset summary`) prints the log's own numbers at column 0; the readout's
+suite screen counts pairings apart from scenarios, prints `coverage:` per
+scenario and every other key as a note, meets BBX-14 over pairings, and lists
+the DRIVER's blind spots (RO2). `gates/docset_suite.sh` (6 controls, every
+printed line of the green run frozen and classified; ~55 s). The plan's §5
+nondeterminism row corrected in its own commit (X11, BBX-19: the caller's
+`DOCSET_NONDET=1` is scrubbed by D33's hermetic list, measured; the control
+sets it inside a wrapper driver). G24: two blind-spot lines in
+`gates/suite.sh` had named "S2 step 4" as their future since bbx-4 (G19's
+shape, second instance; fixed, the S6 rot-gate case strengthened). Built in a
+shadow first; two defects of the new gate caught there (paid 1 shadow run).
+`bin/bbx selftest` GREEN twice at one HEAD (BBX-14 met): 23 gates, 78/78
+controls. Fidelity F12–F17 diff empty on the plain clone at `10a82d2` (104
+pairings). bbh's tip `447e5d2`, a NOTE. Defaults D1–D44. Gotchas G1–G24.
+Retractions X1–X11.

@@ -4,11 +4,12 @@ it to an expectation set (the auto-detecting runner's dispatch): the SUBJECT
 IDENTITY of the abstraction (docs/abstraction.md S2).
 
     python3 -m bbx.fingerprint <rompath> [--set NAME] [--registry FILE]
-                               [--sha-only | --set-key | --full] [--config config.toml]
+                               [--sha-only | --set-key | --path | --full] [--config config.toml]
 
 Prints the expectation-set name on stdout (exit 0), or the unregistered
 fingerprint with exit 2. --sha-only prints just the PROGRAM key; --set-key
-just the WHOLE-SET key; --full a whole-set digest with a per-region
+just the WHOLE-SET key; --path the resolved image path (the file the keys
+were computed from); --full a whole-set digest with a per-region
 breakdown (reporting only — see below).
 
 Lifted from bbh lib/py/bbh/fingerprint.py (S1, 2026-09-09); its lineage is
@@ -248,6 +249,10 @@ def main(argv=None):
     ap.add_argument("--sha-only", action="store_true")
     ap.add_argument("--set-key", action="store_true",
                     help="print the whole-set DISPATCH key (this build's own directory only) and exit")
+    ap.add_argument("--path", action="store_true",
+                    help="print the RESOLVED image path — the subject file the search path resolves, the one the "
+                         "keys were computed from — and exit (S3 step 4: the suite hands it to a comparator that "
+                         "reads the artifact)")
     ap.add_argument("--full", action="store_true",
                     help="whole-set fingerprint over every resolved image + region breakdown (reporting)")
     args = ap.parse_args(argv)
@@ -287,6 +292,9 @@ def main(argv=None):
         return 0
     if args.set_key:
         print(wkey)
+        return 0
+    if args.path:
+        print(zpath)
         return 0
 
     name = lookup(read_registry(registry), wkey, sha, zpath, registry)

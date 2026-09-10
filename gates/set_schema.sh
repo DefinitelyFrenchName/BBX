@@ -11,7 +11,7 @@
 # MUST-FIRE: perturbed-copy: schema-before-values — a column renamed, a cell dropped from one row and a non-numeral in an int column, each in a copied artifact, must FAIL on SHAPE naming the column or the row, and a value perturbed must PASS schema and FAIL exact at its index, or a wrong artifact is read for its values (R34, BBX-16)
 # MUST-FIRE: perturbed-copy: short-apart-from-diverged — a run log truncated must read FAIL-SHORT (finding `short`) and a run log with one token changed FAIL exact at its index (finding `diverged`), or the two findings are one (BBX-4)
 # MUST-FIRE: shadow-tool: verdict-text — a shadow copy of compare_set.py with one verdict string changed must make this gate's frozen-text check FAIL, or the text frozen here is not frozen (C4 with no ancestor: the gate is the freeze)
-# NOT-ASSERTED: the suite's loop over the kinds, the kept-run rows (scenario, kind), NOT-EVALUATED on a schema FAIL and --freeze for the shrink-only kind: S3 step 4
+# NOT-ASSERTED: the suite's loop over the kinds, the kept-run rows (scenario, kind), NOT-EVALUATED on a schema FAIL and --freeze for the shrink-only kind: gates/docset_suite.sh
 # NOT-ASSERTED: anything about a real document set: every input is the fixture's (fixture class) or a perturbed copy of it
 # NOT-ASSERTED: the schema family on a second format or a second consumer (S4's JSON): tsv is its one format and the fixture's artifact its one consumer (BBX-25 unmet, stated)
 #

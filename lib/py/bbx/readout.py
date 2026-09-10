@@ -22,7 +22,11 @@ left in a log is a number the maintainer never saw (bbx-3's first fix); BBX-14 m
 verdict differs; the newest re-baseline line. A kept SUITE run (run.txt carries
 `expset=`) gets its own screen (S2 step 4): the findings counted apart, the
 expectations relied upon as a histogram by R11 class from the register beside
-the tree, which classes PASSed on a pairing that is not fixture-class.
+the tree, which classes PASSed on a pairing that is not fixture-class; since S3
+step 4 the scenarios' own numbers from the run's notes.tsv (D44) — `coverage:`
+per scenario, every other key a note — the rows counted as PAIRINGS keyed
+(scenario, kind), BBX-14 over pairings, and the DRIVER's blind spots under
+"what this green does NOT assert" (RO2), read from its header like a gate's.
 RO2 — what this green does NOT assert (BBX-30): every gate declares it in its
 header as `# NOT-ASSERTED: <text>` (one line per blind spot, in the header
 block, read like MUST-FIRE); the screen lists them per gate and COUNTS the
@@ -91,8 +95,9 @@ def suite_screen(run, meta, rows, against):
           f"(porcelain {meta.get('porcelain', '?')}) — set '{meta.get('set', '?')}' -> expectation set '{expset or '-'}' — "
           f"started {meta.get('started', '?')} on {meta.get('platform', '?')} ==")
     n = {k: int(meta.get(k, 0) or 0) for k in ("pass", "skip", "fail", "other")}
+    scen = len({r.get("scenario") for r in rows})
     print(f"VERDICT: {meta.get('verdict', '?')}   PASS {n['pass']}  SKIP {n['skip']}  FAIL {n['fail']}  OTHER {n['other']}   "
-          f"(scenarios {len(rows)}; each run {meta.get('runs_per_replay', '?')} times; driver {_os.path.basename(meta.get('driver', '?'))})")
+          f"(scenarios {scen}, pairings {len(rows)}; each run {meta.get('runs_per_replay', '?')} times; driver {_os.path.basename(meta.get('driver', '?'))})")
     fc = {}
     for r in rows:
         f = r.get("finding", "unclassified"); fc[f] = fc.get(f, 0) + 1
@@ -133,6 +138,26 @@ def suite_screen(run, meta, rows, against):
     else:
         real_txt = ", ".join(passed_real) if passed_real else "none — every expectation of this set is fixture-class or unregistered"
     print(f"  comparator classes in this run: {', '.join(classes) or 'none'}; PASSed on a real pairing: {real_txt}")
+    # the scenarios' own numbers (D44, notes.tsv): coverage on its own line (BBX-18, RO1), every other key as a note
+    cov, notes = [], []
+    npath = _os.path.join(run, "notes.tsv")
+    if _os.path.isfile(npath):
+        with open(npath, encoding="utf-8") as f:
+            header = f.readline().rstrip("\n").split("\t")
+            for line in f:
+                d = dict(zip(header, line.rstrip("\n").split("\t")))
+                if d.get("key") == "coverage":
+                    cov.append(f"{d.get('scenario')}: {d.get('value', '')}")
+                else:
+                    notes.append(f"{d.get('scenario')}: {d.get('key')} {d.get('value', '')}".rstrip())
+    for c in cov:
+        print(f"  coverage: {c}")
+    if not cov:
+        print("  coverage: no scenario reported a coverage number (NOTE: coverage …) — uncovered claims are not counted in this run")
+    for x in notes:
+        print(f"  note: {x}")
+    if not notes:
+        print("  note: none — no scenario printed a NOTE-class number other than coverage")
     bbx14 = None
     if against:
         try:
@@ -140,17 +165,26 @@ def suite_screen(run, meta, rows, against):
         except OSError as e:
             print(f"  BBX-14 (more than one run): cannot read --against {against} ({e}) — unmet"); bbx14 = False
         else:
-            v1 = {r["scenario"]: r["verdict"] for r in rows}; v2 = {r["scenario"]: r["verdict"] for r in rows2}
+            key = lambda r: f"{r['scenario']}.{r.get('kind', '-')}"     # a pairing (S3 step 4: several rows per scenario)
+            v1 = {key(r): r["verdict"] for r in rows}; v2 = {key(r): r["verdict"] for r in rows2}
             diffs = sorted(k for k in set(v1) | set(v2) if v1.get(k) != v2.get(k))
             same = meta.get("head") == meta2.get("head") and meta.get("expset") == meta2.get("expset")
             if diffs or not same:
                 print(f"  BBX-14 (more than one run): UNMET — " + ("; ".join(([f"different subject or set ({meta.get('head')}/{meta.get('expset')} vs {meta2.get('head')}/{meta2.get('expset')})"] if not same else []) + (["verdicts differ: " + ", ".join(f"{k} {v1.get(k, '-')[:24]}/{v2.get(k, '-')[:24]}" for k in diffs)] if diffs else []))))
                 bbx14 = False
             else:
-                print(f"  BBX-14 (more than one run): met — {len(v1)} scenarios, 0 verdict differences against the run started {meta2.get('started', '?')} at the same HEAD and set"); bbx14 = True
+                print(f"  BBX-14 (more than one run): met — {len(v1)} pairings, 0 verdict differences against the run started {meta2.get('started', '?')} at the same HEAD and set"); bbx14 = True
     else:
         print("  BBX-14 (more than one run): each scenario ran " + str(meta.get("runs_per_replay", "?")) + " times inside this run (nondeterminism is a finding above); pass --against a second kept run for run-to-run")
     print("what this green does NOT assert:")
+    # the driver's own blind spots (RO2, S3 step 4): its header's NOT-ASSERTED lines, read like a gate's
+    drv = meta.get("driver", "")
+    dname = _os.path.basename(drv) or "?"
+    ditems = not_asserted(drv) if drv and _os.path.isfile(drv) else []
+    for it in ditems:
+        print(f"  driver {dname}: {it}")
+    if not ditems:
+        print(f"  driver {dname} declares no blind spot (a driver nobody has asked what its log leaves out)")
     print("  the correctness of any expectation beyond its class: a `self` expectation sees currency, never a regression against a reference (E4)")
     print("  anything about a SKIP scenario: it asserts nothing")
     if unknown:

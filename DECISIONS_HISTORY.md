@@ -546,3 +546,62 @@ lives — bbh `[BBH-9]`).
   family holds both ways on the fixture through the dispatcher and that the
   repository now holds what the gates compare against; it says nothing about
   a real document set, and G22 says a working-tree green is not a clone's.
+
+## bbx-10 — S3 step 4 built: the suite's kinds loop, the kept run's notes, the coverage on the screen (2026-09-10)
+
+- Open: the battery re-derived GREEN first (`build/selftest_20260910_144737`:
+  22 gates, 72/72 controls, porcelain 0, the two expected drift NOTEs). R21
+  the only open ruling; nothing else pending.
+- Measured before building (§1): a caller's `DOCSET_NONDET=1` is SCRUBBED by
+  the suite under the document-set profile (D33 `hermetic_unset`) — the two
+  runs byte-identical, the suite on its verdicts — while the driver called
+  directly under it writes differing logs. The plan's §5 row said the caller's
+  variable reads NONDETERMINISTIC; corrected in its own commit `35c8007`
+  (BBX-19, retraction X11) before the gate asserted the corrected behaviour.
+  D33 stands (a salted token must never reach a freeze).
+- Built (shadow first, every touched gate through `bin/bbx classify`): the
+  kinds loop in `bin/bbx-run-suite` (selected off the kinds table: the
+  temporal family means bbh's precedence loop, verbatim; anything else the
+  kinds loop — `schema` first, the table's order, `.sha1` last; the printed
+  shape `<scenario> <kind> <verdict>`; rows keyed `(scenario, kind)`;
+  `notes.tsv`, D44; `NOT-EVALUATED (schema failed)`; `--freeze` for the
+  shrink-only kind through `bbx.compare_set --freeze`, never a self-freeze
+  beside an authored kind — the bbx-9 HANDOFF hazard closed by construction);
+  `[suite].log_summary` (D43); `bbx.fingerprint --path` (the subject file the
+  identity was computed from, handed to the comparators that read the
+  artifact — proven equal to the driver's resolver on the fixture);
+  `finding.py` (`NOT-EVALUATED` → `pending`; `authored ` as the prefix);
+  the readout's suite screen (scenarios and pairings apart, `coverage:` per
+  scenario from `notes.tsv`, BBX-14 over pairings, the driver's NOT-ASSERTED
+  lines); `gates/docset_suite.sh` (6 controls; 29 printed lines of the green
+  run frozen, 12 verdict lines classified `pass`; 17 suite runs, ~55 s); the
+  registry row; the four gate headers that said "S3 step 4" re-pointed at
+  the gate; `gates/readout.sh`'s three frozen lines moved with the screen.
+- No ruling raised or answered; R21 stays open. No new default class:
+  D43 and D44 are `principled`.
+- Incidents: G24 (two blind-spot lines in `gates/suite.sh` naming "S2 step 4"
+  as their future since bbx-4, G19's shape; paid 0); two defects of the new
+  gate caught in the shadow — a tab-separated dump compared against a
+  space-separated string, and two lookups concatenated into one comparison
+  (paid 1 shadow run; no learning beyond the practice that caught them).
+- Close: GREEN twice at one HEAD — 23 gates, 78/78 controls
+  (`build/selftest_20260910T130844Z`, `build/selftest_20260910T131501Z`); fidelity F12–F17 unchanged
+  (104 pairings identical on the plain clone at `10a82d2`).
+- Step 10 (R27): G24 — the mechanism is G19's (the S6 rot gate over "until
+  step N" sentences), now with two instances; the practice: a blind-spot
+  line names the GATE that will close it, never a step number. The gate's
+  two defects — the shadow-through-the-classifier practice is the mechanism,
+  and it fired.
+- Anti-hyperfocus checkpoint (BBX-27): the sitting built step 4 and stopped at
+  the step boundary. Is S3 step 5 (the slice readout with the first file
+  census) still the most valuable thread? Yes: the document-set kind now runs
+  end to end through the suite and onto the screen; what is missing is the
+  slice's own accounting — families per kind, controls declared / fired,
+  provenance classes, defaults rows, the shared-vs-kind-specific file census
+  — which is what lets the maintainer rule S3 done (§7) and S4 open. Does the
+  last green mean what it is treated as meaning? It means the fixture's three
+  claim sets pass their twelve pairings twice, that each control failed where
+  it must, and that bbh's loop printed the same 104 pairings it did before;
+  it says nothing about a real document set (every expectation is fixture
+  class), and the kinds loop has one profile driving it (BBX-25 unmet, stated
+  in the gate's header).

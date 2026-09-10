@@ -16,8 +16,8 @@
 # MUST-FIRE: known-bad: short-vs-diverged — a FAIL-SHORT folded into bbh's FAIL line must be kept as finding `short`, never `diverged`, or BBX-4 is lost in the kept run
 # MUST-FIRE: known-bad: loosened-at-the-entrance — a consumer config with flicker_max = 3 and no rulings entry must make the suite print the one REFUSED line and exit 3 before any scenario runs, or R25 stops at the comparators
 # NOT-ASSERTED: any driver but the fake: a MAME or FBNeo driver is bbh's and untested here (bbh's own F8 rows)
-# NOT-ASSERTED: the .sha1 kind's evidence: it is `self` class by construction (E4) and the register that says so is S2 step 4
-# NOT-ASSERTED: the readout's reading of a kept suite run: the screen reads bbx-run-static runs only until step 4
+# NOT-ASSERTED: the .sha1 kind's evidence: it is `self` class by construction (E4) and the register that says so is gates/provenance.sh's
+# NOT-ASSERTED: the readout's reading of a kept suite run: gates/readout.sh reads the suite screen, gates/docset_suite.sh its coverage lines
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME
@@ -163,7 +163,7 @@ f2="$(python3 -m bbx.finding "FAIL masked live-state diverged from base/masked")
 f3="$(python3 -m bbx.finding "FAIL masked-flicker: got 'FAIL stretch of 3 frames at frame 100 > max-stretch 2' expected 'FLICKER 2 100,250' (frozen; drift either way is loud — CLAUDE.md §4 standing watch)")"
 if [ "$f1" = short ] && [ "$f2" = diverged ] && [ "$f3" = diverged ]; then echo "CONTROL FIRED: short-vs-diverged — a FAIL-SHORT folded into bbh's FAIL line is kept as 'short'; a divergence and an over-long stretch as 'diverged'"
 else fail "CONTROL DEAD: short-vs-diverged — short='$f1' diverged='$f2' stretch='$f3'"; fi
-for c in "PASS masked-exact:pass" "SKIP (targets the other image):skip" "PENDING — not validated:pending" "NO-EXPECTATION (freeze after review):no-expectation" "NONDETERMINISTIC (first divergent frame below):nondeterministic" "RUN-FAIL:run-fail" "frozen 0123:frozen" "authored .masked expectation — not self-frozen:authored" "FAIL mask mismatch: this set runs:mask-mismatch" "FAIL unknown .masked class 'x':unknown-class" "NO-BASE-LOG /x:no-base-log" "something else entirely:unclassified"; do
+for c in "PASS masked-exact:pass" "SKIP (targets the other image):skip" "PENDING — not validated:pending" "NO-EXPECTATION (freeze after review):no-expectation" "NONDETERMINISTIC (first divergent frame below):nondeterministic" "RUN-FAIL:run-fail" "frozen 0123:frozen" "authored .masked expectation — not self-frozen:authored" "FAIL mask mismatch: this set runs:mask-mismatch" "FAIL unknown .masked class 'x':unknown-class" "NO-BASE-LOG /x:no-base-log" "NOT-EVALUATED (schema failed):pending" "authored .truth expectation — not self-frozen:authored" "something else entirely:unclassified"; do
     got="$(python3 -m bbx.finding "${c%:*}")"; [ "$got" = "${c##*:}" ] && ok "'${c%:*}' -> ${c##*:}" || fail "'${c%:*}' -> '$got' (want ${c##*:})"
 done
 

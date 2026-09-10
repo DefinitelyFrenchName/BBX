@@ -348,3 +348,25 @@ not the shell's. Re-anchors BBX-1 (the exit decides first, then the text;
 a PASS printed after a shell error is not a PASS) for the second time (G16,
 G18 before it). Learning (R27): a practice, written into HANDOFF; the
 mechanism already exists (the classifier), and it fired.
+
+## G24 — Two blind-spot lines in `gates/suite.sh` named "S2 step 4" as their future, and the screen carried them for six closes after that step landed (paid: 0 — read off the gate's header while planning S3 step 4 at bbx-10, 2026-09-10)
+`gates/suite.sh` declared `NOT-ASSERTED: the readout's reading of a kept
+suite run: the screen reads bbx-run-static runs only until step 4` and
+`NOT-ASSERTED: the .sha1 kind's evidence: … the register that says so is S2
+step 4`. Both were true at bbx-3 and false since bbx-4, when the suite screen
+(D32) and the register (D31) were built; the readout printed both sentences
+under "what this green does NOT assert" on every close screen from bbx-4 to
+bbx-9, unnoticed — the generated screen said the readout could not read a
+suite run while the same screen's generator had been reading them for five
+sittings. G19's shape exactly (BBX-10, rot class 4: a stale reference inside
+a generated artifact), second instance: a NOT-ASSERTED line is read by the
+readout like a claim, and "until step N" is a sentence with an expiry date
+that nothing checks. Fix: both lines name the gate that asserts the thing
+now (`gates/readout.sh`, `gates/provenance.sh`), and the four other
+headers that said "S3 step 4" were re-pointed at `gates/docset_suite.sh` in
+the same commit rather than left to rot. Learning (R27): G19's mechanism —
+a rot gate over generated and printed text for "until slice N" / "is step
+N" sentences, S6 — now has two instances behind it; a blind-spot line that
+names a future step should name the gate that will close it instead, so the
+sentence is checkable by the registry (a named gate exists or not) rather
+than by memory.

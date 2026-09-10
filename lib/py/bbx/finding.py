@@ -10,7 +10,11 @@ closed; a line no rule names is `unclassified`, never silently one of the others
 the document-set families' lines are classified here too (`PASS exact` / `set-…` / `schema`,
 `FAIL exact: …` diverged, `FAIL-SHORT exact:` short, `NO-BASE-LOG` no-base-log, and `FAIL unknown
 <family> …` unknown-class — the prefix covers bbh's one such line, `.masked class`, and BBX's);
-gates/set_schema.sh feeds every line it freezes through here and fails on `unclassified`.
+gates/set_schema.sh feeds every line it freezes through here and fails on `unclassified`. Since S3 step 4 the
+suite's kinds loop adds two shapes and no word: `NOT-EVALUATED (schema failed)` — a value kind the suite did not
+evaluate because the artifact's shape failed first — is `pending` (an unevaluated pairing is red, never silently
+passed: E2), and `authored .<kind> expectation — not self-frozen` for any authored kind (bbh's `.masked` line
+is one of them) is `authored`; gates/docset_suite.sh measures both.
 
     pass | skip | pending | no-expectation | nondeterministic | run-fail | frozen | authored |
     mask-mismatch | unknown-class | short | no-base-log | diverged | unclassified
@@ -18,9 +22,10 @@ gates/set_schema.sh feeds every line it freezes through here and fails on `uncla
 import sys
 
 RULES = (
-    ("PASS", "pass"), ("SKIP (", "skip"), ("PENDING", "pending"), ("NO-EXPECTATION", "no-expectation"),
+    ("PASS", "pass"), ("SKIP (", "skip"), ("PENDING", "pending"), ("NOT-EVALUATED", "pending"),
+    ("NO-EXPECTATION", "no-expectation"),
     ("NONDETERMINISTIC", "nondeterministic"), ("RUN-FAIL", "run-fail"), ("GUARD TRIPPED", "run-fail"),
-    ("frozen ", "frozen"), ("authored .masked", "authored"),
+    ("frozen ", "frozen"), ("authored ", "authored"),
     ("FAIL mask mismatch", "mask-mismatch"), ("FAIL unknown ", "unknown-class"), ("NO-BASE-LOG", "no-base-log"),
 )
 

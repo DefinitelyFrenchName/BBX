@@ -5,6 +5,9 @@ ways (docs/plans/S3.md §3 "E1", "C1, C2"; rulings R33, R34; abstraction E5, BBX
     python3 -m bbx.compare_set <scenario.claims|.covered> <run.log> <artifact.tsv> <scenario-file>
         one verdict line (a second `NOTE: covered-grew <k>` line when a shrink-only set grew);
         exit 0 PASS, 1 otherwise
+    python3 -m bbx.compare_set --freeze <scenario.covered> <run.log> <artifact.tsv> <scenario-file>
+        the shrink-only set rewritten from the run (the suite's --freeze, S3 step 4): `frozen set-covered (<n> rows)`;
+        an inventory is authored and REFUSED
 
 Two consumers inside one family (BBX-25): the `claims` kind (mode `inventory`: the frozen rows and
 the run's rows are the same multiset, a difference in EITHER direction fails naming the row and the
@@ -127,7 +130,41 @@ def compare(spec_path, log_path, artifact_path, claims_path):
     return [f"PASS set-covered ({len(frozen)} frozen rows still covered)"], 0
 
 
+def freeze(spec_path, log_path, artifact_path, claims_path):
+    """--freeze (S3 step 4): the shrink-only set REWRITTEN from the run — the [spec] table kept, then one
+    `[c<i>]` table per covered row of the run in extraction order — the same text the fixture generator
+    writes, so a freeze over the fixture reproduces its file byte for byte (gates/docset_suite.sh measures
+    it). An inventory (mode `inventory`) is AUTHORED and never self-frozen: refused here. -> (lines, rc)."""
+    try:
+        mode, _frozen = load_frozen(spec_path)
+    except ValueError as e:
+        return [str(e)], 1
+    if mode != "shrink-only":
+        return [f"FAIL set: --freeze is for the shrink-only mode (mode '{mode}' is authored, never self-frozen)"], 1
+    try:
+        run = [(d, ln, form, status) for _i, d, ln, form, status in docset.run_rows(artifact_path, claims_path, log_path)]
+    except (docset.Unreadable, docset.Refused, ValueError, OSError) as e:
+        return [f"FAIL set: the run rows cannot be derived ({e})"], 1
+    covered = [r for r in run if r[3] in docset.COVERED]
+    spec = toml_subset.load(spec_path)["spec"]
+    out = ["[spec]"] + [f'{k} = "{v}"' for k, v in spec.items()] + [""]
+    for i, (d, ln, form, status) in enumerate(covered, start=1):
+        out += [f"[c{i}]", f'document = "{d}"', f"line = {ln}", f'form = "{form}"', f'status = "{status}"', ""]
+    with open(spec_path, "w", encoding="utf-8") as fh:
+        fh.write("\n".join(out).rstrip("\n") + "\n")
+    return [f"frozen set-covered ({len(covered)} rows)"], 0
+
+
 def main(argv):
+    if argv and argv[0] == "--freeze":
+        argv = argv[1:]
+        if len(argv) != 4:
+            print(__doc__.split("\n\n")[1], file=sys.stderr)
+            return 2
+        lines, rc = freeze(*argv)
+        for l in lines:
+            print(l)
+        return rc
     if len(argv) != 4:
         print(__doc__.split("\n\n")[1], file=sys.stderr)
         return 2

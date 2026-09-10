@@ -138,7 +138,7 @@ mkrun "$SR/run" "$SR"
 python3 -m bbx.readout "$SR/run" > "$T/ss" 2>&1 && fail "a RED suite run read as exit 0" || ok "a RED suite run exits 1"
 wants() { grep -q -- "$2" "$T/ss" && ok "$1" || fail "$1 — missing '$2' in: $(head -8 "$T/ss" | tr '\n' '|')"; }
 wants "the suite header names the set and the expectation set" "^== READOUT (suite) — frame-driven subject at .* — set 'fake' -> expectation set 'build-a' — started 2026-09-10T00:00:00Z on Darwin arm64 ==$"
-wants "the verdict line counts separately, with the runs per scenario and the driver" "^VERDICT: RED   PASS 3  SKIP 1  FAIL 2  OTHER 0   (scenarios 6; each run 2 times; driver fake.sh)$"
+wants "the verdict line counts separately, with the runs per scenario and the driver" "^VERDICT: RED   PASS 3  SKIP 1  FAIL 2  OTHER 0   (scenarios 6, pairings 6; each run 2 times; driver fake.sh)$"
 wants "the findings count short APART from diverged (BBX-4)" "^findings: pass 3, skip 1, short 1, diverged 1   (short = "
 wants "the histogram by R11 class from the register, rank order, testimony and fixture called out" "^  expectations relied upon: derived 1, registry 1, fixture 3, testimony 1 (register expected/PROVENANCE.toml; 6 files in the set); testimony 1: not evidence, never green (BBX-3); fixture 3: evidence about no real subject$"
 wants "the short scenario is named as a length finding under NOT assert" "^  1 scenario(s) read \`short\`: the observation ended before re-convergence could be proved"
@@ -151,9 +151,9 @@ python3 -m bbx.readout "$SR/run_noreg" > "$T/sn" 2>&1 || true
 if grep -q "^  expectations relied upon: none registered — no expected/PROVENANCE.toml; the 6 expectation files of set 'build-a' carry no provenance class (E3)$" "$T/sn" && grep -q "PASSed on a real pairing: unknown — no register says which pairings are real$" "$T/sn" && grep -q "^  where any expectation's numbers came from: no register (E3)$" "$T/sn"; then echo "CONTROL FIRED: no-register-honest — no register: the file count, 'unknown', and the blind spot named"
 else fail "CONTROL DEAD: no-register-honest — $(grep -E 'relied|real pairing|numbers came' "$T/sn" | tr '\n' '|')"; fi
 # BBX-14 for suite runs
-cp -R "$SR/run" "$SR/run2"; python3 -m bbx.readout "$SR/run" --against "$SR/run2" 2>&1 | grep -q "^  BBX-14 (more than one run): met — 6 scenarios, 0 verdict differences" && ok "--against a second kept suite run at the same HEAD and set: met" || fail "suite BBX-14 met"
+cp -R "$SR/run" "$SR/run2"; python3 -m bbx.readout "$SR/run" --against "$SR/run2" 2>&1 | grep -q "^  BBX-14 (more than one run): met — 6 pairings, 0 verdict differences" && ok "--against a second kept suite run at the same HEAD and set: met" || fail "suite BBX-14 met"
 sed -i.bak 's/^03_press	masked	flicker	PASS masked-flicker (…)	pass$/03_press	masked	flicker	FAIL masked-flicker: got X	diverged/' "$SR/run2/results.tsv"
-python3 -m bbx.readout "$SR/run" --against "$SR/run2" 2>&1 | grep -q "^  BBX-14 (more than one run): UNMET — verdicts differ: 03_press " && ok "…and a differing scenario verdict is UNMET, named" || fail "suite BBX-14 unmet"
+python3 -m bbx.readout "$SR/run" --against "$SR/run2" 2>&1 | grep -q "^  BBX-14 (more than one run): UNMET — verdicts differ: 03_press.masked " && ok "…and a differing scenario verdict is UNMET, named" || fail "suite BBX-14 unmet"
 
 echo "== 4. CONTROL untracked-visible: a file written under the tree during a run is on the screen (G17) =="
 cp -R "$T/r1" "$T/r1u"; printf 'untracked_before=3\nuntracked_after=4\n' >> "$T/r1u/run.txt"
