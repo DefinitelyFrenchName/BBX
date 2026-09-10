@@ -32,7 +32,8 @@ F13/F14 21). bbh's tip `447e5d2`, a NOTE. Defaults D1–D44. Gotchas G1–G25.
 Retractions X1–X12.
 
 **In force:** `DECISIONS.md` — R0–R20, R22–R34 and method M1–M4. **Open
-rulings:** R21 (the platform runs: no Linux or WSL host here). R31–R34
+rulings:** R21 (the platform runs: no Linux or WSL host here); R35–R40 (the
+S4 plan's, raised bbx-12 while S3's DONE ruling is pending: `docs/plans/S4.md` §10). R31–R34
 (the S3 plan's) validated 2026-09-10 — R33 to be reworked only if
 experience proves it insufficient, R34 with the TSV caveat and its TOML
 revision validated (the frozen rows of the new kinds are TOML-subset

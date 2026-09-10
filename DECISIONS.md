@@ -47,4 +47,4 @@ table below is what is in force.
 | M2 | A census row's provenance is `gen:<generator>` or `read`; every count has its command; a filed count is labelled `filed:` with its source. | contributor (method) | 2026-09-09 |
 | M3 | Every load-bearing census number is produced by one agent and re-derived by a different one; unresolved mismatches are reported, never averaged. | contributor (method), from FIRST_PROMPT.md | 2026-09-09 |
 
-Open rulings: R21 (how the platform runs are obtained; the queue explains). New ones are raised in `docs/rulings.md` under `## Open` and moved under an `## Answered` heading when answered (`gates/rulings_shape.sh`).
+Open rulings: R21 (how the platform runs are obtained; the queue explains), R35, R36, R37, R38, R39, R40 (the S4 plan's, raised bbx-12: the cli scenario and observation contract, the tolerant-numeric contract, the two adapter frameworks, the self subject's identity, the file census as a gate, the JSON schema format). New ones are raised in `docs/rulings.md` under `## Open` and moved under an `## Answered` heading when answered (`gates/rulings_shape.sh`).
