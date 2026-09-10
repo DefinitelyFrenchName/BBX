@@ -307,3 +307,44 @@ and BBX-16 (the VIEW decides what a perturbation means; the same deletion
 under a positional view is a shift). Learning (R27): a mechanism candidate
 for S4 — the command-line kind's output lines ARE a positional view, and
 `base+1` is its control; nothing to build here.
+
+## G22 — The fixture's three truth logs were never in the repository: `*.log` in `.gitignore` swallowed `fixture/docset/expected/fixture/logs/`, and every gate was green because the working tree had them (paid: 1 shadow run — the bbx-9 shadow built from HEAD had no logs; a clone, R21's Linux run included, would have opened RED; 2026-09-10)
+bbx-8 wrote the `truth` kind: the generator emits `expected/fixture/logs/<s>.log`
+and the register names them (rows e13–e15), the driver gate compares every
+run to them, and the close said "register 16 rows". The files sat under the
+`.gitignore` rule `*.log` (written at birth for build output, with `docs/`
+excepted) and were never staged; `git status` showed nothing because ignored
+files are silent. Found at the bbx-9 open when the shadow tree, built with
+`git archive HEAD`, ran `gates/docset_fixture.sh` (`--check`: 3 files DIFFER)
+and `gates/docset_driver.sh` (every truth comparison red) — the first time a
+gate ran on what the repository actually holds. Fix: `!fixture/**/*.log` in
+`.gitignore`, the three logs added; and the mechanism: `bbx.provenance` now
+requires every file a register row names to be one git TRACKS when the
+expectation tree is inside a work tree (`git ls-files`), reporting the check
+as *not run* outside one, never as passed — `gates/provenance.sh` control
+`row-untracked` (a registered, present, ignored file FAILs naming it), and
+`gates/docset_fixture.sh` runs the tool over the fixture's real register.
+Re-anchors BBX-10 (rot class "missing operand": the operand was present here
+and absent everywhere else) and §1 (the bbx-8 close's "16 rows" was measured
+on a working tree, which is not the artifact that leaves it). Learning (R27):
+a mechanism, built here — the tracked-ness check; and a practice: the shadow
+is built from HEAD precisely so that it is a clone's view, and G22 is what
+that view is for.
+
+## G23 — A backtick inside a double-quoted `echo` ran a word as a command; the shadow ran the gate bare and tested only its exit, so the tree's classifier was the first to read the shell error (paid: 2 close batteries, ~12 min; 2026-09-10)
+`gates/set_schema.sh`'s section-5 banner quoted `finding.py`'s word as
+`` `unclassified` `` inside double quotes: the shell ran `unclassified`,
+printed `line 153: unclassified: command not found`, and the gate went on to
+its PASS line and exit 0. In the shadow the gate was run as `sh gate.sh` with
+its exit tested — green. In the tree `bin/bbx selftest` read the log through
+the classifier, whose shell-error clause (`[classify].shell_error_regex`,
+lineage G18) turns "exit 0 after a shell error" into FAIL: both close
+batteries went NOT GREEN on that one gate, with all 72 controls fired. The
+classifier is the instrument that caught it; the shadow's bare run was the
+blind spot (HANDOFF's own hazard: "a chain that tests only the exit does
+not"). Fix: the quote, and the practice — every touched gate runs in the
+shadow as `sh gate.sh > log; bin/bbx classify $? log`, the runner's reading,
+not the shell's. Re-anchors BBX-1 (the exit decides first, then the text;
+a PASS printed after a shell error is not a PASS) for the second time (G16,
+G18 before it). Learning (R27): a practice, written into HANDOFF; the
+mechanism already exists (the classifier), and it fired.

@@ -33,7 +33,7 @@ kind but `frame-driven`, whose drivers stay bbh's under `$BBX_BBH_HOME/drivers`
 
 | driver | kind | search-path variable | its own family (scrubbed by the suite, D33) | since |
 |---|---|---|---|---|
-| `docset.sh` | `document-set` | `DOCSET_PATH` | `DOCSET_NONDET` (honoured), `DOCSET_VIEW`, `DOCSET_FORMS` (refused) | S3 step 2 (bbx-8, 2026-09-10) |
+| `docset.sh` | `document-set` | `DOCSET_PATH` (resolved by `bbx.docset resolve`, the one resolver the schema comparator shares — S3 step 3) | `DOCSET_NONDET` (honoured), `DOCSET_VIEW`, `DOCSET_FORMS` (refused) | S3 step 2 (bbx-8, 2026-09-10) |
 
 Every driver here refuses the frame-driven replay family (`MASK_RANGES`,
 `DUMPS`, `POKES`, …) and the guard family (`GUARD_*`, `CRASH_VECTORS`,

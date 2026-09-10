@@ -8,8 +8,7 @@
 # MUST-FIRE: perturbed-copy: edited-value — one value changed in a copy's records.tsv must make --check FAIL naming the file, or the fixture can drift by hand (BBX-21)
 # MUST-FIRE: perturbed-copy: symmetric-fixture — two records given the same weight in a copy must make --check FAIL naming the predicate `weights-distinct`, or a fixture can stop being chiral without anyone reading which predicate broke (BBX-15)
 # MUST-FIRE: known-bad: unknown-kind-under-profile — a `.masked` beside a `.claims` scenario under the fixture's config must enumerate UNKNOWN-KIND and non-zero, or the document-set profile inherits the temporal family it never declared (R23)
-# NOT-ASSERTED: that any claim in the fixture is BOUND, MISMATCH or anything else: no driver exists yet (S3 step 2); only that the files are the generator's and the design is chiral
-# NOT-ASSERTED: the `.truth` kind: not generated until the driver's token grammar exists (step 2)
+# NOT-ASSERTED: that any claim in the fixture is BOUND, MISMATCH or anything else (gates/docset_driver.sh and gates/set_schema.sh): only that the files are the generator's, the design is chiral, and the register is complete and tracked
 # NOT-ASSERTED: the suite over the fixture: step 4
 #
 set -eu
@@ -48,6 +47,8 @@ wkey="$(cd "$F" && BBX_CONFIG="$F/bbx.toml" python3 -m bbx.fingerprint subject -
 grep -q "^$wkey	fixture	" "$F/expected/registry.tsv" && ok "the registry row IS the fingerprint tool's whole-set key over subject/" || fail "the registry key differs from bbx.fingerprint --set-key ($wkey)"
 exp="$(cd "$F" && BBX_CONFIG="$F/bbx.toml" python3 -m bbx.fingerprint subject --set records)"; [ "$exp" = fixture ] && ok "bbx.fingerprint resolves subject/ to expectation set 'fixture'" || fail "fingerprint resolved to '$exp'"
 echo "$note"
+if o="$(python3 -m bbx.provenance --config "$F/bbx.toml" 2>&1)"; then ok "the fixture's register: $(printf '%s\n' "$o" | grep '^  ok: [0-9]* expectation files' | sed 's/^  ok: //')"; else fail "the fixture's register (bbx.provenance): $(printf '%s' "$o" | grep 'FAIL' | tr '\n' ' ')"; fi
+printf '%s\n' "$o" | grep -q '^  ok: every named file is tracked by git' && ok "every registered fixture file is tracked by git — a clone has the truth logs (G22)" || fail "tracked-ness of the fixture's expectations: $(printf '%s' "$o" | grep -n 'track\|not run' | tr '\n' ' ')"
 
 echo "== 3. must-fire controls, each on a COPY =="
 cp -R "$F" "$W/c1"

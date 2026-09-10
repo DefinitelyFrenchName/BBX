@@ -7,6 +7,13 @@ states from the artifact, bind the two, and write the point-indexed log the harn
     python3 -m bbx.docset run <artifact.tsv> <scenario.claims> <out.log> [--nondet]
     python3 -m bbx.docset map <artifact.tsv> <scenario.claims>        index -> (document, line, form, status, quoted, derived)
     python3 -m bbx.docset summary <log>                               NOTE: coverage / paraphrase / unbindable
+    python3 -m bbx.docset rows <artifact.tsv> <scenario.claims> <log>  the run's rows: index, document, line, form, status
+                                                                      (the log's statuses joined by index with the map,
+                                                                      the map proven to describe THIS log — S3 step 3)
+    python3 -m bbx.docset resolve <set>                               the artifact `<set>.tsv` on DOCSET_PATH (`;`-separated,
+                                                                      each component made absolute; the first that has it
+                                                                      wins) — the ONE resolver the driver and the schema
+                                                                      comparator share; exit 1 naming the path if none
 
 THE TWO STRINGS ARE DEFINED HERE AND NOWHERE ELSE. The QUOTED string is the document's line, verbatim
 (the `text` view); the DERIVED string is what the artifact says about the thing the line names (the
@@ -53,6 +60,7 @@ compare; UNENCODABLE printed, never dropped), VampireSaved `checkdocs_rom.py` (P
 against the literal fact; the covered set frozen). Nothing here is lifted; the printed lines are BBX's.
 """
 import hashlib
+import os
 import re
 import sys
 import time
@@ -280,6 +288,48 @@ def write_log(rows, out, nondet=False):
         fh.write(f"END {len(rows)}\n")
 
 
+def run_rows(artifact, claimsfile, log):
+    """The run's rows for the set family: [(index, document, line, form, status)] — the STATUS from the
+    log's token (the observation), the (document, line, form) from the map (the scenario, R31), joined by
+    index. The map is proven to describe THIS log: every index of the log must be in the map and the
+    quoted half of every token must equal the sha1 of the map's quoted string (D38; DOCSET_NONDET salts
+    the derived half only). ValueError names the first index where it does not."""
+    rows = bind(artifact, load_claims(claimsfile))
+    by_index = {r[0]: r for r in rows}
+    out = []
+    for index, tok in logfmt.frames(log):
+        t = split_token(tok)
+        if index not in by_index:
+            raise ValueError(f"the log's index {index} is not in the claim map ({len(by_index)} claims)")
+        _i, d, ln, form, _status, quoted, _derived = by_index[index]
+        if t["quoted"] != sha1(quoted):
+            raise ValueError(f"the claim map does not describe this log at index {index} (the quoted hash differs)")
+        out.append((index, d, ln, form, t["status"]))
+    return out
+
+
+def resolve_artifact(set_name, search_path, cwd=None):
+    """`<set>.tsv` on the `;`-separated search path, each component made ABSOLUTE against cwd (bbh's
+    drivers learned it on a relative one); the first directory that has it wins. Raises Unreadable
+    naming the path when none does, or when a relative component does not resolve."""
+    if not search_path:
+        raise Unreadable(f"set DOCSET_PATH to the directory holding {set_name}.tsv")
+    base = Path(cwd or Path.cwd())
+    for comp in search_path.split(";"):
+        if not comp:
+            continue
+        if comp.startswith("/"):
+            d = Path(comp)                                   # an absent absolute component is skipped
+        else:
+            d = base / comp
+            if not d.is_dir():                               # a relative one that resolves nowhere is an error
+                raise Unreadable(f"search-path component '{comp}' does not resolve from {base}")
+            d = d.resolve()
+        if (d / f"{set_name}.tsv").is_file():
+            return str(d / f"{set_name}.tsv")
+    raise Unreadable(f"no {set_name}.tsv on DOCSET_PATH={search_path}")
+
+
 # ── the self-test (every run, before any document is read) ────────────────────
 SELFTEST_RECORDS = {"Zork": {"name": "Zork", "id": "0B1C", "weight": "53", "rank": "2"}}
 SELFTEST_LINES = {   # form: (true, falsified — the value's mirror, loose)
@@ -335,7 +385,7 @@ def cmd_summary(log):
 
 
 def main(argv):
-    if not argv or argv[0] not in ("selftest", "run", "map", "summary"):
+    if not argv or argv[0] not in ("selftest", "run", "map", "summary", "rows", "resolve"):
         print(__doc__.split("\n\n")[1]); return 2
     try:
         if argv[0] == "selftest":
@@ -348,6 +398,16 @@ def main(argv):
             return 0
         if argv[0] == "summary":
             return cmd_summary(argv[1])
+        if argv[0] == "resolve":
+            print(resolve_artifact(argv[1], os.environ.get("DOCSET_PATH", "")))
+            return 0
+        if argv[0] == "rows":
+            try:
+                for index, d, ln, form, status in run_rows(argv[1], argv[2], argv[3]):
+                    print(f"{index}\t{d}\t{ln}\t{form}\t{status}")
+            except ValueError as e:
+                print(f"docset.py: {e}"); return 1
+            return 0
         artifact, claimsfile = argv[1], argv[2]
         claims = load_claims(claimsfile)
         rows = bind(artifact, claims)

@@ -7,27 +7,33 @@ paragraph per sitting, the outgoing status verbatim). Read `HANDOFF.md` first.
 generalization of `blackbox-harness` (bbh) to any subject with testable inputs
 and outputs. Born 2026-09-09.
 
-**Status (bbx-8 close, 2026-09-10):** slices S1 (but for R21's platform run)
-and S2 complete; **S3 steps 1 and 2 built** (`docs/plans/S3.md` §8.1–8.2;
-R31–R34 answered). Step 2: the extractor `lib/py/bbx/docset.py` (quote from
-the document, derive from the artifact, bind; the closed status vocabulary
-D37; the two strings and the token defined once, D38; the lexical classes and
-the record key, D39; the unlisted-claim guards, D40; a self-test on synthetic
-lines every run), the driver `drivers/docset.sh` (bbh's four arguments;
-`DOCSET_PATH`; REFUSED exit 3 on a form no extractor implements, on
-`DOCSET_VIEW`, `DOCSET_FORMS` and the frame-driven and guard families; exit 1
-DISCARDED), `drivers/README.md`, the generator writing the `truth` kind from
-the DESIGN (`expected/fixture/<s>.truth` + `logs/<s>.log`, register rows
-`fixture`), and `gates/docset_driver.sh` (7 controls, portable). Built in a
-shadow tree first, which caught one defect (G20) before the tree saw it; the
-plan's shifted-artifact prediction corrected in its own commit (G21, X9).
-Every scenario's log equals the design's truth byte for byte, twice
-(`01_all` END 23, `02_weights` END 7, `03_rows` END 7; coverage 20/23 on
-`01_all`). No `set` / `schema` / `exact` comparator, no suite loop over the
-kinds yet (steps 3–4). `bin/bbx selftest` GREEN twice at one HEAD (BBX-14
-met): 21 gates, 66/66 controls. Fidelity F12–F17 diff empty on the
-plain clone at `10a82d2` (104 pairings). bbh's tip `447e5d2`, a NOTE.
-Defaults D1–D40. Gotchas G1–G21. Retractions X1–X9.
+**Status (bbx-9 close, 2026-09-10):** slices S1 (but for R21's platform run)
+and S2 complete; **S3 steps 1–3 built** (`docs/plans/S3.md` §8.1–8.3;
+R31–R34 answered). Step 3: the three comparator families of the
+document-set kind under the one dispatcher (R23) — `lib/py/bbx/compare_exact.py`
+(the truth log against the run log BY INDEX; `FAIL-SHORT` apart from
+`FAIL exact: index <i> differs`, BBX-4), `compare_set.py` (a frozen multiset of
+`(document, line, form, status)` rows: `claims` inventory both ways, `covered`
+shrink-only with `NOTE: covered-grew`, R33; a duplicate is hand-editing),
+`compare_schema.py` (the artifact's shape before any value, the first
+violation named; the type vocabulary D41); `compare_check` takes the scenario
+file and the artifact as trailing arguments; `bbx.docset rows` / `resolve`
+(the one artifact resolver, the driver calls it); `gates/set_schema.sh`
+(5 controls; 38 verdict lines frozen and classified by `finding.py`). Every
+verdict line is BBX's own, frozen by the gate (C4 with no ancestor). The
+sitting's first finding was G22: the fixture's three truth logs were
+`*.log`-ignored and never committed — every gate was green on the working
+tree and would have been red on a clone; fixed with the logs added and a
+mechanism (`bbx.provenance` refuses a registered file git does not track;
+`gates/provenance.sh` control `row-untracked`). The plan's control placement
+corrected in its own commit (X10, BBX-19). G23: the new gate's banner ran a
+backticked word as a command; the tree's classifier read the shell error
+that the shadow's bare run had not (two close batteries red, the quote
+fixed, the shadow practice now runs gates through `bin/bbx classify`). No suite loop over the kinds yet
+(step 4). `bin/bbx selftest` GREEN twice at one HEAD (BBX-14 met): 22 gates, 72/72 controls.
+Fidelity F12–F17 diff empty on the plain clone at `10a82d2` (104 pairings).
+bbh's tip `447e5d2`, a NOTE. Defaults D1–D42. Gotchas G1–G23. Retractions
+X1–X10.
 
 **In force:** `DECISIONS.md` — R0–R20, R22–R34 and method M1–M4. **Open
 rulings:** R21 (the platform runs: no Linux or WSL host here). R31–R34
@@ -56,7 +62,8 @@ BBX itself as a subject (R14) and external test frameworks as drivers (R15).
 need R16); incidents that re-anchor one in fact: G8 → §1, G9 → BBX-15,
 G10 → BBX-8, G12 → BBX-29, G13 → BBX-16, G14 → BBX-20, G15 → §0/§1,
 G16 → BBX-1, G17 → BBX-24/BBX-26, G18 → BBX-1, G19 → BBX-10, G20 → BBX-5,
-G21 → §1/BBX-16 (`docs/gotchas.md`, G1–G21). The formal promotion is slice S5.
+G21 → §1/BBX-16, G22 → BBX-10/§1, G23 → BBX-1 (`docs/gotchas.md`, G1–G23). The
+formal promotion is slice S5.
 
 **Constitution:** BBX-5's citation corrected to `MJC-52` (R12, own commit).
 Every further edit to `CLAUDE.md` needs maintainer approval (R16). The counts
@@ -69,9 +76,13 @@ number to bring down; the two added at bbx-2 are host facts the clone
 exposed (G13, rule 7), the only exception ever allowed to move it upward. Grammar in
 `docs/census/README.md`.
 
-**Next:** S3 step 3 (`docs/plans/S3.md` §8.3: `compare_exact.py`,
-`compare_set.py`, `compare_schema.py` under `lib/sh/compare.sh`; `gates/set_schema.sh`;
-`gates/expectation_kinds.sh` extended), then step 4 (the suite loop over the
-kinds per scenario; `--freeze` must not overwrite a truth log a `.truth` names —
-HANDOFF hazard). The platform run when R21's host exists. bbh's
-tip past the baseline follows the R28 procedure when a sitting needs it.
+**Next:** S3 step 4 (`docs/plans/S3.md` §8.4: the suite loop in
+`bin/bbx-run-suite` over the profile's kinds per scenario — frame-driven
+precedence verbatim, F12 the control; `compare_check` with the scenario file
+and the artifact as trailing arguments; kept-run rows `(scenario, kind)`;
+`schema` first and `NOT-EVALUATED (schema failed)` for the value kinds;
+the coverage NOTEs on the screen; `--freeze` for the shrink-only kind, which
+must not overwrite a truth log a `.truth` names — HANDOFF hazard;
+`gates/docset_suite.sh`), then step 5 (the slice readout with the first file
+census). The platform run when R21's host exists. bbh's tip past the
+baseline follows the R28 procedure when a sitting needs it.

@@ -55,16 +55,9 @@ done
 CLAIMS="$(cd "$(dirname "$CLAIMS")" && pwd)/$(basename "$CLAIMS")"
 OUT_DIR="$(cd "$(dirname "$OUT")" && pwd)"; OUT="$OUT_DIR/$(basename "$OUT")"
 if [ -n "$SANDBOX" ]; then mkdir -p "$SANDBOX"; SANDBOX="$(cd "$SANDBOX" && pwd)"; fi
-[ -n "${DOCSET_PATH:-}" ] || { echo "docset.sh: set DOCSET_PATH to the directory holding $SET.tsv"; exit 1; }
-# the search path, component by component, ABSOLUTE (bbh's drivers learned it on a relative one)
-ARTIFACT=""; _rest="$DOCSET_PATH;"
-while [ -n "$_rest" ]; do
-    _d="${_rest%%;*}"; _rest="${_rest#*;}"
-    [ -n "$_d" ] || continue
-    case "$_d" in /*) ;; *) _d="$(CDPATH= cd "$_d" 2>/dev/null && pwd)" || { echo "docset.sh: search-path component '$_d' does not resolve from $(pwd)"; exit 1; } ;; esac
-    [ -f "$_d/$SET.tsv" ] && { ARTIFACT="$_d/$SET.tsv"; break; }
-done
-[ -n "$ARTIFACT" ] || { echo "docset.sh: no $SET.tsv on DOCSET_PATH=$DOCSET_PATH"; exit 1; }
+# the search path, component by component, ABSOLUTE (bbh's drivers learned it on a relative one) —
+# resolved by bbx.docset resolve, the ONE resolver the schema comparator shares (S3 step 3)
+ARTIFACT="$(python3 -m bbx.docset resolve "$SET")" || { echo "$ARTIFACT"; exit 1; }
 
 # Clear the artifact BEFORE the run: "no END line" must never be satisfied by a previous run's file [BBH-27]
 rm -f "$OUT"

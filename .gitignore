@@ -4,6 +4,7 @@ scratch/
 *.tmp
 *.log
 !docs/**/*.log
+!fixture/**/*.log
 __pycache__/
 *.pyc
 build/

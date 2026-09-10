@@ -167,3 +167,33 @@ kinds yet (steps 3–4). `bin/bbx selftest` GREEN twice at one HEAD (BBX-14
 met): 21 gates, 66/66 controls. Fidelity F12–F17 diff empty on the
 plain clone at `10a82d2` (104 pairings). bbh's tip `447e5d2`, a NOTE.
 Defaults D1–D40. Gotchas G1–G21. Retractions X1–X9.
+
+## bbx-9 — 2026-09-10 (session 9: S3 step 3 — the exact, set and schema families; G22, G23)
+
+**Status (bbx-9 close, 2026-09-10):** slices S1 (but for R21's platform run)
+and S2 complete; **S3 steps 1–3 built** (`docs/plans/S3.md` §8.1–8.3;
+R31–R34 answered). Step 3: the three comparator families of the
+document-set kind under the one dispatcher (R23) — `lib/py/bbx/compare_exact.py`
+(the truth log against the run log BY INDEX; `FAIL-SHORT` apart from
+`FAIL exact: index <i> differs`, BBX-4), `compare_set.py` (a frozen multiset of
+`(document, line, form, status)` rows: `claims` inventory both ways, `covered`
+shrink-only with `NOTE: covered-grew`, R33; a duplicate is hand-editing),
+`compare_schema.py` (the artifact's shape before any value, the first
+violation named; the type vocabulary D41); `compare_check` takes the scenario
+file and the artifact as trailing arguments; `bbx.docset rows` / `resolve`
+(the one artifact resolver, the driver calls it); `gates/set_schema.sh`
+(5 controls; 38 verdict lines frozen and classified by `finding.py`). Every
+verdict line is BBX's own, frozen by the gate (C4 with no ancestor). The
+sitting's first finding was G22: the fixture's three truth logs were
+`*.log`-ignored and never committed — every gate was green on the working
+tree and would have been red on a clone; fixed with the logs added and a
+mechanism (`bbx.provenance` refuses a registered file git does not track;
+`gates/provenance.sh` control `row-untracked`). The plan's control placement
+corrected in its own commit (X10, BBX-19). G23: the new gate's banner ran a
+backticked word as a command; the tree's classifier read the shell error
+that the shadow's bare run had not (two close batteries red, the quote
+fixed, the shadow practice now runs gates through `bin/bbx classify`). No suite loop over the kinds yet
+(step 4). `bin/bbx selftest` GREEN twice at one HEAD (BBX-14 met): 22 gates, 72/72 controls.
+Fidelity F12–F17 diff empty on the plain clone at `10a82d2` (104 pairings).
+bbh's tip `447e5d2`, a NOTE. Defaults D1–D42. Gotchas G1–G23. Retractions
+X1–X10.

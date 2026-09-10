@@ -501,3 +501,48 @@ lives — bbh `[BBH-9]`).
   means the binding agrees with the design on the fixture and the seven
   controls can each fail; it says nothing about a real document set, and the
   guards and forms are the fixture's.
+
+## bbx-9 — 2026-09-10 (session 9: S3 step 3 — the exact, set and schema families; G22)
+
+- Open: GREEN on `6a80ec7` (21 gates, 66/66 controls; the two drift
+  NOTEs). The shadow tree built from HEAD then exposed G22: the fixture's
+  three truth logs were `*.log`-ignored and never committed — a clone would
+  have opened red. Fixed (`!fixture/**/*.log`, the logs added) with its
+  mechanism: `bbx.provenance` refuses a registered file git does not track
+  (`gates/provenance.sh` control `row-untracked`); `gates/docset_fixture.sh`
+  runs the tool over the fixture's real register.
+- S3 step 3 built (docs/plans/S3.md §8.3): `lib/py/bbx/compare_exact.py`
+  (by index; short apart from diverged), `compare_set.py` (inventory both
+  ways, covered shrink-only with `NOTE: covered-grew`), `compare_schema.py`
+  (shape before any value, the first violation named); the `exact) set)
+  schema)` branches of `lib/sh/compare.sh` (`compare_check` takes the
+  scenario file and the artifact as trailing arguments); `bbx.docset rows`
+  and `resolve` (the one artifact resolver, the driver now calls it);
+  `finding.py`'s `FAIL unknown ` rule; `gates/set_schema.sh` (5 controls,
+  38 verdict lines frozen and classified); D41, D42.
+- The plan corrected in its own commit `08c9fef` (BBX-19, X10): the third
+  profile's unknown-kind control lives in `gates/docset_fixture.sh` (bbx-7),
+  not in `gates/expectation_kinds.sh`.
+- No ruling raised or answered; R21 stays open.
+- Incidents: G22 (paid 1 shadow run); the set family's duplicate label
+  (`set-shrink-only` for `set-covered`), caught by the gate's frozen text in
+  the shadow — no tracked file saw it; G23 (a backticked word run as a
+  command inside the gate's banner; the shadow's bare run tested only the
+  exit, the tree's classifier read the shell error — paid 2 close batteries).
+- Close: GREEN twice at one HEAD — 22 gates, 72/72 controls
+  (`build/selftest_20260910T123032Z`, `build/selftest_20260910T123545Z`); fidelity F12–F17 unchanged.
+- Step 10 (R27): G22 — a mechanism, built this sitting (tracked-ness in the
+  register tool) and a practice made explicit in HANDOFF (the shadow is a
+  git tree built from HEAD so that it is a clone's view); the label — the
+  gate's frozen text is the mechanism, nothing to add; G23 — a practice
+  (the shadow runs every touched gate through `bin/bbx classify`), the
+  mechanism exists and fired.
+- Anti-hyperfocus checkpoint (BBX-27): the sitting built the three families
+  and stopped at the step boundary. Is S3 step 4 still the most valuable
+  thread? Yes: the comparators exist and are frozen, but no suite run has
+  yet printed one of their lines or a coverage number on the screen — step 4
+  is where the document-set kind becomes something the maintainer reads.
+  Does the last green mean what it is treated as meaning? It means each
+  family holds both ways on the fixture through the dispatcher and that the
+  repository now holds what the gates compare against; it says nothing about
+  a real document set, and G22 says a working-tree green is not a clone's.

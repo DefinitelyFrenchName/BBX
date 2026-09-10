@@ -10,6 +10,7 @@
 # MUST-FIRE: known-bad: row-without-file — a row naming a file that is gone must FAIL naming it, or the register is read as exhaustive while it is stale
 # MUST-FIRE: known-bad: class-outside-eight — a class that is not one of R11's eight must be REFUSED naming the row, or riders become classes again (the VampireSaved 6-to-13 drift)
 # MUST-FIRE: known-bad: file-named-twice — a second row for one file must be REFUSED, or a hand-edited register carries two answers
+# MUST-FIRE: known-bad: row-untracked — a row naming a file git ignores must FAIL naming it, or an expectation present here and absent from every clone reads as frozen (G22: the fixture's three truth logs, one sitting)
 # NOT-ASSERTED: that a row's class is TRUE of its file: the register is written by hand at the freeze; only completeness and the vocabulary are checked
 # NOT-ASSERTED: bbh's example register (markdown, a consumer list of classes): it is bbh's and F19 (S6) reads it under R11
 #
@@ -31,12 +32,17 @@ reg() {  # reg <rows...>  each row: file|class[|extra toml lines]
         printf '[e%s]\nfile = "%s"\ndescribes = "d"\nclass = "%s"\nrefreeze = "r"\n%s\n' "$i" "$f" "$c" "$x" >> "$R/expected/PROVENANCE.toml"; done
 }
 PV="python3 -m bbx.provenance --config $R/bbx.toml"
+# the synthetic tree is a git repository with everything added, so the tracked-ness check runs (G22)
+( cd "$R" && git init -q && git add -A && git -c user.name=g -c user.email=g@g commit -q -m init ) || { echo "SETUP-FAIL: git init of the synthetic tree failed"; exit 1; }
 reg 'registry.tsv|registry' 'a-set/x.masked|derived' 'a-set/y.sha1|self' 'a-set/logs/y.log|self'
 
 echo "== 1. the clean case: four files (README, MASK, mask, the dotfile out of scope), four rows =="
 o="$($PV)" && ok "exit 0" || fail "exit non-zero on a complete register: $(printf '%s' "$o" | tr '\n' ' ')"
 printf '%s\n' "$o" | grep -q '^  ok: 4 expectation files, 4 rows, complete both ways$' && ok "four files across the tree, README / MASK / mask / dotfile excluded, the lineage's ok line" || fail "$(printf '%s\n' "$o" | sed -n 2p)"
 printf '%s\n' "$o" | grep -q '^  ok: every row complete, every class one of the eight, no file named twice$' && ok "every row inside the vocabulary" || fail "row line"
+printf '%s\n' "$o" | grep -q '^  ok: every named file is tracked by git (' && ok "every named file is one git tracks (a clone has them all)" || fail "tracked line: $(printf '%s\n' "$o" | grep -n 'tracked\|not run' | tr '\n' ' ')"
+mkdir -p "$T/nogit"; cp -R "$R/expected" "$R/bbx.toml" "$T/nogit/"
+o2="$(python3 -m bbx.provenance --config "$T/nogit/bbx.toml" 2>&1)" && printf '%s\n' "$o2" | grep -q '^  not run: the expectation tree is not inside a git work tree' && ok "outside a work tree the tracked-ness check is reported NOT RUN, never passed" || fail "outside a work tree: $(printf '%s' "$o2" | grep -n 'tracked\|not run' | tr '\n' ' ')"
 printf '%s\n' "$o" | grep -q '^  self 2, derived 1, registry 1$' && ok "the classes counted in rank order" || fail "histogram line: $(printf '%s\n' "$o" | tail -1)"
 h="$($PV --histogram a-set | tr '\n' ' ')"; [ "$h" = "class=self count=2 class=derived count=1 " ] && ok "--histogram a-set: $h" || fail "histogram: '$h'"
 h="$($PV --histogram nosuch | tr '\n' ' ')"; [ "$h" = "class=none count=0 " ] && ok "--histogram of a set with no rows: none" || fail "empty histogram: '$h'"
@@ -70,6 +76,15 @@ o="$($PV 2>&1)" && fail "a row with no refreeze field passed" || { printf '%s\n'
 reg 'registry.tsv|registry' 'a-set/x.masked|derived' 'a-set/y.sha1|self' 'a-set/logs/y.log|self'
 printf '[e1]\nfile = "registry.tsv"\ndescribes = "d"\nclass = "registry"\nrefreeze = "r"\n' >> "$R/expected/PROVENANCE.toml"
 o="$($PV 2>&1)" && s=0 || s=$?; [ "$s" = 2 ] && printf '%s\n' "$o" | grep -q 'declared twice' && ok "a table declared twice is refused by the subset parser (exit 2, the parser's line)" || fail "duplicate table: rc=$s '$o'"
+echo "== 5b. CONTROL row-untracked =="
+reg 'registry.tsv|registry' 'a-set/x.masked|derived' 'a-set/y.sha1|self' 'a-set/logs/y.log|self' 'a-set/logs/z.log|self'
+printf '*.log\n' > "$R/.gitignore"; : > "$R/expected/a-set/logs/z.log"
+( cd "$R" && git add -A && git -c user.name=g -c user.email=g@g commit -q -m ignore ) || fail "CONTROL DEAD: row-untracked — the ignore rule was not committed"
+( cd "$R" && git check-ignore -q expected/a-set/logs/z.log ) || fail "CONTROL DEAD: row-untracked — z.log is not ignored (the perturbation did not apply)"
+if o="$($PV 2>&1)"; then fail "CONTROL DEAD: row-untracked — an ignored expectation file passed"
+elif printf '%s\n' "$o" | grep -q '^  FAIL: 1 provenance row(s) naming a file git does not track' && printf '%s\n' "$o" | grep -q '^      a-set/logs/z.log$'; then echo "CONTROL FIRED: row-untracked — a-set/logs/z.log is present, registered and ignored: named, exit non-zero"
+else fail "CONTROL DEAD: row-untracked — $(printf '%s' "$o" | grep -A2 'track' | tr '\n' ' ')"; fi
+rm "$R/.gitignore" "$R/expected/a-set/logs/z.log"; ( cd "$R" && git add -A && git -c user.name=g -c user.email=g@g commit -q -m restore )
 echo "== 6. testimony is not evidence; a missing register; --register =="
 reg 'registry.tsv|registry' 'a-set/x.masked|testimony' 'a-set/y.sha1|fixture' 'a-set/logs/y.log|self'
 o="$($PV)" && printf '%s\n' "$o" | grep -q '^  NOTE: testimony rows=1 — a filed count never reads green (BBX-3); these files are not evidence$' && printf '%s\n' "$o" | grep -q '^  NOTE: fixture rows=1 — synthesized with known truth; evidence about no real subject$' && ok "testimony and fixture rows are complete (exit 0) and NAMED as not evidence" || fail "testimony/fixture: $(printf '%s' "$o" | tail -3 | tr '\n' ' ')"

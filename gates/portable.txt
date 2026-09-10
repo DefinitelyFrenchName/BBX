@@ -18,3 +18,4 @@ expectation_kinds
 provenance
 docset_fixture
 docset_driver
+set_schema

@@ -15,12 +15,23 @@
 #
 # WHAT BBX ADDS (ruled R23): `compare_check` dispatches on the expectation KIND — the kind
 # names the family and the view (lib/py/bbx/expectations.py, the profile's table), never the
-# spec line — so `masked` reaches `compare_temporal` unchanged and a later family (set,
-# schema, tolerant-numeric: S3-S4) is a new kind with its own function here. The mask default
-# is the kind profile's [suite].mask_default (frame-driven: bbh's literal; kind-blind: none),
-# never a literal in this file (BBX-24).
+# spec line — so `masked` reaches `compare_temporal` unchanged and a later family is a new kind
+# with its own function here. The mask default is the kind profile's [suite].mask_default
+# (frame-driven: bbh's literal; kind-blind: none), never a literal in this file (BBX-24).
 #
-# Ground truth: gates/compare_dispatch.sh.
+# THE THREE FAMILIES OF THE DOCUMENT-SET KIND (S3 step 3, bbx-9, 2026-09-10; R34): `exact`
+# (compare_exact — the truth log against the run log BY INDEX, lib/py/bbx/compare_exact.py),
+# `set` (compare_set — a frozen multiset of rows both ways, inventory or shrink-only,
+# compare_set.py) and `schema` (compare_schema — the artifact's shape before any value,
+# compare_schema.py). Their spec is the expectation FILE itself (`<expdir>/<name>.<kind>`, a
+# TOML-subset table — R34's caveat), not a spec line: compare_check's <spec> argument is ignored
+# for them, and two trailing arguments carry what the families read beyond the log — the
+# SCENARIO file (the claim map, R31) and the ARTIFACT the run's driver read (resolved through
+# the one resolver, `bbx.docset resolve`). Each prints ONE verdict line in BBX's own text,
+# frozen by gates/set_schema.sh (C4 with no ancestor: the gate is the freeze); a second
+# `NOTE: covered-grew <k>` line follows a shrink-only PASS that grew (R33).
+#
+# Ground truth: gates/compare_dispatch.sh (temporal, the dispatch), gates/set_schema.sh (the three).
 
 [ -n "${BBX_HOME:-}" ] && case ":${PYTHONPATH:-}:" in
     *":$BBX_HOME/lib/py:"*) ;;
@@ -36,15 +47,54 @@ compare_mask_for() {
     if [ -f "$1/mask" ]; then cat "$1/mask"; else echo "$COMPARE_DEFAULT_MASK"; fi
 }
 
-# compare_check <expdir> <name> <kind> <spec> <runmask> <log>
+# compare_check <expdir> <name> <kind> <spec> <runmask> <log> [<scenario> <artifact>]
 #   The kind's family decides; prints the verdict line(s); returns 0 on PASS, 1 on FAIL.
+#   <spec> and <runmask> are the temporal family's (bbh's); the set family needs <scenario> and
+#   <artifact>, the schema family <artifact>; the exact family reads the expectation file only.
 compare_check() {
     _ck_kind="$3"
     _ck_family="$(python3 -m bbx.expectations family "$_ck_kind" 2>/dev/null || echo '-')"
     case "$_ck_family" in
     temporal) compare_temporal "$1" "$2" "$4" "$5" "$6" ;;
+    exact)    compare_exact "$1" "$2" "$_ck_kind" "$6" ;;
+    set)      compare_set "$1" "$2" "$_ck_kind" "$6" "${7:-}" "${8:-}" ;;
+    schema)   compare_schema "$1" "$2" "$_ck_kind" "${8:-}" ;;
     *)        echo "FAIL kind '$_ck_kind' has no comparator family in the kind profile in force (R23: a kind is registered in the profile's table or not at all)"; return 1 ;;
     esac
+}
+
+# compare_spec_field <file> <field> — one [spec] field of a TOML-subset expectation file (R34).
+compare_spec_field() {
+    python3 -c 'import sys; from bbx import toml_subset as t; d = t.load(sys.argv[1]).get("spec") or {}; v = d.get(sys.argv[2]); print("" if v is None else v)' "$1" "$2" 2>/dev/null || echo ""
+}
+
+# compare_exact <expdir> <name> <kind> <log>   (S3 step 3)
+#   The expectation file names the baseset; the truth log is <root>/<baseset>/logs/<name>.log
+#   (the same pairing the temporal family reads its base log from). One line; 0 PASS, 1 FAIL.
+compare_exact() {
+    _ce_root="$(dirname "$1")"
+    _ce_spec="$1/$2.$3"
+    [ -f "$_ce_spec" ] || { echo "FAIL exact: $_ce_spec is not an exact spec (no such file)"; return 1; }
+    _ce_class="$(compare_spec_field "$_ce_spec" class)"
+    [ "$_ce_class" = exact ] || { echo "FAIL unknown exact class '$_ce_class'"; return 1; }
+    _ce_base="$(compare_spec_field "$_ce_spec" baseset)"
+    python3 -m bbx.compare_exact "$_ce_root/$_ce_base/logs/$2.log" "$4"
+}
+
+# compare_set <expdir> <name> <kind> <log> <scenario> <artifact>   (S3 step 3)
+compare_set() {
+    _cs_spec="$1/$2.$3"
+    [ -f "$_cs_spec" ] || { echo "FAIL set: $_cs_spec is not a set spec (no such file)"; return 1; }
+    [ -n "${5:-}" ] && [ -n "${6:-}" ] || { echo "FAIL set: the set family needs the scenario file and the artifact (compare_check's two trailing arguments)"; return 1; }
+    python3 -m bbx.compare_set "$_cs_spec" "$4" "$6" "$5"
+}
+
+# compare_schema <expdir> <name> <kind> <artifact>   (S3 step 3)
+compare_schema() {
+    _cm_spec="$1/$2.$3"
+    [ -f "$_cm_spec" ] || { echo "FAIL schema: $_cm_spec is not a schema spec (no such file)"; return 1; }
+    [ -n "${4:-}" ] || { echo "FAIL schema: the schema family needs the artifact (compare_check's trailing argument)"; return 1; }
+    python3 -m bbx.compare_schema "$_cm_spec" "$4"
 }
 
 # compare_temporal <expdir> <name> <spec> <runmask> <log>   (bbh: masked_check)

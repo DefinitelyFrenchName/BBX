@@ -23,13 +23,19 @@ of classes — the mechanism by which VampireSaved's 6 classes became 13 strings
     complete BOTH WAYS: a file with no row and a row naming a file that is gone both FAIL;
   * `testimony` never reads green (BBX-3: a filed count is not evidence) and `fixture` is counted
     as not evidence about a real subject — both reported by `--histogram`, which the readout
-    prints as "expectations relied upon".
+    prints as "expectations relied upon";
+  * when the expectation tree is inside a git work tree, every file a row names must be one git
+    TRACKS: an ignored or never-added expectation is present here and absent from every clone
+    (gotcha G22: three truth logs sat under a `*.log` ignore rule for a sitting — the working
+    tree's gates were green, a clean checkout's were red). Outside a work tree the check is
+    reported as not run, never as passed.
 Not asserted here: that a row's `class` is TRUE of its file — the register is written by hand
 at the freeze; this tool keeps it complete and inside the vocabulary. Exit 1 on any FAIL, 2
 when the register or the tree is unreadable.
 """
 import argparse
 import os
+import subprocess
 import sys
 
 from . import config as C
@@ -68,6 +74,19 @@ def read_register(path):
         seen.setdefault(f, tab)
         rows.append((tab, row))
     return rows, errs
+
+
+def tracked_of(exp_root):
+    """The set of files git tracks under exp_root (relative to it), or None outside a work tree / without git."""
+    try:
+        r = subprocess.run(["git", "-C", exp_root, "rev-parse", "--is-inside-work-tree"],
+                           capture_output=True, text=True)
+        if r.returncode != 0 or r.stdout.strip() != "true":
+            return None
+        r = subprocess.run(["git", "-C", exp_root, "ls-files", "-z", "--", "."], capture_output=True, text=True, check=True)
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    return set(os.path.normpath(f) for f in r.stdout.split("\0") if f)
 
 
 def histogram(rows, setname):
@@ -129,6 +148,18 @@ def main(argv=None):
             print(f"      {d}")
     if not missing and not dead:
         print(f"  ok: {len(files)} expectation files, {len(rows)} rows, complete both ways")
+    tracked = tracked_of(exp_root)
+    if tracked is None:
+        print("  not run: the expectation tree is not inside a git work tree (or git is absent) — whether a clone has every named file is not checked")
+    else:
+        untracked = sorted(f for f in named if f in files and os.path.normpath(f) not in tracked)
+        if untracked:
+            rc = 1
+            print(f"  FAIL: {len(untracked)} provenance row(s) naming a file git does not track (ignored or never added — a clone has none of them, G22):")
+            for u in untracked:
+                print(f"      {u}")
+        else:
+            print(f"  ok: every named file is tracked by git ({len(tracked)} tracked under {os.path.relpath(exp_root, root)})")
     print("== 2. every row names every field, one class of the eight, and no file twice (R11, R24)")
     if errs:
         rc = 1
