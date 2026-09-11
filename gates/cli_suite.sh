@@ -47,6 +47,9 @@ row()  { awk -F'\t' -v s="$1" -v k="$2" '$1 == s && $2 == k { print $5 }' "$LOGD
 rows() { tail -n +2 "$LOGDIR/results.tsv" 2>/dev/null | wc -l | tr -d ' '; }
 runv() { grep '^verdict=' "$LOGDIR/run.txt" 2>/dev/null | cut -d= -f2; }
 copy() { rm -rf "$W/$1"; cp -R "$F" "$W/$1"; }
+# keep <what> <dest> — the kept run copied aside. A suite that kept NO run is this gate's OWN FAIL, naming the suite's
+# output, never a bare `cp:` line from under `set -e` with no verdict of its own (G28, the bbx-16 learning).
+keep() { if [ -d "$LOGDIR" ]; then rm -rf "$2"; cp -R "$LOGDIR" "$2"; else fail "$1: the suite kept NO run at --log (exit $s); its output:"; printf '%s\n' "$out" | sed 's/^/        /'; exit 1; fi; }
 edit() { sed -i.bak "$2" "$1"; rm -f "$1.bak"; }   # in place, portable; the caller proves the edit applied
 
 echo "== 1. the tree's fixture: GREEN, every printed line frozen and classified, the kept run keyed (scenario, kind) =="
@@ -94,7 +97,7 @@ NOTE: band-fields 0
 NOTE: emitted-files 0
 SUITE GREEN
 WANT
-suite_ "$F"; printf '%s\n' "$out" > "$W/out.txt"; R1="$W/r1"; rm -rf "$R1"; cp -R "$LOGDIR" "$R1"
+suite_ "$F"; printf '%s\n' "$out" > "$W/out.txt"; R1="$W/r1"; keep 'the tree fixture run' "$R1"
 if [ "$s" = 0 ] && diff "$W/want.txt" "$W/out.txt" > "$W/diff.txt"; then ok "exit 0 and every printed line is the frozen text (43 lines: 12 pairings, 28 NOTEs, the set line, SUITE GREEN)"
 else fail "rc=$s; the printed text differs from the frozen text:"; head -12 "$W/diff.txt" | sed 's/^/        /'; fi
 n_lines=0; n_pass=0
@@ -114,7 +117,7 @@ v="$(BBX_CONFIG="$F/bbx.toml" python3 -m bbx.expectations kinds | awk -F'\t' '$3
 [ "$v" = "truth=log unordered=log schema=json band=bands " ] && ok "the views the loop handed the families, from the table's fourth column (D57): $v" || fail "views: '$v'"
 
 echo "== 2. twice (BBX-14): a second run at the same HEAD, and the readout's screen over both =="
-suite_ "$F"; R2="$W/r2"; rm -rf "$R2"; cp -R "$LOGDIR" "$R2"
+suite_ "$F"; R2="$W/r2"; keep 'the second run (BBX-14)' "$R2"
 [ "$s" = 0 ] && cmp -s "$R1/results.tsv" "$R2/results.tsv" && cmp -s "$R1/notes.tsv" "$R2/notes.tsv" && [ "$(printf '%s\n' "$out")" = "$(cat "$W/out.txt")" ] && ok "the second run: exit 0, results.tsv, notes.tsv and the printed text byte-identical to the first" || fail "second run rc=$s; results differ: $(diff "$R1/results.tsv" "$R2/results.tsv" | head -3 | tr '\n' ';')"
 if python3 -m bbx.readout "$R2" --against "$R1" > "$W/screen.txt" 2>&1; then ok "bin/bbx readout <run2> --against <run1>: exit 0 (GREEN and BBX-14 met)"; else fail "readout exit $? on a green pair: $(head -3 "$W/screen.txt" | tr '\n' '|')"; fi
 want() { grep -q -- "$2" "$W/screen.txt" && ok "$1" || fail "$1 — missing '$2'"; }
