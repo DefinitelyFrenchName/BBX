@@ -99,10 +99,10 @@ echo "-- crash-vs-exit --"
 copy_scenario 01_list '"list", "--crash-at", "3"' "$W/crash.cli"
 if cmp -s "$W/crash.cli" "$SC/01_list.cli"; then fail "CONTROL DEAD: crash-vs-exit — the perturbation did not apply"; else
     drv "$F/subject" "$W/crash.cli" "$W/crash.log"
-    if [ "$s" = 2 ] && [ "$(tail -1 "$W/crash.log")" = "END-CRASH 3" ] && [ "$(tail -2 "$W/crash.log" | head -1)" = "CRASH signal:6:SIGABRT" ] \
+    if [ "$s" = 2 ] && [ "$(tail -1 "$W/crash.log")" = "END-CRASH 3" ] && [ "$(tail -2 "$W/crash.log" | head -1)" = "CRASH signal:9:SIGKILL" ] \
        && [ "$(grep -c '^[0-9]* line:' "$W/crash.log")" = 3 ] && [ "$(token_at "$W/crash.log" 3)" = "$(token_at "$W/01_list.1.log" 3)" ] \
        && [ "$(head -1 "$W/05_exit_1.1.log")" = "0 exit:1" ] && cmp -s "$W/05_exit_1.1.log" "$TRUTH/05_exit_1.log"; then
-        echo "CONTROL FIRED: crash-vs-exit — --crash-at 3: exit 2, the log ends CRASH signal:6:SIGABRT / END-CRASH 3 with the 3 lines before the death kept (line 3 the truth's); 05_exit_1: exit 0, '0 exit:1' first, equal to its truth"
+        echo "CONTROL FIRED: crash-vs-exit — --crash-at 3: exit 2, the log ends CRASH signal:9:SIGKILL / END-CRASH 3 with the 3 lines before the death kept (line 3 the truth's); 05_exit_1: exit 0, '0 exit:1' first, equal to its truth"
     else fail "CONTROL DEAD: crash-vs-exit — exit $s: $out; log: $(cat "$W/crash.log" 2>&1 | tail -3 | tr '\n' ' ')"; fi; fi
 echo "-- wrong-truth --"
 sed 's/^0 exit:2$/0 exit:0/' "$TRUTH/06_unknown_option.log" > "$W/truth06.log"

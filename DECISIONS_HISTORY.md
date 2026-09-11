@@ -940,3 +940,73 @@ lives — bbh `[BBH-9]`).
   next most valuable thread is step 5 (the two adapters, R37/R38), the part
   of S4 with no precedent in the tree; R41's answer is a one-line change in
   two gates whenever it comes.
+
+## bbx-17 — Two rulings and no step: R41 answered against the recommendation (both writers of `band-fields` kept); R42 raised from the maintainer's own crash reports and answered — the fixture's deliberate death changed from `os.abort()` to SIGKILL (2026-09-11)
+
+- Opened on the bbx-16 HEAD `d49294b` with the battery GREEN (28 gates,
+  105/105 controls, no tracked file changed —
+  `build/selftest_20260911T185841Z`), the re-derivation step of the ritual.
+  Two drift NOTEs as the handoff predicted, with bbh now `777dbde`, three
+  past the baseline `10a82d2` (it was two at the bbx-16 close; it moved
+  again during the sitting), and VampireSaved 35 ahead. Both reported, not
+  required equal (R18, R28).
+- **R41 answered against the contributor's recommendation.** The maintainer
+  ruled BOTH writers of the `band-fields` NOTE kept, as printed. Measured
+  before the ruling rather than quoted from the queue: on a band PASS both
+  print `NOTE: band-fields 1`; with the frozen band narrowed to [236, 240]
+  against the measured 265 the comparator prints its FAIL and no NOTE while
+  the summary still prints one; over a scenario with no band the comparator
+  never runs and the summary prints `band-fields 0`. One fact the raising
+  session had not recorded and that the ruling now rests on: the two counts
+  CANNOT disagree under this driver, which writes the log's band tokens and
+  the band view from one list in one run — the duplicate is one number by
+  two routes, not a cross-check. Nothing printed changed; the provisional
+  wording came off two gates, the plan and the slice table, the comparator's
+  docstring gained the reason its NOTE has a twin so nobody retires it as a
+  bug, and the suite gate's blind-spot line became the residual one (that no
+  check compares the two routes). No retraction row: BBX-22 was asked and
+  answered no — a recommendation was declined, and no wording BBX had stated
+  as a current fact turned out false.
+- **R42 raised by the maintainer, not by a gate.** The maintainer reported
+  seeing Python crashes for a couple of days and had traced them to BBX
+  sessions. A witness, not an instrument (BBX-28), so the archaeology came
+  first (BBX-23): zero Python crash reports on this host before 19:53 local
+  on 2026-09-10 across about forty kept battery runs, then 23 that evening
+  and 2 the next day, the first inside the sitting that built `--crash-at`
+  (bbx-14). The cause was BBX's own must-fire controls: the fixture tool's
+  `--crash-at` called `os.abort()`, and macOS files a crash report for every
+  SIGABRT. Nothing was broken and no gate was wrong — the defect was that
+  the artifact fell OUTSIDE the sandbox the driver promises to remove, and
+  no line of the contract declared it; the harm was that a genuine Python
+  crash now hid among deliberate ones. Measured both ways before
+  recommending (BBX-5): the tool's own `--crash-at 1` left exactly one new
+  report, the same process killed with SIGKILL left none; then the whole
+  driver path on a copy under TMPDIR, where the two crash logs differed by
+  ONE line, the signal's name. Ruled as recommended: the fixture dies by
+  SIGKILL. The naming of signal 6 stays under test in `bbx.cli`'s self-test,
+  which spawns no process, and the host artifact is now DECLARED in the
+  driver's contract because a real subject that faults will still leave one.
+- The plan was corrected FIRST in its own commit (BBX-19, X25) before the
+  change landed, as at bbx-15 and bbx-16.
+- **One incident of the contributor's own (G31).** R42's change was applied
+  by a script whose pattern for `os.abort()` was anchored on twelve spaces
+  of indentation; the generated tool's DOCSTRING carried the same call
+  under twenty-two, so the pattern matched there too and spliced a code
+  comment into a prose sentence. Four gates, the whole portable tier in a
+  shadow and one complete green battery passed over it, because
+  `mkfakecli.py --check` proves the tool EQUALS its generator and both were
+  corrupted identically — currency, not correctness (§3.3, G26's family).
+  Found by reading the staged diff, a step no gate performs. The running
+  battery was stopped rather than finished on text known to be wrong, and
+  the close's two runs were restarted on the repaired tool. A generated
+  artifact's prose is asserted by nothing BBX has; the mechanism that would
+  have caught it is written into G31 for S6.
+- **Anti-hyperfocus (BBX-27).** The sitting's planned work was S4 step 5,
+  the adapters. It was displaced twice, by a ruling and then by a maintainer
+  report, and neither displacement was the contributor's choice to make: a
+  witness that the harness is damaging its host outranks the next feature,
+  and R41 blocked nothing but cost one exchange. Step 5 is untouched and is
+  the next sitting's work. The last green is treated as meaning what it
+  says: 28 gates on macOS only, with R21's platform run still absent, and
+  the new `.ips` count is measured for this sitting, not gated — S6's
+  candidate mechanism is written into G30.

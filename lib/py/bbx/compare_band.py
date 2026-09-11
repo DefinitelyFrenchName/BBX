@@ -21,6 +21,12 @@ the field's own unit (the subset refuses floats; a fractional band is a consumer
 inventory is compared BOTH WAYS before any value: a frozen field the view lacks and a view field nobody
 froze each FAIL naming it — a band nobody froze is a tolerance nobody ratified (BBX-13).
 
+TWO WRITERS OF `band-fields`. This NOTE and the log summary's (`bbx.cli summary`, D43) both print the key, so a band
+scenario's screen carries the number twice; RULED KEPT as printed (R41, 2026-09-11 — the contributor recommended
+retiring this one, the maintainer declined). They cannot disagree under drivers/cli.sh, which writes the log's band
+tokens and the band view from one list in one run; nothing compares them for a driver that would write them apart.
+This line is printed after a PASS only — a band FAIL leaves the summary's as the only count.
+
 Verdicts (stdout; the text is FROZEN by gates/band.sh — C4 with no ancestor):
   PASS band (<n> field(s), every value inside its band)          + `NOTE: band-fields <n>`
   FAIL band <field>: <v> outside [<min>, <max>]

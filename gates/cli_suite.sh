@@ -9,7 +9,7 @@
 # Every printed line of the green run is frozen here and classified by finding.py (C4 with no ancestor: the gate is the
 # freeze). bbh's precedence loop is not touched by this gate: gates/fidelity_bbh_s2.sh's F12, unchanged and green, is the
 # control that nothing moved for bbh. The `band-fields` key is printed TWICE for 04_band — by the comparator (R36) and by
-# the log summary (D43): two writers of one key, frozen here as printed and queued as ruling R41.
+# the log summary (D43): two writers of one key, RULED KEPT (R41, 2026-09-11) and frozen here as an intended screen.
 # No instrument. Portable, ~95 s (real 95.3 measured 2026-09-10 on this host: 15 suite runs of 9 scenarios twice each, python start-up dominated).
 # Usage: gates/cli_suite.sh
 # MUST-FIRE: shadow-tool: identity-before-any-scenario — one byte changed in a copied fakecli.py must make the suite exit 1 as UNREGISTERED with no scenario row kept, and the copy restored must resolve to the registered set and be GREEN again, or a changed tool is compared against the fixture's expectations (S2, BBH-67)
@@ -23,7 +23,9 @@
 # NOT-ASSERTED: bbh's precedence loop and its printed text: gates/fidelity_bbh_s2.sh (F12) and gates/suite.sh; the document-set kind's loop: gates/docset_suite.sh
 # NOT-ASSERTED: the verdict text of the families beyond the lines frozen here: gates/band.sh, gates/json_schema.sh, gates/set_schema.sh
 # NOT-ASSERTED: the readout screen beyond the lines checked here (the verdict, the register's histogram, the classes, the notes, BBX-14, the driver's blind spots): gates/readout.sh
-# NOT-ASSERTED: which of the two writers of `band-fields` the screen should keep (R41, open): both are frozen here as printed
+# NOT-ASSERTED: that the two writers of `band-fields` AGREE: both counts trace to one `bands` list written once by
+#   drivers/cli.sh (measured bbx-17), so the duplicate is one number by two routes and nothing here compares them
+#   for a driver that would write the log and the band view apart (R41: both writers kept)
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME
@@ -106,7 +108,7 @@ done < "$W/out.txt"
     && ok "kept: 12 rows keyed (scenario, kind), schema first then the table's order (truth, unordered, band)" || fail "kept rows: $(tail -n +2 "$LOGDIR/results.tsv" | cut -f1,2 | tr '\n' ';')"
 [ "$(tail -n +2 "$LOGDIR/results.tsv" | cut -f3 | sort -u | tr '\n' ' ')" = "band exact multiset schema " ] && [ "$(tail -n +2 "$LOGDIR/results.tsv" | cut -f5 | sort -u)" = pass ] && ok "kept: the class column reads the spec's class (band, exact, multiset, schema); every finding pass" || fail "kept classes/findings: $(tail -n +2 "$LOGDIR/results.tsv" | cut -f3,5 | sort -u | tr '\n' ';')"
 [ "$(tail -n +2 "$LOGDIR/notes.tsv" | wc -l | tr -d ' ')" = 28 ] && [ "$(grep -c "^04_band	band-fields	1$" "$LOGDIR/notes.tsv")" = 2 ] && grep -q "^07_emit_file	emitted-files	1$" "$LOGDIR/notes.tsv" && grep -q "^05_exit_1	exit	1$" "$LOGDIR/notes.tsv" && grep -q "^06_unknown_option	exit	2$" "$LOGDIR/notes.tsv" \
-    && ok "kept: notes.tsv 28 rows (scenario, key, value) — exit / band-fields / emitted-files per scenario (D43, D44); 04_band's band-fields 1 kept TWICE, from the comparator and from the summary (two writers of one key: R41)" || fail "notes.tsv: $(cat "$LOGDIR/notes.tsv" | tr '\n' ';')"
+    && ok "kept: notes.tsv 28 rows (scenario, key, value) — exit / band-fields / emitted-files per scenario (D43, D44); 04_band's band-fields 1 kept TWICE, from the comparator and from the summary (two writers of one key, ruled kept: R41)" || fail "notes.tsv: $(cat "$LOGDIR/notes.tsv" | tr '\n' ';')"
 grep -q '^loop=kinds$' "$LOGDIR/run.txt" && [ "$(runv)" = GREEN ] && grep -q '^pass=12$' "$LOGDIR/run.txt" && grep -q '^expset=fixture$' "$LOGDIR/run.txt" && ok "kept: run.txt loop=kinds, expset=fixture, pass=12, verdict=GREEN" || fail "run.txt: $(grep -E '^(loop|verdict|pass|expset)=' "$LOGDIR/run.txt" | tr '\n' ' ')"
 v="$(BBX_CONFIG="$F/bbx.toml" python3 -m bbx.expectations kinds | awk -F'\t' '$3 == "EVAL" { printf "%s=%s ", $1, $4 }')"
 [ "$v" = "truth=log unordered=log schema=json band=bands " ] && ok "the views the loop handed the families, from the table's fourth column (D57): $v" || fail "views: '$v'"
@@ -125,7 +127,7 @@ want "the exit status on the screen, per scenario" "^  note: 06_unknown_option: 
 want "the emitted files on the screen" "^  note: 07_emit_file: emitted-files 1$"
 want "BBX-14 met over pairings" "^  BBX-14 (more than one run): met — 12 pairings, 0 verdict differences against the run started "
 want "the driver's blind spots on the screen (RO2)" "^  driver cli.sh: performance, behaviour on inputs outside the scenarios, and anything the tool wrote that the scenario did not declare"
-[ "$(grep -c '^  note: 04_band: band-fields 1$' "$W/screen.txt")" = 2 ] && ok "the duplicate is on the screen too: 04_band's band-fields line twice (R41's visible cost, not hidden)" || fail "band-fields lines on the screen: $(grep -c 'band-fields 1' "$W/screen.txt")"
+[ "$(grep -c '^  note: 04_band: band-fields 1$' "$W/screen.txt")" = 2 ] && ok "the duplicate is on the screen too: 04_band's band-fields line twice (R41: ruled kept, visible by design)" || fail "band-fields lines on the screen: $(grep -c 'band-fields 1' "$W/screen.txt")"
 
 echo "== 3. --freeze on a copy: every kind authored, nothing written =="
 copy fz; (cd "$W/fz" && find . -type f -exec cksum {} + | sort > "$W/fz.before")
@@ -166,7 +168,7 @@ copy rk; edit "$W/rk/scenarios/01_list.cli" 's/^args = \["list"\]$/argz = ["list
 if ! grep -q -- '--crash-at' "$W/cr/scenarios/01_list.cli" || ! grep -q '^argz = ' "$W/rk/scenarios/01_list.cli"; then fail "CONTROL DEAD: crash-vs-refusal — a scenario edit did not apply"; else
     c6=0
     suite_ "$W/cr"
-    [ "$s" = 1 ] && has "^01_list                  cli.py: the tool died by signal 6 (SIGABRT) after 3 points: exit 2, the log .* is the bug report (END-CRASH)$" && has "^RUN-FAIL$" && [ "$(row 01_list -)" = run-fail ] && [ "$(grep -c '^01_list' "$LOGDIR/results.tsv")" = 1 ] && [ "$(grep -c '^01_list' "$LOGDIR/notes.tsv")" = 0 ] && [ "$(row 02_unordered truth)" = pass ] && [ "$(rows)" = 12 ] && has "^SUITE RED$" && c6=1 || fail "--crash-at 3: rc=$s $(printf '%s' "$out" | sed -n '2,3p' | tr '\n' '|')"
+    [ "$s" = 1 ] && has "^01_list                  cli.py: the tool died by signal 9 (SIGKILL) after 3 points: exit 2, the log .* is the bug report (END-CRASH)$" && has "^RUN-FAIL$" && [ "$(row 01_list -)" = run-fail ] && [ "$(grep -c '^01_list' "$LOGDIR/results.tsv")" = 1 ] && [ "$(grep -c '^01_list' "$LOGDIR/notes.tsv")" = 0 ] && [ "$(row 02_unordered truth)" = pass ] && [ "$(rows)" = 12 ] && has "^SUITE RED$" && c6=1 || fail "--crash-at 3: rc=$s $(printf '%s' "$out" | sed -n '2,3p' | tr '\n' '|')"
     suite_ "$W/rk"
     [ "$s" = 1 ] && has "^01_list                  REFUSED: drivers/cli.sh cannot honour scenario key 'argz' (the keys are args, stdin, stdin_file, cwd, emits, bands, fields (D46; an option the tool does not define is refused, never ignored))$" && has "^RUN-FAIL$" && [ "$(row 01_list -)" = run-fail ] && [ "$(grep -c '^01_list' "$LOGDIR/notes.tsv")" = 0 ] && [ "$(row 09_env truth)" = pass ] && has "^SUITE RED$" && c6=$((c6 + 1)) || fail "argz: rc=$s $(printf '%s' "$out" | sed -n '2,3p' | tr '\n' '|')"
     [ "$(awk -F'\t' '$1 == "05_exit_1" && $2 == "truth" { print $5 }' "$R1/results.tsv")" = pass ] && grep -q "^05_exit_1	exit	1$" "$R1/notes.tsv" && [ "$(awk -F'\t' '$1 == "06_unknown_option" && $2 == "truth" { print $5 }' "$R1/results.tsv")" = pass ] && grep -q "^06_unknown_option	exit	2$" "$R1/notes.tsv" && c6=$((c6 + 1)) || fail "the tool's own non-zero exits did not PASS in the green run"

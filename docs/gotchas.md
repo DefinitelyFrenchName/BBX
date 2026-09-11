@@ -483,3 +483,64 @@ Mechanism candidate for S6's rot-gate queue, with G19, G24 and G27: a close
 gate over every header's quoted counts (`~N s`, `N suite runs`, `N controls`)
 against the kept logs' NOTE lines. Rule re-anchored in fact: §1 ("an
 unmeasured figure is a guess wearing a citation").
+
+## G30 — A must-fire control wrote an artifact OUTSIDE the sandbox and nothing declared it: the fixture's deliberate `os.abort()` made macOS file a crash report in the maintainer's home on every battery, ~25 of them in two days, until the maintainer reported it as a witness (paid: 1 maintainer report, 1 battery, 2 probe runs and 1 shadow build; 2026-09-11)
+The maintainer, who cannot read the code, reported seeing Python crashes "for
+a couple of days" and had already traced their origin to BBX sessions. A
+witness, not an instrument (BBX-28), so it was converted into a reproducible
+case before any theory: the archaeology first (BBX-23) — zero Python crash
+reports before 19:53 local on 2026-09-10 across about forty kept battery
+runs, then 23 that evening and 2 the next day, the first falling inside the
+sitting that built `--crash-at` (bbx-14). The mechanism, then measured both
+ways rather than read off the code (BBX-5): the fixture tool's `--crash-at 1`
+left exactly ONE new `.ips` report, the same process killed with SIGKILL left
+NONE. Nothing was broken — the control was correct, the driver caught the
+death, the gate asserted on it. The defect was in what nobody had written
+down. `drivers/cli.sh` promises its sandbox is removed after the run and its
+NOT-ASSERTED lines enumerate the undeclared artifacts a tool may leave (a
+file outside `emits`, a socket, the clock, the terminal); the crash report is
+written by the OPERATING SYSTEM, outside that sandbox, into the maintainer's
+home, and outlives the run. The harm was never a broken gate: it was that a
+GENUINE Python crash now hid among deliberate ones, and the maintainer was
+being trained to ignore the reports — BBX-6's silent-failure concern in
+mirror image, a live control indistinguishable from a defect. Fixed under
+R42 by dying with SIGKILL, measured to exercise the same driver path (exit 2,
+the same three lines kept, the two crash logs differing only in the signal
+name) and to leave no report; the naming of signal 6 stays under test in
+`bbx.cli`'s self-test, which spawns no process. The blind spot itself is now
+declared in the driver's contract, because a REAL subject that dies by a
+fault signal will still leave one. Learning (R27): a harness is a program
+that runs on somebody's machine, and a control's blast radius stops at the
+sandbox only for the artifacts the harness itself writes — what the OS writes
+ON THE SUBJECT'S BEHALF (a crash report, a core file, a system log entry, a
+quarantine record) escapes it, so a driver contract lists what the HOST
+records about a run, not only what the run records. Mechanism candidate for
+S6: a gate that counts `~/Library/Logs/DiagnosticReports/*.ips` across a
+battery and fails on any BBX-caused growth — the negative control this
+incident never had. A hazard line in `HANDOFF.md`. Rules re-anchored in fact:
+BBX-28 (the witness converted before the theory), §3.2/BBX-30 (a green that
+hides what it does to the host is a lie of omission).
+
+## G31 — An edit pattern anchored on indentation matched a LONGER line with the same tail and corrupted the generated tool's docstring; every gate passed, because nothing checks a generated file's prose (paid: 1 close battery stopped 1.5 min in and the close's two runs restarted; 2026-09-11)
+R42's change was applied by a script whose second replacement was
+`"            os.abort()"` — twelve spaces and the call. The generated tool's
+DOCSTRING carried the same call under twenty-two spaces, so the twelve-space
+pattern matched inside it as a substring and rewrote the prose line into a
+splice of a comment and half a sentence. The tool still ran, so
+`mkfakecli.py --check` said ok (it proves the tool EQUALS the generator's
+output, and the generator had been corrupted identically: currency, not
+correctness — §3.3, G26's family), `gates/cli_fixture.sh` passed on its nine
+predicates, both crash gates fired, the whole portable tier was GREEN in the
+shadow and one close battery was GREEN in the tree. The defect was found by
+READING THE STAGED DIFF before the commit, by a human-shaped step no gate
+performs. Learnings (R27), two: an edit pattern must be anchored on something
+UNIQUE — a leading `\n` plus the exact indent, or the surrounding line — never
+on an indent that a deeper line also contains; and a generated artifact's
+PROSE is outside every check BBX has, so a generator's docstring, usage text
+and comments are asserted by nobody and rot silently. Mechanism candidate for
+S6, beside G19/G24/G27/G29: the fixture's `--check` compares the tool to the
+generator, and a second, lineage-independent assertion — the design's option
+list against the docstring's option list, both ways — would have caught this
+in the same run. Rules re-anchored in fact: §3.3 (a measurement on our own
+build locks currency, never correctness) and BBX-30 (this green did not
+assert what its own subject's text says).

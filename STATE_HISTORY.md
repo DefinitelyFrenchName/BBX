@@ -385,3 +385,32 @@ close's two runs GREEN on `9567d7c` with the step staged (BBX-14 met): **27 gate
 98/98 controls** (`build/selftest_20260910T193009Z`, `build/selftest_20260910T193718Z`).
 Fidelity F12–F17 diff empty on the plain clone at `10a82d2`. bbh's tip
 `447e5d2`, a NOTE. Defaults D1–D56. Gotchas G1–G27. Retractions X1–X21.
+
+## bbx-17 (2026-09-11)
+
+**Status (bbx-16 close, 2026-09-10):** slices S1 (but for R21's platform run)
+and S2 complete; **S3 DONE** (ruled by the maintainer 2026-09-10, for the
+document-set kind as a fixture). **S4 steps 1–4 built** (`docs/plans/S4.md`
+§8.1–8.4; the readout's bbx-13 … bbx-16 sections): the `command-line` kind
+profile (D45), the `.cli` grammar (D46), the token vocabulary (D47), the `band`
+and JSON `schema` shapes (D48, D49), `fixture/fakecli/` (D50) and
+`gates/cli_fixture.sh` at bbx-13; the driver (`bbx.cli`, `drivers/cli.sh`,
+D51–D53) and `gates/cli_driver.sh` at bbx-14; the comparators over a
+command-line log (`compare_band.py`, the json format, the line row shape, the
+JSON view D54, D55–D56) with `gates/band.sh` and `gates/json_schema.sh` at
+bbx-15; at bbx-16 **the suite over the fixture** — the kinds table's VIEW
+column (D57: `-` / `log` / `subject` / `json` / `bands`), read by
+`bin/bbx-run-suite` and resolved in one function (`view_path`) after the
+identity and before any scenario runs, handed to every family as its artifact
+(the band branch derives no path any more); `gates/cli_suite.sh` (7 controls,
+43 printed lines frozen, ~99 s). The plan corrected first in `3d98d1d`
+(X22–X24: the loop is not unchanged — 29 lines added, 5 removed; the band
+branch; the screen's class words and `fixture 21`). **R41 raised** (open): the
+comparator and the log summary both print `NOTE: band-fields <n>` — the screen
+shows one number twice, frozen as printed until ruled. The four S2/S3
+dispatcher functions untouched (measured). `bin/bbx selftest` GREEN at the
+open on `4a5cc61` (`build/selftest_20260910T195936Z`: 27 gates, 98/98); the
+close's two runs GREEN on `3d98d1d` with the step staged (BBX-14 met): **28 gates,
+105/105 controls** (`build/selftest_20260910T203200Z`, `build/selftest_20260910T204058Z`).
+Fidelity F12–F17 diff empty on the plain clone at `10a82d2`. bbh's tip
+`02d58f3`, two past the baseline (it moved during the sitting), a NOTE. Defaults D1–D57. Gotchas G1–G29. Retractions X1–X24.

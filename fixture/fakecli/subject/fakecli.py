@@ -14,7 +14,8 @@ and nothing else. Every feature is an OPTION (a tool's contract is its command l
     fakecli.py report --emit <file>               writes <file> (the records as JSON) and says so
   feature options (any command):
     --nondet          appends `now=<nanoseconds>` — the clock mixed in (the NONDETERMINISTIC control)
-    --crash-at <n>    dies by SIGABRT (os.abort) after the n-th stdout line (the guard's control)
+    --crash-at <n>    dies by SIGKILL after the n-th stdout line (the guard's control; it died by SIGABRT
+                      until R42, which the HOST reported as a crash on every run — outside the sandbox)
     --write-home      writes $HOME/.fakecli first (the sandbox control)
     --sleep <s>       sleeps s seconds first (the timeout control)
   refusals (SMS cliguard's shape: one stderr line naming the thing, exit 2; an unknown record exit 1):
@@ -25,6 +26,7 @@ and nothing else. Every feature is an OPTION (a tool's contract is its command l
 """
 import json
 import os
+import signal
 import sys
 import time
 
@@ -53,7 +55,7 @@ class Out:
         sys.stdout.flush()
         self.n += 1
         if self.crash_at is not None and self.n >= self.crash_at:
-            os.abort()
+            os.kill(os.getpid(), signal.SIGKILL)   # not os.abort(): SIGABRT makes the host write a crash report (R42)
 
 
 def parse(argv):

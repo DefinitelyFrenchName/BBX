@@ -40,6 +40,10 @@
 # emitted file not produced, a non-UTF-8 output, the timeout, the self-test): the run is DISCARDED.
 #
 # NOT-ASSERTED: performance, behaviour on inputs outside the scenarios, and anything the tool wrote that the scenario did not declare — a file not in `emits`, a socket, the clock, the terminal — are not observed
+# NOT-ASSERTED: what the HOST records about a signal death: a subject that dies by a FAULT signal (SIGABRT, SIGSEGV,
+#   SIGILL, SIGBUS, SIGTRAP, SIGFPE, SIGSYS) makes the operating system write a crash report OUTSIDE the sandbox
+#   (on macOS ~/Library/Logs/DiagnosticReports) which this driver neither creates nor removes — the sandbox's
+#   removal does not reach it, and the fixture's own control dies by SIGKILL for exactly that reason (R42, G30)
 # NOT-ASSERTED: that a tool which reads its environment declares every variable it reads: only the [env] table reaches it, and a variable it silently needed is a run under D6's set, not a refusal
 set -eu
 SET="${1:?usage: cli.sh <set> <scenario.cli> <out.log> [sandbox]}"
