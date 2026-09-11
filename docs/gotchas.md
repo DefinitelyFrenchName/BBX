@@ -619,3 +619,41 @@ the wrong view yields plausible garbage, not an error). A hazard line in
 `HANDOFF.md`. Rules re-anchored in fact: §1 (contamination, discard and
 re-measure), BBX-16 (plausible garbage), BBX-12 (parse by name, not position —
 the pipeline read "the first 40-hex thing" instead of the three named trees).
+
+## G34 — BBX-9 is met in ONE direction: a registered-but-absent gate FAILS the run, while a gate on disk in no registry is merely NAMED and the battery still reads GREEN — and the runner cannot be fixed without breaking the fidelity obligation (paid: 4 measurements and one probe planted in `gates/` and removed, ~5 min; 2026-09-11)
+Found while designing the `selfgates` fixture, whose 8th stub file is on disk
+in no registry "for the anti-orphan check" — the question was what that file
+makes OBSERVABLE, and the answer is nothing.
+Measured, in four steps. `bbx tier <config> --unregistered` exits **0** in all
+three states: a complete registry ("ok: every instrument-free gate is
+registered"), a registry with three orphans (it names them), and a registry
+with a dead row (it names the rest). An orphan planted in BBX's OWN `gates/`
+was NAMED by the tool and `gates/tier.sh` PASSed with it present; the probe was
+removed and `git status` came back clean. A dead row, by contrast, becomes a
+`MISSING` row and `rc=1` (measured on a throwaway consumer: `PASS 3 SKIP 1
+FAIL 1 MISSING 1`, exit 1). Read in `bin/bbx-run-static`: `rc` is computed from
+`n_fail`, `n_miss`, `--strict`'s `n_skip` and the controls block, and the
+orphan list is PRINTED and never read; the only other reader in the tree is
+`gates/tier.sh`, which asserts the naming on a SYNTHETIC tree under `TMPDIR`,
+never on BBX's own gates directory.
+Nothing is broken today: BBX's registry is complete, measured above. What is
+missing is the ability to fail — "a check that cannot fail where it should is
+not evidence" (§1), and BBX-9 says an unregistered item and a dead row BOTH
+fail.
+The interesting part is why it cannot simply be fixed. The runner's text and
+its verdict are bbh's, and F13's fidelity pairs run bbh's runner and BBX's
+runner over a synthetic repo that CONTAINS an orphan and diff what they print.
+Making BBX's runner fail on an orphan would change that text, that exit, or
+both, and the fidelity obligation (CLAUDE.md §2, §7.2) outranks the
+convenience of fixing it there. So the verdict has to live in a gate of BBX's
+own, over BBX's own config, leaving the lineage's runner untouched — raised as
+R45 with that recommendation, because adding a gate changes what the battery
+asserts and that is the maintainer's to rule (§3.1).
+Learning (R27): a rule can be half-implemented by a tool that reports both
+directions and enforces one, and the report reads like enforcement on a screen
+— `== registry coverage (the anti-orphan check) ==` is a heading that promises
+a check. When a rule's two directions live in one printed block, measure the
+EXIT of each direction separately; a shared heading is not a shared verdict.
+Rules re-anchored in fact: BBX-9 (complete both ways — the orphan direction is
+unenforced), §1 (a check that cannot fail is not evidence), BBX-6 (the silent
+failure mode is a control that no longer fires — here, one that never could).
