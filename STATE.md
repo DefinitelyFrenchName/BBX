@@ -83,7 +83,7 @@ exposed (G13, rule 7), the only exception ever allowed to move it upward. Gramma
 
 **Next:** **S4 step 5** (`docs/plans/S4.md` §8.5), untouched by this sitting:
 the two adapters `drivers/unittest.sh` and `drivers/gates.sh` over the same
-`bbx.cli` core (R37), `fixture/fakecli/tests/` and `fixture/selfgates/` (R38:
+`bbx.cli` core (R37), `fixture/unittest/` and `fixture/selfgates/` (R38:
 BBX's own runners as a subject, the `command` identity), `gates/adapters.sh`.
 First small fix, still open from bbx-16 (G28): the two suite gates guard the
 kept run's existence before copying it. A framework that dies by a FAULT

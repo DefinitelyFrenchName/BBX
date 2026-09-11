@@ -588,3 +588,34 @@ have failed on 2026-09-10, the day the re-baseline landed. Rules re-anchored
 in fact: BBX-9 (a registry is complete both ways or it is a smaller thing to
 forget), BBX-10 (stale reference, rot class 4 — found by maintenance, not by
 a failure), §3.3 (identical output locks currency, never correctness).
+
+## G33 — `git rev-parse "$c:lib"` in this session's shell measured a key for TWO of three trees and printed a plausible 40-hex digest: zsh applied `:l` to the variable and `HEAD:lib` reached git as `headib` (paid: 1 measurement discarded and re-run under `/bin/sh`, ~2 min; 2026-09-11)
+Measuring R38's identity command across four commits, the loop printed three
+different 40-hex keys — plausible, distinct, and wrong. `git` had said so:
+`fatal: ambiguous argument 'headib': unknown revision or path not in the
+working tree`, one line per iteration, mixed into the output. The mechanism,
+reproduced on purpose rather than guessed: this session's shell is zsh, where a
+bare `$c:lib` applies the history modifier `:l` (lowercase) to `$c` and leaves
+the rest of the word, so `HEAD:lib` becomes `head` + `ib` = `headib`. It
+happens INSIDE double quotes too. `$c:bin` and `$c:drivers` are untouched,
+because `b` and `d` are not modifiers here — which is the dangerous part: git
+resolved two of the three arguments, printed their hashes to stdout, exited
+non-zero, and the pipeline hashed what it got. Measured forms: `$c:lib` →
+`headib`; `${c}:lib` and `"$c":lib` → `HEAD:lib`; `/bin/sh -c` → `HEAD:lib`.
+The numbers were discarded, not adjusted (§1: a number produced with tooling
+later found defective is contaminated), and re-measured under `/bin/sh`: the
+program key is ONE value across the last four commits, because none of them
+touched `bin`, `lib` or `drivers`.
+Nothing in the harness is exposed: `command_key` in `fingerprint.py` checks the
+command's exit status and refuses a non-zero one, the identity command lives in
+a TOML string that `subprocess` runs through `/bin/sh`, and every gate is
+`#!/bin/sh`. The exposure is the contributor's own hand at the terminal, which
+is where G9's ugrep lives too. Learning (R27): the interactive shell is not an
+instrument — a number for a document is measured through `/bin/sh -c` or a
+file, never through a zsh one-liner — and git's own `fatal:` on stderr was the
+detector, so a loop whose stderr is discarded or whose `|| true` swallows the
+status can print a full column of plausible garbage (BBX-16's shape: reading in
+the wrong view yields plausible garbage, not an error). A hazard line in
+`HANDOFF.md`. Rules re-anchored in fact: §1 (contamination, discard and
+re-measure), BBX-16 (plausible garbage), BBX-12 (parse by name, not position —
+the pipeline read "the first 40-hex thing" instead of the three named trees).
