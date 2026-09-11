@@ -83,8 +83,12 @@ Not a fourth kind: BBX's own tree driven through kinds A and B. Its documents
 (`docs/census/*.md`, `docs/bins.md`, every readout) are a document set whose
 claims are the counts, re-derived by the commands beside them — the recount
 gate (R9) is the first instance and the first gate BBX runs; its gates,
-runners and registries are command-line subjects whose observations are their
-own verdict lines and anti-orphan reports. The maintainer's condition is
+runners and registries are command-line subjects whose observations are the
+verdict ROWS of a kept run, read by column name. NOT the anti-orphan report:
+measured at bbx-18 (G34), the runner NAMES a gate that is in no registry and
+exits 0 all the same, so no token of the self subject carries it and BBX-9's
+orphan direction is unenforced until R45 is answered (corrected here, BBX-19,
+retraction X35). The maintainer's condition is
 "without degrading its rules": a self-validation gate is subject to G3 (its
 controls must fire), and the custodian outside the loop is bbh — the fidelity
 rows are what a shared convention error cannot fool (BBX-15). On every
@@ -100,6 +104,27 @@ candidates are chosen when slice S4 opens, from what the first real consumer
 already uses. What the adapter does NOT assert: that the framework's tests
 are good — it asserts that they ran, deterministically, and produced the
 frozen observation.
+
+**Built at bbx-18 (S4 step 5), and here is what it measures.** R37's two
+frameworks are Python's `unittest` (`drivers/unittest.sh`) and BBX's own static
+runner through its own dispatcher (`drivers/gates.sh`), both drivers of kind B
+over one core — `lib/py/bbx/cli.py`'s sandbox, hermetic environment, recording,
+timeout and log grammar, which now has three consumers, so BBX-25 is met for the
+core with one to spare. Each maps its framework's report to observation points
+by NAME: a per-case line's first field and its verdict word for the one, a kept
+`results.tsv` row's `gate` and `verdict` columns for the other. Neither maps
+what the framework TIMED (`Ran 2 tests in 0.003s`, the `seconds` column), because
+a clock in an observation is a nondeterminism the harness would blame on the
+subject. Two consumers were built with them: `fixture/unittest/` (8 cases in 2
+modules, covering all six words of the closed verdict vocabulary, one of them a
+case that FAILS BY DESIGN so the observation carries a red token the frozen
+truth expects) and `fixture/selfgates/` (a synthetic `self`-kind consumer of 7
+stub files whose 6 registered rows read PASS SKIP PASS MISSING FAIL PASS in a
+deliberately unsorted registry order). Both fixtures' expectations are class
+`derived`, not `fixture`: the verdict words follow from each framework's own
+stated contract, and the generators write the truth logs from the design through
+the token vocabulary rather than by running the adapter. `gates/adapters.sh`
+declares 6 controls and fired 9 times over 14 suite runs in 97 s.
 
 ## What the proof measures
 

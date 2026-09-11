@@ -1,4 +1,12 @@
 # Census — BBX's own harness files, by the kind of the gates that RUN them @ 88278e9 — measured 2026-09-10 (bbx-11, S3 step 5)
+
+> **STALE BY ONE STEP since bbx-18 (2026-09-12).** This census was measured at bbx-11 and is
+> NOT gated. S4 step 5 added `lib/py/bbx/adapters.py`, `drivers/unittest.sh`,
+> `drivers/gates.sh` and `gates/adapters.sh`, and it MOVED the two "+kernel" rows this
+> document reports: `bin/bbx` and `bin/bbx-run-static` are now executed by a gate of the
+> command-line kind, through `fixture/selfgates/`. Step 6 lifts the instrument into
+> `lib/py/bbx/file_census.py` and regenerates this file under a gate (R39); until then every
+> count below is true of bbx-11's tree and of no other.
 `/Users/koneko/Developer/generalized-blackbox-harness/BBX` · the first shared-vs-kind-specific FILE CENSUS (`docs/generality.md` "What the proof measures"; `docs/plans/S3.md` §6, §8.5) · **37** tracked files under `lib/`, `bin/`, `drivers/` (`drivers/README.md` excluded: not executable) · **23** gates
 
 Shape: census (a measured document; its history is in `docs/readout.md`, the bbx-11 section). **Measured once, not gated** (the close ritual's honest floor): the instrument in §C is a scratchpad generator run by hand, not a gate — the gate is S4's plan (`HANDOFF.md`: "if the census wants a tool, that is S4's plan"). Its rows are NOT in the census recount (`gates/census_recount.sh` reads the three lineage files only). Two runs of the generator on the same HEAD gave byte-identical per-gate file sets (BBX-14; the stamps in §D).

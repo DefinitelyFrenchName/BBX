@@ -657,3 +657,66 @@ EXIT of each direction separately; a shared heading is not a shared verdict.
 Rules re-anchored in fact: BBX-9 (complete both ways — the orphan direction is
 unenforced), §1 (a check that cannot fail is not evidence), BBX-6 (the silent
 failure mode is a control that no longer fires — here, one that never could).
+
+## G35 — Extracting a shared helper renamed the SUBJECT in three of its messages: one was frozen by a gate and caught in the shadow, the other two were invisible to every gate and were found by reading the diff (paid: 2 gate runs and one diff read, ~4 min; 2026-09-11)
+Step 5's whole point was that three drivers share one core, so `run()`'s
+sandbox, environment, recording, timeout and decode became
+`prepare_sandbox` + `exec_in_sandbox`. The helper had to name the thing it was
+running, and it said "the subject". Three messages moved with it: the timeout
+(`timeout: the tool ran longer than 1 s`), the exec failure (`the tool <path>
+could not be run`) and the non-UTF-8 output (`the tool's output is not UTF-8`).
+`gates/cli_driver.sh` freezes the FIRST of those and caught it in the shadow on
+the first run — `CONTROL DEAD: timeout — exits 1/0: cli.py: timeout: the SUBJECT
+ran longer…`. Nothing in the tree covers the other two: the exec-failure path
+needs an unrunnable file and the UTF-8 path a binary output, and both are
+declared consumers' questions (S4 plan §9). The fix was not to update the gate:
+the helper now takes the caller's own noun and name (`what`, `subject`), so the
+command-line driver's text is byte-identical and each adapter says "the
+framework" or "the runner" — BBX-25's rule that a component serves a second
+consumer without either bending. The second defect was subtler and no gate could
+have seen it: the extracted version printed `argv[0]`, which for a `.py` tool is
+the INTERPRETER, where the original printed the tool's own path. It was found by
+reading the staged diff line by line, as G31 was.
+A third instance, same sitting, same shape: the adapters raised `cli.Refused`,
+whose text was hard-coded `REFUSED: drivers/cli.sh cannot honour …`, so the
+gates adapter's own refusals sent the reader to the wrong contract. Found by a
+control's first run, before the gate existed; fixed by a module-level `DRIVER`
+that each driver sets once.
+Learning (R27): when a component gains a second consumer, its frozen text is
+only as safe as the paths a gate exercises — and the paths a plan has already
+declared "a consumer's question" are exactly the ones no gate exercises, so a
+refactor's messages there are asserted by nobody. Read the diff for every string
+the helper moved, and give the helper the caller's noun rather than inventing a
+neutral one. Mechanism candidate for S6, beside G19/G24/G27/G29/G31: a check
+that every message a shared module emits names its caller's contract, which is
+the same "generated and printed text" rot gate those four already ask for. Rules
+re-anchored in fact: BBX-25 (a second consumer is the detector), §3.3 (the two
+command-line gates passing proves currency for the paths they run, not
+correctness for the ones they do not), §1 (measure the negative: the timeout
+control existed, which is why one of the three was caught at all).
+
+## G36 — `bbx controls report` read a MISSING log as zero firings and printed `declared=6 fired=0 dead=6 verdict=RED`, which is indistinguishable from a gate whose every control died (paid: 1 confused reading, ~2 min; 2026-09-11)
+The new gate's controls were being checked by hand: `bbx controls report gates
+<dir> adapters` after copying the gate's output to `<dir>/adapters.log`. The
+report came back `declared=6 fired=0 dead=6 undeclared=0 verdict=RED` — the
+exact shape of six dead controls, on a gate whose output held six `CONTROL
+FIRED` lines. The cause was a filename: the reader opens `<logs_dir>/<name>.out`
+and the copy was `<name>.log` (the runner's own kept-run convention is `.log`,
+its work directory's is `.out`). `fired()` catches `OSError` and returns empty
+lists, so a log nobody could open is reported as a log with nothing in it.
+Nothing is broken in the battery: the runner writes the file it later reads, so
+the two names never disagree there. The defect is in the tool's answer to a
+question it was not asked — "there is no such file" arriving as "no control
+fired". That is BBX-16's shape (reading in the wrong view yields plausible
+garbage, not an error) with a verdict word attached, and it is the failure mode
+BBX-6 names from the other side: a report that cannot tell a dead control from
+an absent measurement.
+Learning (R27): a reader that swallows `OSError` must say so in its answer. The
+one-line fix is a `missing=1` field, or a refusal, so the verdict never reads
+RED for a file that was never there; it belongs with R29's executable controls
+in S6, because that is where the controls reader is next opened. A hazard line
+in `HANDOFF.md` in the meantime. Rules re-anchored in fact: BBX-16 (the wrong
+view reads as plausible garbage), BBX-6 (a dead control is the only silent
+failure mode — and a report that invents one is the mirror image), BBX-12 (parse
+by name: the two conventions `.log` and `.out` are a positional convention in
+disguise).

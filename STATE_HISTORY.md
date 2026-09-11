@@ -414,3 +414,40 @@ close's two runs GREEN on `3d98d1d` with the step staged (BBX-14 met): **28 gate
 105/105 controls** (`build/selftest_20260910T203200Z`, `build/selftest_20260910T204058Z`).
 Fidelity F12–F17 diff empty on the plain clone at `10a82d2`. bbh's tip
 `02d58f3`, two past the baseline (it moved during the sitting), a NOTE. Defaults D1–D57. Gotchas G1–G29. Retractions X1–X24.
+
+## bbx-17 (closed 2026-09-11)
+
+**Status (bbx-17 close, 2026-09-11):** slices S1 (but for R21's platform run)
+and S2 complete; **S3 DONE**; **S4 steps 1–4 built**. This sitting built no
+step and moved no feature: it answered two rulings, one of them raised by the
+maintainer against the harness's effect on the host. **R41 answered against
+the contributor's recommendation** — BOTH writers of the `band-fields` NOTE
+are kept, the comparator's (R36) and the log summary's (D43), and `04_band`
+prints the number twice by design; measured first that the two counts CANNOT
+disagree under `drivers/cli.sh`, which writes the log's band tokens and the
+band view from one list in one run, so the duplicate is one number by two
+routes and not a cross-check. Nothing printed changed; the provisional
+wording came off two gates, the plan and the slice table, and
+`compare_band.py`'s docstring now says why its NOTE has a twin. **R42 raised
+by the maintainer and answered the same sitting**: the maintainer reported
+Python crashes "for a couple of days" traced to BBX sessions. Treated as a
+witness, not an instrument (BBX-28) — the archaeology first (BBX-23): ZERO
+Python crash reports on this host before 19:53 local on 2026-09-10 across
+about forty kept battery runs, then 23 that evening and 2 the next day, all
+25 carrying ONE signature (SIGABRT, `abort() called`). The cause was BBX's
+own must-fire crash controls, whose fixture tool called `os.abort()`; macOS
+files a ~10 KB crash report for every one, OUTSIDE the sandbox the driver
+promises to remove and declared by no line of its contract. Nothing was
+broken — the harm was that a genuine Python crash hid among deliberate ones.
+The fixture now dies by SIGKILL (measured both ways: abort leaves one report,
+SIGKILL none; the driver exits 2 either way, keeps the same three lines, and
+the two crash logs differ only in the signal name), the naming of signal 6
+stays under test in `bbx.cli`'s self-test, which spawns no process, and the
+host artifact is now DECLARED in `drivers/cli.sh` because a real subject that
+faults will still leave one. The plan corrected FIRST in its own commit (X25,
+BBX-19). Defaults D1–D57 (none added). Gotchas G1–G31 (G31: an edit pattern anchored on an indent corrupted the
+generated tool's docstring and every gate passed — a generated file's prose
+is asserted by nobody; found by reading the staged diff). Retractions X1–X25.
+`bin/bbx selftest` GREEN at the open on `d49294b` (`build/selftest_20260911T185841Z`: 28 gates, 105/105) and GREEN twice more at the close on `9f16238` with
+the change staged (BBX-14 met): **PASS 28  SKIP 0  FAIL 0  TIMEOUT 0  MISSING 0** over 28 gates, controls fired 105 / declared 105
+(`build/selftest_20260911T194343Z`, `build/selftest_20260911T200013Z`).

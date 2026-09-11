@@ -1010,3 +1010,68 @@ lives — bbh `[BBH-9]`).
   says: 28 gates on macOS only, with R21's platform run still absent, and
   the new `.ips` count is measured for this sitting, not gated — S6's
   candidate mechanism is written into G30.
+
+## bbx-18 (2026-09-11 into 2026-09-12) — S4 step 5, and two findings the ritual produced rather than the work
+
+**Nothing was answered this sitting; three rulings were raised.** The maintainer
+rules, and R43, R44 and R45 wait with a recommendation each and their declined
+alternatives.
+
+- **R43 — which bbh commit `gates/suite.sh` clones.** Raised at the open, from
+  reading the rulings queue rather than from a red gate. Three gates read
+  `BBX_BBH_BASELINE`; the R28 re-baseline of 2026-09-10 moved two of them and
+  `D20`'s row, and the third still defaults to `f675710` while its own header
+  says it clones "at the baseline (D20)". Measured both ways: exit 0 and 77
+  byte-identical printed lines at either commit, so nothing this gate asserts
+  reads what the two commits differ in — and they do differ where it matters in
+  principle, since `10a82d2` fixed the example library whose root was one
+  directory too high (bbh's fix of BBX's own G11), and this gate copies that
+  example out of the clone. Identical output locks CURRENCY, never correctness
+  (§3.3). Recommendation: one value for one variable, read from one place, with
+  `D20` naming every reader. Filed as G32 rather than fixed in place, because
+  changing a default is a ruling (BBX-24).
+- **R44 — what the self subject's moving identity costs.** R38 was answered at
+  bbx-12 in the abstract; step 5 made it concrete. The whole-set key is the tree
+  hash of `bin`, `lib`, `drivers` and `gates` at HEAD, and 22 of BBX's 53 commits
+  touch one of those — 5 of the last 10. So this sitting's own step-5 commit
+  invalidated the registry row it had just frozen, and the close carries the
+  reviewed refreeze as its own commit with the review written into the message.
+  Recommendation: keep the key exactly as ruled, `gates` included, and make the
+  refreeze a printed step of the close; four alternatives declined, including
+  dropping `gates` (cheaper, but the one subject whose purpose is to notice that
+  the harness moved would stop noticing the half that moves most) and letting the
+  runner refreeze itself (a self-frozen expectation answers only "did this
+  change", R11/§3.4).
+- **R45 — how BBX-9's orphan direction gets a verdict.** Found while designing
+  the `selfgates` fixture, whose eighth stub file is on disk in no registry "for
+  the anti-orphan check": the question was what that file makes OBSERVABLE, and
+  the answer is nothing. `bbx tier --unregistered` exits 0 in all three states, an
+  orphan planted in BBX's own `gates/` left `gates/tier.sh` PASSing, and the
+  runner's `rc` never reads the list — while a dead row IS a `MISSING` row and
+  reds the run. The rule is half-enforced, and it cannot be fixed in the runner,
+  because F13's fidelity pairs diff both runners over a synthetic repo that
+  CONTAINS an orphan. Recommendation: one new portable gate whose positive is
+  BBX's own config and whose control is a synthetic tree with a planted orphan,
+  leaving the lineage's runner untouched.
+
+**What the sitting built.** S4 step 5, the adapters (commit `b07950f`), then the
+identity refreeze (`4cbacd9`). Two drivers over one core, two new consumers, one
+gate with six controls. The plan was corrected FIRST in its own commit (`6c704c7`,
+X29–X34, BBX-19) on six wordings the built thing differs from, every one of them
+measured before a line was written: the framework writes its report to STDERR;
+`Ran 0 tests` exits 0 with OK; the `Ran <n> tests in <t>s` line carries a clock;
+`bbx` has no `run-sweep` and no `fingerprint` subcommand; the gates-side
+nondeterminism control the plan designed was DEAD as written, because the mapper
+reads two columns by name and a stub that merely prints the clock changes nothing
+observable; and the adapters' paths and counts. D58–D61 were written before their
+first use, and D43 and D47 amended with dated clauses.
+
+**Anti-hyperfocus (BBX-27).** The sitting's planned work was step 5 and step 5
+landed, but the two most valuable things in it were not planned: both findings
+came out of the ritual's own first act — reading the rulings queue and reading a
+fixture's design for what it makes observable. Neither was a red gate; the battery
+has been green through both, which is exactly what BBX-10 says harness rot looks
+like. The last green is treated as meaning what it says: 29 gates on macOS only,
+R21's platform run still absent, BBX-9 enforced in one direction until R45 is
+answered, and the orphan direction declared NOT-ASSERTED in the new gate's own
+header rather than left to be assumed.
