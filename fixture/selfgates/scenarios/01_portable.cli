@@ -1,0 +1,5 @@
+# the scenario (R35, D46): an INVOCATION of a harness runner over this consumer. The first arg is the
+# PROGRAM, resolved under $BBX_HOME/bin and nowhere else; `{config}` and `{log}` are filled in by
+# drivers/gates.sh (D58). Nothing here is an expected value.
+[scenario]
+args = ["bbx", "run-static", "--config", "{config}", "--log", "{log}"]

@@ -72,7 +72,11 @@ from . import toml_subset
 from .recount import HERMETIC_PATH   # D6's PATH, declared once
 
 BAND = "band"
-KINDS = ("exit", "line", "field", "err", "file")
+KINDS = ("exit", "line", "field", "err", "file", "case", "gate")   # case/gate: the adapters (R37, S4 step 5)
+# The two adapter verdicts are CLOSED vocabularies mapped from a framework's own words: a tail outside
+# either is exit 1 DISCARDED, never a token invented on the spot (D58).
+CASE_VERDICTS = ("ok", "FAIL", "ERROR", "skip", "xfail", "xpass")            # python3 -m unittest -v
+GATE_VERDICTS = ("PASS", "FAIL", "SKIP", "TIMEOUT", "MISSING")               # bbx-classify plus the runner's MISSING
 SCENARIO_KEYS = ("args", "stdin", "stdin_file", "cwd", "emits", "bands", "fields")
 FIELD_READERS = ("json",)
 HERMETIC_NAMES = ("PATH", "LANG", "LC_ALL", "HOME", "TMPDIR", "PYTHONDONTWRITEBYTECODE")
@@ -80,10 +84,15 @@ DRIVER_FAMILY = ("CLI_NONDET", "CLI_TIMEOUT", "CLI_KEEP_ENV")     # scrubbed by 
 DEFAULT_TIMEOUT = 60                                              # seconds; D51 (arbitrary)
 
 
+DRIVER = "drivers/cli.sh"     # the FACE a refusal names: each driver of this kind sets it once (D58)
+
+
 class Refused(Exception):
-    """what the driver cannot honour: printed as `REFUSED: drivers/cli.sh cannot honour <what> (<why>)`, exit 3."""
+    """what the driver cannot honour: printed as `REFUSED: <driver> cannot honour <what> (<why>)`, exit 3.
+    The driver's own name, not this module's: an adapter's refusal that named drivers/cli.sh would send the
+    reader to the wrong contract (found at bbx-18, before the adapters' first control was written)."""
     def __init__(self, what, why):
-        super().__init__(f"REFUSED: drivers/cli.sh cannot honour {what} ({why})")
+        super().__init__(f"REFUSED: {DRIVER} cannot honour {what} ({why})")
 
 
 class Unreadable(Exception):
@@ -134,6 +143,24 @@ def point_file(i, name, data, salt=""):
     return f"{i} file:{_name_ok(name)}:{sha1_bytes(data + salt.encode('utf-8'))}"
 
 
+def token_case(name, verdict, salt=""):
+    """`case:<verdict>:<sha1 of the case NAME>` — the framework's verdict is an OBSERVATION (D7, R37).
+    The name is the per-case line's FIRST field, never the whole `<case> (<module.Class>)` text, so the
+    token does not move when the framework changes how it formats the rest of the line."""
+    return f"case:{_verdict_ok(verdict, CASE_VERDICTS)}:{sha1_text(_name_ok(name) + salt)}"
+
+
+def token_gate(name, verdict, salt=""):
+    """`gate:<verdict>:<sha1 of the gate NAME>` — one row of a kept results.tsv, read by column name."""
+    return f"gate:{_verdict_ok(verdict, GATE_VERDICTS)}:{sha1_text(_name_ok(name) + salt)}"
+
+
+def _verdict_ok(verdict, vocabulary):
+    if verdict not in vocabulary:
+        raise ValueError(f"verdict {verdict!r} is outside the closed vocabulary: {', '.join(vocabulary)}")
+    return verdict
+
+
 def end(n):
     return f"END {n}"
 
@@ -164,6 +191,21 @@ def observation(status, stdout_lines=None, fields=None, bands=(), stderr_lines=(
     """The whole log text: the points, then `END <n>`."""
     out, i = points(status, stdout_lines, fields, bands, stderr_lines, files, salt)
     out.append(end(i))
+    return "\n".join(out) + "\n"
+
+
+def observation_tokens(status, tokens):
+    """An adapter's whole log: `0 exit:<n>`, the tokens numbered from 1, `END <n>` (D47's shape, D58)."""
+    out = [point_exit(status)] + [f"{i} {t}" for i, t in enumerate(tokens, start=1)]
+    out.append(end(len(tokens)))
+    return "\n".join(out) + "\n"
+
+
+def crash_tokens(signum, tokens):
+    """An adapter's bug report: the tokens it had mapped before the framework died, then CRASH / END-CRASH."""
+    out = [f"{i} {t}" for i, t in enumerate(tokens, start=1)]
+    out.append(f"CRASH signal:{int(signum)}:{signal_name(signum)}")
+    out.append(f"END-CRASH {len(tokens)}")
     return "\n".join(out) + "\n"
 
 
@@ -200,6 +242,10 @@ def split_token(tok):
         return {"kind": kind, "name": parts[1], "band": parts[2] == BAND, "sha1": None if parts[2] == BAND else parts[2]}
     if kind == "file" and len(parts) == 3 and parts[1] and _is_sha1(parts[2]):
         return {"kind": kind, "name": parts[1], "sha1": parts[2]}
+    if kind == "case" and len(parts) == 3 and parts[1] in CASE_VERDICTS and _is_sha1(parts[2]):
+        return {"kind": kind, "verdict": parts[1], "sha1": parts[2]}
+    if kind == "gate" and len(parts) == 3 and parts[1] in GATE_VERDICTS and _is_sha1(parts[2]):
+        return {"kind": kind, "verdict": parts[1], "sha1": parts[2]}
     raise ValueError(f"not a command-line token: {tok!r}")
 
 
@@ -341,11 +387,9 @@ def _split_lines(text):
     return lines
 
 
-def run(tool, scenario_path, out, sandbox, nondet=False, timeout=DEFAULT_TIMEOUT):
-    """One run: the log at `out` (`<out>.json` when stdout was one JSON object, `<out>.bands` when there are band
-    fields). Raises Refused / Unreadable /
-    Crashed; returns the tool's exit status on a complete observation."""
-    sc = load_scenario(scenario_path)
+def prepare_sandbox(sc, sandbox):
+    """The sandbox and the scenario's working directory inside it, both created; Refused if either escapes
+    (D52). Shared by the three drivers of this kind (cli.sh, unittest.sh, gates.sh — D7)."""
     sandbox = Path(sandbox).resolve()
     sandbox.mkdir(parents=True, exist_ok=True)
     cwd = sandbox / sc.cwd
@@ -355,6 +399,43 @@ def run(tool, scenario_path, out, sandbox, nondet=False, timeout=DEFAULT_TIMEOUT
     for name in sc.emits:
         if not _inside(cwd / name, sandbox):
             raise Refused(f"emitted file '{name}'", "it escapes the sandbox (D52)")
+    return sandbox, cwd
+
+
+def exec_in_sandbox(argv, sc, sandbox, cwd, timeout, extra_env=None, what="the tool", subject=None):
+    """THE ONE PLACE A SUBJECT PROCESS IS STARTED (three drivers share it, D7, BBX-25). D6's hermetic set
+    with the sandbox as HOME and TMPDIR (D52), the scenario's [env] table and `extra_env` on top and nothing
+    from the caller; what was fed recorded beside the run (argv.txt, stdin.bin, env.txt — O5); the timeout
+    and a non-UTF-8 output are Unreadable (the run is DISCARDED).
+    `what` is the caller's noun for its subject ("the tool", "the framework") and `subject` the name it
+    prints for it, so each driver's refusal text stays its own and no gate's frozen line moves when a
+    second consumer arrives (BBX-25). The caller splits the output into lines itself, so what it reads is
+    the DECODED text and nothing is rebuilt from a split.
+    -> (returncode, stdout_text, stderr_text); a negative returncode is a death by that signal."""
+    env = hermetic_env(sandbox)
+    env.update(sc.env)
+    env.update(extra_env or {})
+    (sandbox / "argv.txt").write_text("".join(a + "\n" for a in argv), encoding="utf-8")
+    (sandbox / "stdin.bin").write_bytes(sc.stdin)
+    (sandbox / "env.txt").write_text("".join(f"{k}={env[k]}\n" for k in sorted(env)), encoding="utf-8")
+    try:
+        p = subprocess.run(argv, cwd=str(cwd), env=env, input=sc.stdin, capture_output=True, timeout=timeout)
+    except subprocess.TimeoutExpired:
+        raise Unreadable(f"timeout: {what} ran longer than {timeout:g} s (CLI_TIMEOUT) and was killed; no log written — the run is DISCARDED")
+    except OSError as e:
+        raise Unreadable(f"{what} {subject or argv[0]} could not be run: {e.strerror}")
+    try:
+        return p.returncode, p.stdout.decode("utf-8"), p.stderr.decode("utf-8")
+    except UnicodeDecodeError as e:
+        raise Unreadable(f"{what}'s output is not UTF-8 ({e.reason} at byte {e.start}): a binary output is a consumer's question (docs/plans/S4.md §9); the run is DISCARDED")
+
+
+def run(tool, scenario_path, out, sandbox, nondet=False, timeout=DEFAULT_TIMEOUT):
+    """One run: the log at `out` (`<out>.json` when stdout was one JSON object, `<out>.bands` when there are band
+    fields). Raises Refused / Unreadable /
+    Crashed; returns the tool's exit status on a complete observation."""
+    sc = load_scenario(scenario_path)
+    sandbox, cwd = prepare_sandbox(sc, sandbox)
     out = Path(out)
     bands_path = Path(str(out) + ".bands")
     json_path = Path(str(out) + ".json")
@@ -364,33 +445,17 @@ def run(tool, scenario_path, out, sandbox, nondet=False, timeout=DEFAULT_TIMEOUT
     tool_path = Path(tool)
     if not tool_path.is_file():
         raise Unreadable(f"the tool {tool} is not a file")
-    env = hermetic_env(sandbox)
-    env.update(sc.env)
     argv = command_for(str(tool_path.resolve())) + sc.args
-    # O5: what was fed, recorded where a gate can read it back against the scenario
-    (sandbox / "argv.txt").write_text("".join(a + "\n" for a in argv), encoding="utf-8")
-    (sandbox / "stdin.bin").write_bytes(sc.stdin)
-    (sandbox / "env.txt").write_text("".join(f"{k}={env[k]}\n" for k in sorted(env)), encoding="utf-8")
     salt = f"|{time.time_ns()}" if nondet else ""
-    try:
-        p = subprocess.run(argv, cwd=str(cwd), env=env, input=sc.stdin, capture_output=True, timeout=timeout)
-    except subprocess.TimeoutExpired:
-        raise Unreadable(f"timeout: the tool ran longer than {timeout:g} s (CLI_TIMEOUT) and was killed; no log written — the run is DISCARDED")
-    except OSError as e:
-        raise Unreadable(f"the tool {tool} could not be run: {e.strerror}")
-    try:
-        stdout_text = p.stdout.decode("utf-8")
-        stderr_text = p.stderr.decode("utf-8")
-    except UnicodeDecodeError as e:
-        raise Unreadable(f"the tool's output is not UTF-8 ({e.reason} at byte {e.start}): a binary output is a consumer's question (docs/plans/S4.md §9); the run is DISCARDED")
+    status, stdout_text, stderr_text = exec_in_sandbox(argv, sc, sandbox, cwd, timeout, subject=tool)
     stdout_lines = _split_lines(stdout_text)
     stderr_lines = _split_lines(stderr_text)
-    if p.returncode < 0:                                     # D4: death by a signal — the guard
-        out.write_text(crash_log(-p.returncode, stdout_lines, stderr_lines, salt), encoding="utf-8")
-        raise Crashed(f"the tool died by signal {-p.returncode} ({signal_name(-p.returncode)}) after "
+    if status < 0:                                           # D4: death by a signal — the guard
+        out.write_text(crash_log(-status, stdout_lines, stderr_lines, salt), encoding="utf-8")
+        raise Crashed(f"the tool died by signal {-status} ({signal_name(-status)}) after "
                       f"{len(stdout_lines) + len(stderr_lines)} points: exit 2, the log {out} is the bug report (END-CRASH)")
     fields = None
-    if sc.fields == "json" and p.returncode == 0:
+    if sc.fields == "json" and status == 0:
         try:
             obj = json.loads(stdout_text)
         except ValueError:
@@ -403,13 +468,13 @@ def run(tool, scenario_path, out, sandbox, nondet=False, timeout=DEFAULT_TIMEOUT
         if not fp.is_file():
             raise Unreadable(f"declared emitted file '{name}' not produced by the tool (in {cwd}); the run is DISCARDED")
         files.append((name, fp.read_bytes()))
-    out.write_text(observation(p.returncode, stdout_lines=stdout_lines, fields=fields, bands=sc.bands,
+    out.write_text(observation(status, stdout_lines=stdout_lines, fields=fields, bands=sc.bands,
                                stderr_lines=stderr_lines, files=files, salt=salt), encoding="utf-8")
     if fields is not None and sc.bands:
         bands_path.write_text(band_view(fields, sc.bands), encoding="utf-8")
     if fields is not None:                                   # D54: the object's shape, for the schema family
         json_path.write_text(canon(fields) + "\n", encoding="utf-8")
-    return p.returncode
+    return status
 
 
 # ── summary (D43: the log's own NOTE-class numbers) ──────────────────────────
@@ -447,9 +512,13 @@ def summary_lines(log):
         return [f"FAIL: {log}: END says {n} but the last index is {last}"]
     if not crashed and exit_status is None:
         return [f"FAIL: {log}: no exit point"]
-    return [f"NOTE: exit {'crash' if crashed else exit_status}",
-            f"NOTE: band-fields {counts.get(BAND, 0)}",
-            f"NOTE: emitted-files {counts['file']}"]
+    notes = [f"NOTE: exit {'crash' if crashed else exit_status}",
+             f"NOTE: band-fields {counts.get(BAND, 0)}",
+             f"NOTE: emitted-files {counts['file']}"]
+    for kind in ("case", "gate"):                            # D43 extended for the adapters (S4 step 5):
+        if counts[kind]:                                     # printed only by a log that HOLDS them, so a
+            notes.append(f"NOTE: {kind}s {counts[kind]}")    # command-line log's three lines are unchanged
+    return notes
 
 
 # ── the self-test (every run, before the tool is run) ────────────────────────

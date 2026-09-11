@@ -25,3 +25,4 @@ cli_driver
 band
 json_schema
 cli_suite
+adapters

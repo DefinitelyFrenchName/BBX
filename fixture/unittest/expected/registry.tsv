@@ -1,0 +1,5 @@
+# registry.tsv — whole-set key (dir-sha1 over subject/cases/: the package directory) -> expectation set.
+# Written by mkunittest.py at generation, which is the freeze (a build decision, [BBH-67]); a changed
+# module OR test module is an UNREGISTERED identity before any scenario runs (abstraction S2).
+# sha1	expectation-set	notes
+c6e3e41d315a3c24553c84e142ff12bd3c36aed3	derived	the generated package; WHOLE-SET key (subject/cases/*)

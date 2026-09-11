@@ -1,0 +1,7 @@
+# registry.tsv — the WHOLE-SET key of the HARNESS ITSELF (R38: the tree hash of bin, lib, drivers
+# and gates at HEAD, through idkey.sh) -> expectation set. Written by mkselfgates.py, which is the
+# freeze. THIS KEY MOVES ON EVERY COMMIT THAT TOUCHES THOSE FOUR DIRECTORIES (22 of BBX's first 53
+# commits did), and a moved key is an UNREGISTERED identity before any scenario runs: the refreeze is
+# a REVIEWED step of the close, never automatic (R38, §3.4; its cost is R44's question).
+# sha1	expectation-set	notes
+760628db207d2545c0b1c689d867c3a8c2b2ea17	derived	the harness whose self-subject behaviour was reviewed at this freeze

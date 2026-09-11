@@ -1,0 +1,6 @@
+g1_holds
+g4_skips
+g2_holds
+g6_absent
+g5_reds
+g3_holds

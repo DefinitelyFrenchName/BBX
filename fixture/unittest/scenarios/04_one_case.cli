@@ -1,0 +1,4 @@
+# the scenario (R35, D46): an INVOCATION — the modules `python3 -m unittest -v` is asked to run,
+# one per element. Nothing here is an expected value; the framework's verdicts are the observation.
+[scenario]
+args = ["test_shapes.T.test_a_tilt_turns_once"]
