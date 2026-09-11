@@ -544,3 +544,47 @@ list against the docstring's option list, both ways — would have caught this
 in the same run. Rules re-anchored in fact: §3.3 (a measurement on our own
 build locks currency, never correctness) and BBX-30 (this green did not
 assert what its own subject's text says).
+
+## G32 — A re-baseline moved two of the THREE gates that read its default: `gates/suite.sh` still clones bbh at `f675710` six sittings after `D20` became `10a82d2`, and its own header says it clones "at the baseline (D20)" (paid: 2 gate runs, ~2 min, at the bbx-18 open; 2026-09-11)
+Found by reading the open rulings queue, not by a gate. R21's Linux procedure
+quotes `bbh's baseline f675710`, which R28 replaced on 2026-09-10; grepping
+the tree for that commit to see how far the staleness ran turned up something
+else — `gates/suite.sh:28` sets `BASELINE="${BBX_BBH_BASELINE:-f675710}"`,
+while `gates/fidelity_bbh.sh` and `gates/fidelity_bbh_s2.sh` both default to
+`10a82d2` and cite `D20` for it. Three gates read ONE environment variable;
+the re-baseline edited two of them and the register row, and the third kept
+the old value with nothing to notice it. `D20`'s "where it lives" column named
+only `gates/fidelity_bbh.sh`, so the register could not be the detector
+either: a default whose readers are under-recorded is a default that moves
+incompletely.
+Measured both ways before any theory (BBX-5, §3.3): the gate was run at its
+own default and with `BBX_BBH_BASELINE=10a82d2`, both with
+`BBX_BBH_HOME=~/Developer/blackbox-harness`. Exit 0 both times, 77 printed
+lines both times, and `diff` of the two outputs EMPTY. So nothing this gate
+asserts reads what the two commits differ in — and they do differ inside the
+tree it copies: `10a82d2` touched 7 files, three of them under `example/` and
+`selftest/`, one being `example/tests/lib/needs_fake.sh`, whose root fallback
+was one directory too high (bbh's own fix of BBX's G11). The gate copies
+bbh's `example/` out of the clone, so the older tree it takes carries the
+defect BBX reported upstream. The identical output locks CURRENCY, never
+correctness: it says today's assertions do not touch the difference, not that
+a future one will not.
+Nothing was red and nothing printed wrong, which is why it survived: the
+battery has been GREEN at 28 gates across every sitting since, and this gate
+passed at the pinned commit each time. Its verdict text is therefore true of
+`f675710` and undefined of the baseline every other bbh-facing gate uses.
+Raised as R43 rather than fixed in place: changing a default is a ruling
+(BBX-24), and the two candidate answers differ in more than a value — one
+value read from one place, or a second register row admitting that this gate
+is pinned to the commit its ground truth was lifted from.
+Learning (R27): a default with more than one reader needs the READERS
+enumerated in its register row, and the re-baseline procedure's "on both
+fidelity gates" was the wording that made two feel like all. Mechanism
+candidate for S6, beside G19/G24/G27/G29: a gate over `docs/defaults.md` that
+reads every `BBX_*` environment name in the register, greps the tree for
+`${NAME:-<value>}`, and fails BOTH ways — a reader the row does not list, and
+a listed reader whose fallback differs from the row's value. That gate would
+have failed on 2026-09-10, the day the re-baseline landed. Rules re-anchored
+in fact: BBX-9 (a registry is complete both ways or it is a smaller thing to
+forget), BBX-10 (stale reference, rot class 4 — found by maintenance, not by
+a failure), §3.3 (identical output locks currency, never correctness).

@@ -171,7 +171,7 @@ by construction (the recount's clone) and by `fidelity_bbh`'s proof.
 - `~/Library/Logs/DiagnosticReports/Retired/` holds the older reports: a census of crashes must read BOTH directories or it reads two days as one (bbx-17: `find -name '*.ips'` counted 93 where the top directory listed 2, and the 91 were the Retired subtree).
 - `/Users/koneko/.git` exists: HOME is a git repository. Commands run outside
   a nested repository see the whole home tree. Not ours; do not touch.
-- The fidelity baseline is the commit, not the tree (R8): a moved bbh tip is a NOTE, measured first by the D20 override (`BBX_BBH_BASELINE=<tip>` on both fidelity gates), then followed by the procedure in `docs/rebaselines.md` (R28: a dated line, D20, D12 by definition, the census) — never a queue entry.
+- The fidelity baseline is the commit, not the tree (R8): a moved bbh tip is a NOTE, measured first by the D20 override (`BBX_BBH_BASELINE=<tip>`, which THREE gates read: `fidelity_bbh`, `fidelity_bbh_s2` and `suite` — measured at bbx-18, G32, R43 open), then followed by the procedure in `docs/rebaselines.md` (R28: a dated line, D20, D12 by definition, the census) — never a queue entry.
 - Three counters inside VampireSaved's own docs are stale (see
   `docs/census/vampiresaved.md`); do not quote VampireSaved's prose numbers,
   quote its commands.
