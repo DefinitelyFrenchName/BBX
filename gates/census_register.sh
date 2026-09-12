@@ -13,6 +13,12 @@
 # R18's own precedent: the register ROTTING and the harness MOVING are different findings, and
 # making the second fatal would red the battery on every kernel commit until a twenty-minute run.
 # Usage: gates/census_register.sh        Portable, ~1 s.
+# PORTABILITY: the read-only proof hashes with `python3 -m bbx.sha1` (D27's portable hash
+# command), never with `shasum`. Its first draft called `shasum` directly and UNGUARDED, so on a
+# host without perl's Digest::SHA the assignment would have failed under `set -e` and this gate
+# would have CRASHED rather than skipped — found at bbx-20 while writing R21's procedure, before
+# the platform run rather than by it (gates/cli_driver.sh, which needs a SECOND SHA-1
+# implementation on purpose, guards its own `shasum` use with a SKIP).
 # SKIP: BBX_FILE_CENSUS_SHADOW is set — this gate's question is UNANSWERABLE inside an
 #       instrumented census shadow, not merely stale. The instrument writes
 #       lib/py/sitecustomize.py and commits it, so the shadow's universe permanently holds a
@@ -44,7 +50,7 @@ fail() { printf '  FAIL  %s\n' "$1"; rc=1; }
 }
 T="$(mktemp -d)"; trap 'rm -rf "$T"' EXIT INT TERM
 REG="expected/file_census.toml"
-BEFORE="$(shasum "$REG" | cut -d" " -f1)"   # section 5 compares against this, never against git
+BEFORE="$(python3 -m bbx.sha1 "$REG" | cut -d" " -f1)"   # section 5 compares against this, never against git
 CR() { python3 -m bbx.file_census --self --frozen "$1" --check-register; }
 
 echo "== 1. the tracked register is complete both ways against the universe =="
@@ -140,7 +146,7 @@ echo "== 5. the register is untouched BY THIS GATE ([BBH-59]) =="
 # (the normal state straight after a census run, which is exactly when this gate runs), so
 # it reported "the tracked register was written" about a change the census had made and
 # this gate had not. A control must fire for its own reason (the G20 family).
-after="$(shasum "$REG" | cut -d" " -f1)"
+after="$(python3 -m bbx.sha1 "$REG" | cut -d" " -f1)"
 [ "$after" = "$BEFORE" ] && ok "the tracked register is byte-identical to before this gate ran (sha1 $BEFORE); every perturbation was a copy under TMPDIR" \
   || fail "THIS GATE wrote the tracked register: sha1 $BEFORE -> $after"
 
