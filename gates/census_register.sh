@@ -44,6 +44,7 @@ fail() { printf '  FAIL  %s\n' "$1"; rc=1; }
 }
 T="$(mktemp -d)"; trap 'rm -rf "$T"' EXIT INT TERM
 REG="expected/file_census.toml"
+BEFORE="$(shasum "$REG" | cut -d" " -f1)"   # section 5 compares against this, never against git
 CR() { python3 -m bbx.file_census --self --frozen "$1" --check-register; }
 
 echo "== 1. the tracked register is complete both ways against the universe =="
@@ -133,9 +134,15 @@ else
     fail "the staleness halts the battery"
 fi
 
-echo "== 5. the register is untouched by every perturbation ([BBH-59]) =="
-[ -z "$(git status --porcelain -- "$REG")" ] && ok "the tracked register is unmodified (every perturbation was a copy under TMPDIR)" \
-  || fail "the tracked register was written: $(git status --porcelain -- "$REG")"
+echo "== 5. the register is untouched BY THIS GATE ([BBH-59]) =="
+# Against ITS OWN hash, taken before section 1 — not against git. The first draft read
+# `git status --porcelain`, which also fires when the register is legitimately uncommitted
+# (the normal state straight after a census run, which is exactly when this gate runs), so
+# it reported "the tracked register was written" about a change the census had made and
+# this gate had not. A control must fire for its own reason (the G20 family).
+after="$(shasum "$REG" | cut -d" " -f1)"
+[ "$after" = "$BEFORE" ] && ok "the tracked register is byte-identical to before this gate ran (sha1 $BEFORE); every perturbation was a copy under TMPDIR" \
+  || fail "THIS GATE wrote the tracked register: sha1 $BEFORE -> $after"
 
 printf '\nNOTE: census-register-files %s\n' "$(git ls-files lib bin drivers | grep -vc '\.md$')"
 printf 'NOTE: census-register-rows %s\n' "$(grep -c '^\[f' "$REG")"
