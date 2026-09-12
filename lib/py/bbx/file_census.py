@@ -430,7 +430,10 @@ def run_gates(shadow, trace, out, names, extra_env):
 
 
 def read_run(out):
-    """A KEPT run read back: the identity and every gate's verdict. `--reuse`
+    """A KEPT run read back: the identity, every gate's verdict, and how many
+    files were instrumented — all three, because a render under `--reuse` needs
+    the instrumented count for row A4 and read it as unset on its first try
+    (UnboundLocalError, caught by this gate's own regeneration at bbx-19). `--reuse`
     exists so a gate that costs minutes can run its CONTROLS against the same
     measurement instead of re-measuring once per control (the alternative was
     one whole battery per control)."""
@@ -445,7 +448,7 @@ def read_run(out):
             cells = dict(zip(head, line.rstrip("\n").split("\t")))
             rows.append((cells["gate"], int(cells["exit"]), int(cells["seconds"]),
                          cells["verdict"]))
-    return keys["identity"], rows
+    return keys["identity"], rows, int(keys.get("instrumented", 0))
 
 
 # ----------------------------------------------------------------- the analysis
@@ -523,8 +526,8 @@ def render(out, head, univ, rows, kinds, reach, cat, portable, static, instrumen
         A.append((f"A{i}", f"gates whose derived kind is `{word}`", khist[word], "§B.1"))
         i += 1
     for label, _t in CATEGORIES:
-        if label in counts:
-            A.append((f"A{i}", f"files: {label}", counts[label], "§B.2"))
+        if label in counts or label == "REACHED BY NO GATE":
+            A.append((f"A{i}", f"files: {label}", counts.get(label, 0), "§B.2"))
             i += 1
     A.append((f"A{i}", "files executed by exactly one gate",
               sum(1 for f in univ if len(reach.get(f, [])) == 1), "§B.2, the `gates` column"))
@@ -559,17 +562,18 @@ def render(out, head, univ, rows, kinds, reach, cat, portable, static, instrumen
     L.append("")
     L.append("### B.2 Files, by category, with every gate that executed them")
     for label, _t in CATEGORIES:
-        if label not in cat:
+        if label not in cat and label != "REACHED BY NO GATE":
             continue
         L.append("")
-        L.append(f"**{label}: {len(cat[label])}**")
+        rows_here = cat.get(label, [])
+        L.append(f"**{label}: {len(rows_here)}**")
         L.append("")
-        if not cat[label]:
+        if not rows_here:
             L.append("(none)")
             continue
         L.append("| file | gates | executed by |")
         L.append("|---|---|---|")
-        for f, n, gs in sorted(cat[label]):
+        for f, n, gs in sorted(rows_here):
             L.append(f"| `{f}` | {n} | {' '.join(gs) or '—'} |")
     L.append("")
     L.append(END)
@@ -727,7 +731,8 @@ def main(argv):
     print(f"  universe   {len(univ)} files   gates {len(names)}   "
           f"seeds F={len(seed['F'])} D={len(seed['D'])} C={len(seed['C'])}")
     if reuse:
-        head, rows = read_run(out)
+        head, rows, n_instr = read_run(out)
+        instrumented = ["(kept run)"] * n_instr
         print(f"  reuse      {out}   identity {head[:12]}   {len(rows)} kept traces "
               f"(no shadow built, no gate run)")
     else:
