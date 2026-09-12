@@ -12,6 +12,8 @@
 #   bbx readout <run-dir> [--against <run-dir>]                   the one screen (lib/py/bbx/readout.py)
 #   bbx compare <class-tool> [args]   a comparator directly: flicker | window | composite | diverge | propose (temporal); exact | set | schema (S3); band (S4)
 #   bbx selftest [--strict]       BBX's own gate chain, through its own runner (R14)
+#   bbx file-census --self|--root DIR --out DIR [--document P] [--check] [--frozen P] [--freeze]
+#                                 which harness file each gate EXECUTES, by the gate's kind (lib/py/bbx/file_census.py; R39)
 #
 # Every subcommand finds the harness from THIS file's location, so the
 # harness can live anywhere; the consumer is found from --config / $BBX_CONFIG
@@ -19,7 +21,7 @@
 # from bbh bin/bbh.
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME
-[ $# -ge 1 ] || { sed -n '2,17p' "$0"; exit 2; }
+[ $# -ge 1 ] || { sed -n '2,19p' "$0"; exit 2; }
 cmd="$1"; shift
 PYTHONPATH="$BBX_HOME/lib/py${PYTHONPATH:+:$PYTHONPATH}"; export PYTHONPATH
 case "$cmd" in
@@ -30,9 +32,10 @@ tier)         exec python3 -m bbx.tier "$@" ;;
 config)       exec python3 -m bbx.config "$@" ;;
 controls)     exec python3 -m bbx.controls "$@" ;;
 recount)      exec python3 -m bbx.recount "$@" ;;
+file-census)  exec python3 -m bbx.file_census "$@" ;;
 readout)      exec python3 -m bbx.readout "$@" ;;
 compare)      _t="${1:?bbx compare <flicker|window|composite|diverge|propose> ...}"; shift; case "$_t" in flicker|window|composite|exact|set|schema|band) exec python3 -m "bbx.compare_$_t" "$@" ;; diverge) exec python3 -m bbx.check_diverge "$@" ;; propose) exec python3 -m bbx.propose_temporal "$@" ;; *) echo "bbx compare: unknown class tool '$_t'" >&2; exit 2 ;; esac ;;
 selftest)     cd "$BBX_HOME" && exec "$BBX_HOME/bin/bbx-run-static" --config "$BBX_HOME/bbx.toml" "$@" ;;
--h|--help|help) sed -n '2,17p' "$0"; exit 0 ;;
+-h|--help|help) sed -n '2,19p' "$0"; exit 0 ;;
 *) echo "bbx: unknown command '$cmd' (try bbx help)" >&2; exit 2 ;;
 esac

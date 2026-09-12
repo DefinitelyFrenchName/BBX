@@ -26,3 +26,4 @@ band
 json_schema
 cli_suite
 adapters
+file_census_tool
