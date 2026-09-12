@@ -500,3 +500,57 @@ the close on `4cbacd9` (BBX-14 met); the tally and the controls line are quoted
 verbatim in `docs/readout.md`'s bbx-18 CLOSE. **The battery now takes about ten and
 a half minutes and no longer fits a ten-minute foreground command: run it in the
 background and wait on its tally.**
+
+## bbx-19 (closed 2026-09-12)
+
+**Status (bbx-19 close, 2026-09-12):** slices S1 (but for R21's platform run)
+and S2 complete; **S3 DONE**; **S4's BUILD IS COMPLETE — steps 1 through 6 are
+built, and only step 7, the slice readout, remains.** This sitting built step 6,
+THE FILE CENSUS AS A GATE (R39), and the step found **six defects in its own
+work, every one by measurement**. What landed: `lib/py/bbx/file_census.py` and
+`bbx file-census`; `gates/file_census_tool.sh` (portable, ~13 s, 12 instrument
+runs on a synthetic harness tree, 5 controls) which holds the INSTRUMENT every
+battery; `gates/file_census.sh` (~20 min, 3 controls) which makes the
+MEASUREMENT and is the first row of `gates/sweep.tsv` at the release scope;
+BBX's **first `[tier].patterns` entry**, without which a gate registered only in
+the sweep registry is an orphan (`tier.py` reads `known = portable | static`);
+`expected/file_census.toml`, 44 frozen kind-sets, class `self`, shrink-only; and
+`docs/census/bbx_files.md` GENERATED, its §A and §B never hand-edited again.
+**Two derivations replaced bbx-11's hand lists:** a kind's SEEDS come from its
+own profile (families from `[expectations].kinds`, modules from
+`lib/sh/compare.sh`'s dispatch case followed through its functions, plus the
+log_summary module, the driver, and every consumer config's driver), and a gate
+is frame-driven-by-need when it sits in the static registry and names
+`static_needs_env` — the second reproduces bbx-11's list exactly, the first
+ADAPTS where a list would have lied. **The measurement:** 30 gates traced in a
+shadow, all PASS, universe 44 files, kinds K 14 / F 6 / D 4 / C 6, and **A17 = 0
+files reached by NO gate**, printed explicitly. `bin/bbx` went from 1 gate of one
+kind to 5 gates of two; `bin/bbx-run-static` gained the command-line kind;
+`bin/bbx-run-sweep` stayed where bbx-11 put it, as X33 and X37 said. Eleven
+files are reached by gates of all three kinds. **The six defects (G38–G43, and
+three plan corrections X36–X38):** the shadow is an instrumented harness, so
+R38's identity legitimately moves inside it and the adapters gate failed there
+until `--shadow-refreeze` (G38); a command-line gate read as document-set
+because two shared comparators IMPORT `docset.py` and the trace records what was
+loaded, invisible at bbx-11 because with two kinds the wrong attribution and the
+right answer were the same string — the third kind is the detector, BBX-25 turned
+on the tool that measures genericity (G39); `git commit` with nothing to commit
+exits 1 and under `set -e` killed a gate four controls early (G40); a retraction
+pattern spanning two lines could never match, because the sweep reads per line
+(G41); keying the generated document by `HEAD` made its own check fail for ever,
+fixed with R38's identity (G42); and **the census read 30 of 44 files as reached
+by NO gate** because a gate handed a cwd reports its PHYSICAL path, so modules
+imported under `/private/var` while the trace recorded `/var` — a plausible
+number and pure garbage, and the committed census had been correct only by the
+luck of writing under `build/` (G43). Its fix is proven both ways: the portable
+gate's synthetic stub now derives PYTHONPATH the way real gates do, and on a copy
+with only the realpath comparison reverted the gate FAILs. **Three runs now agree
+on every file count, kind and verdict**; the only field that ever moved is the
+runtime, which is why the seconds column came out of the checked block (BBX-14:
+non-determinism is never absorbed). Defaults D1–D63 (D62 the identity, the
+markers and the frozen register; D63 the cadence and why the sweep row needs the
+tier pattern). Gotchas G1–G43. Retractions X1–X38. **One shape, now five
+instances in two sittings:** a check that cannot reach its own failing state —
+the orphan verdict (G34), the clock stub (X32), the watcher loop (G37), the
+two-line retraction pattern (G41), and the portable gate's own ground truth,
+which lacked the one idiom that triggered G43.

@@ -7,68 +7,53 @@ paragraph per sitting, the outgoing status verbatim). Read `HANDOFF.md` first.
 generalization of `blackbox-harness` (bbh) to any subject with testable inputs
 and outputs. Born 2026-09-09.
 
-**Status (bbx-19 close, 2026-09-12):** slices S1 (but for R21's platform run)
-and S2 complete; **S3 DONE**; **S4's BUILD IS COMPLETE — steps 1 through 6 are
-built, and only step 7, the slice readout, remains.** This sitting built step 6,
-THE FILE CENSUS AS A GATE (R39), and the step found **six defects in its own
-work, every one by measurement**. What landed: `lib/py/bbx/file_census.py` and
-`bbx file-census`; `gates/file_census_tool.sh` (portable, ~13 s, 12 instrument
-runs on a synthetic harness tree, 5 controls) which holds the INSTRUMENT every
-battery; `gates/file_census.sh` (~20 min, 3 controls) which makes the
-MEASUREMENT and is the first row of `gates/sweep.tsv` at the release scope;
-BBX's **first `[tier].patterns` entry**, without which a gate registered only in
-the sweep registry is an orphan (`tier.py` reads `known = portable | static`);
-`expected/file_census.toml`, 44 frozen kind-sets, class `self`, shrink-only; and
-`docs/census/bbx_files.md` GENERATED, its §A and §B never hand-edited again.
-**Two derivations replaced bbx-11's hand lists:** a kind's SEEDS come from its
-own profile (families from `[expectations].kinds`, modules from
-`lib/sh/compare.sh`'s dispatch case followed through its functions, plus the
-log_summary module, the driver, and every consumer config's driver), and a gate
-is frame-driven-by-need when it sits in the static registry and names
-`static_needs_env` — the second reproduces bbx-11's list exactly, the first
-ADAPTS where a list would have lied. **The measurement:** 30 gates traced in a
-shadow, all PASS, universe 44 files, kinds K 14 / F 6 / D 4 / C 6, and **A17 = 0
-files reached by NO gate**, printed explicitly. `bin/bbx` went from 1 gate of one
-kind to 5 gates of two; `bin/bbx-run-static` gained the command-line kind;
-`bin/bbx-run-sweep` stayed where bbx-11 put it, as X33 and X37 said. Eleven
-files are reached by gates of all three kinds. **The six defects (G38–G43, and
-three plan corrections X36–X38):** the shadow is an instrumented harness, so
-R38's identity legitimately moves inside it and the adapters gate failed there
-until `--shadow-refreeze` (G38); a command-line gate read as document-set
-because two shared comparators IMPORT `docset.py` and the trace records what was
-loaded, invisible at bbx-11 because with two kinds the wrong attribution and the
-right answer were the same string — the third kind is the detector, BBX-25 turned
-on the tool that measures genericity (G39); `git commit` with nothing to commit
-exits 1 and under `set -e` killed a gate four controls early (G40); a retraction
-pattern spanning two lines could never match, because the sweep reads per line
-(G41); keying the generated document by `HEAD` made its own check fail for ever,
-fixed with R38's identity (G42); and **the census read 30 of 44 files as reached
-by NO gate** because a gate handed a cwd reports its PHYSICAL path, so modules
-imported under `/private/var` while the trace recorded `/var` — a plausible
-number and pure garbage, and the committed census had been correct only by the
-luck of writing under `build/` (G43). Its fix is proven both ways: the portable
-gate's synthetic stub now derives PYTHONPATH the way real gates do, and on a copy
-with only the realpath comparison reverted the gate FAILs. **Three runs now agree
-on every file count, kind and verdict**; the only field that ever moved is the
-runtime, which is why the seconds column came out of the checked block (BBX-14:
-non-determinism is never absorbed). Defaults D1–D63 (D62 the identity, the
-markers and the frozen register; D63 the cadence and why the sweep row needs the
-tier pattern). Gotchas G1–G43. Retractions X1–X38. **One shape, now five
-instances in two sittings:** a check that cannot reach its own failing state —
-the orphan verdict (G34), the clock stub (X32), the watcher loop (G37), the
-two-line retraction pattern (G41), and the portable gate's own ground truth,
-which lacked the one idiom that triggered G43.
+**Status (bbx-20 close, 2026-09-12):** slices S1 (but for R21's platform run) and
+S2 complete; **S3 DONE**; **S4's BUILD IS COMPLETE — only step 7, the slice
+readout, remains.** This sitting answered FOUR rulings and built three of them.
+**R46** (agreed): the harness's own identity key gets ONE definition in the
+harness, the fixture reading it — in force, not yet built. **R43** (agreed,
+BUILT): `lib/sh/baseline.sh` is the one definition of the bbh baseline
+(`bbx_baseline`), sourced by `gates/fidelity_bbh.sh`, `gates/fidelity_bbh_s2.sh`
+and `gates/suite.sh`, the last of which had cloned the wrong commit for six
+sittings while its header said otherwise (G32). The config-key alternative was
+DECLINED BY MEASUREMENT: fidelity pair F13e diffs bbh's and BBX's `config dump`
+and a new kind-blind section would break it. **R47** (agreed, with an addition
+the maintainer chose, BUILT): `gates/census_register.sh` holds the census
+register complete both ways on every battery via `bbx file-census
+--check-register` — a tracked harness file with no frozen row FAILS, a row naming
+a file the universe does not hold FAILS, and the census being STALE is
+`NOTE: census-drift`, loud and never fatal on R18's split. **R44** (agreed, for
+after this work): keep R38's key as ruled and make the refreeze a printed step —
+its build joins R46's next sitting, since both touch the one identity.
+**R45 RE-MEASURED and rescoped** at the maintainer's request from one direction
+to three: step 6's own tier pattern had opened a second orphan class nobody
+reports (G45), so four directions now exist across three registries. One
+candidate fix was measured and RULED OUT rather than attempted — the tier
+listing's registry column cannot say `sweep`, because F13e diffs that listing and
+all five INSTRUMENT gates in bbh's example are sweep-registered and print `-`.
+**Four defects in this sitting's own work, all found by measurement** (G43–G46
+and the gate-fix below), and three of them one shape: a check whose non-zero exit
+had two possible causes and could not tell them apart. R47's new gate DEADLOCKED
+the census — the register is completable only by a traced run, and the run refuses
+itself when a gate fails in the shadow, which the new gate did because the
+instrument's own `sitecustomize.py` is committed into the shadow and the tree's
+register can never hold it (G46). Fixed by letting the instrument declare the
+shadow (`BBX_FILE_CENSUS_SHADOW`), the gate SKIP there with its reason, and the
+contamination rule split: a FAIL discards a run, a SKIP does not but is NAMED in
+the checked text. The register gate's own read-only proof also fired for the wrong
+reason, reading `git status` where it meant its own sha1. **The census now proves
+R43 rather than my asserting it:** `lib/sh/baseline.sh` is executed by exactly the
+three gates that source it, measured from what the processes ran. 45 harness
+files, 31 gates, 0 unreached. Defaults D1–D63 (D62 amended for R47). Gotchas
+G1–G46. Retractions X1–X38. Open rulings THREE: R21, R44's build, R45.
 
-**In force:** `DECISIONS.md` — R0–R20, R22–R42, R46 and method M1–M4. **Open
-rulings, five:** R21 (the platform runs: no Linux or WSL host here), R43 (which
-bbh commit `gates/suite.sh` clones, and where the one baseline default lives),
-R44 (what the self subject's moving identity costs at every close), R45 (how
-BBX-9's orphan direction gets a verdict when the runner that reports it is the
-lineage's), and R47 (what detects a harness file no gate executes BETWEEN releases, now that the
-census is release-scoped: the recommendation is a cheap portable row holding the
-frozen register complete both ways against the universe, which cannot prove a
-file is reached and must say so). Each carries a recommendation and its declined
-alternatives; none blocks S4 step 7.
+**In force:** `DECISIONS.md` — R0–R20, R22–R43, R46, R47 and method M1–M4. **Open
+rulings, three:** R21 (the platform runs: no Linux or WSL host here), R44's BUILD
+(the ruling is answered; the printed-refreeze step is not yet written, and it
+joins R46's one-definition work because both touch the single identity key), and
+R45 (rescoped this sitting to three directions over three registries, with the
+tier-listing fix measured and ruled out). Each carries a recommendation and its
+declined alternatives; none blocks S4 step 7.
 In force since bbx-2: R18 (the census and the tests
 work on a clone or are explicitly, provably read-only), R19 (parallel work
 is a pull queue; the FIFO token queue is the default implementation, the
@@ -111,23 +96,21 @@ number to bring down; the two added at bbx-2 are host facts the clone
 exposed (G13, rule 7), the only exception ever allowed to move it upward. Grammar in
 `docs/census/README.md`.
 
-**Next:** **S4 step 7, the slice readout** — the last thing S4's plan asks for
-(`docs/plans/S4.md` §8.7): the families per kind (the design target B = 4),
-controls declared and fired, the provenance classes, the defaults rows, the FILE
-CENSUS from the gate with its three-kind rows, and what the green does not assert
-(CLAUDE.md §7). The build is done; this is the slice's own readout, after which
-S4 can be put to the maintainer for a DONE ruling as S3 was. **Before any of it:**
-the battery GREEN at the open, in the background (~11 min; `file_census_tool` is
-the 30th gate and adds ~13 s). **The census's own cadence:** `gates/file_census.sh`
-is NOT in the battery — it is the first row of `gates/sweep.tsv` at the release
-scope, and it takes ~20 min because it runs the whole battery inside a shadow.
-Run it with `BBX_BBH_HOME` set when a release or a kernel change wants it, and
-read R47 first, which is about the gap that cadence leaves. **The refreeze rule
-stands and now has a companion:** a commit touching `bin`, `lib`, `drivers` or
-`gates` moves BOTH the self subject's registry row (R38, R44) AND the census's
-key (D62), so such a commit leaves `gates/adapters.sh` red until the reviewed
-refreeze and leaves `docs/census/bbx_files.md` stale until a release run
-regenerates it. A commit touching only `docs/`, `expected/` or `fixture/` moves
-neither — which is why this sitting could land the census and then refreeze.
-R21's platform run when a host exists. bbh's tip is past the baseline: the R28
-procedure when a sitting needs it, and R43 first.
+**Next:** **S4 step 7, the slice readout** (`docs/plans/S4.md` §8.7) — the last
+thing the slice asks for, after which S4 goes to the maintainer for a DONE ruling
+as S3 did. **Then the first small fixes, which are now ONE step, not two:** R44's
+printed-refreeze and R46's one-definition-of-the-identity-key both touch the
+single key that `fixture/selfgates/idkey.sh`, `lib/py/bbx/file_census.py` and the
+census document all read, so they are built together or they fight each other.
+That step will itself move the identity, so it owes a census regeneration and a
+reviewed refreeze at its own close — and with R47's gate in the battery, a harness
+file added without a census run now REDS the battery, which is the cost the
+maintainer accepted. **The order that avoids paying twice** (learned three times
+this sitting): land every code change FIRST, then `bin/bbx file-census --self
+--out build/file_census_<stamp> --shadow-refreeze 'python3
+fixture/selfgates/mkselfgates.py' --document docs/census/bbx_files.md --frozen
+expected/file_census.toml --freeze`, then commit the document and register
+(docs-only, so the key holds), then refreeze the fixture row (fixture-only, so the
+key still holds), then the battery twice. Prove any instrument change on a
+two-gate `--only` probe before paying twenty minutes. R45 is rescoped and waiting;
+R21's platform run when a host exists.

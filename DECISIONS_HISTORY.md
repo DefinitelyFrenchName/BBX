@@ -1172,3 +1172,44 @@ own failing state — and G45 is the first where the narrowing was introduced
 deliberately, for a good reason, by the step that needed it. That is the strongest
 argument yet for R29's executable controls and for R45 itself.
 
+### bbx-20, continued — R43, R47 and R44 answered and the three builds that followed
+
+**R43 (agreed, built).** One definition of the bbh baseline, in
+`lib/sh/baseline.sh`. The config-key alternative the ruling itself offered was
+declined by MEASUREMENT and not by taste: fidelity pair F13e diffs bbh's and
+BBX's `config dump` of bbh's example, the section lists are identical today, and
+a new kind-blind section would appear in one and never the other. The prediction
+the ruling carried — "the same 77 printed lines from `gates/suite.sh`" — was
+confirmed exactly. And the census then proved the consolidation independently:
+`lib/sh/baseline.sh` is executed by the three gates that source it, measured from
+what the processes ran.
+
+**R47 (agreed, with an addition the maintainer chose, built).** The completeness
+direction FAILS both ways and the census's staleness is a loud non-fatal NOTE. The
+severity question was put to the maintainer rather than decided, because the
+accepted cost is real: a sitting that adds a harness file must run a
+twenty-minute census before its close. That cost arrived immediately, on the first
+file, added by R43 in the same sitting.
+
+**R44 (agreed, deferred by the maintainer's own instruction to after this work).**
+Keep the key as ruled and make the refreeze a printed step. Measured so the next
+sitting does not guess: the MISMATCH half is already red with both keys on the
+screen, so only the passing half may be missing. Its build is bound to R46's,
+because both touch one key with three readers.
+
+**What the sitting cost, and what it bought.** Four census runs were paid for and
+one discarded. The discard was the deadlock (G46) and it was worth its price: it
+exposed that a gate asserting something about a generated artifact must be asked
+whether its question means anything inside the generator's own copy of the tree —
+the second instance of that shape after G38, and the ledger now says a third
+should become a contract line rather than a third ad-hoc fix. The other two runs
+were paid because I changed code after a run, twice, which is now a HANDOFF line.
+
+**Anti-hyperfocus (BBX-27).** The sitting did what the maintainer asked and
+nothing else: four rulings answered, three built, one re-measured. The last green
+means 31 gates and 119 controls at one HEAD with a clean tree; it does NOT mean
+the release-scoped census gate passes at this HEAD, which was not re-run and is
+said so in the readout. The thread worth watching is that three of this sitting's
+four defects were one shape — a check that could not tell its two failure causes
+apart — which is a sharper version of the pattern S6 is already aimed at.
+
