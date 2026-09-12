@@ -13,6 +13,13 @@
 # R18's own precedent: the register ROTTING and the harness MOVING are different findings, and
 # making the second fatal would red the battery on every kernel commit until a twenty-minute run.
 # Usage: gates/census_register.sh        Portable, ~1 s.
+# SKIP: BBX_FILE_CENSUS_SHADOW is set — this gate's question is UNANSWERABLE inside an
+#       instrumented census shadow, not merely stale. The instrument writes
+#       lib/py/sitecustomize.py and commits it, so the shadow's universe permanently holds a
+#       harness file the TREE's register can never contain; and the register in a shadow is a
+#       copy of the one the running census is about to rewrite. Asserting completeness there
+#       made the census refuse its own run and left the register completable only by a run
+#       that could not complete (G46). The tree's own battery is where this is asserted.
 # MUST-FIRE: perturbed-copy: file-without-row — a COPY of the register with one row removed must FAIL naming that file, or the new-file case this gate exists for is not actually checked
 # MUST-FIRE: perturbed-copy: row-without-file — a COPY carrying a row for a file the universe does not hold must FAIL naming it as a dead row, or BBX-9's second direction is unenforced here too
 # MUST-FIRE: perturbed-copy: stale-is-a-note — a COPY whose recorded identity is not the tree's must PRINT the drift NOTE and still exit 0: the note must not be silent, and it must not be fatal
@@ -28,6 +35,13 @@ cd "$BBX_HOME"
 rc=0
 ok()   { printf '  ok    %s\n' "$1"; }
 fail() { printf '  FAIL  %s\n' "$1"; rc=1; }
+[ -z "${BBX_FILE_CENSUS_SHADOW:-}" ] || {
+    echo "SKIP: BBX_FILE_CENSUS_SHADOW is set — inside an instrumented census shadow the"
+    echo "      universe holds lib/py/sitecustomize.py, which the tree's register can never"
+    echo "      contain, and the register itself is the copy this run is about to rewrite."
+    echo "      The question is unanswerable here; the tree's battery is where it is asked (G46)."
+    exit 0
+}
 T="$(mktemp -d)"; trap 'rm -rf "$T"' EXIT INT TERM
 REG="expected/file_census.toml"
 CR() { python3 -m bbx.file_census --self --frozen "$1" --check-register; }

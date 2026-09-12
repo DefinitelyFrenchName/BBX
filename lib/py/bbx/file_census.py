@@ -423,8 +423,15 @@ def run_gates(shadow, trace, out, names, extra_env):
             open(log, "w").write(f"MISSING: {gate}\n")
             rows.append((name, 1, 0, "MISSING"))
             continue
+        # BBX_FILE_CENSUS_SHADOW tells a gate it is inside an instrumented shadow, so a gate
+        # whose question is UNANSWERABLE there can SKIP and say why. Measured at bbx-20: the
+        # instrument writes lib/py/sitecustomize.py and `git add -A` commits it, so the
+        # shadow's universe permanently holds a harness file the tree's census register can
+        # never contain — gates/census_register.sh therefore read FAIL in every shadow, the
+        # contamination rule discarded the run, and the register could only be completed by a
+        # run that could not complete (G46).
         env = {**os.environ, "PYTHONPATH": os.path.join(shadow, "lib", "py"),
-               "PYTHONDONTWRITEBYTECODE": "1", **extra_env}
+               "PYTHONDONTWRITEBYTECODE": "1", "BBX_FILE_CENSUS_SHADOW": "1", **extra_env}
         t0 = time.time()
         r = run(["sh", os.path.join("gates", f"{name}.sh")], cwd=shadow, env=env)
         secs = int(round(time.time() - t0))
@@ -515,6 +522,7 @@ def categorise(univ, reach, kinds):
 # ------------------------------------------------------------------- rendering
 
 def render(out, head, univ, rows, kinds, reach, cat, portable, static, instrumented):
+    skipped = sorted(n for n, _rc, _s, v in rows if v == "SKIP")
     def letters(name):
         return "".join(c for c in "KFDC" if c in kinds[name]) or "K"
     L = []
@@ -551,7 +559,10 @@ def render(out, head, univ, rows, kinds, reach, cat, portable, static, instrumen
              f"`lib`, `drivers`, `gates` — NOT `HEAD`, so a commit that only rewrites this "
              f"document leaves it checkable) over {len(univ)} tracked files under `lib/`, `bin/`, "
              f"`drivers/` (`*.md` excluded) and {len(rows)} gates, each run ONCE in the shadow "
-             f"with a fresh trace. `bbx file-census --check` fails on any line below.")
+             f"with a fresh trace. `bbx file-census --check` fails on any line below. "
+             + (f"**{len(skipped)} gate(s) SKIPPED in the shadow** and so under-report what "
+                f"they reach: {', '.join('`' + g + '`' for g in skipped)}."
+                if skipped else "No gate skipped in the shadow."))
     L.append("")
     L.append("## A. Counts")
     L.append("")
@@ -827,12 +838,20 @@ def main(argv):
                     f"instrumented\t{len(instrumented)}\n")
         for name, _rc, secs, verdict in rows:
             print(f"    {name:24s} {verdict:8s} {secs}s")
-    dirty = [(n, v) for n, _rc, _s, v in rows if v != "PASS"]
+    # A gate that FAILED executed less than it executes in the tree, so its trace is
+    # CONTAMINATED and the run is discarded. A gate that SKIPPED asserted nothing and misled
+    # nobody, so it does not contaminate — but it DOES under-report its own reach, which is a
+    # limit this run STATES rather than absorbs (BBX-30).
+    skipped_gates = sorted(n for n, _rc, _s, v in rows if v == "SKIP")
+    dirty = [(n, v) for n, _rc, _s, v in rows if v not in ("PASS", "SKIP")]
     if dirty:
         for name, verdict in dirty:
             print(f"REFUSED: file-census: `{name}` is {verdict} in the shadow — its trace is "
                   f"CONTAMINATED, so the run is discarded, never adjusted (CLAUDE.md §1)")
         return 1
+    for _g in skipped_gates:
+        print(f"NOTE: census-skipped {_g} (it asserted nothing in the shadow, so the files it "
+              f"reaches are under-reported by this run)")
 
     imps = importers(root, univ)
     kinds = gate_kinds(root, out, rows, seed, set(static),

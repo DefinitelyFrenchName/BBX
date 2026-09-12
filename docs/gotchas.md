@@ -999,3 +999,44 @@ Rules re-anchored in fact: BBX-9 (every registry complete BOTH ways, and there
 are three registries here, not two), BBX-6 (the only silent failure mode is the
 control that no longer fires — here one that stopped being asked), BBX-10 (rot
 class 1, the orphan), §1.
+
+## G46 — R47's new gate DEADLOCKED the census: the register could only be completed by a run that refused to complete while the register was incomplete (paid: 1 census run discarded, ~20 min; 2026-09-12)
+R47's gate asserts that every tracked harness file has a frozen census row. R43,
+in the same sitting, added `lib/sh/baseline.sh`. The register's rows carry KINDS,
+which only a traced run can measure, so completing the register needs a census
+run — and the census builds a shadow from HEAD and REFUSES its own run if any
+gate is not PASS inside it (§1: a gate that failed executed less than it executes
+in the tree, so its trace is contaminated). The new gate failed in the shadow for
+the same true reason it failed in the tree. The run was discarded after twenty
+minutes, and the only thing that could fix the register was the thing the
+register was blocking.
+Reading the shadow's own log made the diagnosis stronger than "stale". The gate
+named TWO files with no row, and the second was `lib/py/sitecustomize.py` — which
+the instrument WRITES into the shadow and `git add -A` then commits. So the
+shadow's universe permanently holds a harness file the tree's register can never
+contain, and the gate's question is not merely out of date inside a shadow, it is
+**unanswerable there by construction**.
+Fix, in three parts. The instrument now exports `BBX_FILE_CENSUS_SHADOW=1` to
+every gate it runs, so a gate whose question cannot be answered in an
+instrumented copy can SKIP and say why — the `# SKIP:` convention the contract
+already has, where a skip asserts nothing and is reported ([BBH-6], [BBH-15]).
+`gates/census_register.sh` skips on it, naming the sitecustomize reason. And the
+contamination rule is split: a FAIL still discards the run, a SKIP does not,
+because a gate that asserted nothing misled nobody — but a skip DOES under-report
+what that gate reaches, so the run prints `NOTE: census-skipped <gate>` and the
+generated block NAMES every skipped gate, which puts the limit inside the checked
+text where it cannot quietly change (BBX-30).
+Learning (R27): **a gate that asserts something about a generated artifact must
+be asked whether its question still means anything inside the generator's own
+copy of the tree.** The census is the only subject here that runs the whole
+battery against a perturbed version of itself, so it is the only place this can
+bite — and it will bite again for any future gate that reads a file the census
+produces. The shape is G38's, one layer out: G38 was an expectation keyed by
+content that instrumentation moved, and this is an assertion whose INPUT the
+instrument rewrites. Both were fixed by letting the subject declare what the copy
+cannot answer, rather than by weakening the rule. A third instance should become a
+contract line in `docs/controls.md`, not a third ad-hoc fix.
+Rules re-anchored in fact: §1 (the run was discarded, never adjusted, and the
+discard is what exposed the deadlock), BBX-30 (the skip is stated in the checked
+text, not absorbed), [BBH-6] (SKIP is not PASS and asserts nothing), BBX-9 (the
+completeness question is right; only its venue was wrong).
