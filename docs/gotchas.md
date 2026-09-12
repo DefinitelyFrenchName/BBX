@@ -720,3 +720,41 @@ view reads as plausible garbage), BBX-6 (a dead control is the only silent
 failure mode — and a report that invents one is the mirror image), BBX-12 (parse
 by name: the two conventions `.log` and `.out` are a positional convention in
 disguise).
+
+## G37 — Four watcher loops were still sleeping after the close, waiting for a condition that could never become false: `until ! pgrep -f 'bbx-run-static --config'` matched the watcher's OWN command line (paid: 4 stray processes killed by PID after the close, and one memory entry corrected that had just recommended the pattern; 2026-09-12)
+The battery grew past the ten-minute foreground cap at this sitting (G30's
+sibling in cost, not in kind), so each run went to the background with a watcher
+loop beside it: `until ! pgrep -f 'bbx-run-static --config'; do sleep 15; done`.
+The maintainer asked, after the close was pushed, what was still running — and
+four of those loops were, each sleeping in fifteen and twenty second cycles, hours
+after the last battery had finished.
+The mechanism, measured rather than guessed: `pgrep -f` matches against the full
+command line of every process, and a watcher's own command line CONTAINS the
+pattern it is searching for. `pgrep -f 'bbx-run-static --config'` returned the
+four watchers' own PIDs and nothing else; `pgrep -f '[b]bx-run-static --config'`
+returned the same four, because by then they were the only processes whose text
+held the string at all. The loop's exit condition was therefore false for as long
+as the loop existed: a wait that cannot end, which on a screen is
+indistinguishable from a wait that is simply patient.
+Nothing was harmed — the batteries had completed and their verdicts were read off
+the kept runs, the close commit is what it says it is, and four sleeping shells
+cost nothing but their existence. What is instructive is the SHAPE: this is the
+third instance this sitting of a check that cannot reach its own failing state.
+G34's registry report cannot go red on an orphan; the plan's clock-printing stub
+control could not have fired at all (X32); and this loop could not exit. In all
+three the reading was "fine" and the truth was "nothing was being decided".
+Learning (R27): a condition that mentions a process must be written so it cannot
+match the observer — the bracket form `'[b]bx-…'`, an exact-name `pgrep -x`, or
+better, watch the ARTIFACT (the run's output file, the kept directory) rather
+than the process, because the artifact is what the next step reads anyway. Before
+arming a wait, ask the negative question §1 asks of every control: what would make
+this loop exit, and has that ever been seen to happen? A hazard line in
+`HANDOFF.md`, and the project memory that had just recommended the defective loop
+was corrected in the same pass. Mechanism candidate for S6, with R29's executable
+controls: the runner already drives a gate's declared controls and demands the
+gate's own FAIL — the same demand made of a WAIT would have caught this in one
+run. Rules re-anchored in fact: §1 (a check that cannot fail where it should is
+not evidence — here a check that cannot succeed), BBX-6 (the silent failure mode
+is the control that no longer fires; a watcher that never fires is its twin), and
+BBX-16 (the wrong view — the process table read with a pattern that includes the
+reader — yields plausible quiet, not an error).

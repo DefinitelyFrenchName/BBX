@@ -2748,3 +2748,18 @@ The two adapters were built in a shadow of the working tree and only then applie
 # CLOSE — bbx-18 (2026-09-12)
 
 **Close measurements.** Green first, twice, kept (`build/selftest_20260911T220942Z`, `build/selftest_20260911T222248Z`): `PASS 29    SKIP 0     FAIL 0     MISSING 0` / `PASS 29    SKIP 0     FAIL 0     MISSING 0`; `controls fired 111 / declared 111; gates with no declaration: 0; red: 0` in both; `ok: no tracked file changed during the run` and `tree during the run: unchanged` in both; BBX-14 (more than one run): met — 29 gates, 0 verdict differences at the same HEAD (the screen above). Both batteries ran on `4cbacd9` (the identity refreeze) with this close's ledgers staged (porcelain 5 on the screen: the five files this commit carries before the readout itself). A third battery ran earlier in the sitting, on `1afffc5` with step 5 staged, and was GREEN at the same 29 gates and 111 controls (`build/selftest_20260911T215227Z`) — its screen was lost to a backgrounded pipe through `tail` and read back off the kept run, which is now a hazard line. **Sweeps:** `close_sweeps` and `rulings_shape` inside all three batteries and re-run on the final tree after these ledgers were written (the commit message quotes both verdicts); each caught a real defect in this sitting's own documents first — a retracted wording left in HANDOFF's step-5 line, and an R-number inside the prose of DECISIONS.md's open-rulings line, which the gate read as a fourth open ruling. **Lineage untouched, by construction and by proof** (from the first close battery's `census_recount.log`, the recount's own clones): bbh `head=10a82d2 tree=clone tip=1af19c727cb7 ahead=6 porcelain=0` (79 rows, 78 match, 1 not recountable); VampireSaved `recorded=0cdd9726 tip=9f2891af00ea ahead=40 porcelain=436` — it moved twice DURING this sitting (37 ahead at the open, 40 now: another session works there, and its tree is nobody's baseline); SMS `head=ecc5481 tip=ecc5481d6f8d ahead=0 porcelain=0`. The two fidelity gates report `bbh-source tip=1af19c7 porcelain=0 untouched-by-construction=clone`. Fidelity F12–F17 unchanged; no verdict text moved on either side. **The battery's own cost moved:** ~10.5 min with `adapters` in it, past the ten-minute cap on a foreground command — the close ran each battery in the background and waited on its tally.
+
+**Post-close (2026-09-12), one finding and no change to any verdict.** Asked what
+was still running after the close was pushed, the answer was: four watcher loops,
+sleeping on a condition that could never become false — `until ! pgrep -f
+'bbx-run-static --config'` matches the watcher's OWN command line, so the wait
+could not end (G37). No battery, gate or suite was running; both close batteries
+had finished before the close commit and their verdicts were read off the kept
+runs, so nothing above moves. What the finding adds is the sitting's THIRD
+instance of one shape — a check that cannot reach its own failing state, beside
+G34's registry report that cannot go red on an orphan and the plan's
+clock-printing stub control that could not have fired (X32). The stray processes
+were killed by PID, the project memory that had just recommended the defective
+loop was corrected, and the hazard is in `HANDOFF.md`. Mechanism candidate for
+S6, with R29: the runner already demands a gate's own FAIL from every declared
+control; the same demand made of a WAIT would have caught this in one run.

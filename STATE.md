@@ -42,7 +42,10 @@ half-moved default; G33 zsh's `:l` modifier turning `$c:lib` into `headib`, so g
 resolved two of three trees and printed a plausible key; G34 the unenforced orphan;
 G35 a shared helper that renamed the subject in three messages, one frozen by a
 gate and two invisible to every gate; G36 `bbx controls report` reading a MISSING
-log as zero firings and printing RED). Retractions X1–X35.
+log as zero firings and printing RED; G37, found POST-CLOSE when the maintainer
+asked what was still running — four watcher loops sleeping on
+`until ! pgrep -f 'bbx-run-static --config'`, a condition that matched the
+watcher's own command line and so could never become false). Retractions X1–X35.
 `bin/bbx selftest` GREEN at the open on `8b4426a` (`build/selftest_20260911T201846Z`:
 28 gates, 105/105), GREEN with step 5 staged on `1afffc5`
 (`build/selftest_20260911T215227Z`: **29 gates**, 111/111) and GREEN twice more at
@@ -84,7 +87,7 @@ G16 → BBX-1, G17 → BBX-24/BBX-26, G18 → BBX-1, G19 → BBX-10, G20 → BBX
 G21 → §1/BBX-16, G22 → BBX-10/§1, G23 → BBX-1, G24 → BBX-10, G25 → BBX-5/BBX-16, G26 → §1/§3.3/BBX-19/BBX-25, G27 → §1, G28 → BBX-5/§1, G29 → §1,
 G30 → BBX-28/§3.2/BBX-30, G31 → §3.3/BBX-30, G32 → BBX-9/BBX-10/§3.3,
 G33 → §1/BBX-16/BBX-12, G34 → BBX-9/§1/BBX-6, G35 → BBX-25/§3.3/§1,
-G36 → BBX-16/BBX-6/BBX-12 (`docs/gotchas.md`, G1–G36). The
+G36 → BBX-16/BBX-6/BBX-12, G37 → §1/BBX-6/BBX-16 (`docs/gotchas.md`, G1–G37). The
 formal promotion is slice S5.
 
 **Constitution:** BBX-5's citation corrected to `MJC-52` (R12, own commit).
