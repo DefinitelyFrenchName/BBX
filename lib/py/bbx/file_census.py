@@ -8,6 +8,7 @@ the gate (BBX-25: a generic thing needs two instances; R39).
                                         [--frozen PATH] [--freeze]
                                         [--only g1,g2] [--insert-after-shebang]
                                         [--shadow-refreeze "<command>"] [--reuse]
+    python3 -m bbx.file_census --self --frozen PATH --check-register    (cheap: no shadow, R47)
 
 Measured at RUNTIME, never by reading the gates' text. A shadow git tree is
 built from the root's HEAD (`git archive`); every `bin/*`, `drivers/*.sh` and
@@ -681,6 +682,51 @@ def compare_frozen(frozen, measured):
     return bad, notes
 
 
+
+# --------------------------------------- the register's completeness (R47)
+
+def register_completeness(root, frozen_path):
+    """The census REGISTER against the universe, both ways, with NO shadow and no
+    gate run (R47, ruled 2026-09-12).
+
+    The census itself is release-scoped (D63) because it runs the whole battery
+    inside a shadow, so between releases nothing watched it: measured at bbx-20,
+    `expected/file_census.toml` and `docs/census/bbx_files.md` are read by
+    `gates/file_census.sh` and this module and by nothing else in the battery. A
+    harness file added and brought under no gate therefore read green until the
+    next release run.
+
+    Two FAILures and one NOTE, the split ruled by the maintainer and following
+    R18's own precedent that the register rotting and the world moving are
+    different findings:
+
+      FAIL  a universe file with no frozen row — the new-file case, the likeliest
+            rot by far, and the one this check exists for
+      FAIL  a frozen row naming a file the universe no longer holds (a dead row,
+            BBX-9's other direction)
+      NOTE  the register's `measured_at` is not the tree's current harness
+            identity — the census is STALE, which is true and loud and never
+            fatal, because making it fatal would red the battery on every kernel
+            commit until a twenty-minute run
+
+    What it CANNOT do, and says so: prove that a file is REACHED by any gate.
+    Only a run with traces can, and that is `gates/file_census.sh`'s job."""
+    _spec, rows = load_frozen(frozen_path)
+    univ = set(universe(root))
+    bad, notes = [], []
+    for f in sorted(univ - set(rows)):
+        bad.append(f"FAIL register: `{f}` is a tracked harness file with NO frozen "
+                   f"census row — it may be reached by no gate and nothing would say so")
+    for f in sorted(set(rows) - univ):
+        bad.append(f"FAIL register: `{f}` has a frozen census row and is not in the "
+                   f"universe (a dead row, BBX-9)")
+    frozen_at = _spec.get("measured_at", "")
+    now = identity(root)
+    if frozen_at != now:
+        notes.append(f"NOTE: census-drift register={frozen_at[:12]} tree={now[:12]} "
+                     f"(the harness moved past the census; the release gate re-measures it)")
+    return bad, notes, len(univ), len(rows)
+
 # ------------------------------------------------------------------------- main
 
 def main(argv):
@@ -688,6 +734,7 @@ def main(argv):
     only = None
     refreeze = ""
     reuse = False
+    check_register = False
     after_shebang = check = freeze = False
     extra_env = {}
     i = 0
@@ -719,6 +766,8 @@ def main(argv):
             refreeze = argv[i]
         elif a == "--reuse":
             reuse = True
+        elif a == "--check-register":
+            check_register = True
         elif a == "--insert-after-shebang":
             after_shebang = True
         elif a == "--check":
@@ -733,11 +782,26 @@ def main(argv):
         print(__doc__, file=sys.stderr)
         return 2
     root = os.path.abspath(root)
-    if not out:
+    if not out and not check_register:
         print("bbx file-census: --out DIR is required (the run is kept)", file=sys.stderr)
         return 2
-    out = os.path.abspath(out)
-    os.makedirs(out, exist_ok=True)
+    if out:
+        out = os.path.abspath(out)
+        os.makedirs(out, exist_ok=True)
+
+    if check_register:
+        if not frozen_path:
+            print("bbx file-census --check-register needs --frozen PATH", file=sys.stderr)
+            return 2
+        bad, notes, n_univ, n_rows = register_completeness(root, os.path.abspath(frozen_path))
+        for n in notes:
+            print(n)
+        for b in bad:
+            print(b)
+        print(f"  register   files {n_univ}   rows {n_rows}   missing-rows "
+              f"{len([b for b in bad if 'NO frozen' in b])}   dead-rows "
+              f"{len([b for b in bad if 'dead row' in b])}")
+        return 1 if bad else 0
 
     cfg = C.load(os.path.join(root, "bbx.toml"))
     univ = universe(root)

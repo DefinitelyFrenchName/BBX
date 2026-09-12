@@ -42,7 +42,8 @@ unset BBX_CONFIG BBH_CONFIG 2>/dev/null || true
 B_SRC="${BBX_BBH_HOME:-}"
 [ -n "$B_SRC" ] && [ -x "$B_SRC/bin/bbh-run-static" ] || { echo "SKIP: BBX_BBH_HOME is not a bbh tree (${B_SRC:-unset}); fidelity needs it"; exit 0; }
 B_SRC="$(cd "$B_SRC" && pwd)"
-BASELINE="${BBX_BBH_BASELINE:-10a82d2}"   # ruling R8, re-baselined 2026-09-10 (R28; docs/rebaselines.md); docs/defaults.md D20
+. "$BBX_HOME/lib/sh/baseline.sh"          # THE ONE DEFINITION (R43); ruling R8, re-baselined 2026-09-10 (R28; docs/rebaselines.md); docs/defaults.md D20
+BASELINE="$(bbx_baseline)"
 rc=0
 ok()   { printf '  ok    %s\n' "$1"; }
 fail() { printf '  FAIL  %s\n' "$1"; rc=1; }

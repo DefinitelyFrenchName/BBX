@@ -1,7 +1,7 @@
 #!/bin/sh
 # suite.sh — the suite's verdicts mean what they say on the fake machine: every printed line in its own words, a perturbed expectation turns it RED, nondeterminism and a failed run are named before any class, the environment is scrubbed, the kept run counts a short observation apart from a divergence, and a loosened threshold is refused at the entrance
 # Ground truth for bin/bbx-run-suite (abstraction C3, C4, E2; R23, R25, R26). Sections 1-8 lifted from bbh
-# selftest/test_suite_dispatch.sh at f675710 — THE DISPATCH LOOP'S FIRST ROM-FREE GROUND TRUTH (the lineage could only
+# selftest/test_suite_dispatch.sh, lifted at f675710 — THE DISPATCH LOOP'S FIRST ROM-FREE GROUND TRUTH (the lineage could only
 # prove its loop by running MAME) — on a COPY of bbh's example/ taken from a plain clone at the baseline (D20), the fake
 # driver and machine being that clone's (R26: the frame-driven kind's drivers are bbh's). Sections 9-12 are BBX's: the
 # kept run and its FINDING column, the finding vocabulary, R25 at the entrance, R26's driver home. Static tier
@@ -25,7 +25,9 @@ PYTHONPATH="$BBX_HOME/lib/py"; export PYTHONPATH
 PYTHONDONTWRITEBYTECODE=1; export PYTHONDONTWRITEBYTECODE
 B_SRC="${BBX_BBH_HOME:-}"
 [ -n "$B_SRC" ] && [ -x "$B_SRC/bin/bbh-run-static" ] || { echo "SKIP: BBX_BBH_HOME is not a bbh tree (${B_SRC:-unset}); the suite needs bbh's fake driver"; exit 0; }
-B_SRC="$(cd "$B_SRC" && pwd)"; BASELINE="${BBX_BBH_BASELINE:-f675710}"
+B_SRC="$(cd "$B_SRC" && pwd)"
+. "$BBX_HOME/lib/sh/baseline.sh"          # THE ONE DEFINITION (R43): this gate read f675710 for six sittings while its header said "the baseline" (G32)
+BASELINE="$(bbx_baseline)"
 rc=0
 ok()   { printf '  ok    %s\n' "$1"; }
 fail() { printf '  FAIL  %s\n' "$1"; rc=1; }
