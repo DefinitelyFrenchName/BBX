@@ -21,10 +21,19 @@ static = "gates/static.txt"
 static_needs_env = "BBX_BBH_HOME"
 
 [tier]
-# nothing in BBX's own gates reaches an instrument yet; the fidelity gate
-# runs bbh's tools, which are the SUBJECT of the frame-driven kind, not an
-# instrument of this tree — an empty list means "nothing" (tier.py)
-patterns = []
+# ONE gate of this tree reaches an instrument: gates/file_census.sh, which
+# builds a shadow of HEAD and runs BBX's WHOLE battery inside it (R39, S4
+# step 6). That is the instrument — heavy, and the reason the gate lives in
+# gates/sweep.tsv at the release scope instead of in a tier that runs every
+# battery. The pattern names the self-subject invocation only: the portable
+# gates/file_census_tool.sh proves the same instrument on a synthetic tree
+# through --root and stays PLAIN, so the portable tier keeps its promise.
+# Why a pattern at all: a gate registered ONLY in the sweep registry is an
+# ORPHAN under BBX-9 unless the tier classifies it INSTRUMENT — tier.py
+# reads `known = portable | static` and exempts nothing else (X36, measured
+# 2026-09-12). The fidelity gates are NOT instrument gates: they run bbh's
+# tools, which are the SUBJECT of the frame-driven kind.
+patterns = ['file-census --self']
 source_regex = '^\s*\.\s+"?\$(?:BBX_HOME|\{BBX_HOME\})"?/(lib/sh/[a-z0-9_]+\.sh)'
 source_depth = 2
 
