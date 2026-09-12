@@ -562,12 +562,19 @@ def render(out, head, univ, rows, kinds, reach, cat, portable, static, instrumen
     L.append("### B.1 Gates, by derived kind, with the number of harness files each "
              "executed and its verdict in the shadow")
     L.append("")
-    L.append("| gate | tier | kind | files executed | shadow verdict | seconds |")
-    L.append("|---|---|---|---|---|---|")
-    for name, _rc, secs, verdict in rows:
+    # NO SECONDS COLUMN. Runtimes move between runs of the same 30 gates (measured at
+    # bbx-19: 12 of 30 rows differed by 1-4 s between two runs whose every file count,
+    # kind and verdict was identical), so a checked block carrying them could never be
+    # stable and `--check` would fail on every second run — tolerating that difference
+    # is exactly what BBX-14 forbids, and the answer is to not freeze a non-deterministic
+    # field rather than to excuse it. Per-gate runtimes live in the kept run's
+    # verdicts.tsv, which is where a runtime question is answered.
+    L.append("| gate | tier | kind | files executed | shadow verdict |")
+    L.append("|---|---|---|---|---|")
+    for name, _rc, _secs, verdict in rows:
         tier = "portable" if name in portable else "static" if name in static else "-"
         n = len(open(os.path.join(out, "files", f"{name}.txt")).read().split())
-        L.append(f"| `{name}` | {tier} | {letters(name)} | {n} | {verdict} | {secs} |")
+        L.append(f"| `{name}` | {tier} | {letters(name)} | {n} | {verdict} |")
     L.append("")
     L.append("### B.2 Files, by category, with every gate that executed them")
     for label, _t in CATEGORIES:
