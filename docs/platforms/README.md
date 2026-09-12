@@ -93,8 +93,23 @@ VERDICT: GREEN   PASS 31  SKIP 0  FAIL 0  TIMEOUT 0  MISSING 0   (gates 31)
   each can fail: 31 of 31 gates proved a control fires on purpose
 ```
 
+measured on this host at `84442f8`, the commit you are cloning, with the tree
+clean and nothing else running.
+
 A Linux screen showing `PASS 30  SKIP 1` with `census_recount` skipped is the
-expected shape, not a problem. Counts to re-derive rather than trust:
+expected shape, not a problem.
+
+**One NOTE is expected on every screen right now**, on macOS and Linux alike:
+
+```
+census_register   census-drift register=af2b1f085070 tree=1e40798f4530
+                  (the harness moved past the census; the release gate re-measures it)
+```
+
+The portability fix in §0 moved the harness identity, so the census artifacts
+record the previous one. That note is R47's ruling working as designed — loud and
+never fatal — and the regeneration belongs to the next sitting here. It is not
+something the Linux run should act on. Counts to re-derive rather than trust:
 `grep -hv '^#' gates/portable.txt gates/static.txt | wc -l` for the gate total.
 
 ## 5. Bring the run back
