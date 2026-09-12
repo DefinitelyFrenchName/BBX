@@ -1075,3 +1075,59 @@ like. The last green is treated as meaning what it says: 29 gates on macOS only,
 R21's platform run still absent, BBX-9 enforced in one direction until R45 is
 answered, and the orphan direction declared NOT-ASSERTED in the new gate's own
 header rather than left to be assumed.
+
+## bbx-19 (2026-09-12) — S4 step 6, the file census as a gate: two rulings raised, no ruling answered
+
+**Nothing was ruled this sitting; two rulings were raised.** R39 had already
+validated the step at bbx-12, so step 6 was built under it, and the two new
+entries come out of the building rather than out of the plan.
+
+**R46 — where the harness's own identity key is COMPUTED.** Until this sitting
+one file computed R38's key: `fixture/selfgates/idkey.sh`. Step 6 needed the
+same key for a second subject, because a census that lives in the tree it
+describes cannot be keyed by that tree's commit (G42), so
+`lib/py/bbx/file_census.py` computes it too. Two writers of one key, in two
+languages, cross-checked by a gate on BBX's own tree and therefore proven equal
+about BBX and nothing else. The recommendation is one definition in the harness
+with the fixture reading it. The precedent cited AGAINST merging is R41, which
+kept two writers of a NOTE key after measuring that they could not disagree;
+these two can, which is the difference.
+
+**R47 — what detects an unreached harness file between releases.** R39 put the
+census at the release scope for a measured reason and declined a portable gate
+that re-runs the battery. The consequence, now visible: the assertion "no harness
+file is reached by NO gate" is made at release and not otherwise, and the
+portable gate proves only that the instrument can detect one. The
+recommendation is a cheap portable row holding the frozen register complete both
+ways against the universe — which cannot prove a file is reached, and must say
+so.
+
+**Six defects in the step's own work, every one found by measurement** (G38–G43,
+and three plan corrections X36–X38 made before any tool was written). Two were
+in the instrument's logic, two in my own shell usage, one in the document's key,
+and one — the worst — in the instrument's ground truth being weaker than its
+subject: the portable gate's synthetic stub did not imitate the idiom by which
+every real gate derives its own paths, which is precisely the idiom that made
+the census read 30 of 44 harness files as executed by no gate. A seventh, G44,
+was a working-discipline error of mine at the close itself.
+
+**The finding worth carrying forward.** A command-line gate was filed under the
+document-set kind because two shared comparators import the document-set module
+and the trace records what was loaded rather than what ran. bbx-11's census could
+not have shown this: with two kinds, every gate that ran the shared exact family
+WAS a document-set gate, so the wrong attribution and the right answer were the
+same string. The third kind is the detector of a defect in the tool whose job is
+measuring genericity — BBX-25's own argument applied to the instrument rather
+than to the harness. The census was measuring its own blind spot and reporting it
+as a number.
+
+**Anti-hyperfocus (BBX-27).** The thread was the right one: step 6 was the last
+unmeasured thing in the tree and S4's build now ends with it. But the sitting
+also shows where the attention went: of roughly twelve commits, three were
+corrections of my own work inside the step and two were regenerations paid for by
+changing code after a run. The last green means what it says — 30 gates, 116
+controls, 0 files unreached — and it does not mean the instrument is finished:
+R46 and R47 are both about this step, and the five-instance pattern of checks
+that cannot reach their own failing state is now the most valuable thing S6 could
+attack.
+

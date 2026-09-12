@@ -451,3 +451,52 @@ is asserted by nobody; found by reading the staged diff). Retractions X1–X25.
 `bin/bbx selftest` GREEN at the open on `d49294b` (`build/selftest_20260911T185841Z`: 28 gates, 105/105) and GREEN twice more at the close on `9f16238` with
 the change staged (BBX-14 met): **PASS 28  SKIP 0  FAIL 0  TIMEOUT 0  MISSING 0** over 28 gates, controls fired 105 / declared 105
 (`build/selftest_20260911T194343Z`, `build/selftest_20260911T200013Z`).
+
+## bbx-18 (closed 2026-09-12)
+
+**Status (bbx-18 close, 2026-09-12; the sitting ran from 2026-09-11):** slices
+S1 (but for R21's platform run) and S2 complete; **S3 DONE**; **S4 steps 1–5
+built — the slice's build is complete but for step 6 (the file census as a gate)
+and step 7 (the slice readout)**. This sitting built step 5, THE ADAPTERS, and
+found two things nobody was looking for. **Step 5:** `drivers/unittest.sh`
+drives a Python unittest package and `drivers/gates.sh` drives BBX's OWN static
+runner through its OWN dispatcher over a synthetic consumer, both over the same
+`lib/py/bbx/cli.py` core, which now has three consumers (BBX-25 with one to
+spare). The framework's verdict is an OBSERVATION: a case that fails by design
+is `case:FAIL:<sha1>` and PASSes against a truth that expects it. Two new
+consumers, `fixture/unittest/` (8 cases in 2 modules, all six verdict words) and
+`fixture/selfgates/` (BBX itself as the subject, R38's `command` identity read
+through `$BBX_HOME` because a copy under TMPDIR is no git repository), and
+`gates/adapters.sh` with 6 controls, 9 firings and 42 ok lines in 97 s. **The
+first finding (G32, R43 open):** the R28 re-baseline of 2026-09-10 moved two of
+the THREE gates that read `BBX_BBH_BASELINE` — `gates/suite.sh` still clones bbh
+at `f675710` while `D20` says `10a82d2`, and its own header says it clones "at
+the baseline (D20)". Measured both ways: exit 0 and 77 identical printed lines at
+either commit, so it is currency and not correctness (§3.3), and the register
+row named one reader of three. **The second (G34, R45 open):** BBX-9 is enforced
+in ONE direction. A registered-but-absent gate is a `MISSING` row and reds the
+run; a gate on disk in no registry is merely NAMED — `bbx tier --unregistered`
+exits 0 in all three states, an orphan planted in BBX's own `gates/` left
+`gates/tier.sh` PASSing, and the runner's `rc` never reads the list. It cannot be
+fixed in the runner without breaking the fidelity obligation (F13's pairs diff
+both runners over a repo that CONTAINS an orphan), so the verdict must live in a
+gate of BBX's own. **R44 open** from R38 made concrete: the self subject's
+identity moves on every commit touching `bin`, `lib`, `drivers` or `gates` — 22
+of BBX's 53 commits, 5 of the last 10 — so this sitting's own step-5 commit moved
+it and the close carries the reviewed refreeze as its own commit. Defaults
+D1–D61 (D58–D61 added; D43 and D47 amended, dated). Gotchas G1–G36 (G32 the
+half-moved default; G33 zsh's `:l` modifier turning `$c:lib` into `headib`, so git
+resolved two of three trees and printed a plausible key; G34 the unenforced orphan;
+G35 a shared helper that renamed the subject in three messages, one frozen by a
+gate and two invisible to every gate; G36 `bbx controls report` reading a MISSING
+log as zero firings and printing RED; G37, found POST-CLOSE when the maintainer
+asked what was still running — four watcher loops sleeping on
+`until ! pgrep -f 'bbx-run-static --config'`, a condition that matched the
+watcher's own command line and so could never become false). Retractions X1–X35.
+`bin/bbx selftest` GREEN at the open on `8b4426a` (`build/selftest_20260911T201846Z`:
+28 gates, 105/105), GREEN with step 5 staged on `1afffc5`
+(`build/selftest_20260911T215227Z`: **29 gates**, 111/111) and GREEN twice more at
+the close on `4cbacd9` (BBX-14 met); the tally and the controls line are quoted
+verbatim in `docs/readout.md`'s bbx-18 CLOSE. **The battery now takes about ten and
+a half minutes and no longer fits a ten-minute foreground command: run it in the
+background and wait on its tally.**

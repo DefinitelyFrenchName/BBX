@@ -884,3 +884,74 @@ this key, and the portable gate proves they agree rather than the tree having on
 reader ([BBH-60]'s preference, met by a cross-check instead of a merge — a
 candidate for S6). Rules re-anchored in fact: BBX-29 (results are keyed by case
 and SUBJECT VERSION, never by the moment or the container), BBX-16, D62.
+
+## G43 — The census read 30 of 44 harness files as "executed by NO gate": a gate handed a working directory reports its PHYSICAL path, so modules imported under `/private/var` while the trace recorded `/var` (paid: 1 heavy gate run, ~20 min, plus 2 regenerations; 2026-09-12)
+`gates/file_census.sh` went RED on its first real run with a census that looked
+like a finding: 30 of 44 files reached by no gate, every kind-set shrunk, five
+gates demoted to kernel. Not one of those statements was true.
+The instrument runs each gate with `subprocess`, handing the shadow to the child
+as its working directory. A gate derives its own home with
+`cd "$(dirname "$0")/.." && pwd`, and what `pwd` reports depends on how the
+process was started — measured side by side from a probe gate that printed both:
+a cwd handed to the process gives `/private/var/folders/.../shadow`, while a
+shell that `cd`-ed there gives `/var/folders/.../shadow`. The gates therefore set
+their module path to the physical form and imported `/private/var/...`, while the
+instrument had written its root as the logical form, so `f.startswith(_ROOT)` was
+False for EVERY module and the python half of the trace was silently empty. The
+SHELL half kept working, which is exactly why the result read as a census number
+rather than as a broken instrument: three kinds were still placed, by the drivers.
+The committed census was nevertheless correct, and that is the uncomfortable
+part: its generating run wrote under `build/`, where no symlink lies in the path,
+so physical and logical agreed. It was right by luck of the output location.
+Fix: `os.path.realpath` on BOTH sides, never the path as written. Measured from
+one shadow afterwards, the instrument's own argv-plus-cwd form and a shell-string
+form trace the identical three modules for `gates/config.sh` where before they
+read 0 and 3.
+The instrument's OWN GROUND TRUTH could not have caught it. The portable gate's
+synthetic stub inherited its module path from the instrument instead of deriving
+it the way every real gate does, so the single idiom that triggers the bug was
+absent from the only gate whose job is to hold the instrument. The stub now sets
+`BBX_HOME` with `cd ... && pwd` and its module path from that, under `mktemp`
+where the symlink exists, and the fix is proven both ways: the gate PASSes with
+it, and on a copy of HEAD with ONLY the realpath comparison reverted the gate
+FAILs at `g1 traced: bin/synthbin` with both modules gone.
+Learning (R27): a fixture that stands in for a subject must imitate the subject's
+IDIOMS, not merely its shape — a synthetic gate that does not derive its own paths
+the way real gates do is not a stand-in for a real gate. And never compare two
+paths that crossed a process boundary without canonicalising both: one side's
+notion of where it is depends on who started it. Rules re-anchored in fact:
+BBX-16 (reading in the wrong view yields plausible garbage, not an error — 30 of
+44 is a plausible number), BBX-5 (the instrument was not proven on a known
+positive that exercised the real idiom), §1 (the generating run was a measurement
+and it was correct for a reason nobody had measured).
+## G44 — A second battery was launched while the first was still running, because a WAIT LOOP's completion was read as the BATTERY's completion (paid: one partial run discarded, one battery's last gate timed under load; 2026-09-12)
+The close needs two batteries at one HEAD, each run alone. The first was
+backgrounded and a separate wait loop was started beside it to poll for the
+`VERDICT:` line. The loop hit its own iteration cap and exited, the harness
+reported THAT command as completed, and the report was read as "the battery has
+finished" — so the second battery was launched while the first was still inside
+`gates/suite.sh`. Measured immediately after: `pgrep -f '[b]bx-run-static'`
+returned three processes, and the first battery's log showed `fidelity_bbh_s2`
+just done with `suite` still to come.
+No verdict is affected and none was salvaged by judgement: the two runs wrote to
+different `--log` directories, every gate builds its own `mktemp` scratch, and
+neither run writes a tracked file, so the first battery's VERDICTS stand. What
+the overlap did touch is runtimes — for about thirty seconds, and only
+`gates/suite.sh`'s, which is why that number is reported and not gated. The
+second battery was killed, its partial kept run REMOVED rather than kept and
+explained, and it was re-run alone afterwards.
+The trap is not the loop; it is the two different things a completion
+notification can be about. A backgrounded MEASUREMENT and a backgrounded WATCHER
+of that measurement both report completion, in the same shape, and only one of
+them means the measurement is done. G37 was the mirror image of this — a watcher
+that could never finish — and the two together say the watcher is the wrong
+instrument: watch the ARTIFACT the next step reads, which here is the `VERDICT:`
+line in the kept run, and test for it rather than for the absence of a process.
+Learning (R27): before starting anything that must run alone, assert that nothing
+it must run alone against is running — the positive check `pgrep` gives, read
+BEFORE the launch and not after. A launch that has a precondition is a gate
+without a control until that precondition is tested. Rules re-anchored in fact:
+§1 (the precondition was assumed from a notification, never measured), BBX-14
+(the two runs the close compares must each be a clean measurement), BBX-29
+(results are keyed by the version that started them, and a run whose conditions
+changed mid-flight is not that run — which is why the partial was deleted).

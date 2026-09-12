@@ -7,60 +7,72 @@ paragraph per sitting, the outgoing status verbatim). Read `HANDOFF.md` first.
 generalization of `blackbox-harness` (bbh) to any subject with testable inputs
 and outputs. Born 2026-09-09.
 
-**Status (bbx-18 close, 2026-09-12; the sitting ran from 2026-09-11):** slices
-S1 (but for R21's platform run) and S2 complete; **S3 DONE**; **S4 steps 1–5
-built — the slice's build is complete but for step 6 (the file census as a gate)
-and step 7 (the slice readout)**. This sitting built step 5, THE ADAPTERS, and
-found two things nobody was looking for. **Step 5:** `drivers/unittest.sh`
-drives a Python unittest package and `drivers/gates.sh` drives BBX's OWN static
-runner through its OWN dispatcher over a synthetic consumer, both over the same
-`lib/py/bbx/cli.py` core, which now has three consumers (BBX-25 with one to
-spare). The framework's verdict is an OBSERVATION: a case that fails by design
-is `case:FAIL:<sha1>` and PASSes against a truth that expects it. Two new
-consumers, `fixture/unittest/` (8 cases in 2 modules, all six verdict words) and
-`fixture/selfgates/` (BBX itself as the subject, R38's `command` identity read
-through `$BBX_HOME` because a copy under TMPDIR is no git repository), and
-`gates/adapters.sh` with 6 controls, 9 firings and 42 ok lines in 97 s. **The
-first finding (G32, R43 open):** the R28 re-baseline of 2026-09-10 moved two of
-the THREE gates that read `BBX_BBH_BASELINE` — `gates/suite.sh` still clones bbh
-at `f675710` while `D20` says `10a82d2`, and its own header says it clones "at
-the baseline (D20)". Measured both ways: exit 0 and 77 identical printed lines at
-either commit, so it is currency and not correctness (§3.3), and the register
-row named one reader of three. **The second (G34, R45 open):** BBX-9 is enforced
-in ONE direction. A registered-but-absent gate is a `MISSING` row and reds the
-run; a gate on disk in no registry is merely NAMED — `bbx tier --unregistered`
-exits 0 in all three states, an orphan planted in BBX's own `gates/` left
-`gates/tier.sh` PASSing, and the runner's `rc` never reads the list. It cannot be
-fixed in the runner without breaking the fidelity obligation (F13's pairs diff
-both runners over a repo that CONTAINS an orphan), so the verdict must live in a
-gate of BBX's own. **R44 open** from R38 made concrete: the self subject's
-identity moves on every commit touching `bin`, `lib`, `drivers` or `gates` — 22
-of BBX's 53 commits, 5 of the last 10 — so this sitting's own step-5 commit moved
-it and the close carries the reviewed refreeze as its own commit. Defaults
-D1–D61 (D58–D61 added; D43 and D47 amended, dated). Gotchas G1–G36 (G32 the
-half-moved default; G33 zsh's `:l` modifier turning `$c:lib` into `headib`, so git
-resolved two of three trees and printed a plausible key; G34 the unenforced orphan;
-G35 a shared helper that renamed the subject in three messages, one frozen by a
-gate and two invisible to every gate; G36 `bbx controls report` reading a MISSING
-log as zero firings and printing RED; G37, found POST-CLOSE when the maintainer
-asked what was still running — four watcher loops sleeping on
-`until ! pgrep -f 'bbx-run-static --config'`, a condition that matched the
-watcher's own command line and so could never become false). Retractions X1–X35.
-`bin/bbx selftest` GREEN at the open on `8b4426a` (`build/selftest_20260911T201846Z`:
-28 gates, 105/105), GREEN with step 5 staged on `1afffc5`
-(`build/selftest_20260911T215227Z`: **29 gates**, 111/111) and GREEN twice more at
-the close on `4cbacd9` (BBX-14 met); the tally and the controls line are quoted
-verbatim in `docs/readout.md`'s bbx-18 CLOSE. **The battery now takes about ten and
-a half minutes and no longer fits a ten-minute foreground command: run it in the
-background and wait on its tally.**
+**Status (bbx-19 close, 2026-09-12):** slices S1 (but for R21's platform run)
+and S2 complete; **S3 DONE**; **S4's BUILD IS COMPLETE — steps 1 through 6 are
+built, and only step 7, the slice readout, remains.** This sitting built step 6,
+THE FILE CENSUS AS A GATE (R39), and the step found **six defects in its own
+work, every one by measurement**. What landed: `lib/py/bbx/file_census.py` and
+`bbx file-census`; `gates/file_census_tool.sh` (portable, ~13 s, 12 instrument
+runs on a synthetic harness tree, 5 controls) which holds the INSTRUMENT every
+battery; `gates/file_census.sh` (~20 min, 3 controls) which makes the
+MEASUREMENT and is the first row of `gates/sweep.tsv` at the release scope;
+BBX's **first `[tier].patterns` entry**, without which a gate registered only in
+the sweep registry is an orphan (`tier.py` reads `known = portable | static`);
+`expected/file_census.toml`, 44 frozen kind-sets, class `self`, shrink-only; and
+`docs/census/bbx_files.md` GENERATED, its §A and §B never hand-edited again.
+**Two derivations replaced bbx-11's hand lists:** a kind's SEEDS come from its
+own profile (families from `[expectations].kinds`, modules from
+`lib/sh/compare.sh`'s dispatch case followed through its functions, plus the
+log_summary module, the driver, and every consumer config's driver), and a gate
+is frame-driven-by-need when it sits in the static registry and names
+`static_needs_env` — the second reproduces bbx-11's list exactly, the first
+ADAPTS where a list would have lied. **The measurement:** 30 gates traced in a
+shadow, all PASS, universe 44 files, kinds K 14 / F 6 / D 4 / C 6, and **A17 = 0
+files reached by NO gate**, printed explicitly. `bin/bbx` went from 1 gate of one
+kind to 5 gates of two; `bin/bbx-run-static` gained the command-line kind;
+`bin/bbx-run-sweep` stayed where bbx-11 put it, as X33 and X37 said. Eleven
+files are reached by gates of all three kinds. **The six defects (G38–G43, and
+three plan corrections X36–X38):** the shadow is an instrumented harness, so
+R38's identity legitimately moves inside it and the adapters gate failed there
+until `--shadow-refreeze` (G38); a command-line gate read as document-set
+because two shared comparators IMPORT `docset.py` and the trace records what was
+loaded, invisible at bbx-11 because with two kinds the wrong attribution and the
+right answer were the same string — the third kind is the detector, BBX-25 turned
+on the tool that measures genericity (G39); `git commit` with nothing to commit
+exits 1 and under `set -e` killed a gate four controls early (G40); a retraction
+pattern spanning two lines could never match, because the sweep reads per line
+(G41); keying the generated document by `HEAD` made its own check fail for ever,
+fixed with R38's identity (G42); and **the census read 30 of 44 files as reached
+by NO gate** because a gate handed a cwd reports its PHYSICAL path, so modules
+imported under `/private/var` while the trace recorded `/var` — a plausible
+number and pure garbage, and the committed census had been correct only by the
+luck of writing under `build/` (G43). Its fix is proven both ways: the portable
+gate's synthetic stub now derives PYTHONPATH the way real gates do, and on a copy
+with only the realpath comparison reverted the gate FAILs. **Three runs now agree
+on every file count, kind and verdict**; the only field that ever moved is the
+runtime, which is why the seconds column came out of the checked block (BBX-14:
+non-determinism is never absorbed). Defaults D1–D63 (D62 the identity, the
+markers and the frozen register; D63 the cadence and why the sweep row needs the
+tier pattern). Gotchas G1–G43. Retractions X1–X38. **One shape, now five
+instances in two sittings:** a check that cannot reach its own failing state —
+the orphan verdict (G34), the clock stub (X32), the watcher loop (G37), the
+two-line retraction pattern (G41), and the portable gate's own ground truth,
+which lacked the one idiom that triggered G43.
 
 **In force:** `DECISIONS.md` — R0–R20, R22–R42 and method M1–M4. **Open
-rulings, four:** R21 (the platform runs: no Linux or WSL host here), and three
-raised this sitting — R43 (which bbh commit `gates/suite.sh` clones, and where the
-one baseline default lives), R44 (what the self subject's moving identity costs at
-every close, and whether the whole-set key keeps `gates`), R45 (how BBX-9's orphan
-direction gets a verdict when the runner that reports it is the lineage's). Each
-carries a recommendation and its declined alternatives; none blocks S4 step 6.
+rulings, six:** R21 (the platform runs: no Linux or WSL host here), R43 (which
+bbh commit `gates/suite.sh` clones, and where the one baseline default lives),
+R44 (what the self subject's moving identity costs at every close), R45 (how
+BBX-9's orphan direction gets a verdict when the runner that reports it is the
+lineage's), and two raised this sitting — R46 (where the harness's own identity
+key is COMPUTED, now that two writers of it exist in two languages and a gate
+only cross-checks them on one tree; the precedent against merging is R41, which
+KEPT two writers after measuring they could not disagree, and these two can) and
+R47 (what detects a harness file no gate executes BETWEEN releases, now that the
+census is release-scoped: the recommendation is a cheap portable row holding the
+frozen register complete both ways against the universe, which cannot prove a
+file is reached and must say so). Each carries a recommendation and its declined
+alternatives; none blocks S4 step 7.
 In force since bbx-2: R18 (the census and the tests
 work on a clone or are explicitly, provably read-only), R19 (parallel work
 is a pull queue; the FIFO token queue is the default implementation, the
@@ -68,9 +80,11 @@ principle is the ruling), R20 (fidelity on a plain clone of bbh at the
 baseline; the recount's clone plain too).
 BBX = Black Box harness eXpanded; GPL-3; sh + Python 3 on macOS, Linux and
 Windows/WSL; kinds: frame-driven (bbh), document set, command-line tool, with BBX ITSELF a
-subject and an external test framework a driver since bbx-18 — five consumers now:
+subject and an external test framework a driver — five consumers:
 bbh's `example/`, `fixture/docset/`, `fixture/fakecli/`, `fixture/unittest/`,
-`fixture/selfgates/` (R14, R15, R37, R38).
+`fixture/selfgates/` (R14, R15, R37, R38). **BBX's own harness files are now
+measured by a gate**, not by a document: 44 files, 30 gates, 0 unreached
+(`docs/census/bbx_files.md`, generated; R39, D62, D63).
 
 **Lineage, measured 2026-09-09** (`docs/census/README.md`):
 
@@ -101,17 +115,23 @@ number to bring down; the two added at bbx-2 are host facts the clone
 exposed (G13, rule 7), the only exception ever allowed to move it upward. Grammar in
 `docs/census/README.md`.
 
-**Next:** **S4 step 6** (`docs/plans/S4.md` §8.6, R39 answered): the file census
-lifted into `lib/py/bbx/file_census.py`, `bin/bbx file-census [--check]`,
-`gates/file_census_tool.sh` (portable, the instrument on a synthetic tree, G25 as a
-mode) and `gates/file_census.sh` as the first row of `gates/sweep.tsv` (static,
-release cadence), the census document regenerated — step 5 moved the two "+kernel"
-rows that census is meant to measure, because `bin/bbx` and `bin/bbx-run-static`
-are now executed by a gate of the command-line kind. Then step 7, the slice
-readout. **Before any of it:** the battery GREEN at the open, in the background;
-and a commit touching `bin`, `lib`, `drivers` or `gates` needs the REVIEWED
-refreeze of `fixture/selfgates/expected/registry.tsv` as its own last commit (R38,
-R44 — `python3 fixture/selfgates/mkselfgates.py` is both the detector and the
-refreeze). R21's platform run when a host exists. bbh's tip is six past the
-baseline: the R28 procedure when a sitting needs it, and R43 first, because one of
-the three gates that read that default was never moved.
+**Next:** **S4 step 7, the slice readout** — the last thing S4's plan asks for
+(`docs/plans/S4.md` §8.7): the families per kind (the design target B = 4),
+controls declared and fired, the provenance classes, the defaults rows, the FILE
+CENSUS from the gate with its three-kind rows, and what the green does not assert
+(CLAUDE.md §7). The build is done; this is the slice's own readout, after which
+S4 can be put to the maintainer for a DONE ruling as S3 was. **Before any of it:**
+the battery GREEN at the open, in the background (~11 min; `file_census_tool` is
+the 30th gate and adds ~13 s). **The census's own cadence:** `gates/file_census.sh`
+is NOT in the battery — it is the first row of `gates/sweep.tsv` at the release
+scope, and it takes ~20 min because it runs the whole battery inside a shadow.
+Run it with `BBX_BBH_HOME` set when a release or a kernel change wants it, and
+read R47 first, which is about the gap that cadence leaves. **The refreeze rule
+stands and now has a companion:** a commit touching `bin`, `lib`, `drivers` or
+`gates` moves BOTH the self subject's registry row (R38, R44) AND the census's
+key (D62), so such a commit leaves `gates/adapters.sh` red until the reviewed
+refreeze and leaves `docs/census/bbx_files.md` stale until a release run
+regenerates it. A commit touching only `docs/`, `expected/` or `fixture/` moves
+neither — which is why this sitting could land the census and then refreeze.
+R21's platform run when a host exists. bbh's tip is past the baseline: the R28
+procedure when a sitting needs it, and R43 first.
