@@ -1,7 +1,8 @@
 # Running BBX's battery on a Linux or WSL host — the step-by-step (R21)
 
-Shape: procedure. Every fact below was **measured on the macOS host on 2026-09-12**
-at BBX commit `48a9525`, by the command shown beside it. Where a number could
+Shape: procedure. Every fact below was **measured on the macOS host on 2026-09-12**,
+by the command shown beside it — the tree facts at `48a9525`, the reference screen in
+§4 at `84442f8` after the portability fix. Where a number could
 drift, the command is there so you re-derive it rather than trust this page (§1).
 
 R21's question is narrow: **every platform guard BBX carries must be gated on
@@ -93,8 +94,9 @@ VERDICT: GREEN   PASS 31  SKIP 0  FAIL 0  TIMEOUT 0  MISSING 0   (gates 31)
   each can fail: 31 of 31 gates proved a control fires on purpose
 ```
 
-measured on this host at `84442f8`, the commit you are cloning, with the tree
-clean and nothing else running.
+measured on this host at `84442f8` with the tree clean and nothing else running.
+The gate total is worth re-deriving rather than trusting this page:
+`grep -hv '^#' gates/portable.txt gates/static.txt | wc -l`.
 
 A Linux screen showing `PASS 30  SKIP 1` with `census_recount` skipped is the
 expected shape, not a problem.
@@ -109,8 +111,7 @@ census_register   census-drift register=af2b1f085070 tree=1e40798f4530
 The portability fix in §0 moved the harness identity, so the census artifacts
 record the previous one. That note is R47's ruling working as designed — loud and
 never fatal — and the regeneration belongs to the next sitting here. It is not
-something the Linux run should act on. Counts to re-derive rather than trust:
-`grep -hv '^#' gates/portable.txt gates/static.txt | wc -l` for the gate total.
+something the Linux run should act on.
 
 ## 5. Bring the run back
 
