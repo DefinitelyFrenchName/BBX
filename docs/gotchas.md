@@ -758,3 +758,129 @@ not evidence — here a check that cannot succeed), BBX-6 (the silent failure mo
 is the control that no longer fires; a watcher that never fires is its twin), and
 BBX-16 (the wrong view — the process table read with a pattern that includes the
 reader — yields plausible quiet, not an error).
+
+## G38 — The census's shadow is an INSTRUMENTED harness, so the self subject's identity legitimately moves inside it and `gates/adapters.sh` failed there; the contamination guard then correctly discarded the whole run (paid: 2 probe runs, 41 s and 140 s; 2026-09-12)
+The file-census instrument builds a shadow of HEAD and puts one trace line into
+every `bin/*`, `drivers/*.sh` and `lib/sh/*.sh`. Those are three of the four trees
+R38 hashes into the self subject's identity, so the shadow's harness is, by
+construction, a DIFFERENT harness from the one whose registry row is frozen.
+Measured on the first probe (`--only adapters`): `mkselfgates.py --check` printed
+"THE HARNESS HAS MOVED since this identity was frozen", the row said
+`0ce60b8cdaeb…` and the shadow computed `e82db89ffe98…`, the suite read
+`UNREGISTERED build`, and the gate FAILed in 41 s. The instrument then refused the
+run as a contaminated trace — which was the right verdict on the evidence it had,
+and the wrong conclusion about the tree.
+What makes this subtle is that NOTHING was broken. The tree's registry row was
+correct, the gate was correct, the identity mechanism was correct, and the
+refusal was correct. The defect was in the census's own contract: it had no way to
+say "this subject's expectations are derived from its content, and I have just
+changed its content on purpose".
+Fix, measured both ways: `--shadow-refreeze "<command>"` runs one command inside
+the throwaway shadow after the first shadow commit — after, because R38's key is
+of the COMMIT. BBX passes `python3 fixture/selfgates/mkselfgates.py`, the
+generator that is also the detector. The four identity trees are untouched by that
+regeneration, so the key is stable across the shadow's second commit, and
+`adapters` then PASSed there in 140 s against 97 s in the tree (the difference is
+the instrumentation). What this does NOT assert is now a line on the gate: the
+TREE's registry row is `gates/adapters.sh`'s to hold, never the census's.
+Learning (R27): a subject whose expectations are keyed by its own content cannot
+be perturbed by an instrument without a declared way to re-derive them, and the
+re-derivation must happen in the throwaway copy and nowhere else (§3.4 forbids the
+runner writing its own expectation; a SHADOW is not the tree). Rules re-anchored
+in fact: §1 (the refusal discarded rather than adjusted), §3.4 (the regeneration
+is the generator's, inside a copy), BBX-6 (a control that fires for the wrong
+reason is as bad as one that does not fire).
+
+## G39 — The document-set seed fired on a COMMAND-LINE gate, because two shared comparators IMPORT the document-set module and the trace records what was loaded, not what ran — and only the third kind could reveal it (paid: 1 probe run re-analysed; 2026-09-12)
+With `adapters` passing in the shadow, the census filed it as kind `DC`: a
+command-line gate counted under the document set. Its trace holds
+`lib/py/bbx/docset.py`, which is one of the document-set kind's two derived seeds.
+Cause, measured: `lib/py/bbx/compare_exact.py` imports `docset` inside its
+detail path and `lib/py/bbx/compare_set.py` imports it at module level, and the
+python half of the trace is a `sitecustomize` that records every `bbx` module in
+`sys.modules` at interpreter exit — what was LOADED, never what was executed. Any
+gate that runs the exact family therefore drags the document-set seed in behind
+it.
+The instructive part is WHY this was invisible at bbx-11, when the same instrument
+and the same sitecustomize produced the first census: with two kinds, every gate
+that ran the exact family WAS a document-set gate, so the wrong attribution and
+the right answer were the same string. The third kind is the detector — which is
+BBX-25's own argument ("a generic thing needs two instances") applied to the tool
+whose job is to measure genericity. The census was measuring its own blind spot
+and reading it as a number.
+Fix: the explainer rule. A seed hit counts only when nothing else in the same
+trace imports that seed, the importers computed transitively from the modules' own
+`from . import` lines. Measured on the kept trace: `adapters` reads `C`. The
+import graph is derived from the tree every run, so a new import moves the rule
+rather than rotting it.
+Learning (R27): an instrument that attributes by IMPORT cannot distinguish a
+caller from a dependency, and the fix is not a better trace but an explicit
+account of what else in the evidence explains the observation. Stated as a
+NOT-ASSERTED line on both gates: the trace records what a process loaded or
+executed, never why. Rules re-anchored in fact: BBX-25 (the second and third
+instances are the detectors, here of the measuring tool itself), BBX-16 (reading
+in the wrong view — imports read as executions — yields plausible garbage, not an
+error), §1 (the bbx-11 number was a measurement, and it was still a measurement of
+the wrong thing).
+
+## G40 — `git commit` with nothing to commit exits 1, and under `set -e` that killed a gate four controls early with an exit the classifier correctly read as FAIL (paid: 1 gate run; 2026-09-12)
+`gates/file_census_tool.sh` perturbs its synthetic subject tree, runs the
+instrument, then restores the perturbation — and commits after each step, because
+the instrument reads the subject through `git archive HEAD`. A restore that puts
+the tree back exactly leaves NOTHING to commit, `git commit` exits 1, and the
+gate's `set -e` ended the script immediately after section 4. The output looked
+orderly: four sections of `ok` lines, two controls fired, and then nothing. The
+classifier read FAIL on the exit, which is right, but the log gives a reader no
+reason at all — the failing command printed nothing, because the commit's output
+was redirected.
+Learning (R27): a housekeeping command whose failure is not a finding must say so
+in its own line (`|| true`), and a gate whose output simply STOPS is a crash until
+proven otherwise ([BBH-20]'s rule read backwards — a PASS row with no verdict line
+is a crash; so is a log with no verdict line and a non-zero exit). The cheap
+standing check is the one [BBH-11] implies: a gate's last line is its own verdict,
+so a log whose last line is a section header never completed. Rules re-anchored in
+fact: BBX-1 (exit status decides, and this exit was honest), [BBH-20].
+
+## G41 — A retraction pattern that spanned two lines could never have matched anything, because the sweep reads per line: a dead entry in the register that watches for dead claims (paid: caught in the same commit, 0 sessions; 2026-09-12)
+X38's first draft quoted two lines of the plan text it retracts, joined by a
+literal `\n` in the pattern field. `lib/py/bbx/close_sweeps.py:111` iterates
+`text.split("\n")` and searches each line, so a pattern containing a newline
+cannot match any line, ever. The register would have carried a row that looked
+like a watch and was a no-op, and `retraction_hits=0` would have kept reading as
+the good news it usually is.
+Caught by asking the negative question of the matcher instead of trusting the
+zero: the corrected single-line pattern was planted into a scratch copy of the
+tree and REQUIRED to fire (`errors=1`, "still stated in planted.md:1"), then
+proven absent from the real tree (142 files, `retraction_hits=0`, `errors=0`).
+Learning (R27): every new retraction row is proven on a planted copy before the
+sweep's zero is believed — the same demand BBX-5 makes of any instrument, applied
+to one row of a register. This is the fourth instance in two sittings of a check
+that cannot reach its own failing state (G34's orphan verdict, X32's clock stub,
+G37's watcher loop, and now this), which is why R45 and R29 both matter more than
+their size suggests. Mechanism candidate for S6: `close_sweeps` could refuse a
+retraction pattern that contains a newline, and could report any row that has
+never been seen to match as unproven. Rules re-anchored in fact: BBX-6 (the only
+silent failure mode is the control that does not fire), BBX-22 (the sweep must
+show an empty result that MEANS something), §1.
+
+## G42 — Keying a generated in-tree document by HEAD makes its own check fail for ever: the commit that writes the document moves the key (paid: caught on the gate's first run, 0 sessions; 2026-09-12)
+The census document records the state it was measured at. The first draft recorded
+`HEAD`, and `gates/file_census_tool.sh` went red on its own output: the gate
+regenerated the document, committed it, re-ran `--check`, and the rendered
+preamble disagreed with the file by exactly one field — the commit hash, which the
+commit had just moved. A census that lives in the tree it describes can never be
+keyed by that tree's commit.
+Fix, reusing a mechanism this project had already ruled for a different reason:
+R38's whole-set identity, the tree hash of `bin`, `lib`, `drivers` and `gates`
+hashed into one. A docs-only commit leaves it unchanged, and a commit that touches
+the harness moves it — which is precisely when the census IS stale. Both
+directions are now controls in the portable gate: a docs-only commit leaves
+`--check` clean, and adding one gate turns it red.
+Learning (R27): the key of a generated artifact must be the identity of what it
+DESCRIBES, never the identity of the tree that stores it, and the two differ
+exactly when the artifact is stored beside its subject. One writer would be better
+than two: `fixture/selfgates/idkey.sh` and `bbx.file_census.identity` both compute
+this key, and the portable gate proves they agree rather than the tree having one
+reader ([BBH-60]'s preference, met by a cross-check instead of a merge — a
+candidate for S6). Rules re-anchored in fact: BBX-29 (results are keyed by case
+and SUBJECT VERSION, never by the moment or the container), BBX-16, D62.
