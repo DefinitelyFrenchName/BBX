@@ -1,283 +1,126 @@
-# Census — BBX's own harness files, by the kind of the gates that RUN them @ 88278e9 — measured 2026-09-10 (bbx-11, S3 step 5)
+# Census — BBX's own harness files, by the kind of the gates that RUN them
 
-> **STALE BY ONE STEP since bbx-18 (2026-09-12).** This census was measured at bbx-11 and is
-> NOT gated. S4 step 5 added `lib/py/bbx/adapters.py`, `drivers/unittest.sh`,
-> `drivers/gates.sh` and `gates/adapters.sh`, and it MOVED the two "+kernel" rows this
-> document reports: `bin/bbx` and `bin/bbx-run-static` are now executed by a gate of the
-> command-line kind, through `fixture/selfgates/`. Step 6 lifts the instrument into
-> `lib/py/bbx/file_census.py` and regenerates this file under a gate (R39); until then every
-> count below is true of bbx-11's tree and of no other.
-`/Users/koneko/Developer/generalized-blackbox-harness/BBX` · the first shared-vs-kind-specific FILE CENSUS (`docs/generality.md` "What the proof measures"; `docs/plans/S3.md` §6, §8.5) · **37** tracked files under `lib/`, `bin/`, `drivers/` (`drivers/README.md` excluded: not executable) · **23** gates
+`/Users/koneko/Developer/generalized-blackbox-harness/BBX` · the shared-vs-kind-specific FILE
+CENSUS (`docs/generality.md` "What the proof measures"; `docs/plans/S3.md` §6, §8.5;
+`docs/plans/S4.md` §8.6) · **GENERATED and GATED since bbx-19** (S4 step 6, ruled R39).
 
-Shape: census (a measured document; its history is in `docs/readout.md`, the bbx-11 section). **Measured once, not gated** (the close ritual's honest floor): the instrument in §C is a scratchpad generator run by hand, not a gate — the gate is S4's plan (`HANDOFF.md`: "if the census wants a tool, that is S4's plan"). Its rows are NOT in the census recount (`gates/census_recount.sh` reads the three lineage files only). Two runs of the generator on the same HEAD gave byte-identical per-gate file sets (BBX-14; the stamps in §D).
+Shape: census. Its §A and §B are **generated** by `bbx file-census` and never hand-edited
+(BBX-21); everything outside the `GENERATED` markers is prose. Two gates hold it:
+
+| gate | tier | what it holds | runtime |
+|---|---|---|---|
+| `gates/file_census_tool.sh` | portable, every battery | the INSTRUMENT on a synthetic harness tree: the trace, the insertion point (G25 as a mode), the document check, the frozen register in every direction, and that the two writers of the subject's identity agree | ~13 s |
+| `gates/file_census.sh` | `gates/sweep.tsv`, release scope (D63) | the MEASUREMENT on BBX's own tree: no file reached by no gate, no kind-set shrunk, this document byte-identical to the run | ~20 min |
+
+Until bbx-19 this page was **measured once and not gated** — a scratchpad instrument run by hand
+at bbx-11, recorded verbatim in this file's §C and reproduced in `docs/readout.md`'s bbx-11
+section, which is where those numbers now live as history. The honest floor was for one sitting;
+a number that is not gated rots (BBX-10).
 
 ## The question and the method
 
-Which harness files are executed by gates of ONE subject kind and which by TWO (BBX-25: a generic thing needs two instances). Measured at RUNTIME, not by reading: a shadow git tree is built from HEAD (`git archive`), every `bin/*`, `drivers/*.sh` and `lib/sh/*.sh` gets one line that appends its own path to a trace file — inserted AFTER the leading comment block, never after the shebang (gotcha G25: the first run inserted it after the shebang, which ENDED the header under R30, and `gates/docset_suite.sh` went red because the readout found no `NOT-ASSERTED:` line in the driver; that run's trace was discarded and the generator corrected before the numbers below were taken) — and `lib/py/sitecustomize.py` appends every `lib/py/bbx/*.py` module loaded (and a module run as a script) at interpreter exit. Every registered gate then runs once, alone, with a fresh trace, `BBX_BBH_HOME` set (the static tier runs); each gate's log is classified by the TREE's `bin/bbx classify`. A gate that is not PASS in the shadow contaminates its trace (§1): the run is discarded, never adjusted.
+Which harness files are executed by gates of ONE subject kind and which by more (BBX-25: a
+generic thing needs two instances). Measured at RUNTIME, not by reading: a shadow git tree is
+built from HEAD (`git archive`), every `bin/*`, `drivers/*.sh` and `lib/sh/*.sh` gets one line
+that appends its own path to a trace file — inserted AFTER the leading comment block, never
+after the shebang (gotcha G25: the first run inserted it after the shebang, which ENDED the
+header under R30, and `gates/docset_suite.sh` went red because the readout found no
+`NOT-ASSERTED:` line in the driver; that run's trace was discarded and the generator corrected).
+`lib/py/sitecustomize.py` appends every `lib/py/bbx/*.py` module loaded, and a module run as a
+script, at interpreter exit. Every registered gate then runs once, alone, with a fresh trace,
+`BBX_BBH_HOME` set so the static tier runs; each gate's log is classified by BBX's own
+classifier. **A gate that is not PASS in the shadow contaminates its trace: the run is REFUSED
+and discarded, never adjusted** (§1).
 
-**A gate's KIND is derived from its trace, not from its vocabulary** (a grep over the gates' text mis-files `gates/readout.sh`, `gates/provenance.sh` and `gates/expectation_kinds.sh` as frame-driven on the word `masked` in their synthetic fixtures — measured first, declined): a gate is **F** (frame-driven) if it executed a module only the frame-driven profile's kinds table registers (the temporal family: `compare_flicker.py`, `compare_window.py`, `compare_composite.py`, `check_diverge.py`, `propose_temporal.py`) or needs bbh's tree (`gates/static.txt` minus the census: `fidelity_bbh`, `fidelity_bbh_s2`, `suite`); **D** (document-set) if it executed a module only the document-set profile registers (`docset.py`, `compare_exact.py`, `compare_set.py`, `compare_schema.py`) or the document-set driver; **K** (kernel — BBX as its own subject, kind D of `docs/generality.md`) otherwise. The kinds tables are read with `python3 -m bbx.expectations kinds` under each profile's config (§A rows A3, A4). A file's category is the set of kinds of the gates that executed it.
+**A gate's KIND is derived from its trace, not from its vocabulary.** A grep over the gates'
+text mis-files them, measured twice and declined twice: at bbx-11 on the word `masked`
+(`gates/readout.sh`, `gates/provenance.sh` and `gates/expectation_kinds.sh` read as
+frame-driven because their synthetic fixtures carry it), and again at bbx-19 on a rule that reads
+each gate's consumer configs — FIVE of 29 gates wrong, `gates/config.sh` and `gates/readout.sh`
+frame-driven on a synthetic `bbh.toml` and `gates/temporal.sh`, `gates/thresholds.sh`,
+`gates/compare_dispatch.sh` kernel because they call the temporal comparators with no consumer
+config at all. The trace is the instrument; the text is a witness (BBX-28).
 
-## A. Counts
+A gate is **F** (frame-driven), **D** (document-set) or **C** (command-line) when it executed a
+SEED of that kind, and **K** (kernel — BBX as its own subject) otherwise. Both halves are
+DERIVED from the tree every run, where bbx-11 hand-listed them (BBX-9):
 
-| id | dimension | count | command / derivation |
-|---|---|---|---|
-| A1 | tracked files under lib/, bin/, drivers/ (README.md excluded) — the universe | 37 | `git ls-files lib bin drivers \| grep -vc '\.md$'` |
-| A2 | registered gates (both tiers) | 23 | `grep -hv '^#' gates/portable.txt gates/static.txt \| wc -l` |
-| A3 | EVAL comparator families the document-set profile registers (exact, set, schema) | 3 | `BBX_CONFIG=fixture/docset/bbx.toml python3 -m bbx.expectations kinds \| awk '$3=="EVAL"{print $2}' \| sort -u \| wc -l` |
-| A4 | EVAL comparator families the frame-driven profile registers (temporal) | 1 | `BBX_CONFIG=$BBX_BBH_HOME/example/bbh.toml python3 -m bbx.expectations kinds \| awk '$3=="EVAL"{print $2}' \| sort -u \| wc -l` |
-| A5 | gates of kind K (kernel) | 13 | §B.1, derived from the traces as stated above |
-| A6 | gates of kind F (frame-driven) | 6 | §B.1 |
-| A7 | gates of kind D (document-set) | 4 | §B.1 |
-| A8 | gates of both kinds F and D | 0 | §B.1 (none: no gate drives both fixtures) |
-| A9 | files executed by gates of BOTH kinds (shared — the abstraction, proved by two instances) | 11 | §B.2 |
-| A10 | files executed by frame-driven gates only (kind-specific, no kernel gate reaches them) | 7 | §B.2 |
-| A11 | files executed by frame-driven gates AND kernel gates, never by a document-set gate | 5 | §B.2 |
-| A12 | files executed by document-set gates only (kind-specific, no kernel gate reaches them) | 7 | §B.2 |
-| A13 | files executed by document-set gates AND kernel gates, never by a frame-driven gate | 3 | §B.2 |
-| A14 | files executed by kernel gates only | 4 | §B.2 |
-| A15 | files executed by NO gate (rot class 1, orphan) | 0 | §B.2 |
-| A16 | files executed by exactly one gate | 6 | §B.2, the `gates` column |
-| A17 | files executed by 15 gates or more | 3 | §B.2 |
+* a **seed** is a harness file one kind profile names and no other: the modules its comparator
+  families reach (the families from `[expectations].kinds`, the modules from `lib/sh/compare.sh`'s
+  own dispatch case followed through the functions it calls), the module its `[suite].log_summary`
+  names, its `[suite].driver`, and the driver of every tracked consumer config of that kind. A
+  file two kinds name is no seed, so `compare_set.py` and `compare_schema.py` correctly stopped
+  discriminating the moment the command-line kind registered them — where a hand list would have
+  gone on claiming them for the document set.
+* **F also** covers a gate in the static registry whose body, comments stripped, names
+  `[registries].static_needs_env`: it needs the lineage tree, which is the frame-driven kind's
+  SUBJECT. Measured 2026-09-12, this reproduces bbx-11's hand list exactly — `fidelity_bbh` 4
+  mentions, `fidelity_bbh_s2` 5, `suite` 10, `census_recount` 0.
+* **the explainer rule.** The trace's python half records what a process LOADED, not what it ran,
+  so a seed hit can be a shared module's import side effect. Measured at bbx-19:
+  `compare_exact.py` and `compare_set.py` both import `docset.py`, so the document-set seed fired
+  on `gates/adapters.sh`, a command-line gate, and it read `DC`. A seed hit therefore counts only
+  when nothing else in the same trace imports it. bbx-11 could not have seen this: with two kinds,
+  every gate that ran the exact family WAS a document-set gate — the third kind is the detector,
+  which is BBX-25's own argument about itself.
 
-## B. The rows
+The census is keyed by the **harness identity**, not by `HEAD`: R38's whole-set key, the tree
+hash of `bin`, `lib`, `drivers` and `gates` hashed into one, the same key
+`fixture/selfgates/idkey.sh wholeset` computes for the self subject and which the portable gate
+proves the two writers agree on. `HEAD` is the wrong key for a census that lives in the tree it
+describes — the commit that writes this page would move it, and `--check` would fail on its own
+output for ever after (measured at bbx-19 as the new gate's first red; D62).
 
-### B.1 Gates, by derived kind, with the number of harness files each executed and its verdict in the shadow
-
-| gate | tier | kind | files executed | shadow verdict | seconds |
-|---|---|---|---|---|---|
-| `classify` | portable | K | 6 | PASS | 2 |
-| `config` | portable | K | 3 | PASS | 1 |
-| `tier` | portable | K | 4 | PASS | 0 |
-| `static_runner` | portable | K | 8 | PASS | 9 |
-| `controls` | portable | K | 9 | PASS | 8 |
-| `sweep_runner` | portable | K | 8 | PASS | 98 |
-| `fingerprint` | portable | K | 4 | PASS | 2 |
-| `rulings_shape` | portable | K | 1 | PASS | 1 |
-| `readout` | portable | K | 11 | PASS | 5 |
-| `close_sweeps` | portable | K | 2 | PASS | 2 |
-| `temporal` | portable | F | 11 | PASS | 4 |
-| `thresholds` | portable | F | 10 | PASS | 2 |
-| `compare_dispatch` | portable | F | 12 | PASS | 2 |
-| `expectation_kinds` | portable | K | 5 | PASS | 1 |
-| `provenance` | portable | K | 4 | PASS | 2 |
-| `docset_fixture` | portable | D | 9 | PASS | 0 |
-| `docset_driver` | portable | D | 5 | PASS | 4 |
-| `set_schema` | portable | D | 13 | PASS | 11 |
-| `docset_suite` | portable | D | 19 | PASS | 83 |
-| `census_recount` | static | K | 1 | PASS | 63 |
-| `fidelity_bbh` | static | F | 10 | PASS | 48 |
-| `fidelity_bbh_s2` | static | F | 17 | PASS | 102 |
-| `suite` | static | F | 15 | PASS | 86 |
-
-`gates/docset_suite.sh`'s row is the corrected instrument's re-run (the first run FAILed on the instrument, G25; 86 s, discarded).
-
-### B.2 Files, by category, with every gate that executed them
-
-**files executed by gates of BOTH kinds (shared — the abstraction, proved by two instances): 11**
-
-| file | gates | executed by |
-|---|---|---|
-| `bin/bbx-run-suite` | 3 | docset_suite fidelity_bbh_s2 suite |
-| `lib/py/bbx/__init__.py` | 21 | classify close_sweeps compare_dispatch config controls docset_driver docset_fixture docset_suite expectation_kinds fidelity_bbh fidelity_bbh_s2 fingerprint provenance readout set_schema static_runner suite sweep_runner temporal thresholds tier |
-| `lib/py/bbx/config.py` | 19 | classify compare_dispatch config controls docset_fixture docset_suite expectation_kinds fidelity_bbh fidelity_bbh_s2 fingerprint provenance readout set_schema static_runner suite sweep_runner temporal thresholds tier |
-| `lib/py/bbx/expectations.py` | 7 | compare_dispatch docset_fixture docset_suite expectation_kinds fidelity_bbh_s2 set_schema suite |
-| `lib/py/bbx/finding.py` | 3 | docset_suite set_schema suite |
-| `lib/py/bbx/fingerprint.py` | 7 | docset_fixture docset_suite fidelity_bbh fidelity_bbh_s2 fingerprint suite sweep_runner |
-| `lib/py/bbx/logfmt.py` | 9 | compare_dispatch docset_driver docset_fixture docset_suite fidelity_bbh_s2 set_schema suite temporal thresholds |
-| `lib/py/bbx/toml_subset.py` | 20 | classify compare_dispatch config controls docset_driver docset_fixture docset_suite expectation_kinds fidelity_bbh fidelity_bbh_s2 fingerprint provenance readout set_schema static_runner suite sweep_runner temporal thresholds tier |
-| `lib/sh/compare.sh` | 5 | compare_dispatch docset_suite fidelity_bbh_s2 set_schema suite |
-| `lib/sh/config.sh` | 9 | classify controls docset_suite fidelity_bbh fidelity_bbh_s2 readout static_runner suite sweep_runner |
-| `lib/sh/expectation_kinds.sh` | 3 | docset_fixture expectation_kinds fidelity_bbh_s2 |
-
-**files executed by frame-driven gates only (kind-specific, no kernel gate reaches them): 7**
-
-| file | gates | executed by |
-|---|---|---|
-| `lib/py/bbx/_mklog.py` | 4 | compare_dispatch fidelity_bbh_s2 temporal thresholds |
-| `lib/py/bbx/check_diverge.py` | 4 | compare_dispatch fidelity_bbh_s2 suite temporal |
-| `lib/py/bbx/compare_composite.py` | 5 | compare_dispatch fidelity_bbh_s2 suite temporal thresholds |
-| `lib/py/bbx/compare_flicker.py` | 5 | compare_dispatch fidelity_bbh_s2 suite temporal thresholds |
-| `lib/py/bbx/compare_window.py` | 5 | compare_dispatch fidelity_bbh_s2 suite temporal thresholds |
-| `lib/py/bbx/propose_temporal.py` | 3 | fidelity_bbh_s2 temporal thresholds |
-| `lib/py/bbx/thresholds.py` | 5 | compare_dispatch fidelity_bbh_s2 suite temporal thresholds |
-
-**files executed by frame-driven gates AND kernel gates, never by a document-set gate: 5**
-
-| file | gates | executed by |
-|---|---|---|
-| `bin/bbx-run-static` | 4 | controls fidelity_bbh readout static_runner |
-| `bin/bbx-run-sweep` | 2 | fidelity_bbh sweep_runner |
-| `lib/py/bbx/tier.py` | 6 | controls fidelity_bbh readout static_runner sweep_runner tier |
-| `lib/sh/classify.sh` | 6 | classify controls fidelity_bbh readout static_runner sweep_runner |
-| `lib/sh/registry.sh` | 4 | controls fidelity_bbh readout static_runner |
-
-**files executed by document-set gates only (kind-specific, no kernel gate reaches them): 7**
-
-| file | gates | executed by |
-|---|---|---|
-| `bin/bbx` | 1 | set_schema |
-| `drivers/docset.sh` | 3 | docset_driver docset_suite set_schema |
-| `lib/py/bbx/compare_exact.py` | 2 | docset_suite set_schema |
-| `lib/py/bbx/compare_schema.py` | 2 | docset_suite set_schema |
-| `lib/py/bbx/compare_set.py` | 2 | docset_suite set_schema |
-| `lib/py/bbx/docset.py` | 4 | docset_driver docset_fixture docset_suite set_schema |
-| `lib/py/bbx/sha1.py` | 1 | docset_suite |
-
-**files executed by document-set gates AND kernel gates, never by a frame-driven gate: 3**
-
-| file | gates | executed by |
-|---|---|---|
-| `lib/py/bbx/controls.py` | 3 | controls docset_suite readout |
-| `lib/py/bbx/provenance.py` | 4 | docset_fixture docset_suite provenance readout |
-| `lib/py/bbx/readout.py` | 2 | docset_suite readout |
-
-**files executed by kernel gates only: 4**
-
-| file | gates | executed by |
-|---|---|---|
-| `bin/bbx-classify` | 1 | classify |
-| `lib/py/bbx/close_sweeps.py` | 1 | close_sweeps |
-| `lib/py/bbx/recount.py` | 1 | census_recount |
-| `lib/py/bbx/rulings_shape.py` | 1 | rulings_shape |
-
-**files executed by NO gate (rot class 1, orphan): 0**
-
-(none)
+<!-- GENERATED by `bbx file-census`: BEGIN. Never hand-edited (BBX-21). -->
+(not yet measured at this identity — run `bbx file-census --self --out <dir> --document docs/census/bbx_files.md`)
+<!-- GENERATED by `bbx file-census`: END. -->
 
 ## What this census does NOT assert
 
-- What a CONSUMER's run executes: only what BBX's 23 gates execute on this host, once each, under `BBX_BBH_HOME`. A file reached by one kind's gates here may be reached by the other kind in a consumer (`bin/bbx`, the dispatcher, is executed by ONE gate — `gates/set_schema.sh` through `bbx compare` — because every other gate calls the runners directly, bbh's shape; that is a fact about the gates' reach, not about the dispatcher's genericity).
-- A BBX-25 verdict: the proof's end is S4's third kind (`docs/plans/S3.md` §6: "S4 completes it with the third kind"). The kind-specific rows are reported, not moved.
-- Python modules imported but never executed on the traced path, and shell files read but not sourced: the trace records interpreter exits and executed `printf` lines, nothing else. A gate killed by a timeout leaves an incomplete trace (none was).
+- What a CONSUMER's run executes: only what BBX's own registered gates execute, once each, on
+  this host, under `BBX_BBH_HOME`. A file reached by one kind's gates here may be reached by
+  another in a consumer.
+- That a file reached by a gate of some kind is USED by that kind. The trace records what a
+  process loaded or executed, never why; the explainer rule attributes an imported module to its
+  importer, not to the importer's caller.
+- A BBX-25 verdict. The kind-specific rows are REPORTED, never moved. Whether a file reached by
+  one kind only ought to be generic is a reading of this census, not its output.
+- Python modules neither imported nor executed on the traced path, and shell files read but not
+  sourced: the trace records interpreter exits and executed `printf` lines, nothing else. A gate
+  killed by a timeout leaves an incomplete trace, which the contamination refusal catches.
+- The instrument itself. `gates/file_census_tool.sh` is its ground truth and runs every battery.
+- The selfgates registry row of the TREE. The shadow is an instrumented harness, so its self
+  identity legitimately moves, and the measurement re-derives that fixture's expectation inside
+  the throwaway shadow (`--shadow-refreeze`). `gates/adapters.sh` is what holds the tree's row.
 - Any platform but Darwin arm64 (R21).
 
-## C. The generator (scratchpad instrument, run by hand; verbatim)
+## C. The instrument
 
-`filecensus.sh <out dir>` builds and instruments the shadow and runs every gate; `fc_analyze.py <out dir> auto` derives the gate kinds and prints §B. Both are reproduced here so the census can be re-run; neither is a tree tool (S4 decides the gate).
+`lib/py/bbx/file_census.py`, reached as `bbx file-census`. It is a tree tool under the gates
+above, and no longer the scratchpad pair (`filecensus.sh` + `fc_analyze.py`) this section held
+between bbx-11 and bbx-19; that pair is preserved verbatim in `docs/readout.md`'s bbx-11 section
+as the record of how these numbers were first taken.
 
-```sh
-#!/bin/sh
-# filecensus.sh — S3 step 5's FILE CENSUS instrument (session bbx-11, scratchpad only; not a tree tool).
-# Builds a shadow git tree from BBX's HEAD, instruments every bin/*, drivers/*.sh and lib/sh/*.sh with one
-# line that appends its own path to a trace file, and a lib/py/sitecustomize.py that appends every bbx
-# module file loaded (and the script run) at interpreter exit; then runs every registered gate once,
-# each with a fresh trace, and keeps per gate: the sorted set of harness files it executed, its log,
-# its exit and its classified verdict. Nothing under the tree is written.
-set -u
-BBX=/Users/koneko/Developer/generalized-blackbox-harness/BBX
-OUT=${1:?out dir}; mkdir -p "$OUT/files" "$OUT/logs" "$OUT/verdicts"
-S="$OUT/shadow"; TRACE="$OUT/trace.txt"
-rm -rf "$S"; mkdir -p "$S"
-( cd "$BBX" && git archive HEAD ) | tar -x -C "$S"
-( cd "$BBX" && git rev-parse HEAD ) > "$OUT/head.txt"
-# instrument sh: bin/* and drivers/*.sh after the shebang; lib/sh/*.sh at the end (they are sourced)
-# AFTER THE HEADER (the leading comment block after the shebang, R30): a line inserted right after the
-# shebang ENDS the header, and the readout then finds no NOT-ASSERTED line in the driver (the first run
-# of this instrument turned gates/docset_suite.sh red exactly there; gotcha G25).
-for f in bin/bbx bin/bbx-classify bin/bbx-run-static bin/bbx-run-suite bin/bbx-run-sweep drivers/docset.sh; do
-  n=$(awk 'NR==1{next} /^#/{last=NR; next} {exit} END{print last+0}' "$S/$f"); [ "$n" -eq 0 ] && n=1
-  { sed -n "1,${n}p" "$S/$f"; printf "printf '%%s\\\\n' '%s' >> '%s'\n" "$f" "$TRACE"; sed -n "$((n+1)),\$p" "$S/$f"; } > "$S/$f.tmp"
-  mv "$S/$f.tmp" "$S/$f"; chmod +x "$S/$f"
-done
-for f in lib/sh/classify.sh lib/sh/compare.sh lib/sh/config.sh lib/sh/expectation_kinds.sh lib/sh/registry.sh; do
-  printf "\nprintf '%%s\\\\n' '%s' >> '%s'\n" "$f" "$TRACE" >> "$S/$f"
-done
-cat > "$S/lib/py/sitecustomize.py" <<PY
-import atexit, os, sys
-_T = '$TRACE'
-_ROOT = '$S' + os.sep
-def _dump():
-    seen = set()
-    for m in list(sys.modules.values()):
-        f = getattr(m, "__file__", None)
-        if f and f.startswith(_ROOT) and "/lib/py/bbx/" in f:
-            seen.add(os.path.relpath(f, _ROOT))
-    a = sys.argv[0] if sys.argv else ""
-    if a:
-        a = os.path.abspath(a)
-        if a.startswith(_ROOT) and "/lib/py/bbx/" in a:
-            seen.add(os.path.relpath(a, _ROOT))
-    if seen:
-        with open(_T, "a") as fh:
-            for s in sorted(seen):
-                fh.write(s + "\n")
-atexit.register(_dump)
-PY
-( cd "$S" && git init -q && git add -A && git commit -qm shadow-instrumented >/dev/null )
-cd "$S"
-export PYTHONDONTWRITEBYTECODE=1
-gates=$(grep -v '^#' gates/portable.txt; grep -v '^#' gates/static.txt)
-for g in $gates; do
-  rm -f "$TRACE"
-  t0=$(date +%s)
-  PYTHONPATH="$S/lib/py" BBX_BBH_HOME="$HOME/Developer/blackbox-harness" sh "gates/$g.sh" > "$OUT/logs/$g.log" 2>&1; rc=$?
-  t1=$(date +%s)
-  if [ -f "$TRACE" ]; then sort -u "$TRACE" > "$OUT/files/$g.txt"; else : > "$OUT/files/$g.txt"; fi
-  v=$(PYTHONPATH="$BBX/lib/py" "$BBX/bin/bbx" classify $rc "$OUT/logs/$g.log" 2>&1 | head -1)
-  printf '%s\t%s\t%s\t%s\n' "$g" "$rc" "$((t1-t0))" "$v" >> "$OUT/verdicts.tsv"
-done
-echo DONE >> "$OUT/verdicts.tsv"
+```
+bbx file-census --self   [--out DIR] [--document PATH] [--check] [--frozen PATH] [--freeze]
+bbx file-census --root DIR --out DIR [--only g1,g2] [--insert-after-shebang]
+                                     [--shadow-refreeze "<command>"] [--reuse]
 ```
 
-```python
-"""fc_analyze.py <fc dir> <gate-kinds.tsv> — the file census over the shadow traces (bbx-11, scratchpad).
-gate-kinds.tsv: <gate>\t<K|F|D|FD> ; universe: git ls-files lib bin drivers of the BBX tree."""
-import os, subprocess, sys
-from collections import defaultdict
-fc, kinds_tsv = sys.argv[1], sys.argv[2]
-BBX = "/Users/koneko/Developer/generalized-blackbox-harness/BBX"
-universe = subprocess.run(["git", "-C", BBX, "ls-files", "lib", "bin", "drivers"], capture_output=True, text=True).stdout.split()
-universe = [u for u in universe if not u.endswith(".md")]
-if kinds_tsv == "auto":
-    # gate kinds DERIVED FROM THE TRACES: seeds are the files only one kind's profile registers (the kinds tables:
-    # temporal family = frame-driven only; exact-by-index / set / schema = document-set only), the document-set
-    # driver, and the gates that need bbh's tree (gates/static.txt minus the census). Everything else is K (kernel).
-    F_SEED = {"lib/py/bbx/compare_flicker.py", "lib/py/bbx/compare_window.py", "lib/py/bbx/compare_composite.py",
-              "lib/py/bbx/check_diverge.py", "lib/py/bbx/propose_temporal.py"}
-    F_GATES = {"fidelity_bbh", "fidelity_bbh_s2", "suite"}
-    D_SEED = {"lib/py/bbx/docset.py", "lib/py/bbx/compare_exact.py", "lib/py/bbx/compare_set.py",
-              "lib/py/bbx/compare_schema.py", "drivers/docset.sh"}
-    kinds = {}
-    for fn in sorted(os.listdir(os.path.join(fc, "files"))):
-        g = fn[:-4]; fs = set(open(os.path.join(fc, "files", fn)).read().split())
-        k = ("F" if (fs & F_SEED or g in F_GATES) else "") + ("D" if fs & D_SEED else "")
-        kinds[g] = k or "K"
-    print("gate kinds (derived):", " ".join(f"{g}={k}" for g, k in kinds.items()))
-    from collections import Counter as _C; print("gate kinds histogram:", dict(_C(kinds.values())))
-else:
-    kinds = dict(l.rstrip("\n").split("\t") for l in open(kinds_tsv) if l.strip())
-reach = defaultdict(set)          # file -> set of gates
-for g in kinds:
-    p = os.path.join(fc, "files", g + ".txt")
-    for f in open(p).read().split():
-        reach[f].add(g)
-def classes(gs): return "".join(c for c in "KFD" if any(c in kinds[g] for g in gs))
-rows = []
-for f in universe:
-    gs = sorted(reach.get(f, ()))
-    rows.append((f, classes(gs), len(gs), gs))
-cat = defaultdict(list)
-for f, c, n, gs in rows:
-    if "F" in c and "D" in c: k = "shared (frame AND document-set)"
-    elif "F" in c: k = "frame-driven only" + (" (+kernel)" if "K" in c else "")
-    elif "D" in c: k = "document-set only" + (" (+kernel)" if "K" in c else "")
-    elif "K" in c: k = "kernel only"
-    else: k = "REACHED BY NO GATE"
-    cat[k].append((f, n, gs))
-print(f"universe: {len(universe)} tracked files under lib/ bin/ drivers/ (README.md excluded); gates: {len(kinds)}")
-for k in ["shared (frame AND document-set)", "frame-driven only", "frame-driven only (+kernel)", "document-set only", "document-set only (+kernel)", "kernel only", "REACHED BY NO GATE"]:
-    if k in cat:
-        print(f"\n{k}: {len(cat[k])}")
-        for f, n, gs in sorted(cat[k]): print(f"  {f}  gates={n}  [{' '.join(gs)}]")
-traced = [f for f in reach if f not in universe]
-if traced: print("\ntraced but not in universe:", traced)
-```
+`--freeze` writes `expected/file_census.toml`, one `[f<i>]` table per universe file with its
+`file` and its `kinds`, class `self`, mode `shrink-only` (D62): a lost kind FAILs naming both
+sides, a file reached by NO gate FAILs always and a fresh freeze cannot hide it, a frozen file
+outside the universe is a dead row, a file frozen twice is hand-editing, and a gained kind is a
+`NOTE: file-census-grew` that re-freezes. `--reuse` re-analyses a kept run without rebuilding the
+shadow, which is how `gates/file_census.sh` proves it can fail without paying a battery per
+control. `--insert-after-shebang` reproduces G25 on purpose.
 
 ## D. Runs
 
-| run | HEAD of the shadow | result | note |
+| run | identity | result | note |
 |---|---|---|---|
-| 1 | `88278e9` | 22 gates PASS; `docset_suite` FAIL on the INSTRUMENT (the trace line after the shebang ended the header, G25) — its trace discarded; the insertion corrected, the gate alone re-run PASS (83 s) with a fresh trace | the numbers in §A/§B were first read off this run |
-| 2 | `88278e9` (the same HEAD: both shadows were built before the sitting's first commit) | 23 gates PASS with the corrected generator end to end (`sweep_runner` 98 s, `fidelity_bbh_s2` 103 s, `suite` 92 s, `docset_suite` 86 s, `census_recount` 65 s, `fidelity_bbh` 47 s, the rest under 13 s) | every gate's file set byte-identical to run 1 (`cmp`, 23 of 23); §B re-derived by `fc_analyze.py` identical — BBX-14 met for the census |
+| bbx-11, 2026-09-10 | `88278e9` (HEAD — the key was not yet the identity) | 22 gates PASS; `docset_suite` FAIL on the INSTRUMENT (the trace line after the shebang ended the header, G25), its trace discarded, the insertion corrected and the gate re-run PASS | the first numbers, now history in `docs/readout.md` |
+| bbx-11, 2026-09-10 | `88278e9` | 23 gates PASS end to end with the corrected generator | every gate's file set byte-identical to run 1 (`cmp`, 23 of 23); BBX-14 met for the census |
+| bbx-19, 2026-09-12 | the identity in the generated block above | the first GATED run: 29 gates, the document generated and `--check`ed, the register frozen | `docs/readout.md`'s bbx-19 section carries the screen |
 
-Both runs 2026-09-10, bbx-11, Darwin arm64, this host loaded (runtimes are not gated). Kept under the session's scratchpad only; the census IS the record.
+Runtimes are not gated. The census IS the record; the kept runs live under `build/`.

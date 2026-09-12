@@ -7,6 +7,7 @@ the gate (BBX-25: a generic thing needs two instances; R39).
     python3 -m bbx.file_census --root DIR --out DIR [--document PATH] [--check]
                                         [--frozen PATH] [--freeze]
                                         [--only g1,g2] [--insert-after-shebang]
+                                        [--shadow-refreeze "<command>"] [--reuse]
 
 Measured at RUNTIME, never by reading the gates' text. A shadow git tree is
 built from the root's HEAD (`git archive`); every `bin/*`, `drivers/*.sh` and
@@ -221,6 +222,44 @@ def seeds(root, univ):
     return out
 
 
+def importers(root, univ):
+    """module relpath -> the universe modules that IMPORT it, transitively.
+
+    The trace's python half records what was LOADED, not what was run (the
+    instrument's declared limit), so a seed hit can be the side effect of a
+    SHARED module's import. Measured at bbx-19: `compare_exact.py` and
+    `compare_set.py` both import `docset.py`, so the document-set seed fired on
+    `gates/adapters.sh` — a command-line gate — and it read `DC`. The third kind
+    is the detector of exactly this, which is BBX-25's own argument.
+
+    bbx-11 could not see it: with two kinds, every gate that ran the exact
+    family was a document-set gate, so the wrong attribution was invisible."""
+    direct = {}
+    for rel in univ:
+        if not rel.startswith("lib/py/bbx/") or not rel.endswith(".py"):
+            continue
+        src = open(os.path.join(root, rel), errors="replace").read()
+        names = set(re.findall(r"^\s*from \.(?:\s*)import ([a-z_][a-z0-9_]*)", src, re.M))
+        names |= set(re.findall(r"^\s*from \.([a-z_][a-z0-9_]*) import", src, re.M))
+        names |= set(re.findall(r"^\s*import bbx\.([a-z_][a-z0-9_]*)", src, re.M))
+        direct[rel] = {f"lib/py/bbx/{n}.py" for n in names} & set(univ)
+    closure = {}
+    for rel in direct:
+        seen, todo = set(), list(direct[rel])
+        while todo:
+            m = todo.pop()
+            if m in seen:
+                continue
+            seen.add(m)
+            todo.extend(direct.get(m, ()))
+        closure[rel] = seen
+    out = {}
+    for rel, imported in closure.items():
+        for m in imported:
+            out.setdefault(m, set()).add(rel)
+    return out
+
+
 # ----------------------------------------------------- the shadow and its trace
 
 def header_end(lines):
@@ -298,7 +337,7 @@ atexit.register(_dump)
 '''
 
 
-def build_shadow(root, out, univ, after_shebang=False):
+def build_shadow(root, out, univ, after_shebang=False, refreeze=""):
     shadow = os.path.join(out, "shadow")
     trace = os.path.join(out, "trace.txt")
     if os.path.exists(shadow):
@@ -311,11 +350,34 @@ def build_shadow(root, out, univ, after_shebang=False):
     head = identity(root)
     commit = git(root, "rev-parse", "HEAD").strip()
     instrumented = instrument(shadow, trace, univ, after_shebang)
+    sh_commit(shadow, "shadow-instrumented")
+    if refreeze:
+        # A subject whose OWN expectations are keyed by its content (R38's
+        # identity) is legitimately MOVED by instrumentation: BBX's
+        # fixture/selfgates reads "THE HARNESS HAS MOVED" and gates/adapters.sh
+        # FAILs in the shadow, which the refusal above would then read as a
+        # contaminated trace (measured at bbx-19, exit 1 on `--only adapters`).
+        # So the subject is given one command to re-derive those expectations
+        # INSIDE the throwaway shadow, after the first commit because the key is
+        # of the COMMIT. The four identity trees are untouched by such a
+        # regeneration, so the key is stable across the second commit.
+        env = {**os.environ, "BBX_HOME": shadow,
+               "PYTHONPATH": os.path.join(shadow, "lib", "py")}
+        r = run(["sh", "-c", refreeze], cwd=shadow, env=env)
+        print(f"  refreeze   `{refreeze}` in the shadow: exit {r.returncode}")
+        if r.returncode:
+            for line in (r.stdout + r.stderr).splitlines()[-6:]:
+                print(f"      {line}")
+            raise RuntimeError(f"--shadow-refreeze failed (exit {r.returncode})")
+        sh_commit(shadow, "shadow-refrozen")
+    return shadow, trace, head, commit, instrumented
+
+
+def sh_commit(shadow, message):
     run(["git", "-C", shadow, "init", "-q"])
     run(["git", "-C", shadow, "add", "-A"])
     run(["git", "-C", shadow, "-c", "user.name=fc", "-c", "user.email=fc@fc",
-         "commit", "-qm", "shadow-instrumented"])
-    return shadow, trace, head, commit, instrumented
+         "commit", "-qm", message])
 
 
 # ------------------------------------------------------------ running the gates
@@ -367,14 +429,46 @@ def run_gates(shadow, trace, out, names, extra_env):
     return rows
 
 
+def read_run(out):
+    """A KEPT run read back: the identity and every gate's verdict. `--reuse`
+    exists so a gate that costs minutes can run its CONTROLS against the same
+    measurement instead of re-measuring once per control (the alternative was
+    one whole battery per control)."""
+    run_txt = os.path.join(out, "run.txt")
+    if not os.path.exists(run_txt):
+        raise RuntimeError(f"--reuse: {run_txt} is missing — there is no kept run here")
+    keys = dict(l.rstrip("\n").split("\t", 1) for l in open(run_txt) if "\t" in l)
+    rows = []
+    with open(os.path.join(out, "verdicts.tsv")) as f:
+        head = f.readline().rstrip("\n").split("\t")
+        for line in f:
+            cells = dict(zip(head, line.rstrip("\n").split("\t")))
+            rows.append((cells["gate"], int(cells["exit"]), int(cells["seconds"]),
+                         cells["verdict"]))
+    return keys["identity"], rows
+
+
 # ----------------------------------------------------------------- the analysis
 
-def gate_kinds(root, out, rows, seed, static_names, needs_env):
+def gate_kinds(root, out, rows, seed, static_names, needs_env, imps):
+    """A seed hit counts only when nothing else in the same trace EXPLAINS it.
+
+    If a module in the trace imports the seed and is not itself a seed of that
+    kind, the hit is the importer's side effect and is dropped — otherwise a
+    shared comparator that imports one kind's module would file every gate
+    under that kind (measured at bbx-19 on `gates/adapters.sh`)."""
     kinds = {}
+    all_seeds = set().union(*seed.values()) if seed else set()
     for name, _rc, _s, _v in rows:
         p = os.path.join(out, "files", f"{name}.txt")
         executed = set(open(p).read().split()) if os.path.exists(p) else set()
-        ks = {L for L, files in seed.items() if executed & files}
+        ks = set()
+        for L, files in seed.items():
+            for f in files & executed:
+                explainers = (imps.get(f, set()) & executed) - all_seeds
+                if not explainers:
+                    ks.add(L)
+                    break
         if name in static_names and needs_env and needs_env in uncomment(
                 os.path.join(root, "gates", f"{name}.sh")):
             ks.add("F")
@@ -572,6 +666,8 @@ def compare_frozen(frozen, measured):
 def main(argv):
     root = out = document = frozen_path = None
     only = None
+    refreeze = ""
+    reuse = False
     after_shebang = check = freeze = False
     extra_env = {}
     i = 0
@@ -598,6 +694,11 @@ def main(argv):
             i += 1
             k, _, v = argv[i].partition("=")
             extra_env[k] = v
+        elif a == "--shadow-refreeze":
+            i += 1
+            refreeze = argv[i]
+        elif a == "--reuse":
+            reuse = True
         elif a == "--insert-after-shebang":
             after_shebang = True
         elif a == "--check":
@@ -625,21 +726,32 @@ def main(argv):
     seed = seeds(root, univ)
     print(f"  universe   {len(univ)} files   gates {len(names)}   "
           f"seeds F={len(seed['F'])} D={len(seed['D'])} C={len(seed['C'])}")
-    shadow, trace, head, commit, instrumented = build_shadow(root, out, univ, after_shebang)
-    print(f"  shadow     {shadow} at commit {commit[:12]}   identity {head[:12]}   instrumented {len(instrumented)} files"
-          f"{'   INSERT-AFTER-SHEBANG (G25 reproduced)' if after_shebang else ''}")
-    rows = run_gates(shadow, trace, out, names, extra_env)
+    if reuse:
+        head, rows = read_run(out)
+        print(f"  reuse      {out}   identity {head[:12]}   {len(rows)} kept traces "
+              f"(no shadow built, no gate run)")
+    else:
+        shadow, trace, head, commit, instrumented = build_shadow(
+            root, out, univ, after_shebang, refreeze)
+        print(f"  shadow     {shadow} at commit {commit[:12]}   identity {head[:12]}   "
+              f"instrumented {len(instrumented)} files"
+              f"{'   INSERT-AFTER-SHEBANG (G25 reproduced)' if after_shebang else ''}")
+        rows = run_gates(shadow, trace, out, names, extra_env)
+        with open(os.path.join(out, "run.txt"), "w") as f:
+            f.write(f"identity\t{head}\ncommit\t{commit}\n"
+                    f"instrumented\t{len(instrumented)}\n")
+        for name, _rc, secs, verdict in rows:
+            print(f"    {name:24s} {verdict:8s} {secs}s")
     dirty = [(n, v) for n, _rc, _s, v in rows if v != "PASS"]
-    for name, _rc, secs, verdict in rows:
-        print(f"    {name:24s} {verdict:8s} {secs}s")
     if dirty:
         for name, verdict in dirty:
             print(f"REFUSED: file-census: `{name}` is {verdict} in the shadow — its trace is "
                   f"CONTAMINATED, so the run is discarded, never adjusted (CLAUDE.md §1)")
         return 1
 
+    imps = importers(root, univ)
     kinds = gate_kinds(root, out, rows, seed, set(static),
-                       C.get(cfg, "registries.static_needs_env"))
+                       C.get(cfg, "registries.static_needs_env"), imps)
     reach = reachability(out, rows, univ)
     cat = categorise(univ, reach, kinds)
     measured = measured_kindsets(univ, reach, kinds)

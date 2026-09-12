@@ -1,2 +1,3 @@
 # gates/sweep.tsv — BBX's instrument-tier registry (bin/bbx-run-sweep; the dispatcher has no run-sweep subcommand, measured bbx-18). Empty at birth: no BBX gate
 # reaches an instrument yet. COLUMNS gate <TAB> lane <TAB> scope <TAB> cadence <TAB> args <TAB> note [<TAB> timeout]
+file_census	prereq	release	always	-	the FILE CENSUS of BBX's own tree (R39, D63): a shadow of HEAD with every registered gate run inside it, about 20 min. INSTRUMENT by [tier].patterns, so this row is its registration	2400
