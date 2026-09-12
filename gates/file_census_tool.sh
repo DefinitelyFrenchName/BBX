@@ -58,13 +58,21 @@ echo adrv ran
 EOF
 : > "$P/lib/py/bbx/__init__.py"
 printf 'print("amod ran")\n' > "$P/lib/py/bbx/amod.py"
+# g1 derives its own home with `cd "$(dirname "$0")/.." && pwd` and sets PYTHONPATH from it,
+# exactly as every real BBX gate does. That idiom is what made this instrument read 30 of 44
+# harness files as "executed by NO gate" at bbx-19: the instrument hands the gate a cwd rather
+# than cd-ing for it, so the shell's `pwd` reports the PHYSICAL path and the modules import
+# under /private/var while the trace had recorded /var. The stub imitates the idiom so the
+# condition is reproduced on every battery, under mktemp, where the symlink exists.
 cat > "$P/gates/g1.sh" <<'EOF'
 #!/bin/sh
-# g1.sh — executes the program and the python module
+# g1.sh — executes the program and the python module, with its PYTHONPATH derived the way every real gate derives it
 # NOT-ASSERTED: anything at all; this is a stub
 #
 set -eu
-"$(cd "$(dirname "$0")/.." && pwd)/bin/synthbin"
+BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME
+PYTHONPATH="$BBX_HOME/lib/py"; export PYTHONPATH
+"$BBX_HOME/bin/synthbin"
 python3 -m bbx.amod
 echo "PASS: g1"
 EOF

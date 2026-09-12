@@ -57,7 +57,7 @@ else
     grep -E '^(REFUSED|FAIL)' "$T/run.log" | head -12 | sed 's/^/        /'
 fi
 sed -n '1,3p' "$T/run.log" | sed 's/^/    /'
-grep -E '^    [a-z_]+ +(PASS|FAIL|SKIP|TIMEOUT|MISSING)' "$T/run.log" | sed 's/^/  /'
+grep -E '^    [a-z_0-9]+ +(PASS|FAIL|SKIP|TIMEOUT|MISSING)' "$T/run.log" | sed 's/^/  /'
 grep -E '^  (gate kinds|kind-sets|document)' "$T/run.log" | sed 's/^/  /'
 grep '^NOTE:' "$T/run.log" || true
 

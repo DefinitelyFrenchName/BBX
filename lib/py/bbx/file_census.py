@@ -317,22 +317,31 @@ def instrument(shadow, trace, univ, after_shebang=False):
 SITECUSTOMIZE = '''\
 import atexit, os, sys
 _T = %(trace)r
-_ROOT = %(root)r
+# REALPATH on both sides, never the path as written. A gate derives its own home
+# with `cd "$(dirname "$0")/.." && pwd`, and what `pwd` reports depends on how the
+# gate was started: with a cwd handed to the process (no matching PWD in its
+# environment) the shell reports the PHYSICAL path, so on macOS a shadow under
+# TMPDIR is imported as /private/var/... while the instrument had written
+# /var/... and startswith() was False for EVERY module. Measured at bbx-19: 30 of
+# 44 harness files read as "executed by NO gate" — a plausible number and pure
+# garbage (BBX-16). The same run under build/ traced correctly only because no
+# symlink lies in that path, which is luck, not design.
+_ROOT = os.path.realpath(%(root)r) + os.sep
+def _keep(p, seen):
+    if not p:
+        return
+    r = os.path.realpath(p)
+    if r.startswith(_ROOT) and "/lib/py/bbx/" in r:
+        seen.add(os.path.relpath(r, _ROOT))
 def _dump():
     seen = set()
     for m in list(sys.modules.values()):
-        f = getattr(m, "__file__", None)
-        if f and f.startswith(_ROOT) and "/lib/py/bbx/" in f:
-            seen.add(os.path.relpath(f, _ROOT))
-    a = sys.argv[0] if sys.argv else ""
-    if a:
-        a = os.path.abspath(a)
-        if a.startswith(_ROOT) and "/lib/py/bbx/" in a:
-            seen.add(os.path.relpath(a, _ROOT))
+        _keep(getattr(m, "__file__", None), seen)
+    _keep(sys.argv[0] if sys.argv else "", seen)
     if seen:
         with open(_T, "a") as fh:
             for s in sorted(seen):
-                fh.write(s + "\\n")
+                print(s, file=fh)   # no escape here on purpose: a newline escape in this template collapsed one level and broke the emitted file (bbx-19)
 atexit.register(_dump)
 '''
 
