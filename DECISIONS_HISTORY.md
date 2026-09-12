@@ -1131,3 +1131,44 @@ R46 and R47 are both about this step, and the five-instance pattern of checks
 that cannot reach their own failing state is now the most valuable thing S6 could
 attack.
 
+## bbx-20 (2026-09-12) — R46 answered; R45 re-measured and rescoped, and the hole step 6 opened filed as G45
+
+**R46 answered: agreed with the recommendation.** The harness's own identity key
+gets ONE definition, in the harness, with `fixture/selfgates/idkey.sh` becoming a
+shim that reads it; the cross-check that the two agree stays as the proof the shim
+has not drifted. The ruling is in force and the work is the next sitting's — it
+touches `lib/` and so moves both the self subject's registry row and the census's
+key, which means a reviewed refreeze and a census regeneration at its close
+(R38, R44, D62).
+
+**R45 re-measured at the maintainer's request, on a copy of HEAD, and rescoped
+from one direction to three.** The question had changed shape because S4 step 6
+added BBX's first `[tier].patterns` entry. Four directions now exist across three
+registries: a dead portable/static row is enforced by the battery; an
+instrument-free orphan is named but not failed (G34); an instrument-MATCHING
+orphan is not even named (G45, new); and the sweep registry's own two directions
+are covered properly by its runner but only at the release scope and only fatally
+under `--strict`, with `--list` exiting before that section entirely. One candidate
+fix was measured and ruled out rather than attempted: the listing's registry column
+cannot say `sweep`, because fidelity pair F13e diffs bbh's tier listing against
+BBX's and all five INSTRUMENT gates in bbh's example are sweep-registered and print
+`-` there. The rescoped recommendation is one portable gate asserting three things
+and reporting the registry, with neither runner touched.
+
+**G45, filed with its price.** The pattern that made the sweep row a legitimate
+registration silently removed the only orphan report that class of gate had. The
+exemption is correct in itself — `--unregistered` asks one question and an
+instrument gate is not its business — and the defect is that nothing asks the
+matching question at the same cadence. The learning is general: **a classifier
+exemption is a hole unless the registry it exempts INTO is checked at the same
+cadence**, so adding a pattern to legitimise one registration is the same edit as
+removing a report, and only the second half is invisible.
+
+**Anti-hyperfocus (BBX-27).** This was ledger and measurement work, not building,
+and it was the right use of the time: R45 would have been answered against a
+three-registry tree with a one-registry recommendation. The shape that keeps
+recurring is now at six instances in two sittings — a check that cannot reach its
+own failing state — and G45 is the first where the narrowing was introduced
+deliberately, for a good reason, by the step that needed it. That is the strongest
+argument yet for R29's executable controls and for R45 itself.
+

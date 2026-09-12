@@ -955,3 +955,47 @@ without a control until that precondition is tested. Rules re-anchored in fact:
 (the two runs the close compares must each be a clean measurement), BBX-29
 (results are keyed by the version that started them, and a run whose conditions
 changed mid-flight is not that run — which is why the partial was deleted).
+
+## G45 — Step 6's tier pattern made the sweep row a legitimate registration and silently removed the only orphan report that class of gate had (paid: caught while scoping R45, 1 copy-of-HEAD measurement, 0 sittings; 2026-09-12)
+Before S4 step 6, `bbx.toml` carried `[tier].patterns = []`, so every BBX gate
+classified as PLAIN and an unregistered one was at least NAMED by
+`bbx tier --unregistered`. Step 6 added BBX's first pattern, deliberately and
+with its reason recorded (X36): `gates/file_census.sh` lives in
+`gates/sweep.tsv`, and `lib/py/bbx/tier.py` reads `known = portable | static`,
+so without the pattern the gate would have been reported as an orphan for ever.
+The pattern fixed that, and in doing so it exempted an entire class from the
+report. Measured on a copy of HEAD: a gate whose code matches the pattern and
+which is in NO registry at all is not named — the report prints `ok: every
+instrument-free gate is registered` while the orphan sits in `gates/`. The
+instrument-FREE orphan is still named, so G34's case did not get worse; what
+appeared is a second, quieter case that did not exist before this step.
+The exemption is correct in itself. `--unregistered` asks one question — is
+every instrument-free gate in a plain registry — and an instrument gate is not
+its business. The defect is that nothing then asks the matching question at the
+same cadence. The sweep runner DOES ask it, properly and both ways
+(`UNREGISTERED` and `DEAD ROW(S)`, re-derived every run), but only at the
+release scope, only fatally under `--strict`, and `--list` exits before that
+section entirely: a dead row planted in `gates/sweep.tsv` passed a `--list`
+silently.
+One fix is NOT available, and that was measured rather than assumed. The
+listing's registry column shows `-` for a sweep-registered gate, which reads as
+"no registry" and is misleading; it cannot be changed, because fidelity pair
+F13e diffs `bbh.tier --list` against `bbx.tier --list` over bbh's example, bbh's
+own column has the same three values, and all five INSTRUMENT gates in that
+example are in its sweep registry and print `-`. Changing BBX's column would
+make five lines differ. So the column stays the lineage's and the new gate
+reports the registry instead.
+Learning (R27): **a classifier exemption is a hole unless the registry it
+exempts INTO is checked at the same cadence.** Adding a pattern to make one
+registration legitimate is the same edit as removing a report, and only the
+second half is invisible. Before narrowing any completeness check, plant the
+case the narrowing newly permits and require the check to still speak. This is
+the sixth instance of one shape in two sittings — a check that cannot reach its
+own failing state, after G34's registry report, X32's clock stub, G37's watcher
+loop, G41's two-line pattern and G43's ground-truth gap — and it is the first
+where the narrowing was introduced on purpose, for a good reason, by the same
+step that needed it. R45's scope grew from one direction to three because of it.
+Rules re-anchored in fact: BBX-9 (every registry complete BOTH ways, and there
+are three registries here, not two), BBX-6 (the only silent failure mode is the
+control that no longer fires — here one that stopped being asked), BBX-10 (rot
+class 1, the orphan), §1.

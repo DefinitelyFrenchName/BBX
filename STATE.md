@@ -59,16 +59,12 @@ the orphan verdict (G34), the clock stub (X32), the watcher loop (G37), the
 two-line retraction pattern (G41), and the portable gate's own ground truth,
 which lacked the one idiom that triggered G43.
 
-**In force:** `DECISIONS.md` — R0–R20, R22–R42 and method M1–M4. **Open
-rulings, six:** R21 (the platform runs: no Linux or WSL host here), R43 (which
+**In force:** `DECISIONS.md` — R0–R20, R22–R42, R46 and method M1–M4. **Open
+rulings, five:** R21 (the platform runs: no Linux or WSL host here), R43 (which
 bbh commit `gates/suite.sh` clones, and where the one baseline default lives),
 R44 (what the self subject's moving identity costs at every close), R45 (how
 BBX-9's orphan direction gets a verdict when the runner that reports it is the
-lineage's), and two raised this sitting — R46 (where the harness's own identity
-key is COMPUTED, now that two writers of it exist in two languages and a gate
-only cross-checks them on one tree; the precedent against merging is R41, which
-KEPT two writers after measuring they could not disagree, and these two can) and
-R47 (what detects a harness file no gate executes BETWEEN releases, now that the
+lineage's), and R47 (what detects a harness file no gate executes BETWEEN releases, now that the
 census is release-scoped: the recommendation is a cheap portable row holding the
 frozen register complete both ways against the universe, which cannot prove a
 file is reached and must say so). Each carries a recommendation and its declined
