@@ -8,7 +8,7 @@
 [spec]
 class = "self"
 # measured_at is R38's whole-set key over bin, lib, drivers, gates — NOT HEAD
-measured_at = "e1c42cfe6c125077d9ded94f1261ceb3259769b4"
+measured_at = "af2b1f08507068b3f5074067fb985515a4d7ec4f"
 mode = "shrink-only"
 
 [f1]
@@ -168,21 +168,25 @@ file = "lib/py/bbx/toml_subset.py"
 kinds = "KFDC"
 
 [f40]
+file = "lib/sh/baseline.sh"
+kinds = "F"
+
+[f41]
 file = "lib/sh/classify.sh"
 kinds = "KFC"
 
-[f41]
+[f42]
 file = "lib/sh/compare.sh"
 kinds = "FDC"
 
-[f42]
+[f43]
 file = "lib/sh/config.sh"
 kinds = "KFDC"
 
-[f43]
+[f44]
 file = "lib/sh/expectation_kinds.sh"
 kinds = "KFDC"
 
-[f44]
+[f45]
 file = "lib/sh/registry.sh"
 kinds = "KFC"
