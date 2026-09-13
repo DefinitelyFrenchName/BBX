@@ -61,7 +61,7 @@ BBX is written entirely by AI agents — Anthropic's Claude, working through Cla
 maintainer who does not read the code.
 
 That is deliberate. The maintainer brings twenty years of product, development and management work in
-large, critical, often undocumented systems, and runs this project the way such systems are governed: by
+mostly large, often critical, largely undocumented systems, and runs this project the way such systems are governed: by
 evidence rather than by reading every line. The agent measures, proposes and builds. For any decision that
 changes how BBX behaves, it writes a recommendation beside the alternatives it rejected, and waits. The
 maintainer rules, and accepts work only on what the readout shows, never on the agent's word. Every ruling
@@ -77,8 +77,8 @@ BBX exists to make that position safe.
 BBX generalizes [blackbox-harness](https://github.com/DefinitelyFrenchName/BBH-frame-based) ("bbh"), a
 harness for systems that can be driven and checked frame by frame, such as an emulated game board. Its
 discipline was first worked out in [SMS-FrenchName-edition](https://github.com/DefinitelyFrenchName/SMS-FrenchName-edition)
-and scaled up in [VampireSaved](https://github.com/DefinitelyFrenchName/VampireSaved), two retro-game
-projects, before bbh extracted it. BBX never modifies bbh; it only has to agree with it.
+and scaled up in [VampireSaved](https://github.com/DefinitelyFrenchName/VampireSaved) (two retro-game
+projects based on SNES and CPS-II architecture), before bbh extracted it. BBX never modifies bbh; it only has to agree with it.
 
 ## Try it
 
@@ -93,7 +93,7 @@ BBX_BBH_HOME=../blackbox-harness bin/bbx selftest --log build/selftest_$stamp
 bin/bbx readout build/selftest_$stamp
 ```
 
-The battery takes 10 to 15 minutes on the maintainer's Mac. Run it twice and add
+The battery takes 10 to 15 minutes on M2 Pro silicon. Run it twice and add
 `--against build/selftest_<first stamp>` to the readout to compare the two runs. Two things to expect:
 
 - Without `BBX_BBH_HOME`, the four checks that need external references do not run at all, and the screen
