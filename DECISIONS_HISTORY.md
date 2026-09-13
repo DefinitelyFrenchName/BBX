@@ -1489,3 +1489,13 @@ closes option A's second gap. Two of the contributor's own probes read less than
 any number reached a document (G59, a gate-name pattern with no digit; G60, G33's zsh modifier trap again). Named
 and not queued: `docs/generality.md` says a one-kind component is moved to its kind's profile, and neither
 single-kind family's comparators ever were — R50 settled declaration, not location.
+
+The close pair at `bf557d0` was GREEN twice (PASS 32, controls fired 133 / declared 133, BBX-14 met), quoted in
+`docs/readout.md` (CLOSE — bbx-25), and S4 was laid before the maintainer again on the amended §7 table.
+
+**Anti-hyperfocus (BBX-27).** The thread was the one ruled after the bbx-24 close, and it grew — from one header
+line to eight, a ruling and two corrections. Each step of that growth was measured before it was built and stayed
+inside the thread's own subject, a readout saying less than is true, so it stayed the most valuable thread while it
+lasted. It is finished, and the next question is not the contributor's to pick: S4's DONE ruling and the next slice
+(S5, or R29's executable controls first) go to the maintainer at this close. The last green means what the amended
+§7 table says and no more — BBX-25 is unmet for two families and declared, not met.

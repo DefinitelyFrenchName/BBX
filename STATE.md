@@ -51,7 +51,7 @@ R39, D62, D63): regenerated at bbx-25 at identity `c26e5a94b344`, 32 gates, 45 r
 
 | repository | HEAD | tracked | note |
 |---|---|---|---|
-| bbh | `10a82d2` | 190 | fidelity baseline (R8; re-baselined from `f675710` on 2026-09-10, `docs/rebaselines.md`); tip `529f9d2`, EIGHT past at the bbx-25 open (`bbh-drift baseline=10a82d2 tip=529f9d2 ahead=8`), a NOTE; bbh's own working tree reads `porcelain=3` at the bbx-25 open (0 at the bbx-24 close) — reported, and the fidelity gates run on a clone, untouched by construction |
+| bbh | `10a82d2` | 190 | fidelity baseline (R8; re-baselined from `f675710` on 2026-09-10, `docs/rebaselines.md`); tip `529f9d2`, 8 past with bbh's own tree at `porcelain=3`, at the bbx-25 open; `f4094c2` (the maintainer's commit, a selftest capture fix in 3 files), NINE past with `porcelain=0`, at the close pair (`bbh-drift baseline=10a82d2 tip=f4094c2 ahead=9`) — a NOTE; every fidelity pair runs on a clone of the baseline, untouched by construction |
 | VampireSaved | `0cdd9726` | 7497 | 555 rules across 8 skills; 311 gate scripts; 4,808 expectation files; re-measured at bbx-2 (was `5df1d8be`: one count and 13 line citations moved); its tip is past the census (a NOTE every run, `b48e8cc0b53b` and 69 ahead at the bbx-25 open; not re-measured by design) |
 | SMS-FrenchName-edition | `ecc5481` | 633 | 66 rules; 28 traps; the Measurement Rule's origin at `CLAUDE.md:19-33`; the S3 plan's rows A35–A41 re-derived on the clone at bbx-6 (7 of 7 match) |
 

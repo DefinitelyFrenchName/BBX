@@ -50,7 +50,7 @@ visible failure.
 - **It proves nothing was lost.** BBX generalizes an earlier harness and must reproduce that harness's
   verdicts byte for byte on the same inputs; the comparison is part of every full battery.
 
-At commit `1c661c3` (2026-09-13), on macOS: 32 checks passed in each of two runs, all 131 of their
+At commit `bf557d0` (2026-09-13), on macOS: 32 checks passed in each of two runs, all 133 of their
 controls fired, and the two runs gave identical verdicts. Earlier commits have also run on Windows (WSL,
 the full battery) and on native Linux (the checks that need no external reference). Re-derive these
 numbers rather than trusting this page.
