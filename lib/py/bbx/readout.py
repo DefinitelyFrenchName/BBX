@@ -235,20 +235,36 @@ def main(argv=None):
         decl = fired = dead = undecl = 0
         red = []
         none_declared = []
+        skipped = []      # (gate, declared): R48 — a SKIPPED gate's declarations assert nothing this run
+        reported = set()
         for line in open(ctrl_path, encoding="utf-8"):
             m = CTRL.match(line)
             if not m:
                 continue
             g, d, f, x, u, v = m.group(1), int(m.group(2)), int(m.group(3)), int(m.group(4)), int(m.group(5)), m.group(6)
+            reported.add(g)
+            if d == 0:
+                none_declared.append(g)
+            if v == "SKIPPED":
+                skipped.append((g, d))
+                continue
             decl += d; fired += f; dead += x; undecl += u
             if v != "OK":
                 red.append(f"{g} ({v})")
-            if d == 0:
-                none_declared.append(g)
+        skip_txt = (f"; skipped {len(skipped)}, whose {sum(d for _, d in skipped)} declared control(s) assert nothing: "
+                    + ", ".join(g for g, _ in skipped)) if skipped else "; skipped 0"
         print(f"  controls: fired {fired} / declared {decl}; dead {dead}; undeclared firings {undecl}; "
-              f"gates red {len(red)}{': ' + ', '.join(red) if red else ''}")
-        print(f"  each can fail: {len(rows) - len(none_declared)} of {len(rows)} gates proved a control fires on purpose"
-              f"{'; declaring none: ' + ', '.join(none_declared) if none_declared else ''}")
+              f"gates red {len(red)}{': ' + ', '.join(red) if red else ''}{skip_txt}")
+        # G48: a gate that RAN with no controls line was never read — named, and never counted as asserting
+        unreported = [r["gate"] for r in rows if r.get("verdict") != "MISSING" and r["gate"] not in reported]
+        if unreported:
+            print(f"  controls: NOT REPORTED for {len(unreported)} gate(s) that ran — no controls verdict rests on them (G48): "
+                  + ", ".join(unreported))
+        skipped_declaring = [g for g, d in skipped if d]
+        proved = sum(1 for g in reported if g not in none_declared and g not in skipped_declaring)
+        print(f"  each can fail: {proved} of {len(rows)} gates proved a control fires on purpose"
+              f"{'; declaring none: ' + ', '.join(none_declared) if none_declared else ''}"
+              f"{'; skipped, proving nothing this run: ' + ', '.join(skipped_declaring) if skipped_declaring else ''}")
     else:
         print("  controls: not enforced in this run (no controls.txt) — no gate here has proved it can fail")
     # expectations

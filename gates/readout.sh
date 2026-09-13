@@ -3,7 +3,7 @@
 # Ground truth for lib/py/bbx/readout.py (abstraction RO1–RO3, BBX-30): a synthetic consumer of
 # stub gates with known verdicts and known header declarations is run through the REAL static
 # runner with --log, and the screen generated from that run is read line by line. The run dir is
-# what `bbx-run-static --log` writes; nothing here re-derives a verdict. Portable, ~3 s.
+# what `bbx-run-static --log` writes; nothing here re-derives a verdict. Portable, ~6 s measured 2026-09-13.
 # Usage: gates/readout.sh
 # MUST-FIRE: perturbed-copy: verdict-follows-run — a kept run with one PASS row rewritten as FAIL must read NOT GREEN with exit 1, or the screen decorates instead of reporting
 # MUST-FIRE: known-bad: bbx-14-unmet — --against a copy of the run with one verdict changed must report BBX-14 UNMET naming that gate, or "met" is silence
@@ -183,6 +183,24 @@ cp -R "$T/r1" "$T/r1n"; sed -i.bak 's/ ahead=2$/ ahead=9/' "$T/r1n/g_a.log"
 python3 -m bbx.readout "$T/r1n" > "$T/c4" 2>&1 || true
 if grep -q "^  note: g_a: drift census=x.md recorded=abc1234 tip=def5678 ahead=9" "$T/c4" && ! grep -q "ahead=2" "$T/c4"; then echo "CONTROL FIRED: note-follows-log — $(grep '^  note: g_a' "$T/c4" | cut -c1-70)"
 else fail "CONTROL DEAD: note-follows-log — $(grep '^  note' "$T/c4" | tr '\n' ' ')"; fi
+
+echo "== 5. R48 and G48: a skipped gate's declarations are set aside, named and never counted as proved; a gate with no controls line is named =="
+cat > "$FR/tests/g_k.sh" <<'G'
+#!/bin/sh
+# g_k.sh — declares a control, then skips
+# MUST-FIRE: known-bad: needs-input — a wrong input must fail
+# NOT-ASSERTED: everything, when it skips
+#
+echo "SKIP: the input is absent on this host"
+G
+chmod +x "$FR/tests/g_k.sh"; printf 'g_a\ng_b\ng_s\ng_k\n' > "$FR/tests/ci_portable.txt"
+run --log "$T/r3" > "$T/o3" && ok "a correct skip beside a declared control leaves the run GREEN, exit 0 (G47's case)" || fail "the run with g_k is not GREEN: $(grep -E 'controls=g_k|GREEN' "$T/o3" | tr '\n' '|')"
+python3 -m bbx.readout "$T/r3" > "$T/s3" 2>&1 && ok "…and its screen exits 0" || fail "the screen of that run exits non-zero: $(grep -E '^VERDICT|^  controls' "$T/s3" | tr '\n' '|')"
+grep -qx "  controls: fired 1 / declared 1; dead 0; undeclared firings 0; gates red 0; skipped 2, whose 1 declared control(s) assert nothing: g_s, g_k" "$T/s3" && ok "the controls line sets the skipped declarations aside, counts them and names the gates" || fail "r3 controls line: $(grep '^  controls' "$T/s3")"
+grep -qx "  each can fail: 1 of 4 gates proved a control fires on purpose; declaring none: g_b, g_s; skipped, proving nothing this run: g_k" "$T/s3" && ok "a skipped gate is never counted as having proved a control" || fail "r3 each-can-fail line: $(grep 'each can fail' "$T/s3")"
+cp -R "$T/r1" "$T/r1g"; grep -v '^controls=g_b ' "$T/r1/controls.txt" > "$T/r1g/controls.txt" || true
+python3 -m bbx.readout "$T/r1g" > "$T/sg" 2>&1 || true
+grep -qx "  controls: NOT REPORTED for 1 gate(s) that ran — no controls verdict rests on them (G48): g_b" "$T/sg" && ok "a gate that ran with no controls line is named, never read as asserting (G48)" || fail "r1g controls: $(grep '^  controls' "$T/sg" | tr '\n' '|')"
 
 echo
 [ "$rc" = 0 ] && echo "PASS: the readout screen reports the kept run and nothing else" || { echo "FAIL: see above"; exit 1; }

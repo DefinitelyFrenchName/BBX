@@ -19,7 +19,11 @@
 # ONE ADDITION over bbh (ruled R10, docs/controls.md): under [controls]
 # enforce = true, every gate's MUST-FIRE declarations are read from its
 # header and compared with the CONTROL FIRED lines in its output; a declared
-# control that did not fire, or a firing nobody declared, is RED. Off, the
+# control that did not fire, or a firing nobody declared, is RED. A gate the
+# classifier called SKIP ran none of its checks, so its declarations are set
+# aside, counted and named, never dead (R48) — and --strict, which makes the
+# skip itself fatal, admits no exception. The controls verdict rests on the
+# reader's OUTPUT, one line per gate that ran, never on its exit (G48). Off, the
 # output is bbh's byte for byte (fidelity F13); BBX's own config turns it on.
 #
 # Usage:
@@ -52,7 +56,7 @@ while [ $# -gt 0 ]; do
     --list)   LIST=1 ;;
     --tier)   shift; TIER="${1:?--tier needs portable|static|all}" ;;
     --log)    shift; LOG="${1:?--log needs a dir}" ;;
-    -h|--help) sed -n '2,40p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,44p' "$0"; exit 0 ;;
     *) echo "unknown argument '$1' (try --help)" >&2; exit 2 ;;
     esac
     shift
@@ -103,7 +107,7 @@ if [ -n "$LOG" ]; then
     printf 'gate\ttier\tverdict\tseconds\texit\tdetail\n' > "$LOG/results.tsv"
 fi
 n_pass=0; n_skip=0; n_fail=0; n_miss=0
-failed=""; skipped=""; ran=""
+failed=""; skipped=""; ran=""; ctrl_skip=""
 
 # WORKING-TREE SNAPSHOT. This is the PRE-COMMIT command, so it must not leave
 # the tree dirty — and in the lineage it did on the first full run: gates
@@ -157,7 +161,7 @@ run_tier() {  # run_tier <label> <names>
             n_fail=$((n_fail + 1)); failed="$failed $g" ;;
         SKIP)
             printf '  %-34s SKIP  %3ss  %s\n' "$g" "$_dur" "$BBX_DETAIL"
-            n_skip=$((n_skip + 1)); skipped="$skipped $g" ;;
+            n_skip=$((n_skip + 1)); skipped="$skipped $g"; ctrl_skip="${ctrl_skip:+$ctrl_skip,}$g" ;;
         *)
             printf '  %-34s PASS  %3ss\n' "$g" "$_dur"
             n_pass=$((n_pass + 1)) ;;
@@ -194,21 +198,37 @@ python3 -m bbx.tier "$BBX_CONFIG" --unregistered
 
 # THE CONTROLS BLOCK (R10). Declared in each gate's header, read from its
 # output; a control that did not fire refuses the verdict (BBX-6).
-n_ctrl_red=0
+n_ctrl_red=0; n_ctrl_unrep=0
 if [ "$ENFORCE" = true ] && [ -n "$ran" ]; then
     echo
     echo "== controls (declared MUST-FIRE vs CONTROL FIRED) =="
     # shellcheck disable=SC2086
-    python3 -m bbx.controls report "$GATES_DIR" "$WORK" $ran > "$WORK/controls.txt" && _cst=0 || _cst=$?
+    # --skipped: the gates THIS runner's classifier called SKIP (exit 0 plus the marker, never the marker
+    # alone, BBX-1); the reader sets their declarations aside and re-decides nothing (R48)
+    python3 -m bbx.controls report --skipped "$ctrl_skip" "$GATES_DIR" "$WORK" $ran > "$WORK/controls.txt" && _cst=0 || _cst=$?
     [ -z "$LOG" ] || cp "$WORK/controls.txt" "$LOG/controls.txt"
     sed 's/^/  /' "$WORK/controls.txt"
     n_ctrl_red="$(grep -c 'verdict=RED' "$WORK/controls.txt" || true)"
-    _decl="$(awk '{for(i=1;i<=NF;i++) if($i ~ /^declared=/){split($i,a,"="); s+=a[2]}} END{print s+0}' "$WORK/controls.txt")"
-    _fired="$(awk '{for(i=1;i<=NF;i++) if($i ~ /^fired=/){split($i,a,"="); s+=a[2]}} END{print s+0}' "$WORK/controls.txt")"
+    # _csum <field> <in|out>: the sum of each line's FIRST <field>= over its SKIPPED lines (in) or the rest (out),
+    # every field read by name (BBX-12); a SKIPPED gate's declarations leave fired / declared (R48)
+    _csum() {
+        awk -v f="$1=" -v side="$2" '{ v = ""; n = ""
+            for (i = 1; i <= NF; i++) { if (v == "" && index($i, "verdict=") == 1) v = substr($i, 9)
+                                        if (n == "" && index($i, f) == 1) n = substr($i, length(f) + 1) }
+            if ((side == "in") == (v == "SKIPPED")) s += n } END { print s + 0 }' "$WORK/controls.txt"
+    }
+    _decl="$(_csum declared out)"; _fired="$(_csum fired out)"; _skd="$(_csum declared in)"
+    _skn="$(awk '{ for (i = 1; i <= NF; i++) if (index($i, "verdict=") == 1) { if ($i == "verdict=SKIPPED") s++; break } } END { print s + 0 }' "$WORK/controls.txt")"
     _undecl="$(grep -c 'verdict=UNDECLARED' "$WORK/controls.txt" || true)"
     # under enforcement a gate with no declaration is red too: silence is not "asserts nothing"
     n_ctrl_red=$((n_ctrl_red + _undecl))
-    echo "  controls fired $_fired / declared $_decl; gates with no declaration: $_undecl; red: $n_ctrl_red"
+    _sktxt="; skipped: $_skn"; [ "$_skn" = 0 ] || _sktxt="$_sktxt, whose $_skd declared control(s) assert nothing"
+    echo "  controls fired $_fired / declared $_decl; gates with no declaration: $_undecl; red: $n_ctrl_red$_sktxt"
+    # G48: the reader exits 1 for RED and 1 for a crash, so the verdict rests on its OUTPUT — one line per gate that ran
+    # shellcheck disable=SC2086
+    _nran="$(bbx_count "$(printf '%s\n' $ran)")"
+    _nrep="$(grep -c '^controls=' "$WORK/controls.txt" || true)"
+    [ "$_nrep" = "$_nran" ] || n_ctrl_unrep=1
 fi
 
 echo
@@ -265,12 +285,19 @@ printf 'PASS %-4s  SKIP %-4s  FAIL %-4s  MISSING %s\n' \
 
 rc=0
 [ "$n_fail" = 0 ] && [ "$n_miss" = 0 ] || rc=1
+# --strict ADMITS NO EXCEPTION (R48, the maintainer's addition): every SKIP is fatal under it, whatever
+# the gate declares and whatever the controls block set aside. An exemption of any shape — a list, a flag,
+# a header line, a variable — is a RULING, never a change.
 if [ "$STRICT" = 1 ] && [ "$n_skip" != 0 ]; then
     echo "--strict: SKIP counts as failure (a skipped gate asserts NOTHING)"
     rc=1
 fi
 if [ "$n_ctrl_red" != 0 ]; then
     echo "controls: $n_ctrl_red gate(s) with a dead or undeclared control (a dead control refuses a verdict)"
+    rc=1
+fi
+if [ "$n_ctrl_unrep" != 0 ]; then
+    echo "controls: the reader reported $_nrep of $_nran gate(s) that ran (exit $_cst) — a reader that did not finish refuses a verdict (G48)"
     rc=1
 fi
 [ "$rc" = 0 ] && echo "GREEN — every registered $WORD-free gate passed." \

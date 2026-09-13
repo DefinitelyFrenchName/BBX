@@ -1,7 +1,7 @@
-"""controls.py — the must-fire contract's reader (docs/controls.md, ruled R10).
+"""controls.py — the must-fire contract's reader (docs/controls.md, ruled R10; a skipped gate, R48).
 
     python3 -m bbx.controls declared <gate.sh>          the controls a gate's header declares
-    python3 -m bbx.controls report <gates_dir> <logs_dir> <name>...
+    python3 -m bbx.controls report [--skipped g1,g2] <gates_dir> <logs_dir> <name>...
                                                         declared vs fired, one line per gate
 
 A gate DECLARES each of its must-fire controls as one header line:
@@ -16,13 +16,22 @@ fails for its stated reason the gate prints `CONTROL FIRED: <name> — …`;
 when it does not, `CONTROL DEAD: <name> — …`.
 
 The report, per gate:
-    controls=<gate> declared=<n> fired=<n> dead=<n> undeclared=<n> verdict=OK|RED|UNDECLARED
+    controls=<gate> declared=<n> fired=<n> dead=<n> undeclared=<n> verdict=OK|RED|UNDECLARED|SKIPPED
 RED when a declared control did not fire, fired as DEAD, or a FIRED line
 names a control no header declares (a control nobody can find in the
 header is a control nobody can review). UNDECLARED when the header carries
 no MUST-FIRE line at all — reported, and red only under [controls].enforce,
 so bbh's own gates (which predate the grammar) are read as *undeclared*,
 never as asserting (fidelity keeps bbh unmodified).
+SKIPPED (R48) for a gate named in --skipped: the RUNNER's classifier called it
+SKIP, which is exit 0 plus the marker and never the marker alone (BBX-1); this
+reader does not classify. A skipped gate ran none of its checks, so a declared
+control that did not fire is NOT-ASSERTING, never dead. Only that is set
+aside: a CONTROL DEAD line, a firing nobody declared and a header that
+declares nothing are RED / UNDECLARED exactly as for a gate that ran. The
+runner leaves a SKIPPED gate's declarations out of fired / declared, says how
+many it left out, and --strict still makes the skip itself fatal, with no
+exception.
 
 This is the machine reader VampireSaved's must-fire doctrine never had
 (docs/census/vampiresaved.md A26, A34; docs/gotchas.md G5).
@@ -88,17 +97,22 @@ def fired(log_path):
     return f, d
 
 
-def report_one(gate_path, log_path, name):
+def report_one(gate_path, log_path, name, skipped=False):
     ctrls, none = declared(gate_path)
     names = [c[1] for c in ctrls]
     fired_names, dead_names = fired(log_path)
     n_fired = sum(1 for n in names if n in fired_names)
-    n_dead = sum(1 for n in names if n in dead_names or n not in fired_names)
+    if skipped:
+        n_dead = sum(1 for n in names if n in dead_names)   # R48: not fired is not-asserting; a DEAD line is still dead
+    else:
+        n_dead = sum(1 for n in names if n in dead_names or n not in fired_names)
     undeclared = sorted(set(fired_names) - set(names))
     if undeclared or dead_names or n_dead:
         verdict = "RED"          # a firing nobody declared, or a declared control that did not fire
     elif not ctrls and none is None:
-        verdict = "UNDECLARED"   # silence: red under enforcement, invisible without it
+        verdict = "UNDECLARED"   # silence: red under enforcement, invisible without it — a skip does not excuse it
+    elif skipped:
+        verdict = "SKIPPED"      # R48: the gate asserted nothing, so its declarations assert nothing this run
     else:
         verdict = "OK"
     return (f"controls={name} declared={len(names)} fired={n_fired} dead={n_dead} "
@@ -115,15 +129,20 @@ def main(argv):
         if none is not None and not ctrls:
             print(f"none\t-\t{none}")
         return 0
-    if len(argv) >= 4 and argv[0] == "report":
-        gates_dir, logs_dir, names = argv[1], argv[2], argv[3:]
-        red = 0
-        for n in names:
-            line = report_one(os.path.join(gates_dir, n + ".sh"), os.path.join(logs_dir, n + ".out"), n)
-            print(line)
-            if "verdict=RED" in line:
-                red += 1
-        return 1 if red else 0
+    if argv and argv[0] == "report":
+        rest, skipped = argv[1:], set()
+        if len(rest) >= 2 and rest[0] == "--skipped":
+            skipped = {s for s in rest[1].split(",") if s}   # the runner's classifier said SKIP; never re-decided here
+            rest = rest[2:]
+        if len(rest) >= 3:
+            gates_dir, logs_dir, names = rest[0], rest[1], rest[2:]
+            red = 0
+            for n in names:
+                line = report_one(os.path.join(gates_dir, n + ".sh"), os.path.join(logs_dir, n + ".out"), n, n in skipped)
+                print(line)
+                if "verdict=RED" in line:
+                    red += 1
+            return 1 if red else 0
     print(__doc__, file=sys.stderr)
     return 2
 

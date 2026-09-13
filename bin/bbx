@@ -7,7 +7,7 @@
 #   bbx classify <exit> <log>     one verdict                      (bin/bbx-classify)
 #   bbx tier <config> [--list|--unregistered]                      (lib/py/bbx/tier.py)
 #   bbx config <config> get <section.key> [--default V] | dump | root | kind
-#   bbx controls declared <gate.sh> | report <gates_dir> <logs_dir> <name>...   (lib/py/bbx/controls.py)
+#   bbx controls declared <gate.sh> | report [--skipped g1,g2] <gates_dir> <logs_dir> <name>...   (lib/py/bbx/controls.py)
 #   bbx recount <census.md> [--only A1,A2] [--root DIR]            (lib/py/bbx/recount.py)
 #   bbx readout <run-dir> [--against <run-dir>]                   the one screen (lib/py/bbx/readout.py)
 #   bbx compare <class-tool> [args]   a comparator directly: flicker | window | composite | diverge | propose (temporal); exact | set | schema (S3); band (S4)
