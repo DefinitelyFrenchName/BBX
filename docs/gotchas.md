@@ -1156,3 +1156,21 @@ named must cover the readout's readers, not only the runners in `bin/`. Rules re
 BBX-16 (reading in the wrong view yields plausible garbage), BBX-7 (a claim measured by absence
 needs a positive control), §3.2 and BBX-30 (the blind-spot section is the part of the screen that
 must not lie).
+
+## G51 — R44 was answered at bbx-20 and left under Open for two sittings: the queue and DECISIONS.md agreed with each other, and the only record of the answer was the history twin (paid: 0 runs — found when the maintainer asked to rule R44 and the queue was read against the history first; 2026-09-13)
+At bbx-20 the maintainer agreed with R44's recommendation and deferred its build.
+`DECISIONS_HISTORY.md` recorded "R44 (agreed, deferred by the maintainer's own instruction to after
+this work)", and STATE at the bbx-22 open said "R44's BUILD (the ruling is answered…)". But
+`docs/rulings.md` kept the entry under `## Open` with `- **Answer:** (open)`, and `DECISIONS.md`
+listed R44 on its `Open rulings:` line with no row. `gates/rulings_shape.sh` passed at every close
+in between — `open=3` at bbx-22's, R44 among them — because it checks that the queue and
+`DECISIONS.md` agree, and they did, both wrong the same way. G14's dark pattern in its mirror form:
+not an answer written under Open, but an answer written nowhere the gate reads.
+Re-ruled the same hour on re-measured numbers; the answer line says it had been given before.
+Learning (R27): "answered, build deferred" is two facts, and the close moved only the second. The
+trap is filed in HANDOFF: when a ruling is answered, MOVE it and write its DECISIONS row in the same
+edit, whatever happens to its build. A mechanism is possible and is not built here — the history
+twin names rulings as "agreed" or "answered" in prose, and a check over that prose would be a
+reader of free text, which this tree has avoided for good reason. Rules re-anchored in fact: BBX-20
+(a living page states what is true; two did not), BBX-9 (a registry complete both ways — these two
+files were complete with respect to each other and not to the ruling), §1.

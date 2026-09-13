@@ -1321,3 +1321,27 @@ how the runs are obtained — and not the platform row, which still waits on the
 as the likely next step if these runs become frequent. Nothing in the tree measures that frequency
 today, so it is recorded as a condition for a future ruling rather than decided on a guess: the
 number that would raise it is how many sittings in a row need a platform run.
+
+### bbx-22, continued — R44 and R45 answered after the close
+
+**R44 confirmed — maintainer, 2026-09-13.** Keep R38's whole-set key with `gates` in it, and make
+the refreeze a printed step. This had been answered at bbx-20 — this file said "agreed, deferred"
+— but only this file said so: the queue kept R44 under Open with `(open)`, `DECISIONS.md` listed it
+as open, and `gates/rulings_shape.sh` passed at every close in between, because the two files it
+compares agreed with each other (G51). Found by reading the queue against this file before putting
+R44 to the maintainer, who re-ruled it on numbers re-measured the same hour: 34 of 92 commits owe a
+refreeze, and only 4 of them for `gates` alone.
+
+**R45 answered — maintainer, 2026-09-13.** One portable gate for the three orphan directions,
+neither runner changed. Re-measured first, all three gaps still open at `898dbe6`; the first probe
+of the instrument direction was itself wrong — its pattern sat in a comment and the classifier read
+the gate PLAIN — and was redone with the pattern in code before the gap was called confirmed.
+
+**What the two rulings commit to next.** Four harness changes now wait, and every one moves the
+identity: G50 (the readout names a header it cannot read), R44's printed key, R46's one definition
+of the key, and R45's new gate — the last a new FILE, so the census must run (R47). Built as one
+step they cost one identity move, one census run, one reviewed refreeze and one battery pair.
+
+**Anti-hyperfocus (BBX-27).** No ruling is open. The pull now is toward the build, which is right,
+but S4 step 7 — the slice readout — is still the one thing S4 asks for before its DONE ruling, and
+it moves no harness file. Which comes first is the maintainer's call.

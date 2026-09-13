@@ -154,23 +154,27 @@ by construction (the recount's clone) and by `fidelity_bbh`'s proof.
   value equal to macOS (`docs/platforms/wsl/`). The next platform run follows the same procedure;
   the maintainer's rider — SSH or basic automation — becomes a ruling once the cadence of platform
   runs is known.
-- **FIRST SMALL FIX: G50.** The readout counts a gate header it cannot find as a gate declaring no
-  blind spot, so a screen read off the host that ran it reports 31 silent gates where the truth is
-  0. Make it name the unreadable header instead ("header not found at <path>") and never count it.
-  It is a harness change, so land it together with R44's and R46's build if that comes next — one
-  identity move, one refreeze, one census regeneration, one battery pair.
+- **FIRST: ONE harness build, four changes** (ruled or filed after the bbx-22 close; none built):
+  - **G50** — the readout names a gate header it cannot read ("header not found at <path>") and
+    never counts that gate as declaring no blind spot.
+  - **R44** — the refreeze becomes a PRINTED step: the gate prints the key it computed and the row
+    it matched on PASS too (today only its mismatch control prints the keys), and the close quotes
+    the one-line registry change in its commit message.
+  - **R46** — one definition of the identity key, in the harness (`python3 -m bbx.fingerprint`),
+    with `fixture/selfgates/idkey.sh` a shim and the cross-check kept as the proof it did not drift.
+  - **R45** — `gates/registry_complete.sh`, portable, ~1 s: an instrument-free gate in no portable or
+    static registry, an INSTRUMENT gate with no sweep row, and a sweep row naming a missing gate each
+    FAIL; BBX's own config the positive, a synthetic consumer the must-fire control; neither runner
+    changes. Re-measure the three gaps before writing it (they were re-measured on `898dbe6`).
+  All four move the identity and R45 adds a harness FILE, so: every code change first, then ONE
+  census run (R47), then the document and register, then the fixture refreeze, then the battery pair.
 - **Then S4 step 7, the slice readout** (`docs/plans/S4.md` §8.7), the last thing the slice asks
   for; then S4 goes to the maintainer for a DONE ruling as S3 did. The maintainer judged it
   independent of R48 and chose to finish R48 and R21 first.
 - Open with the battery **in the background** (~14 min, 31 registered gates), with
   `--log build/selftest_<stamp>`, alone, nothing edited while it runs.
 - **Expect `NOTE: census-drift register=af2b1f085070 tree=bc18c672fdb9` on every screen.** R48's
-  build moved the identity again; R47's ruling makes that loud and never fatal. Regenerate ONCE,
-  after R44's and R46's build, not before.
-- **R44's and R46's builds are ONE step, not two.** Both touch the single identity key that
-  `fixture/selfgates/idkey.sh`, `lib/py/bbx/file_census.py` and the census document all read.
-  R44's mismatch half is already RED with both keys on the screen (measured twice at bbx-19), so
-  only the PASSING half may be missing — measure before writing.
+  build moved the identity again; R47's ruling makes that loud and never fatal. Regenerate ONCE, after the combined build, not before.
 - **THREE THINGS move on a commit touching `bin`, `lib`, `drivers` or `gates`**: the self
   subject's registry row (reviewed refreeze, R38/R44 — bbx-22's was one line, `a614699`), the
   census's key (D62), and — if the commit adds a harness FILE — the BATTERY itself, because
@@ -183,8 +187,9 @@ by construction (the recount's clone) and by `fidelity_bbh`'s proof.
 - **G48's sweep is the cheap next measurement**: every count a runner in `bin/` takes over a
   tool's output, asking whether a missing line would read as zero. Measure before claiming any of
   them is a defect.
-- **R45 is rescoped and waiting** (three directions over three registries; the tier-listing fix
-  measured and RULED OUT because F13e diffs that listing).
+- **Why R45's verdict lives in a gate and not in a runner:** the tier listing's registry column
+  cannot say `sweep` (F13e diffs that listing, and all five INSTRUMENT gates in bbh's example print
+  `-`), and F13's pairs run both runners over a synthetic repo that contains an orphan.
 - If the census cadence starts to bite, the lever is its RUNTIME, not the gates: most of the
   twenty minutes is five heavy gates in the shadow, and nothing the register check does depends on
   them. Worth measuring before it becomes a complaint.
@@ -267,5 +272,6 @@ by construction (the recount's clone) and by `fidelity_bbh`'s proof.
 - A runner that COUNTS a tool's output reads a missing line as zero. The controls block counted `verdict=RED` lines in a report the reader never wrote when it crashed, and read `red: 0` and GREEN (G48); the reader's exit was no help, because it is 1 for RED and 1 for a crash. Require the lines to be PRESENT — one per item the tool was asked about — and never rest a verdict on an exit status two causes share.
 - Asking the maintainer to run BBX on another host is a claim about the REMOTE: push FIRST, confirm with `git ls-remote origin refs/heads/main`, and give them one line that proves which tree they pulled (G49 — a WSL battery ran the pre-fix harness because the fix was still local; `docs/platforms/README.md` §1 now carries the check).
 - `bin/bbx readout` reads gate headers from the root a kept run RECORDED: on any other host it finds none and, until G50 is fixed, counts every gate as declaring no blind spot (31 for the WSL pair, where the truth is 0). Read a platform's screen where it ran, or on a copy whose `root=` points at a clone of the same commit — and say so.
+- A ruling answered with its build DEFERRED is still ANSWERED: move it under an Answered heading and write its DECISIONS row in the same edit. R44 sat under Open for two sittings while the history twin said "agreed", and `gates/rulings_shape.sh` passed because the two files it compares were wrong the same way (G51).
 - A second HOST is a detector in the same way a second consumer is (BBX-25). Three sittings running, the second instance found what the first could not: the third subject kind found the census attributing an imported module to the wrong kind (G39), the second consumer of the exact family found its END rule (G26), and the second platform found the skip/controls defect (G47). When something has one instance, its green is a measurement of that instance.
 

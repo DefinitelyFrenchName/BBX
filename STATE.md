@@ -33,16 +33,15 @@ byte-identical under `docs/platforms/wsl/runs/`. Reading them here found G50: th
 readout of another host's run counts every gate header it cannot find as a gate
 declaring no blind spot (31 where the truth is 0) — the next sitting's first small fix. The opening
 battery and the close's pair are quoted in `docs/readout.md` (bbx-22, and CLOSE —
-bbx-22). Gotchas G1–G50; retractions X1–X41. G49: a WSL re-run met the pre-fix tree
+bbx-22). Gotchas G1–G51; retractions X1–X42. G49: a WSL re-run met the pre-fix tree
 because the fix was not yet pushed when it was asked for; `429d3f8` was pushed before
 the close commit, and the platform procedure now carries a tree check.
 
-**Open rulings, two:** R44's BUILD (the
-ruling is answered; the printed-refreeze step is not yet written, and it joins R46's
-one-definition work because both touch the single identity key), and R45 (rescoped
-to three directions over three registries, with the tier-listing fix measured and
-ruled out). Each carries a recommendation and its declined alternatives; none blocks
-S4 step 7.
+**Open rulings: none.** R44 confirmed and R45 answered after the bbx-22 close, both as
+recommended: R44 keeps `gates` in the whole-set key and makes the refreeze a printed step;
+R45 adds one portable gate, `gates/registry_complete.sh`, for BBX-9's three orphan
+directions. Neither is built. R44 had already been answered at bbx-20 and was left under
+Open for two sittings while the gate that checks the queue passed (G51).
 In force since bbx-2: R18 (the census and the tests
 work on a clone or are explicitly, provably read-only), R19 (parallel work
 is a pull queue; the FIFO token queue is the default implementation, the
@@ -89,14 +88,13 @@ number to bring down; the two added at bbx-2 are host facts the clone
 exposed (G13, rule 7), the only exception ever allowed to move it upward. Grammar in
 `docs/census/README.md`.
 
-**Next:** (1) **G50, the first small fix:** the readout names a gate header it
-cannot read ("header not found at <path>") instead of counting that gate as declaring
-no blind spot. It is a harness change, so fold it into R44's and R46's build if that
-comes next: one identity move, one refreeze, one census regeneration, one battery pair. (2) **S4 step 7,
+**Next:** (1) **ONE harness build, four changes:** G50 (the readout names a gate
+header it cannot read instead of counting it as declaring no blind spot), R44's printed
+key, R46's one definition of the key, and R45's registry gate. All four move the
+identity and R45 adds a harness FILE, so together they cost one census run (R47), one
+reviewed refreeze and one battery pair — apart, four of each. (2) **S4 step 7,
 the slice readout** (`docs/plans/S4.md` §8.7), after which S4 goes to the maintainer
-for a DONE ruling as S3 did. (3) **R44's printed refreeze and R46's one definition of
-the identity key, built as ONE step**, then ONE census regeneration. The order that
-avoids paying twice: land every code change FIRST, then `bin/bbx file-census --self
+for a DONE ruling as S3 did. (3) **The order for that build**, which avoids paying twice: land every code change FIRST, then `bin/bbx file-census --self
 --out build/file_census_<stamp> --shadow-refreeze 'python3
 fixture/selfgates/mkselfgates.py' --document docs/census/bbx_files.md --frozen
 expected/file_census.toml --freeze`, then commit the document and register
@@ -104,4 +102,4 @@ expected/file_census.toml --freeze`, then commit the document and register
 key still holds), then the battery twice. Prove any instrument change on a two-gate
 `--only` probe before paying twenty minutes. (4) **G48's sweep**: every count a
 runner in `bin/` takes over a tool's output, asking whether a missing line reads as
-zero — measured before any of them is called a defect. R45 is rescoped and waiting.
+zero — measured before any of them is called a defect.
