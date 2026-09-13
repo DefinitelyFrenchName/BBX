@@ -32,6 +32,7 @@ Shape: operational map. Read this first, then `STATE.md`, then
 | **the two ADAPTERS (S4 step 5)** — an external framework and BBX ITSELF as subjects | `lib/py/bbx/adapters.py` (the two mappers over `bbx.cli`'s core: `resolve_set` — the set is a DIRECTORY on `CLI_PATH`, D58; `parse_cases` and `ran_count` reading the framework's STDERR by field, never the clock line; `read_results` reading a kept `results.tsv` BY COLUMN NAME; `fill` and `resolve_program` — the placeholders `{config}`/`{log}`/`{set}` and `$BBX_HOME/bin`, anything else REFUSED, D60; its own self-test, both directions on every check); `lib/py/bbx/cli.py`'s additions (`case`/`gate` in KINDS with two CLOSED verdict vocabularies D59, `token_case`/`token_gate`, `observation_tokens`/`crash_tokens`, `prepare_sandbox`/`exec_in_sandbox` as THE ONE place a subject process is started — three drivers share it — the `DRIVER` face so each refusal names its own driver, and `summary`'s two CONDITIONAL notes `cases <n>`/`gates <n>`, D43 amended); `drivers/unittest.sh` (`python3 -m unittest -v <modules>`, `PYTHONPATH` the set dir and nothing else, D61) and `drivers/gates.sh` (a harness program under `$BBX_HOME/bin` over a consumer directory); `fixture/unittest/` (BBX's FOURTH consumer: `mkunittest.py --check` runs the FRAMEWORK per scenario against the design; 8 cases in 2 modules covering all six verdict words, 4 scenarios, expectations class `derived`) and `fixture/selfgates/` (the FIFTH, whose subject is BBX: `mkselfgates.py --check` runs BBX's OWN runner per scenario and REPORTS A MOVED IDENTITY; 7 stub files, 6 registered portable in a deliberately unsorted order reading PASS SKIP PASS MISSING FAIL PASS, 1 static SKIP-or-PASS by its needs-env, 1 unregistered; `idkey.sh` is R38's identity, read through `$BBX_HOME`); `gates/adapters.sh` (6 controls, 9 firings, 42 ok lines, 14 suite runs, ~97 s) |
 | **the command-line driver (S4 step 2)** | `lib/py/bbx/cli.py` — the driver's core beside the vocabulary: `selftest` (FIPS 180-1's vectors as the reference anchor, the layout, the splitter, the scenario reader's refusals), `resolve` (the ONE resolver over `CLI_PATH`: per directory an executable `<set>` over `<set>.py`), `run` (the sandbox as cwd, HOME and TMPDIR — D52; D6's set plus the scenario's `[env]` and nothing from the caller; `argv.txt` / `stdin.bin` / `env.txt` recorded, O5; the crash log `CRASH signal:<n>:<NAME>` / `END-CRASH <n>` and the band view `<out>.bands` — D53; the fixture's own control dies by SIGKILL since R42, which the host does not report, while a REAL subject that dies by a FAULT signal still leaves a host crash report the driver never removes — declared in its header, G30; the JSON view `<out>.json` — D54, step 3; `--nondet`, `--timeout`), `summary` (`NOTE: exit / band-fields / emitted-files`); `drivers/cli.sh` (D4's four exits: a tool's non-zero exit is an OBSERVATION, a signal death exit 2, REFUSED exit 3 for the three families, `CLI_KEEP_ENV`, a scenario key the grammar lacks, a bad `CLI_TIMEOUT`; `CLI_TIMEOUT` default 60 s, D51, exit 1 DISCARDED); `drivers/README.md`; `gates/cli_driver.sh` (7 controls; two points re-hashed by `shasum`; ~10 s) |
 | **R21's step-by-step: running the battery on Linux or WSL** | `docs/platforms/README.md` (bbx-20; needs ONE bbh commit since R43, expects `census_recount` to SKIP, never `--strict`) |
+| **R21's FIRST RUN, and its finding** | `docs/platforms/wsl/` — WSL 2026-09-13: NOT GREEN on a CORRECT skip, because a skipped gate cannot fire its declared controls and the reader counts that as dead (G47, R48). Everything else identical to macOS. The run file is a WITNESS (the kept directory is not in the tree); the finding was reproduced here and is instrument-grade |
 | the maintainer readouts, one section per step, the CLOSE section last | `docs/readout.md` |
 | **the document-set kind (S3)** | the profile `lib/py/bbx/config.py` KINDS `document-set` (D33); `[suite].scenario_ext` (D34) via `bbx.expectations scenario-ext`; the fixture `fixture/docset/` (BBX's second consumer: `bbx.toml`, `mkdocset.py --check` — writes the `truth` kind from the design, `subject/`, `claims/`, `expected/` with `logs/<s>.log` the truth logs); `gates/docset_fixture.sh` |
 | **the document-set extractor and driver (S3 step 2)** | `lib/py/bbx/docset.py` (`selftest`, `run`, `map`, `summary`, and since step 3 `rows` — the run's rows joined by index with the map, proven the log's — and `resolve`, the ONE artifact resolver over `DOCSET_PATH`; the two strings and the token, D38; the forms' lexical classes and the record key, D39; the unlisted-claim guards, D40); `drivers/docset.sh` (`DOCSET_PATH` through `bbx.docset resolve`; REFUSED exit 3, DISCARDED exit 1); `drivers/README.md`; `gates/docset_driver.sh` (7 controls) |
@@ -75,7 +76,7 @@ set, at a release or after a kernel change.
 ## The ritual (ruled R17 at the bbx-1 close, 2026-09-09; adapted from VampireSaved VSP-17/VSP-18/VSP-162)
 
 Sessions are keyed `bbx-N`, one key per sitting, never renamed (pointers in
-readouts, gotchas and history resolve through it). The last closed sitting is **bbx-20** (2026-09-12); the next is **bbx-21**.
+readouts, gotchas and history resolve through it). The last closed sitting is **bbx-20** (2026-09-12). **bbx-21 is OPEN** (2026-09-13): R21's first platform run came in and is NOT GREEN pending R48.
 
 **Open**
 1. Read this file, `STATE.md`, `docs/rulings.md`. (`CLAUDE.md` is the
@@ -144,6 +145,19 @@ readouts, gotchas and history resolve through it). The last closed sitting is **
 
 Steps 8 and 9 are checked, not remembered: step 8 by `close_sweeps`, step 9
 by construction (the recount's clone) and by `fidelity_bbh`'s proof.
+
+**FIRST TASK, ruled by BBX-26 (written 2026-09-13):** R21's first platform run (WSL)
+is **NOT GREEN**, and the cause is a defect in BBX's own controls contract, not in
+WSL: a gate that SKIPS runs none of its checks, so its declared must-fire controls
+cannot fire, and `docs/controls.md`'s "declared and not fired is red" turns a
+CORRECT skip into a red battery. `gates/census_recount.sh` skips off macOS because
+the three lineage censuses record absolute paths from this host. Reproduced here the
+same day with `BBX_CENSUS_DIR` pointed at a census naming an absent tree, so the
+finding is instrument-grade (G47). **R48 is raised and must be ruled before the fix**,
+because it amends a contract R10 ruled; the recommendation, its four declined
+alternatives and a narrower fallback are in the queue. Nothing else about the two
+hosts differs: 31 gates, 119 declared controls, every NOTE-class value equal, which
+is the strong half of the result.
 
 **Next-session orientation (written at the bbx-20 close, 2026-09-12)**
 - Open first: the battery, **in the background** (~11 min, 31 registered gates),

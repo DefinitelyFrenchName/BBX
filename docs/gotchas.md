@@ -1040,3 +1040,44 @@ Rules re-anchored in fact: §1 (the run was discarded, never adjusted, and the
 discard is what exposed the deadlock), BBX-30 (the skip is stated in the checked
 text, not absorbed), [BBH-6] (SKIP is not PASS and asserts nothing), BBX-9 (the
 completeness question is right; only its venue was wrong).
+
+## G47 — A gate that SKIPS cannot fire its controls, and the controls contract counts a control that did not fire as DEAD: the first platform run went NOT GREEN on a skip that was correct (paid: found by R21's WSL run, reproduced on macOS the same day; 2026-09-13)
+The first Linux/WSL run of the battery (`docs/platforms/wsl/`) read
+`PASS 30  SKIP 1  FAIL 0  MISSING 0` and then `NOT GREEN`. The one skip was
+`gates/census_recount.sh`, skipping for the reason the procedure had predicted: the
+three lineage census files record absolute paths from the macOS host, and a census
+naming an absent directory is skipped, asserting nothing. But a gate that skips runs
+none of its checks, so none of its FOUR declared must-fire controls could fire, and
+`docs/controls.md` says "Declared and not fired is red" — so the reader printed
+`declared=4 fired=0 dead=4 verdict=RED` and the runner made the whole battery NOT
+GREEN.
+Converted from a witness into an instrument the same day (BBX-28): pointing
+`BBX_CENSUS_DIR` at a census naming an absent tree reproduces it on macOS exactly —
+`controls=census_recount declared=4 fired=0 dead=4 verdict=RED`. So this is a defect
+in BBX's own contract, not a property of WSL and not a defect of any gate.
+**Why macOS could never have shown it.** No gate skips here, because the three
+lineage trees exist at the paths the censuses record, so every declared control
+always fires. The second PLATFORM is the detector — BBX-25's argument about needing
+two consumers, applied to hosts instead of to code. Every other number the WSL run
+produced is identical to this host's: 31 gates, 119 declared controls, and every
+NOTE-class value the same, which is the strong half of the result.
+The contract's own text already contains the principle it is missing. [BBH-6] and
+`docs/controls.md` both say a skipped gate ASSERTS NOTHING, and the same page
+already treats bbh's undeclared selftests as "reported as undeclared, never as
+asserting". Demanding that a gate which ran nothing nevertheless prove its controls
+fired asks for evidence from a measurement that did not happen.
+It is NOT fixed here, because the fix amends a ruled contract (R10): raised as
+**R48** with the recommendation that a SKIPPED gate's declarations are reported as
+not-asserting rather than dead, paired with the skip staying counted and named on
+the screen and `--strict` still making a skip fatal — otherwise the exemption
+becomes a new way to hide a dead control behind a convenient skip.
+Learning (R27): this is the mirror of the shape that has dominated the last three
+sittings. Five times a check could not reach its own failing state; here a check
+reaches a failing state it should not — and both come from a verdict rule that does
+not distinguish "the thing I watch is broken" from "the thing I watch did not run".
+BBX-26 now applies to the next sitting: the suite diverges on one platform until
+R48 is ruled. Rules re-anchored in fact: [BBH-6] (SKIP is not PASS and asserts
+nothing — the reader honours the first half and not the second), BBX-6 (a dead
+control refuses a verdict, which is right, and a control that never ran is not
+dead), BBX-25 (the second instance is the detector; here a second HOST), §1 (the
+green on this host was a measurement of a host where nothing skips).

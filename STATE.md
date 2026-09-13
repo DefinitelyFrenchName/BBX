@@ -47,12 +47,19 @@ three gates that source it, measured from what the processes ran. 45 harness
 files, 31 gates, 0 unreached. Defaults D1–D63 (D62 amended for R47). Gotchas
 G1–G46. Retractions X1–X38. Open rulings THREE: R21, R44's build, R45.
 
-**In force:** `DECISIONS.md` — R0–R20, R22–R43, R46, R47 and method M1–M4. **Open
-rulings, three:** R21 (the platform runs: no Linux or WSL host here), R44's BUILD
+**In force:** `DECISIONS.md` — R0–R20, R22–R43, R46, R47 and method M1–M4. **R21 HAS PRODUCED ITS FIRST RUN** (2026-09-13, WSL): `PASS 30 SKIP 1 FAIL 0 MISSING 0` and then
+**NOT GREEN**, on a skip that was CORRECT — `gates/census_recount.sh` skips because the three lineage
+censuses record absolute macOS paths, and a skipped gate cannot fire its four declared controls, which
+`docs/controls.md` counts as dead. Reproduced on macOS the same day, so it is a contract defect and not
+a WSL property (G47, R48 open, BBX-26 applies). Everything else is IDENTICAL across the two hosts: 31
+gates, 119 declared controls, every NOTE-class value equal. `docs/platforms/wsl/`.
+
+**Open
+rulings, four:** R21 (its first run is in; the platform ROW is still not green, pending R48), R44's BUILD
 (the ruling is answered; the printed-refreeze step is not yet written, and it
-joins R46's one-definition work because both touch the single identity key), and
-R45 (rescoped this sitting to three directions over three registries, with the
-tier-listing fix measured and ruled out). Each carries a recommendation and its
+joins R46's one-definition work because both touch the single identity key), R45 (rescoped to three directions over three registries, with the tier-listing fix
+measured and ruled out), and R48 (what a SKIPPED gate's declared controls mean — the
+first platform run's finding, and the next sitting's FIRST task under BBX-26). Each carries a recommendation and its
 declined alternatives; none blocks S4 step 7.
 In force since bbx-2: R18 (the census and the tests
 work on a clone or are explicitly, provably read-only), R19 (parallel work
