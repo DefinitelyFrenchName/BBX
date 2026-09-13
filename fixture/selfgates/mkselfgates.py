@@ -390,6 +390,7 @@ def main(argv):
             print(f"  RUNNER  {b}")
         print("FAIL: BBX's own runner does not keep what the design says")
         return 1
+    print(f"identity(wholeset)={identity()} — the key the registry row matched (R44: printed on PASS)")
     print("check ok: the design is chiral, the consumer is the design's, the tree equals what this script "
           "writes, and the runner keeps " + ", ".join(f"{k}={v}" for k, v in counts().items()))
     return 0

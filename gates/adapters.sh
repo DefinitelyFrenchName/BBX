@@ -146,7 +146,10 @@ k1="$(BBX_HOME="$BBX_HOME" sh "$SG/idkey.sh" program)"; k2="$(BBX_HOME="$BBX_HOM
 case "$k1$k2" in *[!0-9a-f]*) fail "idkey.sh printed something that is not two hex keys: $k1 $k2" ;; *)
     [ "${#k1}" = 40 ] && [ "${#k2}" = 40 ] && [ "$k1" != "$k2" ] && ok "the identity (R38): two 40-hex keys, the whole-set key differing from the program key (it adds gates)" || fail "idkey.sh: program=$k1 wholeset=$k2" ;;
 esac
-grep -q "^$k2	derived	" "$SG/expected/registry.tsv" && ok "the registry names the identity the harness has NOW (a moved harness is the refreeze R38 rules, R44's cost)" || fail "the registry does not name $k2: $(grep -v '^#' "$SG/expected/registry.tsv" | tr '\n' ';')"
+if grep -q "^$k2	derived	" "$SG/expected/registry.tsv"; then
+    ok "the registry names the identity the harness has NOW: whole-set $k2 (a moved harness is the refreeze R38 rules, R44's cost)"
+    echo "NOTE: self-identity whole-set=$k2 program=$k1 (R44: the key the registry row matched, printed on PASS)"
+else fail "the registry does not name $k2: $(grep -v '^#' "$SG/expected/registry.tsv" | tr '\n' ';')"; fi
 if o="$(BBX_HOME= sh "$SG/idkey.sh" program 2>&1)"; then fail "idkey.sh answered with BBX_HOME unset: $o"
 else printf '%s' "$o" | grep -q 'BBX_HOME is unset' && ok "idkey.sh REFUSES without BBX_HOME: the identity is the harness's tree, never the caller's directory" || fail "idkey.sh without BBX_HOME: $o"; fi
 if o="$(python3 -m bbx.provenance --config "$SG/bbx.toml" 2>&1)"; then
