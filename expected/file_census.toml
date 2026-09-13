@@ -8,7 +8,7 @@
 [spec]
 class = "self"
 # measured_at is R38's whole-set key over bin, lib, drivers, gates — NOT HEAD
-measured_at = "4465efe8a4532e5a831275e04231fb11e0c2255e"
+measured_at = "c26e5a94b344ea01ca960cd4e7ec228c621aec76"
 mode = "shrink-only"
 
 [f1]
