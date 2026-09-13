@@ -99,15 +99,17 @@ That one screen is the deliverable. **Generate it on the host that ran the batte
 reads each gate's header from the root the run recorded, so a screen generated on another
 machine cannot find them. Since G50's fix (bbx-23, `bffd698`) it NAMES them — `gates whose header was NOT
 FOUND: <n> … their blind spots are UNKNOWN, not absent` — instead of counting them as gates declaring
-no blind spot; the blind spots themselves are still readable only where the battery ran. On the macOS host at this commit it reads:
+no blind spot; the blind spots themselves are still readable only where the battery ran. On the macOS host at the newest commit measured it reads:
 
 ```
-VERDICT: GREEN   PASS 31  SKIP 0  FAIL 0  TIMEOUT 0  MISSING 0   (gates 31)
-  controls: fired 123 / declared 123; dead 0; undeclared firings 0; gates red 0; skipped 0
-  each can fail: 31 of 31 gates proved a control fires on purpose
+VERDICT: GREEN   PASS 32  SKIP 0  FAIL 0  TIMEOUT 0  MISSING 0   (gates 32)
+  controls: fired 131 / declared 131; dead 0; undeclared firings 0; gates red 0; skipped 0
+  each can fail: 32 of 32 gates proved a control fires on purpose
 ```
 
-measured on this host at `429d3f8`, in both runs of bbx-22's close pair, with the tree clean.
+measured on this host at `1c661c3`, in both runs of bbx-24's close pair, with the tree clean. At
+`429d3f8`, the commit the WSL pair ran, the same three lines read `PASS 31 … (gates 31)`, `fired 123 /
+declared 123` and `31 of 31` (bbx-22's close pair).
 The gate total is worth re-deriving rather than trusting this page:
 `grep -hv '^#' gates/portable.txt gates/static.txt | wc -l`.
 

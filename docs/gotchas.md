@@ -1243,3 +1243,36 @@ quotes a count should quote its command beside it. The mechanism that would catc
 own `docs/` checked as a document-set subject (BBX-18: quote the claim, derive it, compare), which the S3
 and S4 plans left out (their §9); it is a candidate for a ruling, not built. Rules re-anchored in fact:
 BBX-20 (a living page states what is true; three sentences did not), BBX-9, §1.
+
+## G55 — "All 30 rules remain [inherited]" was carried in STATE and in S3's slice readout, and one of the 30 never was: BBX-30 is marked [this project] (paid: 0 gate runs and 1 planted-copy re-run — found at bbx-24 when S4's slice readout measured §7's fifth condition instead of copying S3's answer; 2026-09-13)
+`CLAUDE.md` §4 has 30 rule lines (`- [BBX-n]`): 29 carry `[inherited …]`, and BBX-30 carries `[this
+project]` — "This rule has no lineage citation because it is the reason this repository exists."
+`STATE.md`'s Rules paragraph said "all 30 in CLAUDE.md §4 remain `[inherited]`", and S3's slice readout
+wrote the same twice (its point 8 and row 5 of its §7 table), where the maintainer read it before ruling
+S3 DONE. The claim never changed the condition it answered — no rule was promoted then, and none is now —
+but it was a count copied, never taken. Corrected in STATE; the S3 readout stays as written, a ledger;
+retraction X46, its pattern proven to match the three old wordings and to miss the corrected one before
+it was written. That first version was still case-sensitive: the planted copy that must make a new row
+fire carried the wording twice, once opening a sentence (`All 30 in CLAUDE.md …`), and only the lowercase
+plant failed. The row was given `(?i)`, as X39–X44 carry, the generated readout block that already quoted
+G55's old price was removed rather than hand-edited, and the planted copy was run again.
+Learning (R27): §7's table is answered by measurement every slice, never by the previous slice's answer
+— G54's trap, a count kept in prose, in the one place a DONE ruling reads. No mechanism beyond the
+retraction row: the document-set candidate G54 names would hold this count as well. Rules re-anchored
+in fact: §1 ("inherited numbers are re-derived, not carried forward"), BBX-20.
+
+## G56 — Two of the contributor's own probes at the bbx-24 close reported nothing wrong while measuring nothing: a loop printed `exit=0` four times for calls that had failed — the exit of `tail`, G16 again — and a script that did not compile printed no lines at all (paid: 2 probe re-runs, about a minute; both caught before any number reached a document; 2026-09-13)
+Checking the four fixture registers for S4's slice readout, a loop ran `python3 -m bbx.provenance check
+<dir> 2>&1 | tail -2` and then echoed `$?`: every call had failed on a usage error (the tool takes
+`--config`), and every line read `exit=0`, the pipe's. The same close, a script extracting each run's
+controls stopped at compile time — this host's `python3` refuses a backslash inside an f-string
+expression — so its summary lines were simply absent, and nothing on the screen said so. Both were
+redone before anything quoted them: the registers with the gates' own invocation (`--config
+fixture/<fx>/bbx.toml`, the exit captured as `> file 2>&1; e=$?`), all four exit 0 and complete both
+ways; the script without the backslash, its sums equal to what the screen printed.
+Learning (R27): G16's hazard is already in HANDOFF and still bit, in a one-off probe, because probes
+are written faster than gates. Capture a measured exit as `cmd > file 2>&1; e=$?` before any pipe —
+the form every gate uses — in a probe as well. And a probe that prints nothing has not reported zero:
+count the lines it should have printed before reading its silence. Rules re-anchored in fact: BBX-1
+(exit status decides, and the status read was the wrong process's), BBX-7 (an absence read as a
+result), §1.

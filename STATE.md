@@ -26,7 +26,7 @@ the 31-gate count after R45 made it 32, one of them on the page followed on WSL.
 battery at `f6f136d` was GREEN (PASS 32, controls 128 / 128); the close's pair is quoted in
 `docs/readout.md` (CLOSE — bbx-24). **The WSL platform row stays GREEN at `429d3f8` and attests
 that commit only**; the platform README's tree check now names a count this sitting moved.
-Gotchas G1–G54; retractions X1–X45.
+Gotchas G1–G56; retractions X1–X46.
 
 **Open rulings: none.** Every ruling R0–R49 is answered and recorded in `DECISIONS.md`; R49 was
 raised and answered at bbx-24 and is built. The maintainer's words with it stand as a rule of
@@ -53,7 +53,8 @@ R39, D62, D63): regenerated at bbx-24 at identity `4465efe8a453`, 32 gates, 45 r
 | VampireSaved | `0cdd9726` | 7497 | 555 rules across 8 skills; 311 gate scripts; 4,808 expectation files; re-measured at bbx-2 (was `5df1d8be`: one count and 13 line citations moved); its tip is past the census (a NOTE every run, `322682504c9e` and 66 ahead at the bbx-24 open; not re-measured by design) |
 | SMS-FrenchName-edition | `ecc5481` | 633 | 66 rules; 28 traps; the Measurement Rule's origin at `CLAUDE.md:19-33`; the S3 plan's rows A35–A41 re-derived on the clone at bbx-6 (7 of 7 match) |
 
-**Rules:** all 30 in CLAUDE.md §4 remain `[inherited]` in the file (edits
+**Rules:** 29 of the 30 in CLAUDE.md §4 remain `[inherited]` in the file and BBX-30 is
+`[this project]`, as it was written (measured at bbx-24, G55); none is promoted (edits
 need R16); incidents that re-anchor one in fact: G8 → §1, G9 → BBX-15,
 G10 → BBX-8, G12 → BBX-29, G13 → BBX-16, G14 → BBX-20, G15 → §0/§1,
 G16 → BBX-1, G17 → BBX-24/BBX-26, G18 → BBX-1, G19 → BBX-10, G20 → BBX-5,
