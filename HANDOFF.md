@@ -166,8 +166,9 @@ by construction (the recount's clone) and by `fidelity_bbh`'s proof.
     static registry, an INSTRUMENT gate with no sweep row, and a sweep row naming a missing gate each
     FAIL; BBX's own config the positive, a synthetic consumer the must-fire control; neither runner
     changes. Re-measure the three gaps before writing it (they were re-measured on `898dbe6`).
-  All four move the identity and R45 adds a harness FILE, so: every code change first, then ONE
-  census run (R47), then the document and register, then the fixture refreeze, then the battery pair.
+  All four move the identity (R45's new file is under `gates/`, outside the census universe, so it
+  owes no census row — measured at bbx-23): every code change first, then ONE census regeneration,
+  then the document and register, then the fixture refreeze, then the battery pair.
 - **Then S4 step 7, the slice readout** (`docs/plans/S4.md` §8.7), the last thing the slice asks
   for; then S4 goes to the maintainer for a DONE ruling as S3 did. The maintainer judged it
   independent of R48 and chose to finish R48 and R21 first.
@@ -177,7 +178,8 @@ by construction (the recount's clone) and by `fidelity_bbh`'s proof.
   build moved the identity again; R47's ruling makes that loud and never fatal. Regenerate ONCE, after the combined build, not before.
 - **THREE THINGS move on a commit touching `bin`, `lib`, `drivers` or `gates`**: the self
   subject's registry row (reviewed refreeze, R38/R44 — bbx-22's was one line, `a614699`), the
-  census's key (D62), and — if the commit adds a harness FILE — the BATTERY itself, because
+  census's key (D62), and — if the commit adds a FILE under `bin/`, `lib/` or `drivers/` (the census universe; a new
+  file under `gates/` does not count, measured at bbx-23) — the BATTERY itself, because
   `gates/census_register.sh` fails on a file with no frozen row (R47). A commit touching only
   `docs/`, `expected/` or `fixture/` moves none of them.
 - **The order that avoids paying twice**: land every code change FIRST, then the census

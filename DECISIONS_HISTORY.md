@@ -1345,3 +1345,7 @@ step they cost one identity move, one census run, one reviewed refreeze and one 
 **Anti-hyperfocus (BBX-27).** No ruling is open. The pull now is toward the build, which is right,
 but S4 step 7 — the slice readout — is still the one thing S4 asks for before its DONE ruling, and
 it moves no harness file. Which comes first is the maintainer's call.
+
+### bbx-23 — a correction to the R45 entry above, before the build
+
+The entry above says R45's new gate is "a new FILE, so the census must run (R47)". Measured at the bbx-23 open, that is wrong: R47's register covers the census universe, `git ls-files lib bin drivers`, and a gate lives under `gates/`. On a clone of `898dbe6`, a new gate file committed under `gates/` left `bbx file-census --self --check-register` at exit 0 with the drift NOTE only, where a new file under `lib/` made it exit 1 (`FAIL register: … a tracked harness file with NO frozen census row`). The ruling is unchanged; only its stated cost was wrong. The combined build still ends in one census regeneration, because every one of its four changes moves the identity — which makes the census stale (a NOTE), not incomplete (a FAIL). The claim was the contributor's, made from the word "harness" rather than from the code that defines the universe; it is retraction X43.

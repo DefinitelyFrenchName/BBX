@@ -90,9 +90,9 @@ exposed (G13, rule 7), the only exception ever allowed to move it upward. Gramma
 
 **Next:** (1) **ONE harness build, four changes:** G50 (the readout names a gate
 header it cannot read instead of counting it as declaring no blind spot), R44's printed
-key, R46's one definition of the key, and R45's registry gate. All four move the
-identity and R45 adds a harness FILE, so together they cost one census run (R47), one
-reviewed refreeze and one battery pair — apart, four of each. (2) **S4 step 7,
+key, R46's one definition of the key, and R45's registry gate. All four move the identity, so together they cost one reviewed refreeze,
+one census regeneration and one battery pair — apart, four of each. R45's gate lives under
+`gates/`, outside the census universe, so it owes no census row (measured at bbx-23). (2) **S4 step 7,
 the slice readout** (`docs/plans/S4.md` §8.7), after which S4 goes to the maintainer
 for a DONE ruling as S3 did. (3) **The order for that build**, which avoids paying twice: land every code change FIRST, then `bin/bbx file-census --self
 --out build/file_census_<stamp> --shadow-refreeze 'python3
