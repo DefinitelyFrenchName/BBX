@@ -1,0 +1,42 @@
+== 1. the tree's fixture: GREEN, every printed line frozen and classified, the kept run keyed (scenario, kind) ==
+  ok    exit 0 and every printed line is the frozen text (43 lines: 12 pairings, 28 NOTEs, the set line, SUITE GREEN)
+  ok    12 verdict lines, each classified 'pass' by finding.py
+  ok    kept: 12 rows keyed (scenario, kind), schema first then the table's order (truth, unordered, band)
+  ok    kept: the class column reads the spec's class (band, exact, multiset, schema); every finding pass
+  ok    kept: notes.tsv 28 rows (scenario, key, value) — exit / band-fields / emitted-files per scenario (D43, D44); 04_band's band-fields 1 kept TWICE, from the comparator and from the summary (two writers of one key, ruled kept: R41)
+  ok    kept: run.txt loop=kinds, expset=fixture, pass=12, verdict=GREEN
+  ok    the views the loop handed the families, from the table's fourth column (D57): truth=log unordered=log schema=json band=bands 
+== 2. twice (BBX-14): a second run at the same HEAD, and the readout's screen over both ==
+  ok    the second run: exit 0, results.tsv, notes.tsv and the printed text byte-identical to the first
+  ok    bin/bbx readout <run2> --against <run1>: exit 0 (GREEN and BBX-14 met)
+  ok    the screen counts scenarios and pairings apart
+  ok    the register's histogram: 21 fixture rows (12 files + 9 truth logs), evidence about no real subject
+  ok    the classes that ran — the spec's class words — none on a real pairing
+  ok    no coverage number: the command-line kind has none (BBX-18 stated, not faked)
+  ok    the band inventory on the screen (BBX-13's watch, RO1)
+  ok    the exit status on the screen, per scenario
+  ok    the emitted files on the screen
+  ok    BBX-14 met over pairings
+  ok    the driver's blind spots on the screen (RO2)
+  ok    the duplicate is on the screen too: 04_band's band-fields line twice (R41: ruled kept, visible by design)
+== 3. --freeze on a copy: every kind authored, nothing written ==
+  ok    --freeze: exit 0, 12 'authored .<kind> expectation — not self-frozen' lines (kept: authored), no file of the copy changed, no .sha1 written (every expectation is design-derived: nothing self-freezes)
+== 4. CONTROL identity-before-any-scenario ==
+CONTROL FIRED: identity-before-any-scenario — one byte of the tool changed: UNREGISTERED, exit 1, no scenario row; restored: set 'fixture', SUITE GREEN
+== 5. CONTROL nondeterministic-before-any-class ==
+CONTROL FIRED: nondeterministic-before-any-class — a scenario copy with --nondet: NONDETERMINISTIC on it, no kind evaluated (kept kind '-', finding nondeterministic), RED; the wrapper driver: on every scenario, 9 rows, no PASS; the caller's CLI_NONDET=1: scrubbed, SUITE GREEN; the driver directly under it: two differing logs
+== 6. CONTROL crash-vs-refusal ==
+CONTROL FIRED: crash-vs-refusal — --crash-at 3: the driver's signal line, RUN-FAIL (kept: run-fail, kind '-', one row, no NOTE), the other scenarios pass, RED; scenario key argz: the driver's REFUSED line naming it, RUN-FAIL the same way; 05_exit_1 (exit 1) and 06_unknown_option (exit 2) PASS in the green run with their exit kept — three reports, not one
+== 7. CONTROL wrong-truth ==
+CONTROL FIRED: wrong-truth — the truth rewritten exit:0 at index 0: the exact pairing alone FAILS naming index 0 (kept: diverged), the other 11 pairings PASS, SUITE RED
+== 8. CONTROL schema-before-any-value (the JSON view through the loop) ==
+CONTROL FIRED: schema-before-any-value — the schema pairing FAILS naming the frozen key 'width' as absent from the OBJECT (the JSON view, D54, handed by the loop's view column), the truth pairing reads NOT-EVALUATED (schema failed) (kept: pending, fail=2), no NOTE kept for 03_show_json, the other 8 scenarios pass
+== 9. CONTROL band-through-the-loop ==
+CONTROL FIRED: band-through-the-loop — the band narrowed to [236, 260]: the band pairing FAILS naming size, 265 and the band (kept: diverged, RED) through the view the loop handed; the truth pairing PASSes on the constant token; band-fields 1 kept ONCE — the summary's, the comparator's gone with its FAIL
+== 10. CONTROL unknown-view ==
+CONTROL FIRED: unknown-view — view 'objekt' on the schema kind: FAIL at the entrance naming the kind and the view, exit 1, 0 rows, no NOTE, verdict RED; a three-field table: one 'bbx expectations:' line naming the row, the suite's FAIL line, exit 1, no kept run
+== 11. READ-ONLY: the tree's fixture after every run ==
+  ok    every file of fixture/fakecli has the checksum it had before (35 files)
+NOTE: suite-runs 15 (each kept under --log)
+
+PASS: the suite drives the command-line fixture end to end, GREEN twice, the kinds loop's second consumer with every view handed from the table, and every control failed where it must

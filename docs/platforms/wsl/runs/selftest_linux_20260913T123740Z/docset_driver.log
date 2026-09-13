@@ -1,0 +1,47 @@
+== 1. the extractor's self-test, standalone ==
+  ok    docset.py: self-test ok — 3 forms found true, falsified and loose lines as designed
+== 2. every scenario of the tree's fixture binds to the design's truth, byte for byte, twice ==
+  ok    01_all: two runs, byte-identical (BBX-14)
+  ok    01_all: the log EQUALS the generator's truth (END 23)
+  ok    01_all: END 23 equals the claim lines (23) — the denominator is in the log (R33)
+  ok    02_weights: two runs, byte-identical (BBX-14)
+  ok    02_weights: the log EQUALS the generator's truth (END 7)
+  ok    02_weights: END 7 equals the claim lines (7) — the denominator is in the log (R33)
+  ok    03_rows: two runs, byte-identical (BBX-14)
+  ok    03_rows: the log EQUALS the generator's truth (END 7)
+  ok    03_rows: END 7 equals the claim lines (7) — the denominator is in the log (R33)
+  ok    summary: NOTE: coverage 20/23 NOTE: paraphrase 1 NOTE: unbindable 2 NOTE: stale 0 NOTE: mismatch 1 
+  ok    the log carries a BOUND token
+  ok    the log carries a PARAPHRASE token
+  ok    the log carries a UNBINDABLE token
+  ok    the log carries a MISMATCH token
+  ok    every status is in the closed vocabulary (R33, D37)
+  ok    map: 23 rows, index -> (document, line, form, status, quoted, derived)
+  ok    DOCSET_NONDET=1: two runs differ (the kind's nondeterminism knob is live; gates/docset_suite.sh carries it through the suite)
+  ok    a two-component search path resolves the second; the sandbox holds the self-test's output
+  ok    no <set>.tsv on the path: exit 1, no log (docset.py: no records.tsv on DOCSET_PATH=/tmp/tmp.OfLbqFzkiS/nowhere)
+  ok    a claim set with no forms: exit 1 (DISCARDED): docset.py: claim set /tmp/tmp.OfLbqFzkiS/bad.claims: [claims].forms must be a non-empty list of names
+  ok    a named document that is absent: exit 1, no log
+NOTE: coverage 20/23
+NOTE: paraphrase 1
+NOTE: unbindable 2
+NOTE: stale 0
+NOTE: mismatch 1
+== 3. must-fire controls, each on a COPY ==
+-- edited-document --
+CONTROL FIRED: edited-document — index 4 reads STALE; the log differs from the truth at line 4 and nowhere else (diff: 4c4)
+-- shifted-artifact --
+CONTROL FIRED: shifted-artifact — the deleted record's two claims read STALE (indices 1 and 10); the other 21 indices are the truth's
+-- wrong-claim --
+CONTROL FIRED: wrong-claim — index 12 (weights.md:5, Dorin 58 vs the artifact's 57) is the one MISMATCH; a truth rewritten BOUND there differs from the log at line 12
+-- paraphrase --
+CONTROL FIRED: paraphrase — index 3 reads PARAPHRASE on the tree (never BOUND); its literal 37 -> 36 in the artifact turns index 3 MISMATCH and nothing else
+-- unlisted-unbindable --
+CONTROL FIRED: unlisted-unbindable — 2 UNBINDABLE counted in END 23; the absence row removed -> REFUSED overview.md:9, the number row removed -> REFUSED overview.md:11, exit 3, no log
+-- extractor-shadow --
+CONTROL FIRED: extractor-shadow — a broken of-is regex: exit 1 naming the form, no log written (docset.py: self-test FAILED — form 'of-is': expected line 1 BOUND and line 2 MISMATCH, g)
+-- refused-form-and-family --
+CONTROL FIRED: refused-form-and-family — form 'regex', MASK_RANGES, POKES and DOCSET_VIEW each REFUSED, exit 3, no log
+  ok    an EMPTY MASK_RANGES (what the suite exports for a maskless kind, D26) is not a refusal
+
+PASS: the document-set driver binds the fixture to the design's truth, twice; the self-test, the vocabulary, the guards and the refusals hold; 7 controls fired

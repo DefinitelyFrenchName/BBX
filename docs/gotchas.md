@@ -1131,3 +1131,28 @@ remote, then ask, with one line that proves which tree the other host has. Rules
 fact: §1 (the commit was named, not measured on the remote), BBX-29 (results keyed by subject
 version — the version was in the output, which is how the run was classified correctly), BBX-28
 (a witness, converted by reading its own lines).
+
+## G50 — The readout of a kept run from ANOTHER host counts every gate whose header it cannot find as "declaring no blind spot": the WSL screen read 31 where the same commit's screen reads 0 (paid: 0 sittings — found reading the first kept platform pair before it was committed; 2026-09-13)
+`bin/bbx readout` finds each gate's header — the `NOT-ASSERTED:` lines behind "what this green
+does NOT assert" (RO2) — at the `root` and `gates_dir` the run recorded. The kept runs from the WSL
+host record `root=/home/koneko/bbx/BBX`, which does not exist on this host, so every header read
+came back empty and the screen for the WSL pair at `429d3f8` printed `gates declaring no blind
+spot: 31 — classify, config, …`, where the macOS close pair at the same commit prints `0`. Measured
+both ways: the same two kept runs, copied with only their `root=` rewritten to a clone of BBX at
+`429d3f8`, print `gates declaring no blind spot: 0` and a blind-spot section identical to the macOS
+close screen's apart from the one line naming the skip. Nothing else on the screen moved — the
+verdict, the counts, the controls and BBX-14 all come from the kept files — but RO2 on an
+off-host screen was plausible garbage (BBX-16), and R21's ruling names exactly that screen as the
+platform's.
+Not fixed in the commit that found it, which changes no harness file: the committed runs are
+byte-identical to the archive, and the platform page quotes the screen generated with `root=`
+pointed at the clone, and says so. The fix is the next sitting's first small one (R27): a header
+the readout cannot read is NAMED ("header not found at <path>") and never counted as a gate that
+declares nothing. Meanwhile `docs/platforms/README.md` §4 tells the other host to generate its
+screen where it ran.
+Learning (R27): G48's shape again, the same day, in a second place — an absence counted as a
+value. G48 counted missing LINES as zero; this counted a missing FILE as silence. The sweep G48
+named must cover the readout's readers, not only the runners in `bin/`. Rules re-anchored in fact:
+BBX-16 (reading in the wrong view yields plausible garbage), BBX-7 (a claim measured by absence
+needs a positive control), §3.2 and BBX-30 (the blind-spot section is the part of the screen that
+must not lie).

@@ -1,0 +1,135 @@
+LAST RE-BASELINE: 2026-09-10 (bbx-5, R28): bbh `f675710` → `10a82d2` — bbh's commit "config: the M18 re-point that sat dirty since 14z-144; the example lib's root one level too high; the extraction counts dated" (7 files; G11 fixed there; the four dirty files of R8 committed). Measured before the move by the D20 override: F12, F13, F14, F14f, F16, F17 identical on a clone of `10a82d2`. Moved with it: D20; D12's five `[sweep].placeholders` (by definition); the census `docs/census/bbh.md` (A2 19 → 20). No verdict text changed on either side.
+bbh: /home/koneko/bbx/blackbox-harness tip=529f9d2 porcelain=0 — measured on a plain clone at 10a82d2 (R8, R20), ahead=8
+NOTE: bbh-drift baseline=10a82d2 tip=529f9d2 ahead=8
+== F17a. the flicker class ==
+  ok    flicker identical — identical (EXACT)
+  ok    flicker one flicker — identical (FLICKER 1 100)
+  ok    flicker 2-stretch+1 — identical (FLICKER 3 100,101,300)
+  ok    flicker 3-stretch — identical (FAIL stretch of 3 frames at frame 100 > max-stretch 2)
+  ok    flicker short gap — identical (FAIL only 39 converged frames after frame 100 < min-converge)
+  ok    flicker persistent — identical (FAIL 301 divergent frames > max-total 8 (first at frame 200))
+  ok    flicker tail 60 — identical (FLICKER 1 440)
+  ok    flicker tail 59 — identical (FAIL-SHORT only 59 frames of log after frame 441 < min-conve)
+  ok    flicker end-of-log — identical (FAIL-SHORT only 1 frames of log after frame 499 < min-conver)
+  ok    flicker length — identical (FAIL length mismatch (501 vs 500 lines))
+  ok    flicker over cap — identical (FAIL 9 divergent frames > max-total 8 (first at frame 20))
+  ok    flicker two empty logs — identical (FAIL no frame rows compared — the log has no data)
+  ok    flicker 3-stretch under flicker_max=3 — identical (FLICKER 3 100,101,102)
+== F17b. the window class ==
+  ok    window frozen shape — identical (divergent frames 5, runs 1, window 100..104, 296 identical a)
+  ok    window scattered — identical (divergent frames 5, runs 3, window 100..200, 200 identical a)
+  ok    window late onset — identical (divergent frames 5, runs 1, window 120..124, 276 identical a)
+  ok    window never re-converges — identical (divergent frames 5, runs 1, window 396..400, 0 identical aft)
+  ok    window bit-identical pair — identical (note: the logs are bit-identical, so the expected window did)
+  ok    window truncated — identical (FAIL: length mismatch (400 vs 201 frames) — a short log ca)
+  ok    window late break — identical (divergent frames 106, runs 2, window 100..400, 0 identical a)
+  ok    window late break truncated — identical (FAIL: length mismatch (400 vs 251 frames) — a short log ca)
+  ok    window under reconverge=10 — identical (divergent frames 5, runs 1, window 100..104, 296 identical a)
+== F17c. the composite class ==
+  ok    composite c_ok — identical (divergent frames 915 in 3 run(s): flicker 829,2093, windows )
+  ok    composite c_extra — identical (divergent frames 916 in 4 run(s): flicker 829,2093,3100, win)
+  ok    composite c_miss — identical (divergent frames 914 in 2 run(s): flicker 829, windows 890-1)
+  ok    composite c_late — identical (divergent frames 914 in 3 run(s): flicker 829,2093, windows )
+  ok    composite c_norec — identical (divergent frames 3112 in 2 run(s): flicker 829, windows 890-)
+  ok    composite c_base — identical (note: the logs are bit-identical, so the expected shape did )
+  ok    composite c_2nd — identical (divergent frames 1115 in 4 run(s): flicker 829,2093, windows)
+  ok    composite c_trunc — identical (FAIL: length mismatch (4000 vs 2200 frames) — a short log )
+  ok    composite c_lb — identical (divergent frames 1916 in 4 run(s): flicker 829,2093, windows)
+  ok    composite c_lbt — identical (FAIL: length mismatch (4000 vs 2500 frames) — a short log )
+  ok    composite over-cap inventory — identical (divergent frames 923 in 11 run(s): flicker 1,3,5,7,9,11,13,1)
+  ok    composite inter-run rule off — identical (divergent frames 916 in 4 run(s): flicker 829,885,2093, wind)
+  ok    composite inter-run rule on — identical (divergent frames 916 in 4 run(s): flicker 829,885,2093, wind)
+  ok    composite no windows frozen — identical (divergent frames 915 in 3 run(s): flicker 829,2093, windows )
+  ok    composite under flicker_max=3 — identical (divergent frames 915 in 3 run(s): flicker 829,2093, windows )
+== F17d. the frozen first-divergence constant ==
+  ok    diverge d_900 — identical (PASS (diverges from basis at exactly 900))
+  ok    diverge d_899 — identical (FAIL first divergence at 899 (expected exactly 900 vs basis))
+  ok    diverge d_901 — identical (FAIL first divergence at 901 (expected exactly 900 vs basis))
+  ok    diverge d_never — identical (FAIL first divergence at None (expected exactly 900 vs basis)
+  ok    diverge d_short — identical (FAIL length mismatch (1000 vs 999 frames vs basis))
+  ok    diverge missing base log — identical (NO-BASE-LOG exp/nosuch/logs/q.log)
+== F17e. the proposer ==
+  ok    proposer identical — identical (shape: bit-identical)
+  ok    proposer flicker — identical (shape: 3/500 frames differ in 2 run(s), first at frame 100, )
+  ok    proposer window — identical (shape: 5/400 frames differ in 1 run(s), first at frame 100, )
+  ok    proposer composite — identical (shape: 915/4000 frames differ in 3 run(s), first at frame 82)
+  ok    proposer not re-converging — identical (shape: 5/400 frames differ in 1 run(s), first at frame 396, )
+  ok    proposer length mismatch — identical (shape: bit-identical [LENGTH MISMATCH 500 vs 499])
+  ok    proposer tail of exactly 60 — identical (shape: 1/500 frames differ in 1 run(s), first at frame 440, )
+  ok    proposer under the override — identical (shape: 3/200 frames differ in 1 run(s), first at frame 100, )
+  ok    proposer default on the same shape — identical (shape: 3/200 frames differ in 1 run(s), first at frame 100, )
+  F17: 52 pairs, 0 differ
+== F16a. every .masked spec of bbh's example, against logs the fake driver writes on the clone ==
+  ok    F16a build-a/01_idle (exact base/masked -) — identical (PASS masked-exact)
+  ok    F16a build-a/02_coin_start (window base/masked 260 359) — identical (PASS masked-window (divergent frames 100, runs 1, window 260..359, 261)
+  ok    F16a build-a/03_press (flicker base/masked 2 100,250) — identical (PASS masked-flicker (FLICKER 2 100,250 — frozen inventory))
+  ok    F16a build-a/04_both (composite base/masked 220 260-359) — identical (PASS masked-composite (divergent frames 101 in 2 run(s): flicker 220, )
+  ok    F16a build-a/05_attract (diverge base/masked 900) — identical (PASS (diverges from base/masked at exactly 900))
+  ok    F16a build-b/01_idle (exact base/masked -) — identical (PASS masked-exact)
+  ok    F16a build-b/02_coin_start (window base/masked 260 359) — identical (PASS masked-window (divergent frames 100, runs 1, window 260..359, 261)
+  ok    F16a build-b/03_press (flicker base/masked 2 100,250) — identical (PASS masked-flicker (FLICKER 2 100,250 — frozen inventory))
+  ok    F16a build-b/04_both (composite base/masked 220 260-359) — identical (PASS masked-composite (divergent frames 101 in 2 run(s): flicker 220, )
+  ok    F16a build-b/05_attract (diverge base/masked 900) — identical (PASS (diverges from base/masked at exactly 900))
+  ok    F16a build-a/03_press through compare_check by KIND (R23) — identical (PASS masked-flicker (FLICKER 2 100,250 — frozen inventory))
+  F16a: 10 driver runs
+== F16b. the dispatcher's synthetic ground truth, both implementations ==
+  ok    F16b 'exact basis -' on s_same — identical (PASS masked-exact)
+  ok    F16b 'exact basis -' on s_one — identical (FAIL masked live-state diverged from basis)
+  ok    F16b 'flicker basis 2 100,200' on s_flick — identical (PASS masked-flicker (FLICKER 2 100,200 — frozen inventory))
+  ok    F16b 'flicker basis 2 100,200' on s_flick3 — identical (FAIL masked-flicker: got 'FLICKER 3 100,200,300' expected 'FLICKER 2 1)
+  ok    F16b 'flicker basis 2 100,200' on s_one — identical (FAIL masked-flicker: got 'FLICKER 1 7' expected 'FLICKER 2 100,200' (f)
+  ok    F16b 'flicker basis 2 100,200' on s_same — identical (FAIL masked-flicker: got 'EXACT' expected 'FLICKER 2 100,200' (frozen;)
+  ok    F16b 'diverge basis 42' on s_late — identical (PASS (diverges from basis at exactly 42))
+  ok    F16b 'diverge basis 42' on s_early — identical (FAIL first divergence at 10 (expected exactly 42 vs basis))
+  ok    F16b 'diverge basis 42' on s_same — identical (FAIL first divergence at None (expected exactly 42 vs basis))
+  ok    F16b 'window basis 100 104' on s_win — identical (PASS masked-window (divergent frames 5, runs 1, window 100..104, 296 i)
+  ok    F16b 'window basis 110 114' on s_win — identical (FAIL masked-window: divergent frames 5, runs 1, window 100..104, 296 i)
+  ok    F16b 'window basis 100 104' on s_same — identical (FAIL masked-window: note: the logs are bit-identical, so the expected )
+  ok    F16b 'composite basis 200 100-150' on s_comp — identical (PASS masked-composite (divergent frames 52 in 2 run(s): flicker 200, w)
+  ok    F16b 'composite basis 200 100-150' on s_comp2 — identical (FAIL masked-composite: divergent frames 53 in 3 run(s): flicker 200,30)
+  ok    F16b 'composite basis 200 100-150' on s_same — identical (FAIL masked-composite: note: the logs are bit-identical, so the expect)
+  ok    F16b 'exact basis -' on s_same — identical (FAIL mask mismatch: this set runs)
+  ok    F16b 'exact oldbasis -' on s_same — identical (FAIL mask mismatch: oldbasis has no MASK record (it predates them))
+  ok    F16b 'sortof basis -' on s_same — identical (FAIL unknown .masked class 'sortof')
+  ok    F16b mask_for: a set with a mask file — identical (043c-043d,7f00-8000)
+  ok    F16b mask_for: a set without one (the profile's default = bbh's literal) — identical (043c-043d,4182-41a2,7f00-8000)
+  ok    F16b mask_for: the runner's variable overrides — identical (aa-bb)
+== F16c. the kind enumeration ==
+  ok    F16c enumerate example/expected/build-a — identical (01_idle|masked|EVAL)
+  ok    F16c enumerate example/expected/attract (a .diverge among .sha1) — identical (01_idle|sha1|N/A)
+  ok    F16c enumerate a tree with a .pending and an unknown kind (non-zero) — identical (a|masked|EVAL)
+  F16+F17: 87 pairs, 0 differ
+== F12. the suite: bbh's example through both runners, the same copy for both sides ==
+  ok    F12a/b roms/build-a — identical (10 lines)
+  ok    F12a/b roms/build-b — identical (10 lines)
+  ok    F12a/b roms/base — identical (10 lines)
+  ok    F12a/b roms/attract — identical (10 lines)
+  ok    F12c roms/hook (unregistered) — identical (4 lines)
+  ok    F12d FAKE_NONDET=1 (the NONDETERMINISTIC line and the diff's head) — identical (28 lines)
+  ok    F12d FAKE_CRASH_AT=50 (RUN-FAIL) — identical (40 lines)
+  ok    F12e perturbed copy, roms/base (a wrong .sha1, a deleted expectation, a moved inventory, a .pending, a moved .diverge) — identical (10 lines)
+  ok    F12e perturbed copy, roms/build-a (a wrong .sha1, a deleted expectation, a moved inventory, a .pending, a moved .diverge) — identical (11 lines)
+  ok    F12e perturbed copy, roms/attract (a wrong .sha1, a deleted expectation, a moved inventory, a .pending, a moved .diverge) — identical (10 lines)
+  ok    F12e the mask guard (set mask differs from the basis record) — identical (35 lines)
+  ok    F12f SUITE_ONLY — identical (3 lines)
+  ok    F12f POKES in the environment (the hermetic scrub) — identical (10 lines)
+  ok    F12f the input demand (FAKE_ROOT empty) — identical (2 lines)
+  ok    F12f a positional set that resolves nowhere — identical (3 lines)
+  ok    F12f --freeze on an empty set (each side its own copy) — identical (9 lines)
+  ok    F12f both freezes wrote the same files (14 entries)
+  ok    F12f --freeze leaves an authored .masked alone and RETIRES a .diverge — identical (12 lines)
+  F12+F16+F17: 104 pairs, 0 differ
+== MUST-FIRE: a verdict-text change is visible to F16 ==
+CONTROL FIRED: verdict-text-f16 — one changed verdict string in compare.sh, the pair differs: < PASS masked-exact > PASS masked-exact. 
+  ok    the F16 diff can fail
+== MUST-FIRE: a verdict-text change is visible to F12 ==
+CONTROL FIRED: verdict-text-f12 — one changed line in the suite runner, the pair differs: < SUITE GREEN > SUITE GREEN. 
+  ok    the F12 diff can fail
+== MUST-FIRE: a verdict-text change is visible to F17 ==
+CONTROL FIRED: verdict-text-f17 — one changed verdict string, the pair differs: < EXACT > EXACT. 
+  ok    the F17 diff can fail
+== READ-ONLY: the clone after the run (R18, R20) ==
+  ok    the clone is clean after the run: 0 tracked, untracked or ignored entries
+NOTE: bbh-source tip=529f9d2 porcelain=0 untouched-by-construction=clone
+
+PASS: BBX's suite, dispatcher and temporal family reproduce bbh's verdict text over 104 pairings (F12, F16, F17)

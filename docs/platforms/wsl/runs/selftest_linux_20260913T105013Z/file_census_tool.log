@@ -1,0 +1,46 @@
+== 1. the instrument runs every registered gate and traces what each EXECUTED ==
+  ok    universe 5 files, 4 gates (the tree as built)
+  ok    4 files instrumented (1 bin, 1 driver, 1 sourced lib, sitecustomize)
+  ok    g1's trace is the program and the two modules, and nothing else
+  ok    g2's trace is the driver and the SOURCED lib
+  ok    g3 executed no harness file (it only read a header)
+== 2. MUST-FIRE: the static-registry gate that names the lineage variable reads F ==
+  ok    g4 is F: it is in gates/static.txt and names SYNTH_LINEAGE
+  ok    the other three are K (no seed, no need)
+CONTROL FIRED: static-need-is-what-decides — g4 reads F from gates/static.txt and K from gates/portable.txt, the body unchanged
+  ok    the STATIC REGISTRY plus the lineage variable is what decides F, not the gate's text
+== 3. the census document is GENERATED, and --check reads it back ==
+  ok    the generated block was written
+  ok    the prose OUTSIDE the markers is untouched
+  ok    the old block was replaced
+  ok    --check on the generated document is clean (the run's own text)
+== 4. MUST-FIRE: one count edited in the generated block ==
+CONTROL FIRED: edited-census-row — census.md:39 differs from the run, both texts printed
+  ok    an edited census row is named with the document's text and the run's
+== 5. the frozen kind-sets: the freeze, then the clean compare ==
+  ok    5 rows frozen, one per universe file
+  ok    the frozen file declares class self and mode shrink-only (R39, R11: currency not correctness)
+  ok    frozen 5 measured 5 failures 0 notes 0
+== 6. MUST-FIRE: a frozen kind-set that claims a kind the run did not measure ==
+CONTROL FIRED: shrunk-kind-set — 5 rows named, each with the kind lost and both sides
+  ok    a kind-set that shrank FAILs naming the file and the direction
+   and a row the universe no longer holds is a DEAD ROW (BBX-9, the other way)
+  ok    a frozen row naming a file the universe does not hold FAILs as a dead row
+   and a file frozen TWICE is hand-editing (BBX-17)
+  ok    a file frozen twice is named as hand-editing
+== 7. MUST-FIRE: a harness file no gate executes (rot class 1) ==
+CONTROL FIRED: orphan-file — named against the old freeze AND against a freeze taken with it on disk
+  ok    an unreached harness file FAILs always; a re-freeze cannot hide it
+== 8. MUST-FIRE: G25 — the trace line inserted after the SHEBANG ends the header ==
+CONTROL FIRED: header-insertion — g3 PASS after the header, FAIL after the shebang, and the run REFUSED as contaminated
+  ok    the insertion point decides whether a driver's header survives (R30, G25)
+== 9. the census's KEY is R38's identity, and the two writers of it AGREE ==
+  ok    bbx.file_census.identity and idkey.sh wholeset compute ONE key over BBX's own tree
+  ok    a commit that only rewrites the document leaves --check clean: the key is the harness, not HEAD
+  ok    a commit that adds a gate moves the identity and --check goes red, which is when the census IS stale
+== 10. the instrument writes nothing under the subject tree it measures ==
+  ok    the subject tree is clean and unignored-clean after every run (each shadow lives under the out dir)
+
+NOTE: file-census-tool-runs 12
+
+PASS: the file-census instrument measures execution, refuses a contaminated run, and fails on every frozen row that moved

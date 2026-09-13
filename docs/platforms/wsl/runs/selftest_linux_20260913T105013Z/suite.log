@@ -1,0 +1,77 @@
+== 1. the four registered images are GREEN, each verdict in its own words ==
+  ok    base: 6 x 'PASS' (.sha1), SUITE GREEN, exit 0
+  ok    the resolved set is announced
+  ok    kept: run.txt verdict=GREEN, results.tsv 6 rows, finding pass (kind sha1)
+  ok    attract: the .diverge KIND — 'PASS (diverges from base at exactly 900)'
+  ok    kept: the .diverge row names its kind and class
+  ok    build-a: exit 0, the per-set mask announced
+  ok    01_idle: PASS masked-exact
+  ok    02_coin_start: PASS masked-window (divergent frames 100, runs 1, window 260..359, 261 iden
+  ok    03_press: PASS masked-flicker (FLICKER 2 100,250 — frozen inventory)
+  ok    04_both: PASS masked-composite (divergent frames 101 in 2 run(s): flicker 220, windows 260
+  ok    05_attract: PASS (diverges from base/masked at exactly 900)
+  ok    06_other_set: SKIP (targets the other image; covered by its own suite)
+  ok    kept: kind and class per row (masked: exact, window, flicker, composite, diverge; skip)
+  ok    build-b: the dual-key twin resolves to ITS OWN set (whole-set key) and is GREEN
+== 2. the unregistered image ==
+  ok    roms/hook: exit 1, UNREGISTERED named, the suite's own line
+  ok    kept: run.txt verdict=UNREGISTERED, no scenario rows
+== 3. CONTROL perturbed-expectations: a perturbed .sha1, .masked and .diverge each turn the suite RED with the expected text ==
+  ok    .sha1: 'FAIL expected <frozen> got <measured>', SUITE RED, exit 1; kept: diverged, verdict=RED
+  ok    .masked flicker: a moved inventory is a loud FAIL; kept: diverged
+  ok    .masked window: an onset off by one is a FAIL
+  ok    .diverge: a frame off by one is a FAIL; kept: diverged
+CONTROL FIRED: perturbed-expectations — .sha1, .masked and .diverge each RED with bbh's text
+== 4. NO-EXPECTATION, PENDING, the mask guard ==
+  ok    no expectation file: NO-EXPECTATION, a failure; kept: no-expectation
+  ok    .pending: 'PENDING — not validated' + the reason, a FAILURE (never green); kept: pending
+  ok    a set mask differing from the basis's MASK record: 'FAIL mask mismatch'; kept: mask-mismatch
+  ok    a record-less basis cited by a set with its own mask is refused
+== 5. CONTROL nondeterministic; RUN-FAIL ==
+CONTROL FIRED: nondeterministic — two differing runs: NONDETERMINISTIC (the diff's first lines follow), RED, kept as nondeterministic
+  ok    a driver that fails (the crash exit): its own lines, then RUN-FAIL; kept: run-fail
+== 6. CONTROL hermetic-scrub ==
+CONTROL FIRED: hermetic-scrub — POKES moves the log when the driver is called directly, and the suite under the same POKES is still GREEN
+== 7. --freeze ==
+  ok    --freeze on an empty set: 6 x 'frozen <sha>', .sha1 + logs/ written; kept: frozen
+  ok    …and the frozen set is GREEN on the next plain run
+  ok    an authored .masked is left alone by --freeze (no .sha1 written); kept: authored
+  ok    a self-frozen .diverge is RETIRED to .diverge.superseded (dispatch consults it first)
+== 8. SUITE_ONLY, the driver by path, the input demand, the search-path fallback ==
+  ok    SUITE_ONLY: FILTERED announced, only the named scenarios run; kept: filtered=1
+  ok    --driver <path> (has a slash): a consumer's own driver, relative to its root
+  ok    --driver <bare name>: a driver under the driver home — a name that is not one is refused
+  ok    --driver </abs/path>
+  ok    a driver that is not executable is refused at the entrance
+  ok    the input variable is demanded: 'FAIL: set FAKE_ROOT …', exit 1
+  ok    no search-path variable: the input directory is the search path (base resolves)
+  ok    a positional set name that resolves nowhere fails loudly
+== 9. CONTROL short-vs-diverged: the finding vocabulary (lib/py/bbx/finding.py) ==
+CONTROL FIRED: short-vs-diverged — a FAIL-SHORT folded into bbh's FAIL line is kept as 'short'; a divergence and an over-long stretch as 'diverged'
+  ok    'PASS masked-exact' -> pass
+  ok    'SKIP (targets the other image)' -> skip
+  ok    'PENDING — not validated' -> pending
+  ok    'NO-EXPECTATION (freeze after review)' -> no-expectation
+  ok    'NONDETERMINISTIC (first divergent frame below)' -> nondeterministic
+  ok    'RUN-FAIL' -> run-fail
+  ok    'frozen 0123' -> frozen
+  ok    'authored .masked expectation — not self-frozen' -> authored
+  ok    'FAIL mask mismatch: this set runs' -> mask-mismatch
+  ok    'FAIL unknown .masked class 'x'' -> unknown-class
+  ok    'NO-BASE-LOG /x' -> no-base-log
+  ok    'NOT-EVALUATED (schema failed)' -> pending
+  ok    'authored .truth expectation — not self-frozen' -> authored
+  ok    'something else entirely' -> unclassified
+== 10. CONTROL loosened-at-the-entrance (R25) ==
+CONTROL FIRED: loosened-at-the-entrance — REFUSED: [thresholds].flicker_max = 3 is looser than the frame-driven profile's 2 and [thresholds].rulings names no ruling for it (BBX-13, R25)
+  ok    …and with its ruling row the same config runs (the loosened value changes no verdict on this fixture)
+== 11. R26: the driver home ==
+  ok    the frame-driven kind's bare driver name needs BBX_BBH_HOME: FAIL naming it, exit 1
+  ok    a consumer overrides driver_home in its ONE [suite] table (a second table is refused by the subset)
+  ok    a consumer driver_home is where a bare name resolves (here: nowhere, refused by path)
+  ok    an absolute consumer driver_home needs no BBX_BBH_HOME
+== 12. READ-ONLY: the clone after everything (the example was copied out; the driver and machine ran in place) ==
+  ok    the clone is clean: 0 tracked, untracked or ignored entries
+NOTE: suite-runs 25 (each kept under --log)
+
+PASS: the suite's verdicts mean what they say, ROM-free, and the kept run says what each verdict was a finding of

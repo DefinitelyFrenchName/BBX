@@ -1,0 +1,21 @@
+== 1. the tracked register is complete both ways against the universe ==
+  ok    register   files 45   rows 45   missing-rows 0   dead-rows 0
+NOTE: census-drift register=af2b1f085070 tree=bc18c672fdb9 (the harness moved past the census; the release gate re-measures it)
+  note  the census is STALE — a note, never a failure (R47)
+== 2. MUST-FIRE: a COPY of the register with one row removed ==
+CONTROL FIRED: file-without-row — `bin/bbx` named, register   files 45   rows 44   missing-rows 1   dead-rows 0
+  ok    a tracked harness file with no frozen row FAILs, naming the file
+== 3. MUST-FIRE: a COPY carrying a row for a file the universe does not hold ==
+CONTROL FIRED: row-without-file — `lib/sh/zz_does_not_exist.sh` named as a dead row
+  ok    a frozen row naming a file the universe does not hold FAILs
+== 4. MUST-FIRE: a COPY whose recorded identity is not the tree's ==
+  built a COMPLETE copy (45 rows + 0 added) and staled its identity
+CONTROL FIRED: stale-is-a-note — census-drift register=000000000000 tree=bc18c672fdb9 (… printed, and the run still exited 0
+  ok    a stale census is LOUD and not fatal (R47, R18's split)
+== 5. the register is untouched BY THIS GATE ([BBH-59]) ==
+  ok    the tracked register is byte-identical to before this gate ran (sha1 69606900e7b0364d69a7710f12106c9ceb4984d4); every perturbation was a copy under TMPDIR
+
+NOTE: census-register-files 45
+NOTE: census-register-rows 45
+
+PASS: the census register is complete both ways against the universe, and a stale census says so without halting the run

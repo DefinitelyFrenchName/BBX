@@ -1,0 +1,39 @@
+== 1. a kept run, and the screen generated from it ==
+  ok    --log kept results.tsv, run.txt, controls.txt and the gate logs
+  ok    --log changes nothing printed (the two runs' outputs are identical apart from durations)
+  ok    the screen exits 0 on a GREEN run
+  ok    the header names the kind, the root, the HEAD and the platform
+  ok    the verdict line counts separately
+  ok    controls fired / declared are summed
+  ok    gates that proved a control can fail are counted, the rest named
+  ok    the expectation line of a static run says no frozen expectation was compared (a suite run carries the register, D32)
+  ok    coverage comes from the gate's NOTE
+  ok    every other NOTE-class line reaches the screen as a note
+  ok    a non-coverage NOTE is not counted as coverage
+  ok    one run alone leaves BBX-14 UNMET, and says how to meet it
+  ok    g_a's two blind spots are listed
+  ok    the skipping gate's declared blind spot is listed
+  ok    the SKIP is listed as asserting nothing, with its reason
+== 2. two runs at the same HEAD: BBX-14 met ==
+  ok    --against a second kept run of the same HEAD: met, 0 differences
+== 3. a kept SUITE run: the findings counted apart, the register's histogram, the real pairings by FILE (S2 step 4) ==
+  ok    a RED suite run exits 1
+  ok    the suite header names the set and the expectation set
+  ok    the verdict line counts separately, with the runs per scenario and the driver
+  ok    the findings count short APART from diverged (BBX-4)
+  ok    the histogram by R11 class from the register, rank order, testimony and fixture called out
+  ok    the short scenario is named as a length finding under NOT assert
+CONTROL FIRED: real-pairing-by-file — five classes ran, three PASSed, one file is not fixture-class: the line names flicker alone
+CONTROL FIRED: no-register-honest — no register: the file count, 'unknown', and the blind spot named
+  ok    --against a second kept suite run at the same HEAD and set: met
+  ok    …and a differing scenario verdict is UNMET, named
+== 4. CONTROL untracked-visible: a file written under the tree during a run is on the screen (G17) ==
+CONTROL FIRED: untracked-visible — tree during the run: unchanged (untracked entries 3 -> 4 — a file was written 
+  ok    an unchanged untracked count reads as such
+== MUST-FIRE controls ==
+CONTROL FIRED: verdict-follows-run — VERDICT: NOT GREEN   PASS 1  SKIP 1  FAIL 1  TIMEOUT 0  MISSING 0   (gates 3)
+CONTROL FIRED: bbx-14-unmet —   BBX-14 (more than one run): UNMET — verdicts differ: g_b PASS/FAIL (against 2026-09-13
+CONTROL FIRED: undeclared-blind-spot —   gates declaring no blind spot: 1 — g_b   (a gate nobody 
+CONTROL FIRED: note-follows-log —   note: g_a: drift census=x.md recorded=abc1234 tip=def5678 ahead=9
+
+PASS: the readout screen reports the kept run and nothing else

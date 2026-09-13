@@ -1,0 +1,28 @@
+== 1. the clean case: four files (README, MASK, mask, the dotfile out of scope), four rows ==
+  ok    exit 0
+  ok    four files across the tree, README / MASK / mask / dotfile excluded, the lineage's ok line
+  ok    every row inside the vocabulary
+  ok    every named file is one git tracks (a clone has them all)
+  ok    outside a work tree the tracked-ness check is reported NOT RUN, never passed
+  ok    the classes counted in rank order
+  ok    --histogram a-set: class=self count=2 class=derived count=1 
+  ok    --histogram of a set with no rows: none
+== 2. CONTROL file-without-row ==
+CONTROL FIRED: file-without-row — a-set/y.sha1 named, the advice names the register
+== 3. CONTROL row-without-file ==
+CONTROL FIRED: row-without-file — a-set/gone.sha1 named
+== 4. CONTROL class-outside-eight ==
+CONTROL FIRED: class-outside-eight — 'authored' refused, the eight printed
+  ok    a class with a rider ('self-frozen') is refused: riders go in notes (R11)
+== 5. CONTROL file-named-twice; a missing field; a duplicate table ==
+CONTROL FIRED: file-named-twice — the second row refused, the first named
+  ok    a missing field is refused BY NAME
+  ok    a table declared twice is refused by the subset parser (exit 2, the parser's line)
+== 5b. CONTROL row-untracked ==
+CONTROL FIRED: row-untracked — a-set/logs/z.log is present, registered and ignored: named, exit non-zero
+== 6. testimony is not evidence; a missing register; --register ==
+  ok    testimony and fixture rows are complete (exit 0) and NAMED as not evidence
+  ok    a missing register is the lineage's one-line FAIL
+  ok    --register names another register
+
+PASS: every frozen expectation says where its numbers came from, in one closed vocabulary, in a register that cannot be ambiguous

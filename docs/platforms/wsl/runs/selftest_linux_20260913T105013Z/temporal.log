@@ -1,0 +1,51 @@
+== 1. flicker: the inventory is exact, the tail is measured to the last FRAME row ==
+  ok    identical -> EXACT
+  ok    single-frame flicker -> FLICKER 1 100
+  ok    2-frame stretch + isolated -> FLICKER 3
+  ok    3-frame stretch -> FAIL stretch
+  ok    insufficient re-convergence -> FAIL
+  ok    persistent divergence -> FAIL
+  ok    tail == min-converge (60) -> FLICKER
+  ok    length mismatch -> FAIL length
+  ok    two zero-frame logs -> FAIL (nothing was compared)
+  ok    9 divergent frames > max-total 8 -> FAIL
+CONTROL FIRED: short-is-not-diverged — end-of-log flicker 'FAIL-SHORT only 1 frames of log after frame 499 < min-converge 60 — the log ends too soon to prove re-convergence' and tail 59 'FAIL-SHORT only 59 frames of log after f…' both FAIL-SHORT
+== 2. window: one contiguous run, a fixed onset, full re-convergence, the end state untouched ==
+  ok    single contiguous window at the frozen onset -> PASS
+  ok    scattered flicker is not a window
+  ok    a drifting onset is caught
+  ok    a window that never re-converges is caught
+  ok    a truncated log is not prefix-compared
+  ok    the full log of a late permanent divergence FAILs
+  ok    truncating before a permanent divergence does NOT rescue it
+== 3. composite: the conjunction, stricter than either component ==
+  ok    exactly the frozen shape -> PASS
+  ok    the window onset moves by one frame -> FAIL
+  ok    the window never re-converges -> FAIL
+  ok    an unfrozen second window appears -> FAIL
+  ok    a truncated log is not prefix-compared -> FAIL
+  ok    a permanent break after the frozen shape -> FAIL
+  ok    truncating before that break does not rescue it -> FAIL
+  ok    an over-cap flicker inventory (10) is rejected (max-total 8)
+  ok    a 55-frame flicker gap passes by DEFAULT (the inter-run rule is policy, off)
+  ok    --min-converge-flicker 60 rejects the 55-frame gap when asked
+  ok    with no windows frozen, a long run is rejected (not a loophole)
+CONTROL FIRED: inventory-drift — an extra frame (3100) and a missing frame (2093) each FAIL naming the inventory
+CONTROL FIRED: window-identical — a bit-identical pair FAILs the window class and the composite class (the divergence must EXIST)
+== 4. the frozen first-divergence constant: line-identical through n-1, divergence EXACTLY at n ==
+  ok    first divergence at exactly 900 -> PASS
+  ok    length mismatch -> FAIL (a short log is never a prefix match)
+  ok    a missing base log -> NO-BASE-LOG
+CONTROL FIRED: diverge-off-by-one — 899, 901 and no divergence each FAIL the constant at 900
+== 5. the proposer: proposes in the vocabulary, never ratifies; a proposed line drops into the enforcer verbatim (C5) ==
+  ok    bit-identical -> exact
+  ok    three flicker frames -> flicker line
+  ok    …and the enforcer accepts the proposed inventory verbatim
+  ok    one long run -> window line
+  ok    …and the enforcer accepts the proposed window verbatim
+  ok    flicker + window -> composite line
+  ok    a shape that never re-converges -> NONE, not expressible (C6)
+  ok    a length mismatch is named in the shape line
+  ok    a tail of exactly RECONVERGE proposes (the proposer's <= bug, GitHub #53 there, stays fixed)
+
+PASS: the temporal family's five checkers and its proposer hold their frozen shapes in both directions

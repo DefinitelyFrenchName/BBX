@@ -1,0 +1,38 @@
+LAST RE-BASELINE: 2026-09-10 (bbx-5, R28): bbh `f675710` → `10a82d2` — bbh's commit "config: the M18 re-point that sat dirty since 14z-144; the example lib's root one level too high; the extraction counts dated" (7 files; G11 fixed there; the four dirty files of R8 committed). Measured before the move by the D20 override: F12, F13, F14, F14f, F16, F17 identical on a clone of `10a82d2`. Moved with it: D20; D12's five `[sweep].placeholders` (by definition); the census `docs/census/bbh.md` (A2 19 → 20). No verdict text changed on either side.
+bbh: /home/koneko/bbx/blackbox-harness tip=529f9d2 porcelain=0 — measured on a plain clone at 10a82d2 (R8, R20), ahead=8
+NOTE: bbh-drift baseline=10a82d2 tip=529f9d2 ahead=8
+== F13a. both static runners over one synthetic repo of stub gates ==
+  ok    F13a (portable, 10 stub gates + MISSING + orphan + an emulator gate + a NOTE): identical (36 lines)
+  ok    F13a --strict: identical (37 lines)
+== F13b/c/d. bbh's example consumer through both runners ==
+  ok    F13b example/ portable tier: identical (22 lines)
+  ok    F13c example/ both tiers (FAKE_ROOT=.): identical (24 lines)
+  ok    F13c' example/ static tier NOT RUN (FAKE_ROOT unset): identical (25 lines)
+  ok    F13d example/ --list: identical (10 lines)
+== F13e. the tier classifier over example/ ==
+  ok    F13e tier --list: identical (13 lines)
+  ok    F13e tier --unregistered: identical (2 lines)
+  ok    F13e config dump of example/bbh.toml: identical (108 lines)
+== F14. the sweep runner over example/ ==
+  ok    F14 --list: identical (8 lines)
+  ok    F14 --list --scope all --lane all: identical (9 lines)
+  ok    F14 --dry-run --scope all (the precondition, the fingerprinted builds, the instruments, every lane's command, the coverage report): identical (32 lines)
+  ok    F14 a real run: --scope all --strict (bbh's example gates under each runner; BBH_HOME exported on both sides, G11): identical (35 lines)
+== F14f. the fingerprint over example/roms ==
+  ok    F14f fingerprint roms/build-a (registry lookup): identical (2 lines)
+  ok    F14f fingerprint roms/base (registry lookup): identical (3 lines)
+  ok    F14f fingerprint roms/attract (registry lookup): identical (3 lines)
+  ok    F14f fingerprint roms/build-b (registry lookup): identical (2 lines)
+  ok    F14f fingerprint roms/hook (registry lookup): identical (3 lines)
+  ok    F14f fingerprint roms/build-a --sha-only: identical (2 lines)
+  ok    F14f fingerprint roms/build-a --set-key: identical (2 lines)
+  ok    F14f fingerprint roms/build-a --full: identical (6 lines)
+== MUST-FIRE: a verdict-text change is visible to F13a ==
+CONTROL FIRED: verdict-text — one changed format string, 8 differing lines
+  ok    the fidelity diff can fail
+== F15. not run (set BBX_FIDELITY_F15=1; runs bbh's whole selftest, ~2-6 min) ==
+== READ-ONLY: bbh's tree after the run (R18, R20) ==
+  ok    the clone is clean after the run: 0 tracked, untracked or ignored entries (it started with 0 of each)
+NOTE: bbh-source tip=529f9d2 porcelain=0 untouched-by-construction=clone
+
+PASS: BBX reproduces bbh's verdict text over bbh's own fixtures (F13a-e, F14, F14f); F15 not run

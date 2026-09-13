@@ -93,7 +93,9 @@ battery (D63).
 bin/bbx readout build/selftest_linux_<second stamp> --against build/selftest_linux_<first stamp>
 ```
 
-That one screen is the deliverable. On the macOS host at this commit it reads:
+That one screen is the deliverable. **Generate it on the host that ran the battery.** The readout
+reads each gate's header from the root the run recorded, so a screen generated on another
+machine cannot find them and, until G50 is fixed, counts every gate as declaring no blind spot. On the macOS host at this commit it reads:
 
 ```
 VERDICT: GREEN   PASS 31  SKIP 0  FAIL 0  TIMEOUT 0  MISSING 0   (gates 31)
@@ -174,3 +176,5 @@ reads it, not to the one that produced it). Send the archive and the screen.
   value moved with R48's build (`bc18c672fdb9`). Run at bbx-22's close commit or later.
 - 2026-09-13 (bbx-22 close): §4's screen re-measured at `429d3f8`; §1's tree check added
   after a WSL run met the pre-fix tree because the fix was not yet pushed (G49).
+- 2026-09-13 (after the bbx-22 close): §4 says to generate the screen where the battery ran —
+  the first kept WSL pair, read on the macOS host, counted 31 gates as declaring no blind spot (G50).

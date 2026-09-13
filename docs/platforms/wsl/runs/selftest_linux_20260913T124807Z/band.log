@@ -1,0 +1,41 @@
+== 1. the driver on the tree's fixture: 04_band, once ==
+  ok    04_band: END 2; the view: 1 size=265
+  ok    the view holds the design's size(4) = 265 and END 1
+  ok    index 2 of the log is the constant field:size:band — the value lives in the view only (BBX-16)
+== 2. the pairing PASSes through the one dispatcher, the family from the kind (R23), with the NOTE ==
+  ok    04_band band — PASS band (1 field(s), every value inside its band)
+  ok    NOTE: band-fields 1 follows the PASS (BBX-13's inventory watch, for the screen)
+  ok    04_band truth (the band token is the constant, so the exact family never moves with the value) — PASS exact (3 indices, every token the truth's)
+  ok    the family from the profile's table: band=tolerant-numeric
+  ok    bin/bbx compare band reaches the tool
+  ok    the same value through a view copy — PASS band (1 field(s), every value inside its band)
+== 3. what is refused: a class outside the family, a spec that is not a band, a view that is not there or not the grammar ==
+  ok    a band spec whose class is not band — FAIL unknown tolerant-numeric class 'sortof'
+  ok    a .band under the frame-driven profile (BBX_CONFIG unset) has no family
+  ok    no band view handed (the kinds loop's argument missing) — FAIL band: the tolerant-numeric family needs the band view (compare_check's trailing argument)
+  ok    an expectation file that is not there — FAIL band: /tmp/tmp.UgRPBFjXoz/x/fixture/09_none.band is not a band spec (no such file)
+  ok    a log with no band view (01_list declares no bands) — FAIL band: the band view /tmp/tmp.UgRPBFjXoz/01_list.log.bands cannot be read (No such file or directory: no band field was observed — the scenario declares no bands, or stdout was not one JSON object)
+  ok    a band with no measured statement — FAIL band: /tmp/tmp.UgRPBFjXoz/x/fixture/04_band.band is not a band spec ([spec] lacks measured: a band with no measurement is a knob (R36))
+  ok    a band whose min is above its max — FAIL band: /tmp/tmp.UgRPBFjXoz/x/fixture/04_band.band is not a band spec ([b1] min 271 is above max 270)
+  ok    a fractional band (the subset refuses the float, D48) — FAIL band: /tmp/tmp.UgRPBFjXoz/x/fixture/04_band.band is not a band spec (line 9: unsupported value syntax: '270.5')
+  ok    a rulings entry for a field no table freezes — FAIL band: /tmp/tmp.UgRPBFjXoz/x/fixture/04_band.band is not a band spec ([spec].rulings names 'seed', which no [b<i>] table freezes)
+  ok    a view value that is not an integer — FAIL band size: 265.5 is not an integer (the band is [236, 270])
+  ok    a view value that is a string — FAIL band size: "265" is not an integer (the band is [236, 270])
+  ok    a view whose END disagrees — FAIL band: the band view /tmp/tmp.UgRPBFjXoz/v3.log.bands is malformed (END 2 but 1 rows)
+  ok    a view with no END — FAIL band: the band view /tmp/tmp.UgRPBFjXoz/v4.log.bands is malformed (no END line last)
+  ok    a view whose indices do not run 1..k — FAIL band: the band view /tmp/tmp.UgRPBFjXoz/v5.log.bands is malformed (line 2 is not `2 <name>=<value>`)
+== 4. must-fire controls, each on a COPY ==
+-- outside-the-band --
+CONTROL FIRED: outside-the-band — 235 and 271 each FAIL naming size, the value and [236, 270]; 236 and 270 themselves PASS (inclusive both sides)
+-- inventory-both-ways --
+CONTROL FIRED: inventory-both-ways — a view field nobody froze (seed) FAILs naming it; a frozen field the view lacks (seed) FAILs naming it; the two together PASS with NOTE: band-fields 2 (the inventory grew, and the screen says so)
+-- ruling-less-class --
+CONTROL FIRED: ruling-less-class — 273 FAILs against [236, 270]; a copy widened to 275 with no rulings entry is REFUSED, exit 3, the file unchanged (cmp); with rulings = { size = "R36" } it is written (max 275, the entry kept) and 273 now PASSes; a narrower copy [240, 270] is written with no ruling and 238 now FAILs against it; a copy adding a field is REFUSED unchanged; the generator's own file re-frozen over itself is byte-identical
+-- verdict-text --
+CONTROL FIRED: verdict-text — the shadow's changed string is exactly what the frozen-text check refuses: 'PASS band [1 field(s), every value inside its band)' is not the frozen line
+== 5. every verdict line this gate saw is classified (finding.py never reads unclassified); the freeze's lines are frozen, not classified ==
+  ok    22 distinct verdict lines, every one classified
+  ok    5 distinct --freeze lines frozen above (a tool's answer, never a pairing's verdict)
+NOTE: verdict-lines-frozen 22
+
+PASS: the tolerant-numeric family holds both ways on the fixture, its inventory both ways, --freeze refuses to widen without a ruling and writes a narrowing, the verdict text is frozen and classified, and the dispatcher reaches the family from its kind; 4 controls fired

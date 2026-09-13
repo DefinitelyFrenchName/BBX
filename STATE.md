@@ -25,10 +25,15 @@ fidelity unchanged. **R21 ANSWERED after the close** (maintainer, 2026-09-13):
 platform runs are the maintainer's, brought back as a kept pair and committed keyed by
 commit; a platform reads green only on such a pair at a commit whose macOS battery is
 green; SSH or basic automation is a later decision that depends on how often runs are
-needed. The WSL re-run at the fix reported `PASS 30  SKIP 1 … GREEN` (three pasted
-lines, a witness); the platform row turns green when the kept pair is committed. The opening
+needed. **The WSL platform row is GREEN:** the kept pair at `429d3f8` (the
+macOS close pair's commit) reads GREEN twice with `census_recount` SKIPPED and BBX-14
+met, every other gate verdict and every NOTE value equal to macOS, on Linux x86_64 —
+a second OS and a second CPU architecture. Five kept WSL runs are committed
+byte-identical under `docs/platforms/wsl/runs/`. Reading them here found G50: the
+readout of another host's run counts every gate header it cannot find as a gate
+declaring no blind spot (31 where the truth is 0) — the next sitting's first small fix. The opening
 battery and the close's pair are quoted in `docs/readout.md` (bbx-22, and CLOSE —
-bbx-22). Gotchas G1–G49; retractions X1–X40. G49: a WSL re-run met the pre-fix tree
+bbx-22). Gotchas G1–G50; retractions X1–X41. G49: a WSL re-run met the pre-fix tree
 because the fix was not yet pushed when it was asked for; `429d3f8` was pushed before
 the close commit, and the platform procedure now carries a tree check.
 
@@ -84,10 +89,10 @@ number to bring down; the two added at bbx-2 are host facts the clone
 exposed (G13, rule 7), the only exception ever allowed to move it upward. Grammar in
 `docs/census/README.md`.
 
-**Next:** (1) **the kept WSL pair.** The re-run at the fix reported GREEN with
-one skip, `census_recount` (three pasted lines, a witness); its archive, committed under
-`docs/platforms/wsl/` with `bin/bbx readout <second> --against <first>`, is what turns the
-platform row green under R21's ruling. (2) **S4 step 7,
+**Next:** (1) **G50, the first small fix:** the readout names a gate header it
+cannot read ("header not found at <path>") instead of counting that gate as declaring
+no blind spot. It is a harness change, so fold it into R44's and R46's build if that
+comes next: one identity move, one refreeze, one census regeneration, one battery pair. (2) **S4 step 7,
 the slice readout** (`docs/plans/S4.md` §8.7), after which S4 goes to the maintainer
 for a DONE ruling as S3 did. (3) **R44's printed refreeze and R46's one definition of
 the identity key, built as ONE step**, then ONE census regeneration. The order that

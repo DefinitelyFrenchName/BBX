@@ -1,0 +1,20 @@
+== 1. the reader ==
+  ok    a declaration reads as shape / name / text
+  ok    'none — reason' reads as the explicit no-control declaration
+  ok    a header with no MUST-FIRE line declares nothing
+== 1b. the header is the leading comment block (R30): a bare # does not end it, the first code line does ==
+  ok    a declaration after a bare # line is read (bbh: 264 of 315 gates have one within five lines)
+CONTROL FIRED: body-is-not-header — a MUST-FIRE line after the first code line declares nothing (its firing will read as undeclared)
+== 2. the runner's controls block, one gate at a time ==
+  ok    g_ok -> OK, runner exit 0
+  ok    g_none -> OK, runner exit 0
+  ok    g_undecl -> RED, runner exit 1
+  ok    g_deadline -> RED, runner exit 1
+  ok    g_silent -> UNDECLARED, runner exit 1
+== 3. MUST-FIRE: a declared control that never fires ==
+CONTROL FIRED: dead-control — g_dead (declared, never fired) made the runner NOT GREEN, exit 1
+  ok    a dead control refuses the verdict (BBX-6)
+== 4. without enforcement the block is absent and the output is bbh's ==
+  ok    enforce = false: no controls block, GREEN (fidelity with bbh)
+
+PASS: declared controls are read, dead ones refuse the verdict, silence is red under enforcement

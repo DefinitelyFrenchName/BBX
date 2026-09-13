@@ -1,0 +1,39 @@
+== exact ==
+  ok    bit-identical passes
+  ok    one differing frame fails
+== flicker (frozen inventory, drift either way is loud) ==
+  ok    the frozen inventory passes
+  ok    a GROWN inventory fails
+  ok    a SHRUNK inventory fails too
+  ok    bit-identical is not a silent pass
+== diverge (the regression lock for the spec-stem bug) ==
+  ok    divergence at the frozen frame
+  ok    an EARLIER onset fails
+  ok    no divergence at all fails
+  ok    a healthy diverge spec finds its base log
+== window ==
+  ok    one contiguous run at the frozen onset
+  ok    a drifting onset fails
+  ok    bit-identical FAILS (the class asserts the divergence exists)
+== composite (strict conjunction; adds no tolerance) ==
+  ok    frozen flicker + frozen window passes
+  ok    an unaccounted extra run fails
+  ok    bit-identical fails
+== CONTROL mask-mismatch: the baseset/mask invariant, both shapes ==
+CONTROL FIRED: mask-mismatch — a differing mask and a record-less basis are each refused before any class runs
+== CONTROL unknown-class ==
+CONTROL FIRED: unknown-class — FAIL unknown .masked class 'sortof'
+== the kind dispatch (R23): the family comes from the kind ==
+  ok    kind masked -> the temporal family, same verdict text
+  ok    …and FAILs through the same path
+  ok    the profile's table names masked's family: temporal
+  ok    an unregistered kind has none ('-', exit 1)
+== CONTROL no-family-kind ==
+CONTROL FIRED: no-family-kind — FAIL kind 'weird' has no comparator family in the kind profile in forc
+== compare_mask_for: the set's file, else the profile's default, else the env the runners export ==
+  ok    a set with a mask file reports it
+  ok    a set without one falls back to the frame-driven profile's default (bbh's literal, [suite].mask_default)
+  ok    BBX_MASK_DEFAULT (from [suite].mask_default, exported by the runners) overrides it
+  ok    a kind with no mask concept has an EMPTY default, not bbh's literal (BBX-24: the biased default stays in its profile)
+
+PASS: the one dispatcher holds every class both ways, refuses what it must, and takes the family from the kind

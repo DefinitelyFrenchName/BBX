@@ -1,0 +1,41 @@
+== 1. the tree's fixture: GREEN, every printed line frozen and classified, the kept run keyed (scenario, kind) ==
+  ok    exit 0 and every printed line is the frozen text (29 lines: 12 pairings, 15 NOTEs, the set line, SUITE GREEN)
+  ok    12 verdict lines, each classified 'pass' by finding.py
+  ok    kept: 12 rows keyed (scenario, kind), schema first then the table's order
+  ok    kept: the class column reads the spec's class (exact, multiset, schema); every finding pass
+  ok    kept: notes.tsv 15 rows (scenario, key, value) — coverage 20/23, 6/7, 7/7 among them (D44)
+  ok    kept: run.txt loop=kinds, expset=fixture, pass=12, verdict=GREEN
+  ok    the subject file the suite hands the comparators is the file the driver resolves (one artifact: bbx.fingerprint --path = bbx.docset resolve)
+== 2. twice (BBX-14): a second run at the same HEAD, and the readout's screen over both ==
+  ok    the second run: exit 0, results.tsv and notes.tsv byte-identical to the first
+  ok    bin/bbx readout <run2> --against <run1>: exit 0 (GREEN and BBX-14 met)
+  ok    the screen counts scenarios and pairings apart
+  ok    coverage on the screen, per scenario (BBX-18, RO1)
+  ok    …all three
+  ok    the other keys as notes
+  ok    BBX-14 met over pairings
+  ok    the register's histogram: fixture class, evidence about no real subject
+  ok    the classes that ran, none on a real pairing
+  ok    the driver's blind spots on the screen (RO2)
+== 3. CONTROL identity-before-any-claim ==
+CONTROL FIRED: identity-before-any-claim — one word changed: UNREGISTERED, exit 1, no scenario row; restored: set 'fixture', SUITE GREEN
+== 4. CONTROL nondeterministic-before-any-class ==
+CONTROL FIRED: nondeterministic-before-any-class — the wrapper driver: NONDETERMINISTIC on every scenario, no kind evaluated, kept kind '-' finding nondeterministic, RED; the caller's DOCSET_NONDET=1: scrubbed, SUITE GREEN; the driver directly under it: two differing logs
+== 5. CONTROL covered-shrink-only ==
+CONTROL FIRED: covered-shrink-only — a lost row FAILS naming it (diverged, RED); a run covering more PASSes with NOTE: covered-grew 1 kept; --freeze rewrote the file to the generator's byte for byte, the other covered files and the three truth logs untouched, no .sha1 written; the next plain run GREEN with no growth NOTE
+== 6. CONTROL wrong-truth ==
+  ok    the planted wrong claim reads MISMATCH (kept: 02_weights mismatch 1) and the truth expects it: the pairing PASSes
+CONTROL FIRED: wrong-truth — the truth rewritten BOUND at index 3: the exact pairing alone FAILS naming index 3 (kept: diverged), schema, claims and covered PASS, SUITE RED
+== 7. CONTROL schema-before-any-value ==
+CONTROL FIRED: schema-before-any-value — the schema pairing FAILS naming column 3, the three value kinds read NOT-EVALUATED (schema failed) (kept: pending, fail=4), no NOTE kept for 01_all, 02_weights and 03_rows pass
+== 8. CONTROL freeze-keeps-the-truth-log ==
+CONTROL FIRED: freeze-keeps-the-truth-log — with the authored kinds present --freeze left the marked truth log intact and wrote no .sha1; with the four kinds removed the self-freeze overwrote that log (frozen <sha>, the marker gone) and wrote 03_rows.sha1: the guard is the authored kinds' presence
+== 9. the self-frozen kind beside the authored kinds (E4), and NO-EXPECTATION ==
+  ok    a .sha1 beside the four kinds is a fifth pairing, last: 'sha1     PASS' (kept: pass; 13 rows)
+  ok    --freeze with both: the .sha1 is not re-frozen beside authored kinds, and says why
+  ok    a scenario with no expectation file of any kind: NO-EXPECTATION, a failure (kept: no-expectation)
+== 10. READ-ONLY: the tree's fixture after every run ==
+  ok    every file of fixture/docset has the checksum it had before (26 files)
+NOTE: suite-runs 17 (each kept under --log)
+
+PASS: the suite drives the document-set fixture end to end, GREEN twice, every pairing its own verdict and its own kept row, the coverage on the screen, and every control failed where it must

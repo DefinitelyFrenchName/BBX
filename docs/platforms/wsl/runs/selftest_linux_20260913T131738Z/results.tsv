@@ -1,0 +1,32 @@
+gate	tier	verdict	seconds	exit	detail
+classify	portable	PASS	1	0	
+config	portable	PASS	1	0	
+tier	portable	PASS	0	0	
+static_runner	portable	PASS	2	0	
+controls	portable	PASS	5	0	
+sweep_runner	portable	PASS	58	0	
+fingerprint	portable	PASS	3	0	
+rulings_shape	portable	PASS	0	0	
+readout	portable	PASS	3	0	
+close_sweeps	portable	PASS	6	0	
+temporal	portable	PASS	2	0	
+thresholds	portable	PASS	1	0	
+compare_dispatch	portable	PASS	1	0	
+expectation_kinds	portable	PASS	1	0	
+provenance	portable	PASS	0	0	
+docset_fixture	portable	PASS	1	0	
+docset_driver	portable	PASS	2	0	
+set_schema	portable	PASS	4	0	
+docset_suite	portable	PASS	37	0	
+cli_fixture	portable	PASS	1	0	
+cli_driver	portable	PASS	8	0	
+band	portable	PASS	2	0	
+json_schema	portable	PASS	4	0	
+cli_suite	portable	PASS	59	0	
+adapters	portable	PASS	37	0	
+file_census_tool	portable	PASS	2	0	
+census_register	portable	PASS	0	0	
+census_recount	static	SKIP	0	0	SKIP: bbh.md names a repository directory that is absent h
+fidelity_bbh	static	PASS	20	0	
+fidelity_bbh_s2	static	PASS	61	0	
+suite	static	PASS	51	0	

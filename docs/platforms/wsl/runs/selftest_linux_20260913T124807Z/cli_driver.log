@@ -1,0 +1,74 @@
+== 1. the core's self-test, standalone ==
+  ok    cli.py: self-test ok — the SHA-1 reference vectors, the layout, the splitter and the scenario reader behave as designed
+== 2. every scenario of the tree's fixture: the driver's log EQUALS the generator's truth, byte for byte, twice ==
+  ok    01_list: two runs, byte-identical (BBX-14)
+  ok    01_list: the log EQUALS the generator's truth (0 exit:0; END 9)
+  ok    01_list: END 9 equals the point lines after the exit point (9)
+  ok    02_unordered: two runs, byte-identical (BBX-14)
+  ok    02_unordered: the log EQUALS the generator's truth (0 exit:0; END 9)
+  ok    02_unordered: END 9 equals the point lines after the exit point (9)
+  ok    03_show_json: two runs, byte-identical (BBX-14)
+  ok    03_show_json: the log EQUALS the generator's truth (0 exit:0; END 5)
+  ok    03_show_json: END 5 equals the point lines after the exit point (5)
+  ok    04_band: two runs, byte-identical (BBX-14)
+  ok    04_band: the log EQUALS the generator's truth (0 exit:0; END 2)
+  ok    04_band: END 2 equals the point lines after the exit point (2)
+  ok    05_exit_1: two runs, byte-identical (BBX-14)
+  ok    05_exit_1: the log EQUALS the generator's truth (0 exit:1; END 1)
+  ok    05_exit_1: END 1 equals the point lines after the exit point (1)
+  ok    06_unknown_option: two runs, byte-identical (BBX-14)
+  ok    06_unknown_option: the log EQUALS the generator's truth (0 exit:2; END 1)
+  ok    06_unknown_option: END 1 equals the point lines after the exit point (1)
+  ok    07_emit_file: two runs, byte-identical (BBX-14)
+  ok    07_emit_file: the log EQUALS the generator's truth (0 exit:0; END 2)
+  ok    07_emit_file: END 2 equals the point lines after the exit point (2)
+  ok    08_join_stdin: two runs, byte-identical (BBX-14)
+  ok    08_join_stdin: the log EQUALS the generator's truth (0 exit:0; END 3)
+  ok    08_join_stdin: END 3 equals the point lines after the exit point (3)
+  ok    09_env: two runs, byte-identical (BBX-14)
+  ok    09_env: the log EQUALS the generator's truth (0 exit:0; END 10)
+  ok    09_env: END 10 equals the point lines after the exit point (10)
+-- two points re-hashed by a second implementation (BBX-15) --
+  ok    01_list index 1: shasum('1 Rosalind 3F60 48') equals the driver's token (and the truth's)
+  ok    03_show_json index 2: shasum of the canonical JSON value '"Maren"' equals the driver's field token
+-- the band view and the summary --
+  ok    04_band: the band view holds the field's value (1 size=265) and END 1; the log's token is the constant field:size:band
+  ok    01_list: no band view for a scenario with no band field
+  ok    summary 04_band: NOTE: band-fields 1
+  ok    summary 07_emit_file: NOTE: emitted-files 1
+  ok    summary 05_exit_1: NOTE: exit 1
+  ok    summary 06_unknown_option: NOTE: exit 2
+  ok    summary 01_list: NOTE: band-fields 0
+-- O5: what the driver fed is recorded in a named sandbox --
+  ok    08_join_stdin: argv.txt ends with the scenario's args, stdin.bin is the scenario's three lines
+  ok    the sandbox holds the self-test's output
+-- CLI_NONDET, the search path, the refusals --
+  ok    CLI_NONDET=1: two runs differ (the driver-side nondeterminism knob is live; the suite scrubs it, D45)
+  ok    a two-component CLI_PATH resolves the second component
+  ok    no tool on the path: exit 1, no log (cli.py: no executable fakecli and no fakecli.py on CLI_PATH=/tmp/tmp.oAgB0NTdex/nowhere)
+  ok    an executable <set> (an sh script) runs as itself: its one line's token is shasum('hello')
+  ok    a scenario with no [scenario] table: exit 1 (DISCARDED): cli.py: scenario /tmp/tmp.oAgB0NTdex/noscen.cli: no [scenario] table
+  ok    MASK_RANGES: REFUSED, exit 3, no log
+  ok    POKES: REFUSED, exit 3, no log
+  ok    GUARD_DEBUG: REFUSED, exit 3, no log
+  ok    DOCSET_VIEW: REFUSED, exit 3, no log
+  ok    CLI_KEEP_ENV: REFUSED, exit 3, no log
+  ok    CLI_TIMEOUT: REFUSED, exit 3, no log
+  ok    an EMPTY MASK_RANGES (what the suite exports for a maskless kind, D26) is not a refusal
+== 3. must-fire controls, each on a COPY ==
+-- crash-vs-exit --
+CONTROL FIRED: crash-vs-exit — --crash-at 3: exit 2, the log ends CRASH signal:9:SIGKILL / END-CRASH 3 with the 3 lines before the death kept (line 3 the truth's); 05_exit_1: exit 0, '0 exit:1' first, equal to its truth
+-- wrong-truth --
+CONTROL FIRED: wrong-truth — 06_unknown_option is GREEN (the tool's refusal, '0 exit:2' and one err point, is the truth); a truth rewritten '0 exit:0' differs from the log at line 1 and nowhere else
+-- unknown-scenario-key --
+CONTROL FIRED: unknown-scenario-key — REFUSED: drivers/cli.sh cannot honour scenario key 'argz' (the keys are args, stdin, stdin_file, cwd; exit 3, no log
+-- sandbox-both-ways --
+CONTROL FIRED: sandbox-both-ways — --write-home wrote .fakecli in the SANDBOX (visited) and not in the caller's HOME (absent before and after); with no sandbox argument the fresh temp dir under TMPDIR was removed (0 entries left) and the log is the truth
+-- env-scrub --
+CONTROL FIRED: env-scrub — FAKECLI_SALT=7 moves the tool's output when called directly ('salt=7') and not through the driver (the log is the unsalted truth); 09_env's [env] table reaches it (index 10 is shasum('salt=9'), the truth's) with env.txt exactly D6's set plus FAKECLI_SALT=9
+-- uncaptured-emitted-file --
+CONTROL FIRED: uncaptured-emitted-file — args without --emit: exit 1, 'report.json' named as not produced, no log (DISCARDED); the tree's 07_emit_file carries file:report.json:<sha1> at index 2
+-- timeout --
+CONTROL FIRED: timeout — --sleep 5 under CLI_TIMEOUT=1 (a wrapper driver): exit 1 naming the timeout, no log; --sleep 1 under CLI_TIMEOUT=10: exit 0, the log is the truth
+
+PASS: the command-line driver's log equals every truth log twice, two points re-hashed by shasum; the crash, the grammar, the sandbox, the scrub, the emitted file and the timeout hold; 7 controls fired

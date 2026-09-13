@@ -1,0 +1,17 @@
+== 1. the frame-driven profile's five kinds (bbh's) ==
+  ok    the table (extension, family, disposition, view — D57): skip:-:SKIP:- sha1:exact:N/A:log pending:-:NOT-EVALUATED:- masked:temporal:EVAL:log diverge:temporal:EVAL:log 
+  ok    four known kinds, no pending -> exit 0
+  ok    one line per expectation, kind and disposition named (bbh's lines)
+  ok    a non-scenario stem is ignored
+== 2. CONTROL pending-is-red ==
+CONTROL FIRED: pending-is-red — d|pending|NOT-EVALUATED, exit non-zero
+== 3. CONTROL unknown-kind ==
+CONTROL FIRED: unknown-kind — e|weird|UNKNOWN-KIND, exit non-zero
+== 4. the replays dir: the argument, then the environment ==
+  ok    a third argument selects the scenarios dir
+  ok    BBX_REPLAYS_DIR selects it too
+== 5. CONTROL family-absent: the kinds are the PROFILE's (R23) ==
+  ok    the self profile carries the three kind-blind kinds only: skip sha1 pending 
+CONTROL FIRED: family-absent — under kind self: a|masked|UNKNOWN-KIND b|skip|SKIP c|sha1|N/A 
+
+PASS: the expectation kinds are one table per profile, and nothing outside it is silently anything

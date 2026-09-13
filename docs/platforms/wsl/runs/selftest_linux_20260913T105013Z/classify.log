@@ -1,0 +1,23 @@
+== 1. the verdict cases, both directions ==
+  ok    exit 0, PASS line -> PASS
+  ok    exit 1, FAIL line -> FAIL
+  ok    exit 0, SKIP marker -> SKIP
+  ok    exit 0, indented SKIP marker -> SKIP
+  ok    exit 0, SKIP only in prose -> PASS
+  ok    SKIP marker AND exit 2 -> FAIL
+  ok    exit 124 (timeout) -> TIMEOUT
+  ok    exit 137 (timeout -k) -> TIMEOUT
+  ok    exit 1 is FAIL, not TIMEOUT -> FAIL
+  ok    exit 0 after a shell error -> FAIL
+  ok    exit 0, benign teardown segfault -> PASS
+  ok    exit 0, empty log -> PASS
+  ok    SETUP-FAIL marker, exit 1 (R13: a sub-outcome of FAIL, never a fifth word) -> FAIL
+== 2. the detail line ==
+  ok    SKIP detail is the FIRST marker line
+  ok    FAIL detail carries the exit and the last FAIL line
+  ok    --width cuts the detail (20 chars)
+== 3. MUST-FIRE: the config reaches the classifier ==
+CONTROL FIRED: config-reaches-classifier — 'SKIP:' read PASS under a consumer skip_regex, 'SKIPPED:' read SKIP, exit 99 read TIMEOUT, exit 124 read FAIL
+  ok    a consumer [classify] replaces every default it names, and only those
+
+PASS: the classifier's verdicts mean what they say, in both directions

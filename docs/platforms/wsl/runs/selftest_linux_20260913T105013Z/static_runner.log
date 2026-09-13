@@ -1,0 +1,30 @@
+== 1. each verdict is classified correctly ==
+  ok    g_pass -> PASS
+  ok    g_fail -> FAIL
+  ok    g_skip -> SKIP
+  ok    g_skip_indent -> SKIP
+  ok    g_prose -> PASS
+  ok    g_shellcrash -> FAIL
+  ok    g_segv_prose -> PASS
+CONTROL FIRED: skip-and-exit-2 — g_skip_fail (SKIPPED marker, exit 2) is FAIL
+  ok    g_skip_fail -> FAIL (a SKIP marker plus a non-zero exit is a failure)
+== 2. the TALLY matches (the number a human reads) ==
+  ok    PASS 3  SKIP 2  FAIL 3 (the SKIP-and-exit-2 gate and the shell crash count FAIL)
+== 3. a FAIL makes the runner exit nonzero ==
+  ok    exit 1
+== 4. MUST-FIRE: an all-SKIP run is not GREEN under --strict ==
+CONTROL FIRED: strict-all-skip — plain run exit 0 with 'SKIP 2', --strict exit 1
+  ok    without --strict the skips are legitimate and counted; --strict turns them into failure
+== 5. a registered-but-missing gate is MISSING, not silently dropped ==
+  ok    reported MISSING and exited nonzero
+== 6. the anti-orphan check ==
+  ok    an unregistered driver-free gate is named
+  ok    a driver gate (reached only through a sourced lib) is left out of the nag list
+== 7. the static tier is gated by static_needs_env, made absolute ==
+  ok    FAKE_ROOT unset: the static tier is NOT RUN and its gates count as SKIP
+  ok    FAKE_ROOT set: the static tier runs, the variable reached the gate ABSOLUTE, the run is GREEN
+  ok    an input dir that does not resolve is refused at the entrance (exit 2)
+== 8. --list prints the registries ==
+  ok    --list: portable (1) / static (1)
+
+PASS: the runner's verdicts mean what they say.

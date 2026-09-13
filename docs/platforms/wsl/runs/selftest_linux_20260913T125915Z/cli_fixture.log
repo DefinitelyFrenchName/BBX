@@ -1,0 +1,32 @@
+== 1. the tree's fixture equals its generator, and its tool matches the design (read-only: --check regenerates under TMPDIR) ==
+  ok    mkfakecli.py --check exit 0
+  ok    every chirality predicate holds on subject/fakecli.py (D36 + D50)
+  ok    the tool, run directly under a clean environment, matches the design on 9 scenarios (exit, stdout, stderr, files)
+  ok    the generator prints its counts as a NOTE
+  ok    files under subject/, scenarios/, expected/: 33
+  ok    every TOML-subset file the fixture introduces is read by the subset parser: 22 files, 0 refused (R40's caveat: no new TSV but the registry the kernel already had)
+  ok    subject/fakecli.py is executable
+== 2. the consumer config resolves to the command-line profile ==
+  ok    kind = command-line
+  ok    seven kinds under the profile (the kind-blind three + truth, unordered, schema, band)
+  ok    kind row: truth exact EVAL log
+  ok    kind row: unordered set EVAL log
+  ok    kind row: schema schema EVAL json
+  ok    kind row: band tolerant-numeric EVAL bands
+  ok    no temporal family under the profile (a temporal comparator is REFUSED, D23)
+  ok    scenario extension = cli (R32, R35, D34)
+  ok    kind-blind scenario extension = rpl (bbh's literal)
+  ok    the identity is file-sha1 over {set}.py, whole-set key over subject/ (D45)
+  ok    the search-path variable is CLI_PATH, not scrubbed: CLI_NONDET CLI_TIMEOUT CLI_KEEP_ENV 
+  ok    one registry row (the whole-set key -> fixture)
+  ok    the registry row IS the fingerprint tool's whole-set key over subject/
+  ok    bbx.fingerprint resolves subject/ to expectation set 'fixture'
+NOTE: fakecli-fixture records=9 commands=5 options=9 refusals=7 scenarios=9 expectations=12 truth_logs=9 band_fields=1
+  ok    the fixture's register: 22 expectation files, 22 rows, complete both ways
+  ok    every registered fixture file is tracked by git — a clone has the truth logs (G22)
+== 3. must-fire controls, each on a COPY ==
+CONTROL FIRED: edited-value — FAIL: 1 file(s) differ from the generator, 0 not generated
+CONTROL FIRED: symmetric-fixture — FAIL: chirality predicate(s) do not hold on subject/fakecli.py: weights-distinct
+CONTROL FIRED: tool-drifts-from-design — FAIL: the tool differs from the design in 3 place(s); first: TOOL-DIFFERS  01_list: stdout line 1 differs
+CONTROL FIRED: unknown-kind-under-profile — x|masked|UNKNOWN-KIND x|truth|EVAL
+PASS: the command-line fixture is its generator's, chiral, its tool matches the design, and its profile resolves; 4 controls fired
