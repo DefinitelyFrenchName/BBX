@@ -14,6 +14,7 @@
 # NOT-ASSERTED: the suite over the fixture — `NOT-EVALUATED (schema failed)` on the truth row of a scenario whose schema FAILed, and how the suite hands the JSON view to the schema family in place of the subject file: S4 step 4
 # NOT-ASSERTED: the TSV format's verdicts beyond its vocabulary: gates/set_schema.sh freezes them; nothing here reads a TSV artifact
 # NOT-ASSERTED: anything about a real tool: every input is the fixture's (fixture class) or a perturbed copy of it; a tool whose unordered output repeats a line cannot be frozen (a duplicate frozen row is hand-editing, BBX-17) — a consumer's question; the inside of a nested object is not judged (D49)
+# NOT-ASSERTED: that the json format of the schema family and the JSON view it reads, or the line row shape of the set family, is generic: each has one consumer, fixture/fakecli (one json .schema, one .unordered); both FAMILIES have a second kind, and BBX-25 is judged per family (R50; measured bbx-25)
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME

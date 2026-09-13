@@ -33,6 +33,7 @@
 # NOT-ASSERTED: the controls contract of the runner (`enforce`): the synthetic consumer sets it false, and gates/controls.sh is its ground truth
 # NOT-ASSERTED: the readout screen over these runs, and the comparators' own verdict text: gates/readout.sh, gates/set_schema.sh, gates/band.sh, gates/json_schema.sh
 # NOT-ASSERTED: a framework that is not on this host (pytest, bats, node's runner): R37 declines them, and a consumer adds a third adapter under the same core
+# NOT-ASSERTED: that drivers/unittest.sh is generic over unittest suites or drivers/gates.sh over the consumers of BBX's runner: each has one consumer (fixture/unittest, fixture/selfgates), so BBX-25 is unmet for each driver and met for what they share, the mapper lib/py/bbx/adapters.py (two frameworks) and the core (R50; measured bbx-25)
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME

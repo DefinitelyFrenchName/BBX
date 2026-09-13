@@ -13,6 +13,7 @@
 # NOT-ASSERTED: the suite's loop over the band kind, `NOTE: band-fields` on the readout's screen and --freeze under the suite: S4 step 4
 # NOT-ASSERTED: that a rulings entry names a ruling that exists, or that the ruling names a mechanism: any non-empty id is accepted here (the thresholds gate's rule, R25; docs/plans/S4.md §9)
 # NOT-ASSERTED: anything about a real tool: every input is the fixture's (fixture class) or a perturbed copy of it; a fractional band or a band field that is not an integer by design is a consumer's question (D48)
+# NOT-ASSERTED: that the tolerant-numeric family, or the band view it reads, is generic: fixture/fakecli is the one consumer of both (one .band file across every fixture's expected tree), so BBX-25 is unmet for the FAMILY until a second, genuinely different consumer freezes a band (R50; measured bbx-25)
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME

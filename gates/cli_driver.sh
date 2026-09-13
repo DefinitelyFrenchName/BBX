@@ -20,6 +20,7 @@
 # NOT-ASSERTED: the suite over the fixture (identity, the kinds loop, RUN-FAIL on a crash, the band NOTE on the screen): S4 step 4
 # NOT-ASSERTED: performance, behaviour on inputs outside the scenarios, and anything the tool wrote that the scenario did not declare
 # NOT-ASSERTED: a tool that is a directory, a non-UTF-8 output, an emitted TREE, a fractional band (docs/plans/S4.md §9): a consumer's question, refused or discarded here, never measured
+# NOT-ASSERTED: that drivers/cli.sh is generic over command-line tools: fixture/fakecli is its one consumer, so BBX-25 is unmet for the driver; the sandbox core it shares with the two adapter drivers in lib/py/bbx/cli.py has three (R50; measured bbx-25)
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME

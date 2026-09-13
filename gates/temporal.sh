@@ -14,6 +14,7 @@
 # NOT-ASSERTED: anything about a real log: every shape here is synthesized (fixture class); the classes' fitness for a consumer is that consumer's ratification
 # NOT-ASSERTED: the dispatcher's spec line and the suite's dispatch (S2 steps 2 and 3): the comparators are called directly
 # NOT-ASSERTED: that the thresholds are right for any subject: they are the frame-driven profile's (D23) and a consumer's override needs R25's ruling row (gates/thresholds.sh)
+# NOT-ASSERTED: that the temporal family is generic inside BBX: bbh's example (example/bbh.toml, 10 .masked expectations at 10a82d2) is the one consumer any BBX gate runs it over, and its lineage consumer VampireSaved is F20's, not written yet, so BBX-25 is unmet for the family in this tree (R50; measured bbx-25)
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME

@@ -19,6 +19,7 @@
 # NOT-ASSERTED: prose, reasoning and causal claims in a document: only sentences in a declared form and the listed rows are claims
 # NOT-ASSERTED: the truth of the artifact itself: a document that agrees with a wrong artifact reads BOUND
 # NOT-ASSERTED: a nested document tree or a second artifact per set (DOCSET_VIEW is refused): S4 or a consumer's question
+# NOT-ASSERTED: that drivers/docset.sh and its extractor are generic over document sets: fixture/docset is their one consumer, so BBX-25 is unmet for the driver (BBX's own docs/ as a second consumer is G54's candidate ruling, not built) (R50; measured bbx-25)
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME
