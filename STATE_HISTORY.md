@@ -652,3 +652,57 @@ measured by a gate**, not by a document: 44 files, 30 gates, 0 unreached
 (`docs/census/bbx_files.md`, generated; R39, D62, D63).
 
 **In force:** `DECISIONS.md` — R0–R20, R22–R43, R46, R47 and method M1–M4.
+
+## bbx-22 (closed 2026-09-13)
+
+**Status (bbx-22 close, 2026-09-13):** slices S1 and S2 complete; **S3 DONE**;
+**S4's BUILD IS COMPLETE — only step 7, the slice readout, remains.** One subject,
+in the order the maintainer set: **R48 answered and built — a correct SKIP can now
+be green, and `--strict` still refuses every skip, with no exception of any shape**
+(the maintainer's addition: an exemption under `--strict` is a ruling, never a
+change). A gate the classifier calls SKIP gets `verdict=SKIPPED`; only
+declared-and-not-fired is set aside, and the runner and the readout count and name
+what was set aside. On the real gate that reddened WSL (`census_recount` alone, its
+census pointed at an absent tree) the fix reads GREEN where it read NOT GREEN, and
+NOT GREEN again under `--strict`. **Building it found G48:** a controls reader that
+CRASHED was read as `red: 0` and GREEN, and the readout of such a run said `each can
+fail: 31 of 31`. Fixed in the same block — the verdict rests on the reader's output,
+one line per gate that ran, never on its exit. Four new must-fire controls in
+`gates/controls.sh`, each measured DEAD on a regression and FIRED on the fix; bbh
+fidelity unchanged. **R21 ANSWERED after the close** (maintainer, 2026-09-13):
+platform runs are the maintainer's, brought back as a kept pair and committed keyed by
+commit; a platform reads green only on such a pair at a commit whose macOS battery is
+green; SSH or basic automation is a later decision that depends on how often runs are
+needed. **The WSL platform row is GREEN:** the kept pair at `429d3f8` (the
+macOS close pair's commit) reads GREEN twice with `census_recount` SKIPPED and BBX-14
+met, every other gate verdict and every NOTE value equal to macOS, on Linux x86_64 —
+a second OS and a second CPU architecture. Five kept WSL runs are committed
+byte-identical under `docs/platforms/wsl/runs/`. Reading them here found G50: the
+readout of another host's run counts every gate header it cannot find as a gate
+declaring no blind spot (31 where the truth is 0) — the next sitting's first small fix. The opening
+battery and the close's pair are quoted in `docs/readout.md` (bbx-22, and CLOSE —
+bbx-22). Gotchas G1–G51; retractions X1–X42. G49: a WSL re-run met the pre-fix tree
+because the fix was not yet pushed when it was asked for; `429d3f8` was pushed before
+the close commit, and the platform procedure now carries a tree check.
+
+**Open rulings: none.** R44 confirmed and R45 answered after the bbx-22 close, both as
+recommended: R44 keeps `gates` in the whole-set key and makes the refreeze a printed step;
+R45 adds one portable gate, `gates/registry_complete.sh`, for BBX-9's three orphan
+directions. Neither is built. R44 had already been answered at bbx-20 and was left under
+Open for two sittings while the gate that checks the queue passed (G51).
+In force since bbx-2: R18 (the census and the tests
+work on a clone or are explicitly, provably read-only), R19 (parallel work
+is a pull queue; the FIFO token queue is the default implementation, the
+principle is the ruling), R20 (fidelity on a plain clone of bbh at the
+baseline; the recount's clone plain too).
+BBX = Black Box harness eXpanded; GPL-3; sh + Python 3 on macOS, Linux and
+Windows/WSL; kinds: frame-driven (bbh), document set, command-line tool, with BBX ITSELF a
+subject and an external test framework a driver — five consumers:
+bbh's `example/`, `fixture/docset/`, `fixture/fakecli/`, `fixture/unittest/`,
+`fixture/selfgates/` (R14, R15, R37, R38). **BBX's own harness files are
+measured by a gate**, not by a document (`docs/census/bbx_files.md`, generated;
+R39, D62, D63); the register holds 45 rows for 45 harness files, measured by
+`gates/census_register.sh` at bbx-22, and the census itself is stale by design
+until the next regeneration (`census-drift register=af2b1f085070 tree=bc18c672fdb9`).
+
+**In force:** `DECISIONS.md` — R0–R48 (none open) and method M1–M4.

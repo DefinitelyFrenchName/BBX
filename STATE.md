@@ -7,41 +7,30 @@ paragraph per sitting, the outgoing status verbatim). Read `HANDOFF.md` first.
 generalization of `blackbox-harness` (bbh) to any subject with testable inputs
 and outputs. Born 2026-09-09.
 
-**Status (bbx-22 close, 2026-09-13):** slices S1 and S2 complete; **S3 DONE**;
-**S4's BUILD IS COMPLETE — only step 7, the slice readout, remains.** One subject,
-in the order the maintainer set: **R48 answered and built — a correct SKIP can now
-be green, and `--strict` still refuses every skip, with no exception of any shape**
-(the maintainer's addition: an exemption under `--strict` is a ruling, never a
-change). A gate the classifier calls SKIP gets `verdict=SKIPPED`; only
-declared-and-not-fired is set aside, and the runner and the readout count and name
-what was set aside. On the real gate that reddened WSL (`census_recount` alone, its
-census pointed at an absent tree) the fix reads GREEN where it read NOT GREEN, and
-NOT GREEN again under `--strict`. **Building it found G48:** a controls reader that
-CRASHED was read as `red: 0` and GREEN, and the readout of such a run said `each can
-fail: 31 of 31`. Fixed in the same block — the verdict rests on the reader's output,
-one line per gate that ran, never on its exit. Four new must-fire controls in
-`gates/controls.sh`, each measured DEAD on a regression and FIRED on the fix; bbh
-fidelity unchanged. **R21 ANSWERED after the close** (maintainer, 2026-09-13):
-platform runs are the maintainer's, brought back as a kept pair and committed keyed by
-commit; a platform reads green only on such a pair at a commit whose macOS battery is
-green; SSH or basic automation is a later decision that depends on how often runs are
-needed. **The WSL platform row is GREEN:** the kept pair at `429d3f8` (the
-macOS close pair's commit) reads GREEN twice with `census_recount` SKIPPED and BBX-14
-met, every other gate verdict and every NOTE value equal to macOS, on Linux x86_64 —
-a second OS and a second CPU architecture. Five kept WSL runs are committed
-byte-identical under `docs/platforms/wsl/runs/`. Reading them here found G50: the
-readout of another host's run counts every gate header it cannot find as a gate
-declaring no blind spot (31 where the truth is 0) — the next sitting's first small fix. The opening
-battery and the close's pair are quoted in `docs/readout.md` (bbx-22, and CLOSE —
-bbx-22). Gotchas G1–G51; retractions X1–X42. G49: a WSL re-run met the pre-fix tree
-because the fix was not yet pushed when it was asked for; `429d3f8` was pushed before
-the close commit, and the platform procedure now carries a tree check.
+**Status (bbx-23 close, 2026-09-13):** slices S1 and S2 complete; **S3 DONE**;
+**S4's BUILD IS COMPLETE — only step 7, the slice readout, remains.** One subject: the
+combined build of what was answered after the bbx-22 close, paid once. **G50 fixed**
+(`bffd698`): the readout names a gate header it cannot read as `NOT FOUND`, its blind
+spots UNKNOWN, instead of counting it as declaring none. **R45 built** (`ff7c06f`): `bbx
+tier --complete` and `gates/registry_complete.sh` (portable, 3 controls) make an orphan of
+either tier and a dead sweep row FAIL — and the gate's first run against BBX's own tree,
+before it was registered, failed naming itself. **R46 built** (`d2501cf`): the harness
+identity has one definition, `bbx.fingerprint.harness_identity`; `idkey.sh` is a shim and
+the census delegates, and the old and new paths gave one key each way. **R44 built**
+(`5a449ed`): the passing `adapters` prints `NOTE: self-identity …`, and the refreeze
+commit quotes its changed line (`3202a22` did). Each change was measured red on the old
+code and green on the new, and a full battery over all four read PASS 32, controls fired
+128 / declared 128, before the first commit. **The file census is CURRENT again**
+(`367f5e7`): 32 gates run in its shadow, 45 rows, no kind lost, and the register check
+reads no drift. A claim was corrected before any code (`f72a2e1`): R45's gate forces no
+census run, because `gates/` is outside the census universe (G52, retraction X43). The
+opening battery at `7b83477` was GREEN (PASS 31, controls 123 / 123); the close's pair is
+quoted in `docs/readout.md` (CLOSE — bbx-23). **The WSL platform row stays GREEN at
+`429d3f8` and attests that commit only:** the build changed the readout, the tier
+classifier and the identity since. Gotchas G1–G52; retractions X1–X44.
 
-**Open rulings: none.** R44 confirmed and R45 answered after the bbx-22 close, both as
-recommended: R44 keeps `gates` in the whole-set key and makes the refreeze a printed step;
-R45 adds one portable gate, `gates/registry_complete.sh`, for BBX-9's three orphan
-directions. Neither is built. R44 had already been answered at bbx-20 and was left under
-Open for two sittings while the gate that checks the queue passed (G51).
+**Open rulings: none.** Every ruling R0–R48 is answered and recorded in `DECISIONS.md`;
+R21, R44 and R45 were answered after the bbx-22 close, and R44, R45 and R46 are built.
 In force since bbx-2: R18 (the census and the tests
 work on a clone or are explicitly, provably read-only), R19 (parallel work
 is a pull queue; the FIFO token queue is the default implementation, the
@@ -53,16 +42,15 @@ subject and an external test framework a driver — five consumers:
 bbh's `example/`, `fixture/docset/`, `fixture/fakecli/`, `fixture/unittest/`,
 `fixture/selfgates/` (R14, R15, R37, R38). **BBX's own harness files are
 measured by a gate**, not by a document (`docs/census/bbx_files.md`, generated;
-R39, D62, D63); the register holds 45 rows for 45 harness files, measured by
-`gates/census_register.sh` at bbx-22, and the census itself is stale by design
-until the next regeneration (`census-drift register=af2b1f085070 tree=bc18c672fdb9`).
+R39, D62, D63): regenerated at bbx-23 at identity `afd52caf8a96`, 32 gates, 45 rows for
+45 harness files, and `bbx file-census --self --check-register` reads no drift.
 
 **Lineage, measured 2026-09-09** (`docs/census/README.md`):
 
 | repository | HEAD | tracked | note |
 |---|---|---|---|
 | bbh | `10a82d2` | 190 | fidelity baseline (R8; re-baselined from `f675710` on 2026-09-10, `docs/rebaselines.md`); tip `529f9d2`, EIGHT past at the bbx-22 open (`bbh-drift baseline=10a82d2 tip=529f9d2 ahead=8`), a NOTE |
-| VampireSaved | `0cdd9726` | 7497 | 555 rules across 8 skills; 311 gate scripts; 4,808 expectation files; re-measured at bbx-2 (was `5df1d8be`: one count and 13 line citations moved); its tip is past the census (a NOTE every run, `373725e0c000` and 63 ahead at the bbx-22 open; not re-measured by design) |
+| VampireSaved | `0cdd9726` | 7497 | 555 rules across 8 skills; 311 gate scripts; 4,808 expectation files; re-measured at bbx-2 (was `5df1d8be`: one count and 13 line citations moved); its tip is past the census (a NOTE every run, `fb530857c4de` and 64 ahead at the bbx-22 close; not re-measured by design) |
 | SMS-FrenchName-edition | `ecc5481` | 633 | 66 rules; 28 traps; the Measurement Rule's origin at `CLAUDE.md:19-33`; the S3 plan's rows A35–A41 re-derived on the clone at bbx-6 (7 of 7 match) |
 
 **Rules:** all 30 in CLAUDE.md §4 remain `[inherited]` in the file (edits
@@ -73,9 +61,9 @@ G21 → §1/BBX-16, G22 → BBX-10/§1, G23 → BBX-1, G24 → BBX-10, G25 → B
 G30 → BBX-28/§3.2/BBX-30, G31 → §3.3/BBX-30, G32 → BBX-9/BBX-10/§3.3,
 G33 → §1/BBX-16/BBX-12, G34 → BBX-9/§1/BBX-6, G35 → BBX-25/§3.3/§1,
 G36 → BBX-16/BBX-6/BBX-12, G37 → §1/BBX-6/BBX-16. From G38 on, every entry in
-`docs/gotchas.md` names the rules it re-anchors in its own text (11 of 11, G38–G48,
-counted at bbx-22), and this list is not copied further. The formal promotion is
-slice S5.
+`docs/gotchas.md` names the rules it re-anchors in its own text (11 of 11 for G38–G48,
+counted at bbx-22; G49–G52 were written with theirs), and this list is not copied
+further. The formal promotion is slice S5.
 
 **Constitution:** BBX-5's citation corrected to `MJC-52` (R12, own commit).
 Every further edit to `CLAUDE.md` needs maintainer approval (R16). The counts
@@ -88,18 +76,13 @@ number to bring down; the two added at bbx-2 are host facts the clone
 exposed (G13, rule 7), the only exception ever allowed to move it upward. Grammar in
 `docs/census/README.md`.
 
-**Next:** (1) **ONE harness build, four changes:** G50 (the readout names a gate
-header it cannot read instead of counting it as declaring no blind spot), R44's printed
-key, R46's one definition of the key, and R45's registry gate. All four move the identity, so together they cost one reviewed refreeze,
-one census regeneration and one battery pair — apart, four of each. R45's gate lives under
-`gates/`, outside the census universe, so it owes no census row (measured at bbx-23). (2) **S4 step 7,
-the slice readout** (`docs/plans/S4.md` §8.7), after which S4 goes to the maintainer
-for a DONE ruling as S3 did. (3) **The order for that build**, which avoids paying twice: land every code change FIRST, then `bin/bbx file-census --self
---out build/file_census_<stamp> --shadow-refreeze 'python3
-fixture/selfgates/mkselfgates.py' --document docs/census/bbx_files.md --frozen
-expected/file_census.toml --freeze`, then commit the document and register
-(docs-only, so the key holds), then refreeze the fixture row (fixture-only, so the
-key still holds), then the battery twice. Prove any instrument change on a two-gate
-`--only` probe before paying twenty minutes. (4) **G48's sweep**: every count a
-runner in `bin/` takes over a tool's output, asking whether a missing line reads as
-zero — measured before any of them is called a defect.
+**Next:** (1) **S4 step 7, the slice readout** (`docs/plans/S4.md` §8.7): the selftest
+run twice, kept; the families per kind; controls declared and fired; provenance classes;
+defaults rows; the file census from the gate with its three-kind rows; what the green does
+not assert — after which S4 goes to the maintainer for a DONE ruling, as S3 did. It moves
+no harness file. (2) **A WSL re-run** whenever the maintainer wants the platform row to
+attest a commit newer than `429d3f8` (R21's procedure; its tree check still holds). (3)
+**G48's sweep**, widened by G50: every count a runner in `bin/` — and every reader in the
+readout — takes over something that may be absent, asking whether the absence reads as
+zero or as silence. Measure before calling any of them a defect. For any future harness
+change, the order that avoids paying twice is in HANDOFF.

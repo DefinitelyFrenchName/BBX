@@ -3856,3 +3856,57 @@ one-line tree check in `docs/platforms/README.md` §1. The two ledger seams and 
 corrected in their own commits, and X39/X40 hold them.
 
 **Sweeps on the final tree:** `PASS: close_sweeps=/Users/koneko/Developer/generalized-blackbox-harness/BBX files=147 retractions=40 retraction_hits=0 deferrals=0 defaults_rows=63 citations=851 unresolved=0 errors=0; 3 controls fired`; `PASS: rulings=/Users/koneko/Developer/generalized-blackbox-harness/BBX/docs/rulings.md entries=49 open=3 answered=46 decisions_rows=46 errors=0; 4 controls fired`.
+
+
+# bbx-23 — the combined build: G50 fixed, R45, R46 and R44 built, the census current again (2026-09-13)
+
+One subject, chosen by the maintainer: build what was answered after the bbx-22 close, as one
+step, so that the identity moves once, the census is regenerated once and the self subject is
+refrozen once.
+
+**What changed on the screen.**
+- **G50.** A screen generated on a host that cannot read a gate's header now says `gates whose header
+  was NOT FOUND: <n> under <dir> — their blind spots are UNKNOWN, not absent (G50)` instead of counting
+  those gates as declaring no blind spot. A suite screen whose driver is missing says `header NOT FOUND`.
+- **R45.** A new gate, `registry_complete`, is on every battery. It fails when a gate that needs no
+  instrument is in neither the portable nor the static registry, when a gate that needs one has no
+  sweep row, or when a sweep row names a gate that does not exist.
+- **R44.** Every battery's notes now carry `adapters: self-identity whole-set=<key> program=<key> (R44:
+  the key the registry row matched, printed on PASS)`.
+- **R46.** Nothing visible: the identity key has one definition, and the old and new paths produce the
+  same key.
+
+**How it was proved.** A claim was corrected first (`f72a2e1`): R45's gate does not force a census
+run, because the census universe is `bin/`, `lib/`, `drivers/` and not `gates/` — measured both ways
+on a clone (G52). Then, in a scratch clone so the opening battery ran alone, each change's check was
+written and run against the unchanged code, where it had to fail, and against the change, where it had
+to pass. The patch went into the tree whole, identical to the clone file by file, and a full battery
+ran over it uncommitted before the four commits. The census regeneration and the refreeze followed.
+
+## Counts, separately (measured this sitting by the commands named)
+
+| what | count | how |
+|---|---|---|
+| opening battery at `7b83477` | `PASS 31  SKIP 0  FAIL 0  TIMEOUT 0  MISSING 0`, GREEN; controls fired 123 / declared 123; tree unchanged | `bin/bbx selftest --log build/selftest_20260913T143456Z`, `bin/bbx readout` |
+| a new gate file vs a new lib file, against the census register | gate file: `--check-register` exit 0, drift NOTE only; lib file: exit 1, `FAIL register` | a clone of `898dbe6`, one commit each — measured once, not gated (the register gate holds the lib direction) |
+| the new checks on the UNCHANGED code | `readout.sh` exit 1 (`header-not-found-named` DEAD: `gates declaring no blind spot: 3`); `registry_complete.sh` exit 1 (3 controls DEAD: `unknown mode '--complete'`); `fingerprint.sh` exit 1 (the old command line) | a scratch clone of `7b83477` |
+| the identity, three ways, on BBX's own tree | old `idkey.sh`, new shim and `file_census.identity`: wholeset `bc18c672fdb9…`, program `f21f241f49f8…`, equal | the clone, before and after R46 |
+| the new checks on the CHANGED code | `readout.sh` exit 0, 8 fired, 30 ok; `registry_complete.sh` exit 0, 3 fired; `fingerprint.sh` exit 0, 2 fired; `tier.sh`, `controls.sh`, `static_runner.sh`, `file_census_tool.sh` (5 fired), `mkselfgates.py --check` all exit 0 | the clone |
+| `bbx tier bbx.toml --complete` on BBX's own tree, before and after registering the new gate | exit 1, `FAIL orphan: registry_complete is instrument-free and in neither gates/portable.txt nor gates/static.txt`; then exit 0 | the clone |
+| the pre-commit battery over the uncommitted build | `PASS 32  SKIP 0  FAIL 0`, GREEN; controls fired 128 / declared 128; each can fail 32 of 32; tree unchanged; gate runtimes sum to 860 s | `bin/bbx selftest --log build/selftest_20260913T145029Z` |
+| the census regeneration | exit 0 in 848 s; 45 rows frozen, only `measured_at` changed; A2/A3 31 → 32, A8 15 → 16; then `--check-register` exit 0, files 45 rows 45, no drift | `bin/bbx file-census --self … --freeze`, `build/file_census_20260913T150603Z` |
+| the refreeze | one line of `fixture/selfgates/expected/registry.tsv`, `bc18c672…` → `afd52caf…`; `mkselfgates.py --check` exit 0, printing `identity(wholeset)=afd52caf…` | `git diff --numstat -- fixture` |
+| retraction positive controls | X43: 3 hits (HANDOFF ×2, STATE); X44: 7 hits (HANDOFF ×3, STATE ×3, the platform procedure) — each before its wording was rewritten | `gates/close_sweeps.sh` |
+
+## What this green does NOT assert
+
+- **That the WSL platform row attests this commit.** Its kept pair is at `429d3f8`; the readout, the tier
+  classifier and the identity have changed since.
+- **That an off-host screen's blind spots are known.** G50's fix names them `NOT FOUND`; it does not
+  recover them.
+- **That every registry entry is in the RIGHT registry, or that a dead portable/static row is caught by the
+  new gate.** The runner already fails on the dead row; the right-tier question is not asked.
+- **That the printed identity is checked as a value.** R44 prints it as a NOTE; the gate's check is that
+  the registry row matches.
+- **That no other absence in the harness reads as zero or silence.** G48's sweep, widened by G50, has not
+  been done.

@@ -1349,3 +1349,39 @@ it moves no harness file. Which comes first is the maintainer's call.
 ### bbx-23 — a correction to the R45 entry above, before the build
 
 The entry above says R45's new gate is "a new FILE, so the census must run (R47)". Measured at the bbx-23 open, that is wrong: R47's register covers the census universe, `git ls-files lib bin drivers`, and a gate lives under `gates/`. On a clone of `898dbe6`, a new gate file committed under `gates/` left `bbx file-census --self --check-register` at exit 0 with the drift NOTE only, where a new file under `lib/` made it exit 1 (`FAIL register: … a tracked harness file with NO frozen census row`). The ruling is unchanged; only its stated cost was wrong. The combined build still ends in one census regeneration, because every one of its four changes moves the identity — which makes the census stale (a NOTE), not incomplete (a FAIL). The claim was the contributor's, made from the word "harness" rather than from the code that defines the universe; it is retraction X43.
+
+## bbx-23 (2026-09-13) — the combined build: R45, R46 and R44 built, G50 fixed; no ruling raised or answered
+
+**Nothing was ruled this sitting.** It built what was answered after the bbx-22 close — R45
+(`ff7c06f`), R46 (`d2501cf`), R44 (`5a449ed`) — and the fix filed as G50 (`bffd698`): four changes that
+each move the self identity, landed together so that the census regeneration, the reviewed refreeze and
+the battery pair are paid once.
+
+**One correction before any code, in its own commit** (`f72a2e1`, BBX-19). R45's recorded answer said
+its new gate forces a census run; the census universe excludes `gates/`, measured both ways (G52,
+retraction X43). The ruling stands; only its stated cost was wrong.
+
+**How the build was proved.** In a scratch clone first, so the opening battery ran alone. Each change's
+check was written and run against the unchanged code, where it had to fail — the readout's new control
+DEAD on `gates declaring no blind spot: 3`, the registry gate DEAD on `unknown mode '--complete'`, the
+identity section of `gates/fingerprint.sh` failing on the old command line — and then against the
+change, where it passed. R46 also had to reproduce the old key exactly: the old `idkey.sh`, the new shim
+and the census gave one key each way on BBX's own tree. The patch then went into the tree whole, checked
+file by file against the clone, and a full battery ran over it before the first commit: PASS 32,
+controls fired 128 / declared 128, each can fail 32 of 32.
+
+**The registry gate's first run found a real orphan: itself.** Against BBX's own tree, before it was
+added to `gates/portable.txt`, `bbx tier --complete` failed naming `registry_complete` — the exact case
+the report it replaces named with exit 0.
+
+**The census and the refreeze, paid once.** The regeneration ran the whole battery in its shadow —
+every gate PASS, `census_register` SKIPping there by design (G46) — in 848 s (`367f5e7`). The
+register's only changed line is its `measured_at`, so no file's kind-set moved, and
+`--check-register` then read no drift. The refreeze was one line, `bc18c672…` → `afd52caf…`, quoted
+old and new in its commit (`3202a22`) — the first refreeze made under R44's printed rule.
+
+**Anti-hyperfocus (BBX-27).** The sitting did the build it set out to do and nothing else. Whether the
+last green means what it is taken to mean: the pre-commit battery attests the four changes as an
+uncommitted tree over `f72a2e1`, and only the close pair — at the committed HEAD, after the census and
+the refreeze — is the close's evidence. The next thread is S4 step 7, the slice readout, which moves no
+harness file and which names the file census among its inputs.

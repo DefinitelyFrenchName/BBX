@@ -95,7 +95,9 @@ bin/bbx readout build/selftest_linux_<second stamp> --against build/selftest_lin
 
 That one screen is the deliverable. **Generate it on the host that ran the battery.** The readout
 reads each gate's header from the root the run recorded, so a screen generated on another
-machine cannot find them and, until G50 is fixed, counts every gate as declaring no blind spot. On the macOS host at this commit it reads:
+machine cannot find them. Since G50's fix (bbx-23, `bffd698`) it NAMES them — `gates whose header was NOT
+FOUND: <n> … their blind spots are UNKNOWN, not absent` — instead of counting them as gates declaring
+no blind spot; the blind spots themselves are still readable only where the battery ran. On the macOS host at this commit it reads:
 
 ```
 VERDICT: GREEN   PASS 31  SKIP 0  FAIL 0  TIMEOUT 0  MISSING 0   (gates 31)
@@ -178,3 +180,5 @@ reads it, not to the one that produced it). Send the archive and the screen.
   after a WSL run met the pre-fix tree because the fix was not yet pushed (G49).
 - 2026-09-13 (after the bbx-22 close): §4 says to generate the screen where the battery ran —
   the first kept WSL pair, read on the macOS host, counted 31 gates as declaring no blind spot (G50).
+- 2026-09-13 (bbx-23): §4's note brought up to G50's fix — an off-host screen now names the headers it
+  cannot read, instead of counting them as declaring no blind spot.

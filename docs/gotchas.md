@@ -1174,3 +1174,22 @@ twin names rulings as "agreed" or "answered" in prose, and a check over that pro
 reader of free text, which this tree has avoided for good reason. Rules re-anchored in fact: BBX-20
 (a living page states what is true; two did not), BBX-9 (a registry complete both ways — these two
 files were complete with respect to each other and not to the ruling), §1.
+
+## G52 — Two claims were made from the NAME of a thing instead of the code that defines it: R45's gate was said to force a census run because it "adds a harness FILE", and a probe was said to test an INSTRUMENT gate while its pattern sat in a comment (paid: one docs commit of corrections and retraction X43; no run wasted — both were caught by measuring before building; 2026-09-13)
+While putting R45 to the maintainer, the contributor wrote — in the ruling's answer, the history,
+STATE and HANDOFF, and to the maintainer directly — that R45's gate "adds a harness FILE, so its build
+owes a census run (R47)". R47's register covers the census UNIVERSE, which `lib/py/bbx/file_census.py`
+`universe()` defines as `git ls-files lib bin drivers`; a gate lives under `gates/`. Measured at the
+bbx-23 open, on a clone of `898dbe6`: a new gate file left `--check-register` at exit 0, and a new
+`lib/` file — the positive control — made it exit 1. Corrected in its own commit before the build
+(`f72a2e1`), retraction X43. The same hour, a probe of R45's second gap put the instrument pattern in a
+COMMENT; the tier classifier strips comments, read the probe PLAIN, and reported an ordinary orphan — a
+result about the probe, not about the gap. It was redone with the pattern in code, next to the real
+`file_census` gate classified INSTRUMENT, before the gap was called confirmed.
+Learning (R27): "harness" names `bin`/`lib`/`drivers` in R47's universe and `bin`/`lib`/`drivers`/`gates`
+in R38's whole-set key, and the claim followed the word. When a claim rests on what a registry or a
+universe CONTAINS, read the function that builds it — one grep — before writing the claim anywhere. A
+probe is an instrument: it is wrong until it has shown, on a known case beside it, the result it would
+show (BBX-5). Rules re-anchored in fact: §1 (the claim was measured after it was written, not before),
+BBX-16 (the wrong reading of "harness" yielded a plausible cost), BBX-5 (the probe had no positive
+control of its own).
