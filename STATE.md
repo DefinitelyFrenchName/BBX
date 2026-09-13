@@ -7,34 +7,31 @@ paragraph per sitting, the outgoing status verbatim). Read `HANDOFF.md` first.
 generalization of `blackbox-harness` (bbh) to any subject with testable inputs
 and outputs. Born 2026-09-09.
 
-**Status (bbx-24 close, 2026-09-13):** slices S1 and S2 complete; **S3 DONE**;
-**S4 BUILT AND READ OUT, and ruled NOT YET DONE after the close (option A)**: its step 7 slice readout
-is in `docs/readout.md`, and laying it out to the maintainer found two gaps — the tolerant-numeric family has
-one consumer and no gate header says so (BBX-25), and `gates/file_census.sh` was not run at this commit —
-which close next sitting before S4 is ruled again. The sitting's first finding came off the opening screen, not off a gate: two blind
-spots written over several header lines were printed cut mid-sentence, one of them on seven
-committed screens since bbx-17 (**G53**). **R49 was raised and ruled the same sitting — option
-1, the maintainer adding: "We don't compromise on discipline."** The two headers were put back
-on one line first (`398a64f`), then the check (`64dfd85`): `gates/close_sweeps.sh` fails the
-tree on a header entry that runs past its one line, naming it, and the readout marks a cut
-blind spot `^ TRUNCATED` instead of printing a shorter whole. Three new controls, each DEAD on
-the old code in a scratch clone and FIRED on the new; a battery over the uncommitted build read
-PASS 32, controls fired 131 / declared 131. **The file census is current** (`c2e654c`, identity
-`4465efe8a453`: 32 gates, 45 rows, no kind lost — `controls.py` gains the close sweep, which is
-the build and nothing else), and the self subject was refrozen in one quoted line (`af8846c`).
-**The stale spot HANDOFF carried is fixed, with G54 and X45:** three living-page sentences kept
-the 31-gate count after R45 made it 32, one of them on the page followed on WSL. The opening
-battery at `f6f136d` was GREEN (PASS 32, controls 128 / 128); the close's pair is quoted in
-`docs/readout.md` (CLOSE — bbx-24). **The WSL platform row stays GREEN at `429d3f8` and attests
-that commit only**; the platform README's tree check now names a count this sitting moved. **Native Linux
-is a PARTIAL row** (ruled after the close): a pair made through claude.ai, GREEN twice at `f6f136d` over the
-28 portable gates, the static tier not run (`docs/platforms/linux-native/`). **G57, found reading that
-pair:** the gate screen counts only kept rows, so a tier the runner did not run reads `SKIP 0` — reproduced
-on macOS; fixed next sitting with option A. A root `README.md` introduces BBX to visitors.
-Gotchas G1–G57; retractions X1–X46.
+**Status (bbx-25 close, 2026-09-13):** slices S1 and S2 complete; **S3 DONE**;
+**S4 BUILT AND READ OUT, option A BUILT, and S4 laid before the maintainer again for the DONE ruling.**
+Both gaps the bbx-24 layout found are closed, and the build met a ruling first. **R50 was raised and
+ruled before option A was built:** re-deriving bbx-24's claim that every S4 component had two instances
+except the tolerant-numeric family, it held per comparison family and failed per format and per driver;
+the maintainer chose "Family decides, all declared" — BBX-25 is judged per family or contract, and every
+format, row shape, view and driver with one consumer is declared in the gate that holds it. Eight gate
+headers now say so (`7b7af0e`, `1cad369`), the tolerant-numeric and temporal families the two unmet. The
+question as put named band alone; the temporal family was measured after the answer and the maintainer
+was told (**G58**). The sweep that followed found two blind spots S4 had made false, corrected first in
+their own commit (`7b7af0e`, X47, X48). **G57 is fixed** (`da4a4b8`): the gate screen reconciles its rows
+with `run.txt`'s tallies, counts gates the runner did not keep as `(gates N kept, M not run)` and names
+the unrun tier; its two controls read DEAD on the old code in a scratch clone and FIRED on the new, the
+native Linux pair's screen now reads `SKIP 4` and names the static tier, and the macOS screen is
+byte-identical. **`gates/file_census.sh` PASSed at `e81417d`** (633 s; `edited-census-row`,
+`shrunk-kind-set` and `contaminated-trace` fired; 45 files each reached by a gate, kind-sets frozen 45
+measured 45). **The file census is current** (`610bba7`, identity `c26e5a94b344`: 32 gates, 45 rows, only
+the identity line moved) and the self subject was refrozen in one quoted line (`e81417d`). The opening
+battery at `a2ec618` was GREEN (PASS 32, controls 131 / 131); a battery over the uncommitted build read
+PASS 32, controls 133 / 133; the close's pair is quoted in `docs/readout.md` (CLOSE — bbx-25). **The WSL
+platform row stays GREEN at `429d3f8` and attests that commit only; native Linux is a PARTIAL row** at
+`f6f136d` (the static tier not run). Gotchas G1–G59; retractions X1–X48.
 
-**Open rulings: none.** Every ruling R0–R49 is answered and recorded in `DECISIONS.md`; R49 was
-raised and answered at bbx-24 and is built. The maintainer's words with it stand as a rule of
+**Open rulings: none.** Every ruling R0–R50 is answered and recorded in `DECISIONS.md`; R50 was
+raised and answered at bbx-25 and is built. The maintainer's words with R49 stand as a rule of
 method: discipline is never arbitrated — only the method of applying it, on time or practicality.
 In force since bbx-2: R18 (the census and the tests
 work on a clone or are explicitly, provably read-only), R19 (parallel work
@@ -47,19 +44,19 @@ subject and an external test framework a driver — five consumers:
 bbh's `example/`, `fixture/docset/`, `fixture/fakecli/`, `fixture/unittest/`,
 `fixture/selfgates/` (R14, R15, R37, R38). **BBX's own harness files are
 measured by a gate**, not by a document (`docs/census/bbx_files.md`, generated;
-R39, D62, D63): regenerated at bbx-24 at identity `4465efe8a453`, 32 gates, 45 rows for
+R39, D62, D63): regenerated at bbx-25 at identity `c26e5a94b344`, 32 gates, 45 rows for
 45 harness files, and `bbx file-census --self --check-register` reads no drift.
 
 **Lineage, measured 2026-09-09** (`docs/census/README.md`):
 
 | repository | HEAD | tracked | note |
 |---|---|---|---|
-| bbh | `10a82d2` | 190 | fidelity baseline (R8; re-baselined from `f675710` on 2026-09-10, `docs/rebaselines.md`); tip `529f9d2`, EIGHT past at the bbx-24 open (`bbh-drift baseline=10a82d2 tip=529f9d2 ahead=8`), a NOTE |
-| VampireSaved | `0cdd9726` | 7497 | 555 rules across 8 skills; 311 gate scripts; 4,808 expectation files; re-measured at bbx-2 (was `5df1d8be`: one count and 13 line citations moved); its tip is past the census (a NOTE every run, `322682504c9e` and 66 ahead at the bbx-24 open; not re-measured by design) |
+| bbh | `10a82d2` | 190 | fidelity baseline (R8; re-baselined from `f675710` on 2026-09-10, `docs/rebaselines.md`); tip `529f9d2`, EIGHT past at the bbx-25 open (`bbh-drift baseline=10a82d2 tip=529f9d2 ahead=8`), a NOTE; bbh's own working tree reads `porcelain=3` at the bbx-25 open (0 at the bbx-24 close) — reported, and the fidelity gates run on a clone, untouched by construction |
+| VampireSaved | `0cdd9726` | 7497 | 555 rules across 8 skills; 311 gate scripts; 4,808 expectation files; re-measured at bbx-2 (was `5df1d8be`: one count and 13 line citations moved); its tip is past the census (a NOTE every run, `b48e8cc0b53b` and 69 ahead at the bbx-25 open; not re-measured by design) |
 | SMS-FrenchName-edition | `ecc5481` | 633 | 66 rules; 28 traps; the Measurement Rule's origin at `CLAUDE.md:19-33`; the S3 plan's rows A35–A41 re-derived on the clone at bbx-6 (7 of 7 match) |
 
-**Rules:** 29 of the 30 in CLAUDE.md §4 remain `[inherited]` in the file and BBX-30 is
-`[this project]`, as it was written (measured at bbx-24, G55); none is promoted (edits
+**Rules:** 29 of the 30 rule lines in CLAUDE.md §4 carry `[inherited]` and BBX-30 is
+`[this project]`, as it was written (re-measured at bbx-25); none is promoted (edits
 need R16); incidents that re-anchor one in fact: G8 → §1, G9 → BBX-15,
 G10 → BBX-8, G12 → BBX-29, G13 → BBX-16, G14 → BBX-20, G15 → §0/§1,
 G16 → BBX-1, G17 → BBX-24/BBX-26, G18 → BBX-1, G19 → BBX-10, G20 → BBX-5,
@@ -68,7 +65,7 @@ G30 → BBX-28/§3.2/BBX-30, G31 → §3.3/BBX-30, G32 → BBX-9/BBX-10/§3.3,
 G33 → §1/BBX-16/BBX-12, G34 → BBX-9/§1/BBX-6, G35 → BBX-25/§3.3/§1,
 G36 → BBX-16/BBX-6/BBX-12, G37 → §1/BBX-6/BBX-16. From G38 on, every entry in
 `docs/gotchas.md` names the rules it re-anchors in its own text (G26–G52 extracted at bbx-24,
-0 without one; G53–G57 were written with theirs), and this list is not copied further. The
+0 without one; G53–G59 were written with theirs), and this list is not copied further. The
 formal promotion is slice S5.
 
 **Constitution:** BBX-5's citation corrected to `MJC-52` (R12, own commit).
@@ -78,21 +75,20 @@ Every further edit to `CLAUDE.md` needs maintainer approval (R16). The counts
 
 **Census:** 300 count rows, 244 recountable by command on a plain clone of
 the recorded commit (R18, R20), 56 not recountable (bbh 1, VS 27, SMS 28) — the
-number to bring down; the two added at bbx-2 are host facts the clone
+number to bring down (the bbx-25 opening battery: `NOTE: coverage rows=300 recountable=244
+not_recountable=56`); the two added at bbx-2 are host facts the clone
 exposed (G13, rule 7), the only exception ever allowed to move it upward. Grammar in
 `docs/census/README.md`.
 
-**Next:** (1) **Option A and G57 in one harness cycle, then the DONE ruling on S4**: declare the tolerant-numeric
-family's single consumer in `gates/band.sh` and add a per-component BBX-25 table to S4's readout; run
-`gates/file_census.sh` at the final commit; make the gate screen reconcile `run.txt`'s `skip=` with its rows
-(G57); then the amended §7 table goes back to the maintainer. (2) **Which slice comes next** — S5 (the skill) by the table, or
-R29's executable controls (S6) first, since every controls count a readout quotes is still a
-gate's self-report; the contributor's answer is in `DECISIONS_HISTORY.md` (bbx-24) and the
-question goes to the maintainer with the DONE ruling. (3) **A full native Linux pair** (with `BBX_BBH_HOME` set) and **a WSL re-run** whenever the platform
-row should attest a commit newer than `429d3f8` (`docs/platforms/README.md`; its tree check now
-reads `gates/close_sweeps.sh` → `4`). (4) **G48's sweep, widened by G50 and G53**: every reader
-that may read LESS than is there — a count over something absent, a header read one line at a
-time — asking whether the shortfall reads as silence. Measure before calling any of them a
-defect. (5) **The candidate ruling G54 names**: BBX's own `docs/` checked as a document-set
-subject, so a count a registry defines cannot go stale in prose. For any future harness change,
-the order that avoids paying twice is in HANDOFF.
+**Next:** (1) **S4's DONE ruling**, on the amended §7 table and the per-component BBX-25 table in
+`docs/readout.md` ("S4 — the slice readout, amended at bbx-25"), and with it **which slice follows** —
+S5 (the skill) by the table, or R29's executable controls (S6) first, since every controls count a readout
+quotes is still a gate's self-report; the contributor's answer is in `DECISIONS_HISTORY.md` (bbx-24).
+(2) **Named, not queued (bbx-25):** `docs/generality.md` says a component used by one kind is moved to
+that kind's profile, and neither single-kind family's comparators were — they sit in `lib/py/bbx/` beside
+the kind-blind families, reported by the census and moved by nothing. (3) **A full native Linux pair**
+(with `BBX_BBH_HOME` set) and **a WSL re-run** whenever the platform row should attest a commit newer than
+`429d3f8` (`docs/platforms/README.md`). (4) **G48's sweep, widened by G50, G53 and G59**: every reader —
+the contributor's probes included — that may read LESS than is there, asking whether the shortfall reads
+as silence. (5) **The candidate ruling G54 names**: BBX's own `docs/` checked as a document-set subject.
+For any future harness change, the order that avoids paying twice is in HANDOFF.

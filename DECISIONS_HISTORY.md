@@ -1455,3 +1455,37 @@ cycle as option A. The maintainer also asked for a root `README.md` for visitors
 **Anti-hyperfocus (BBX-27).** The next sitting's first thread is fixed by these rulings — option A's two
 gaps and G57 in one harness cycle — and it is the right one: all three are small, all three are cases of a
 readout saying less than is true, and S4 cannot be ruled until two of them close.
+
+### bbx-25 — R50 raised before option A was built and ruled the same sitting; option A built under it; G57 fixed; two stale blind spots corrected
+
+The opening battery at `a2ec618` was GREEN: PASS 32, controls fired 131 / declared 131, `header_entries=240
+continued=0`, no census-drift NOTE (`build/selftest_20260913T202059Z`).
+
+Before a header line was written for option A, bbx-24's filed claim — every S4 component has two instances except
+the tolerant-numeric family — was re-derived by counting each fixture's tracked expectation files by extension, each
+fixture config's driver and each consumer's kinds table. Per comparison FAMILY it held for S4 (exact 4, set 2, schema
+2, tolerant-numeric 1); one level finer it did not (the json format and its view, the line row shape, the band view,
+the tsv format, the claim row shape, and each of the four drivers have one consumer each). Which level decides BBX-25
+is a ruling, so it was put as R50 with three options: the family decides and every finer single-consumer unit is
+declared (recommended); the family only, as option A was ruled; every unit decides DONE. **The maintainer chose the
+first.** The question as put named band as the only single-consumer family; the temporal family, measured after the
+answer, has one consumer inside BBX too (bbh's example; VampireSaved is F20's), was declared under the same ruling,
+and the maintainer was told the same sitting (G58). Sweeping every header that mentions BBX-25 then found two blind
+spots S4 had made false — `set_schema` ("tsv is its one format") and `docset_suite` (the kinds loop "BBX-25 unmet") —
+corrected first in their own commit (`7b7af0e`, X47, X48); the declarations followed (`1cad369`).
+
+G57 was built as ruled after the bbx-24 close (`da4a4b8`): the readout adds the gates `run.txt` counted as SKIP with
+no kept row to SKIP, names the tier the run asked for that no row carries, and prints any other tally its rows do not
+reproduce as a disagreement, deciding nothing; the runner, whose text is bbh's (F13), is untouched. Its two controls
+read DEAD on the old code in a scratch clone (`declared=12 fired=10 dead=2 verdict=RED`) and FIRED on the new; the
+native Linux pair's screen now reads `SKIP 4 … (gates 28 kept, 4 not run)` and names the static tier, and the macOS
+opening battery's screen is byte-identical. A battery over the uncommitted build read PASS 32, controls 133 / 133.
+
+The harness cycle closed in the planned order: the file census regenerated at `da4a4b8` (629 s; only `measured_at`
+moved, to `c26e5a94b344`; `610bba7`), the self subject refrozen in one quoted line (`e81417d`), and
+`gates/file_census.sh` run alone at `e81417d` — PASS in 633 s, `edited-census-row`, `shrunk-kind-set` and
+`contaminated-trace` fired, each of the 45 harness files reached by a gate, kind-sets frozen 45 measured 45 — which
+closes option A's second gap. Two of the contributor's own probes read less than was there and were caught before
+any number reached a document (G59, a gate-name pattern with no digit; G60, G33's zsh modifier trap again). Named
+and not queued: `docs/generality.md` says a one-kind component is moved to its kind's profile, and neither
+single-kind family's comparators ever were — R50 settled declaration, not location.

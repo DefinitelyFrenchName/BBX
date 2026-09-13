@@ -1305,3 +1305,55 @@ option A. And a reproduction is an instrument: it shows it takes the witnessed p
 read. Rules re-anchored in fact: BBX-1 (every count reported separately, and one was not), BBX-30 and §3.2
 (a green that hid four assertions it did not make), BBX-28 (the pair a witness until reproduced), BBX-25
 (the second host as the detector), §1.
+
+## G58 — "Every S4 component has two instances except the tolerant-numeric family" held per family and failed one level down, and the question built on it carried a slip of the contributor's own: the temporal family was not measured before "band is the only single-consumer family" was put to the maintainer (paid: 0 battery runs — found by re-deriving the filed claim before building option A; the temporal family measured minutes after the answer and the maintainer told the same sitting; two stale blind spots found by the sweep that followed, X47 and X48; 2026-09-13)
+bbx-24 filed, laying S4's readout out, that every S4 component had two instances except the tolerant-numeric
+family. Before a gate header was written on that basis it was re-derived (§1): each fixture's tracked expectation
+files counted by extension, each fixture config's `driver`, each consumer's kinds table. Per comparison FAMILY it
+held for S4 — exact 4 consumers, set 2, schema 2, tolerant-numeric 1. One level finer it did not: the json format
+and its view, the line row shape, the band view, the tsv format, the claim row shape and each of the four drivers
+have one consumer each. Which level decides was a ruling, not a measurement, so it went to the maintainer as R50
+(answered: the family decides, and every finer single-consumer unit is declared).
+The question as put said the band family was the only one with a single consumer. That was measured over S3's and
+S4's families only; the temporal family (S2), whose one consumer inside BBX is bbh's example, was measured after
+the answer. The ruling covered it as written and the maintainer was told in the same sitting — but a sentence put
+to the maintainer was wider than the measurement under it, the G55 shape again (a scope widened between the count
+and the claim).
+The sweep of every header that mentions BBX-25 then found two blind spots S4 had made false and every screen
+still printed: `gates/set_schema.sh` ("tsv is its one format", X47) and `gates/docset_suite.sh` (the kinds loop
+"BBX-25 unmet", X48), both corrected first in their own commit (`7b7af0e`, BBX-19). Of the ten header entries that
+name an S2, S3 or S4 step, the other nine POINT at the gate where a thing is asserted and are still true.
+Learning (R27): a claim about "every X" is a claim at a granularity — name the unit in the sentence, and measure
+the whole population the sentence names (every family, not the slice's) before it reaches the maintainer; R50's
+table, which lists families and finer units apart, is the mechanism. And a blind spot that STATES a status
+("unmet", "its one format") about something a later slice will touch goes false the day that slice lands, while
+one that POINTS at where a thing is asserted does not: when a slice closes, sweep the headers for statements of
+status. Rules re-anchored in fact: §1, BBX-25, BBX-19, BBX-22, BBX-30.
+
+## G59 — A probe counting the census shadow's verdicts read 30 PASS and 1 SKIP for 32 gates, because its name pattern had no digit and `fidelity_bbh_s2` fell out; the census commit went in before the shortfall was chased (paid: 1 recount, seconds; the commit's own sentence — every gate PASS but `census_register` — was true, measured by the recount after it was written; 2026-09-13)
+After the census regeneration at bbx-25, the verdict lines of its console were counted with `^    [a-z_]+ +PASS`. The
+shadow ran 32 gates; the count read 30 PASS, 1 SKIP, 0 other — a total one short, which is the signal, and it was
+printed beside a `gates traced: 32` line and not reconciled before `610bba7` was committed. The recount with
+`[a-z0-9_]+` read 32 rows: 31 PASS, 1 SKIP (`census_register`, by design in the shadow, G46). No number from the
+defective probe reached a document or a commit message; the message's claim came from reading the console's
+lines, and the recount confirmed it after the fact rather than before.
+Learning (R27): the G48 / G57 shape inside the contributor's own probe — a count that reads less than is there. A
+probe that counts rows checks its total against the population it knows (here the 32 of `gates traced`) and stops
+on a mismatch; a name pattern for gates admits digits. No harness mechanism: the harness's own readers take gate
+names by field, never by a character class (BBX-12). Rules re-anchored in fact: §1, BBX-12, BBX-1.
+
+## G60 — G33's trap in a probe again: a zsh loop spliced `$c:gates/readout.sh`, the shell read `:ga` as modifiers, and every count read 0 beside git's own fatal errors (paid: 1 probe re-run under /bin/sh, seconds; no number reached a document; 2026-09-13)
+Choosing which count the platform README's tree check should name at bbx-25, a loop over `429d3f8`, `114a4a5`
+and `HEAD` printed `readout.sh MUST-FIRE=0 close_sweeps.sh MUST-FIRE=0` for all three — impossible, since the
+controls reader had just read 12 declared for `readout` at HEAD. git printed `fatal: ambiguous argument
+'…/BBX/429d3f8tes/readout.sh'`: zsh took `:g` and `a` after `$c` as history modifiers (make the value an
+absolute path) and left `tes/readout.sh`, the family HANDOFF names under G33 (`$c:lib` reaching git as
+`headib`). `grep -c` over the empty stream printed 0, and the loop printed on. Re-run under `/bin/sh -c` with
+`"${c}:gates/…"`, each commit's file first proven to exist: 11, 14 and 17 — and those were not the header's
+count either, because `gates/readout.sh` carries stub gates in heredocs whose own `# MUST-FIRE` lines start at
+column 0 (12 in the header at HEAD, 5 in the stubs). The tree check chose a file with no stubs.
+Learning (R27): the hazard was in HANDOFF and was not applied, because the probe was typed fresh instead of in
+the hazard's safe form. No harness mechanism (the harness's tools run under `/bin/sh` and read headers through
+one reader); for probes, a revision spliced with a path is written `"${c}:path"`, a zero out of a pipeline whose
+producer failed is silence, not a count (the G59 shape), and a grep over a whole file is not a header read.
+Rules re-anchored in fact: §1, BBX-12, BBX-16.

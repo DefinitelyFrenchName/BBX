@@ -142,6 +142,20 @@ the command that produced them:
 A generic thing needs two instances (BBX-25): any component used by only one
 kind at the end of the proof is moved to that kind's profile and reported.
 
+**Ruled R50 (bbx-25):** BBX-25 is judged per comparison FAMILY or contract — for
+a slice's DONE and for the word "generic" — and every format, row shape, view
+and driver with one consumer is declared anyway, one `NOT-ASSERTED:` line in the
+gate that holds it. The per-component table, each count with its command, is in
+`docs/readout.md` (S4, amended at bbx-25): two families have one consumer inside
+BBX, tolerant-numeric (`fixture/fakecli`) and temporal (bbh's example). **Not
+settled by R50, and named here rather than queued:** the sentence above says a
+one-kind component is MOVED to that kind's profile, and neither family's
+comparators were — `lib/py/bbx/compare_band.py` and the temporal family's
+`compare_*.py` sit beside the kind-blind families, and only their kinds-table
+rows live in a kind profile (`lib/py/bbx/config.py`). The file census REPORTS
+them as reached by one kind's gates (`docs/census/bbx_files.md`); nothing moves
+them.
+
 ## What this proof does NOT establish
 
 That BBX works on a *real* document set or a *real* tool (both fixtures are

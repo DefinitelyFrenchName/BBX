@@ -23,9 +23,11 @@ following `../README.md` (which sets `BBX_BBH_HOME`), is still owed.
    UNKNOWN and counts `gates declaring no blind spot: 0` (G50's fix, measured at `f6f136d` and at
    `114a4a5`). To read the blind spots, copy the runs, rewrite `root=` to a clone of BBX at `f6f136d`, and
    read the copies — which is how the screen below was made.
-2. **The screen under-counts the skips (G57).** The runner counted the 4 static gates as skipped (`skip=4` in
-   `run.txt`) but kept no row for them, and the readout counts rows: the screen reads `PASS 28  SKIP 0 …
-   (gates 28)` and never names the tier. Trust `run.txt`'s `skip=` line until G57 is fixed.
+2. **The screen below under-counts the skips (G57, fixed at `da4a4b8`).** The runner counted the 4 static
+   gates as skipped (`skip=4` in `run.txt`) but kept no row for them, and the readout at `114a4a5` counted rows
+   alone: the screen reads `PASS 28  SKIP 0 … (gates 28)` and never names the tier. The readout from `da4a4b8`
+   on, run over each of the two committed runs as recorded (measured at bbx-25), reads `SKIP 4 … (gates 28
+   kept, 4 not run)` and `not run (asserting nothing): the static tier — 4 gate(s) …`.
 3. **One blind spot is wrapped at this commit (G53).** `gates/cli_suite.sh` declares it over three header
    lines at `f6f136d`; that commit's own readout prints it cut mid-sentence, and a readout from `64dfd85` on
    marks it `^ TRUNCATED`.
@@ -158,6 +160,6 @@ what this green does NOT assert (declared by each gate's header):
 - The static tier on Linux: fidelity with bbh, the suite gate, the census recount.
 - Anything at a commit after `f6f136d`: the readout, the close sweep and the harness identity have changed
   since.
-- That the screen's SKIP count is right (G57).
+- A SKIP count read off the screen above: it was generated before G57's fix (warning 2).
 - The host beyond `run.txt`'s `platform=` line: no kernel, distribution or Python version came with the
   archive.

@@ -748,3 +748,50 @@ R39, D62, D63): regenerated at bbx-23 at identity `afd52caf8a96`, 32 gates, 45 r
 45 harness files, and `bbx file-census --self --check-register` reads no drift.
 
 **In force:** `DECISIONS.md` — R0–R48 (none open) and method M1–M4.
+
+## bbx-24 (closed 2026-09-13)
+
+**Status (bbx-24 close, 2026-09-13):** slices S1 and S2 complete; **S3 DONE**;
+**S4 BUILT AND READ OUT, and ruled NOT YET DONE after the close (option A)**: its step 7 slice readout
+is in `docs/readout.md`, and laying it out to the maintainer found two gaps — the tolerant-numeric family has
+one consumer and no gate header says so (BBX-25), and `gates/file_census.sh` was not run at this commit —
+which close next sitting before S4 is ruled again. The sitting's first finding came off the opening screen, not off a gate: two blind
+spots written over several header lines were printed cut mid-sentence, one of them on seven
+committed screens since bbx-17 (**G53**). **R49 was raised and ruled the same sitting — option
+1, the maintainer adding: "We don't compromise on discipline."** The two headers were put back
+on one line first (`398a64f`), then the check (`64dfd85`): `gates/close_sweeps.sh` fails the
+tree on a header entry that runs past its one line, naming it, and the readout marks a cut
+blind spot `^ TRUNCATED` instead of printing a shorter whole. Three new controls, each DEAD on
+the old code in a scratch clone and FIRED on the new; a battery over the uncommitted build read
+PASS 32, controls fired 131 / declared 131. **The file census is current** (`c2e654c`, identity
+`4465efe8a453`: 32 gates, 45 rows, no kind lost — `controls.py` gains the close sweep, which is
+the build and nothing else), and the self subject was refrozen in one quoted line (`af8846c`).
+**The stale spot HANDOFF carried is fixed, with G54 and X45:** three living-page sentences kept
+the 31-gate count after R45 made it 32, one of them on the page followed on WSL. The opening
+battery at `f6f136d` was GREEN (PASS 32, controls 128 / 128); the close's pair is quoted in
+`docs/readout.md` (CLOSE — bbx-24). **The WSL platform row stays GREEN at `429d3f8` and attests
+that commit only**; the platform README's tree check now names a count this sitting moved. **Native Linux
+is a PARTIAL row** (ruled after the close): a pair made through claude.ai, GREEN twice at `f6f136d` over the
+28 portable gates, the static tier not run (`docs/platforms/linux-native/`). **G57, found reading that
+pair:** the gate screen counts only kept rows, so a tier the runner did not run reads `SKIP 0` — reproduced
+on macOS; fixed next sitting with option A. A root `README.md` introduces BBX to visitors.
+Gotchas G1–G57; retractions X1–X46.
+
+**Open rulings: none.** Every ruling R0–R49 is answered and recorded in `DECISIONS.md`; R49 was
+raised and answered at bbx-24 and is built. The maintainer's words with it stand as a rule of
+method: discipline is never arbitrated — only the method of applying it, on time or practicality.
+In force since bbx-2: R18 (the census and the tests
+work on a clone or are explicitly, provably read-only), R19 (parallel work
+is a pull queue; the FIFO token queue is the default implementation, the
+principle is the ruling), R20 (fidelity on a plain clone of bbh at the
+baseline; the recount's clone plain too).
+BBX = Black Box harness eXpanded; GPL-3; sh + Python 3 on macOS, Linux and
+Windows/WSL; kinds: frame-driven (bbh), document set, command-line tool, with BBX ITSELF a
+subject and an external test framework a driver — five consumers:
+bbh's `example/`, `fixture/docset/`, `fixture/fakecli/`, `fixture/unittest/`,
+`fixture/selfgates/` (R14, R15, R37, R38). **BBX's own harness files are
+measured by a gate**, not by a document (`docs/census/bbx_files.md`, generated;
+R39, D62, D63): regenerated at bbx-24 at identity `4465efe8a453`, 32 gates, 45 rows for
+45 harness files, and `bbx file-census --self --check-register` reads no drift.
+
+**In force:** `DECISIONS.md` — R0–R49 (none open) and method M1–M4.

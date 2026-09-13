@@ -44,11 +44,12 @@ plain local clone of it under `TMPDIR` and never touch your checkout. Until R43
 landed this sitting, one gate needed a second, older commit; it does not any more.
 
 **Check which BBX tree you have before paying for a run.** `git -C BBX log --oneline -1`
-names the commit, and it must be the one you were asked to test or later. Since R49
-(bbx-24, `64dfd85`), `grep -c '^# MUST-FIRE' BBX/gates/close_sweeps.sh` prints `4`; a tree
-from before it prints `3` (measured on the macOS host at `64dfd85`, `f6f136d` and
-`429d3f8`). The older check, `grep -c '^# MUST-FIRE' BBX/gates/controls.sh`, prints `6`
-at all three since R48 (bbx-22) and no longer tells a new tree from the last one tested.
+names the commit, and it must be the one you were asked to test or later. Since R50
+(bbx-25, `1cad369`), `grep -c '^# NOT-ASSERTED:' BBX/gates/band.sh` prints `4`; a tree
+from before it prints `3` (measured on the macOS host with `git show` at `e81417d`, `114a4a5`
+and `429d3f8`). The older checks no longer tell a new tree from the last one tested:
+`grep -c '^# MUST-FIRE' BBX/gates/close_sweeps.sh` prints `4` at `114a4a5` and at `e81417d`
+alike (`3` at `429d3f8`), and `controls.sh`'s `6` stopped moving at R48 (bbx-22).
 A pull taken while a fix was still unpushed has already run the pre-fix harness once (G49).
 
 ## 2. Run the battery twice, in the background, alone
@@ -74,9 +75,10 @@ Three things to hold to, each paid for here:
 * **Do NOT pass `--strict`.** It makes a SKIP fatal, and this host is expected to
   skip (next section).
 * **Set `BBX_BBH_HOME`, and check that it took.** Unset, the static tier — the four gates that
-  compare against bbh or recount the lineage — does not run at all, and until G57 is fixed the
-  screen still reads `SKIP 0` for them: only the kept run's `run.txt` (`skip=4`) shows it. The
-  native Linux pair at `f6f136d` (`linux-native/`) is exactly that case.
+  compare against bbh or recount the lineage — does not run at all. Since G57's fix (`da4a4b8`) the
+  screen counts those gates in SKIP, writes `(gates 28 kept, 4 not run)` and names the static tier on
+  a `not run` line; a screen generated before that commit reads `SKIP 0`, and only the kept run's
+  `run.txt` (`skip=4`) shows it. The native Linux pair at `f6f136d` (`linux-native/`) is exactly that case.
 
 ## 3. What is expected to SKIP, and why that is correct
 
