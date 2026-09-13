@@ -23,9 +23,7 @@
 # NOT-ASSERTED: bbh's precedence loop and its printed text: gates/fidelity_bbh_s2.sh (F12) and gates/suite.sh; the document-set kind's loop: gates/docset_suite.sh
 # NOT-ASSERTED: the verdict text of the families beyond the lines frozen here: gates/band.sh, gates/json_schema.sh, gates/set_schema.sh
 # NOT-ASSERTED: the readout screen beyond the lines checked here (the verdict, the register's histogram, the classes, the notes, BBX-14, the driver's blind spots): gates/readout.sh
-# NOT-ASSERTED: that the two writers of `band-fields` AGREE: both counts trace to one `bands` list written once by
-#   drivers/cli.sh (measured bbx-17), so the duplicate is one number by two routes and nothing here compares them
-#   for a driver that would write the log and the band view apart (R41: both writers kept)
+# NOT-ASSERTED: that the two writers of `band-fields` AGREE: both counts trace to one `bands` list written once by drivers/cli.sh (measured bbx-17), so the duplicate is one number by two routes and nothing here compares them for a driver that would write the log and the band view apart (R41: both writers kept)
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME
