@@ -18,7 +18,7 @@
 # NOT-ASSERTED: anything about a real document set: every input is the fixture's (fixture class) or a perturbed copy of it; the forms, guards and lexical classes are the fixture's (D35, D39, D40)
 # NOT-ASSERTED: bbh's precedence loop and its printed text: gates/fidelity_bbh_s2.sh (F12) and gates/suite.sh
 # NOT-ASSERTED: the readout screen beyond the lines checked here (the verdict, the pairings, the coverage and note lines, BBX-14, the driver's blind spots): gates/readout.sh
-# NOT-ASSERTED: a second consumer of the kinds loop (S4's command-line kind): one profile drives it here (BBX-25 unmet, stated)
+# NOT-ASSERTED: the kinds loop under a second profile: only the document set's drives it here; the command-line profile is its second consumer, asserted by gates/cli_suite.sh, which is where BBX-25 is met for the loop (R50)
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME

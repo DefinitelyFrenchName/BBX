@@ -13,7 +13,7 @@
 # MUST-FIRE: shadow-tool: verdict-text — a shadow copy of compare_set.py with one verdict string changed must make this gate's frozen-text check FAIL, or the text frozen here is not frozen (C4 with no ancestor: the gate is the freeze)
 # NOT-ASSERTED: the suite's loop over the kinds, the kept-run rows (scenario, kind), NOT-EVALUATED on a schema FAIL and --freeze for the shrink-only kind: gates/docset_suite.sh
 # NOT-ASSERTED: anything about a real document set: every input is the fixture's (fixture class) or a perturbed copy of it
-# NOT-ASSERTED: the schema family on a second format or a second consumer (S4's JSON): tsv is its one format and the fixture's artifact its one consumer (BBX-25 unmet, stated)
+# NOT-ASSERTED: that the tsv format of the schema family or the claim row shape of the set family is generic: each has one consumer, fixture/docset (three tsv .schema, three .claims, three .covered); both FAMILIES gained a second kind at S4 (json and lines: gates/json_schema.sh), and BBX-25 is judged per family (R50; measured bbx-25)
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME
