@@ -1111,3 +1111,23 @@ zero. Worth a sweep of the other `grep -c` counts over a tool's output in `bin/`
 measured before anything is claimed about them. Rules re-anchored in fact: BBX-6,
 BBX-7 (a claim measured by absence needs a positive control), BBX-12 (the sums now
 read each line's first field of a name, never every field that starts with it), §1.
+
+## G49 — The maintainer re-ran the WSL battery on the PRE-fix tree, because the fix had not been pushed when they were asked to run it (paid: one WSL battery run on the maintainer's host; 2026-09-13)
+The sitting's message asked for a WSL re-run "at the close commit I'm about to push or
+later" while the five bbx-22 commits were still local and the close pair was running. The
+maintainer pulled, got `fd63797` — the remote's head, measured afterwards with `git ls-remote
+origin refs/heads/main` — and ran the battery: `PASS 30  SKIP 1`, `controls fired 115 /
+declared 119; red: 1`, NOT GREEN, the first WSL run's result exactly. Three lines of their own
+output identified the tree without asking: `controls=controls declared=2` (the fixed gate
+declares 6), `census-drift … tree=1e40798f4530` (the pre-fix identity; the fixed tree is
+`bc18c672fdb9`), and a controls sum with no `skipped:`. `429d3f8` was pushed as soon as the close
+pair's first battery read GREEN, and the run is recorded as a second witness of the pre-fix
+behaviour, never as evidence about R48.
+Learning (R27): a request to run on another host is a claim about the REMOTE, and it was not
+checked against the remote. The fix is procedural and is now written where the next run meets
+it: `docs/platforms/README.md` §1 names a tree check (`grep -c '^# MUST-FIRE' gates/controls.sh`
+prints 6 since R48, 2 before), and HANDOFF carries the hazard — push first, confirm on the
+remote, then ask, with one line that proves which tree the other host has. Rules re-anchored in
+fact: §1 (the commit was named, not measured on the remote), BBX-29 (results keyed by subject
+version — the version was in the output, which is how the run was classified correctly), BBX-28
+(a witness, converted by reading its own lines).

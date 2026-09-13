@@ -2,7 +2,7 @@
 
 Shape: procedure. Every fact below was **measured on the macOS host on 2026-09-12**,
 by the command shown beside it — the tree facts at `48a9525`, the reference screen in
-§4 at `84442f8` after the portability fix. Where a number could
+§4 at `429d3f8` (bbx-22's close pair, after R48's build). Where a number could
 drift, the command is there so you re-derive it rather than trust this page (§1).
 
 R21's question is narrow: **every platform guard BBX carries must be gated on
@@ -42,6 +42,12 @@ BBX needs exactly **one** bbh commit, `10a82d2`, and the clone above contains it
 (measured 2026-09-12). The fidelity gates and the suite gate each make their own
 plain local clone of it under `TMPDIR` and never touch your checkout. Until R43
 landed this sitting, one gate needed a second, older commit; it does not any more.
+
+**Check which BBX tree you have before paying for a run.** `git -C BBX log --oneline -1`
+names the commit, and it must be the one you were asked to test or later. Since R48
+(bbx-22), `grep -c '^# MUST-FIRE' BBX/gates/controls.sh` prints `6`; a tree from before
+the fix prints `2` (both measured on the macOS host). A pull taken while the fix was
+still unpushed has already run the pre-fix harness once (G49).
 
 ## 2. Run the battery twice, in the background, alone
 
@@ -91,11 +97,11 @@ That one screen is the deliverable. On the macOS host at this commit it reads:
 
 ```
 VERDICT: GREEN   PASS 31  SKIP 0  FAIL 0  TIMEOUT 0  MISSING 0   (gates 31)
-  controls: fired 119 / declared 119; dead 0; undeclared firings 0; gates red 0
+  controls: fired 123 / declared 123; dead 0; undeclared firings 0; gates red 0; skipped 0
   each can fail: 31 of 31 gates proved a control fires on purpose
 ```
 
-measured on this host at `84442f8` with the tree clean and nothing else running.
+measured on this host at `429d3f8`, in both runs of bbx-22's close pair, with the tree clean.
 The gate total is worth re-deriving rather than trusting this page:
 `grep -hv '^#' gates/portable.txt gates/static.txt | wc -l`.
 
@@ -166,3 +172,5 @@ reads it, not to the one that produced it). Send the archive and the screen.
 - 2026-09-13 (bbx-22): R48 built. The expected Linux screen is GREEN with one skip, and
   the lines it prints for that skip were measured on this host; the drift NOTE's tree
   value moved with R48's build (`bc18c672fdb9`). Run at bbx-22's close commit or later.
+- 2026-09-13 (bbx-22 close): §4's screen re-measured at `429d3f8`; §1's tree check added
+  after a WSL run met the pre-fix tree because the fix was not yet pushed (G49).

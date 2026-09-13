@@ -26,7 +26,9 @@ run Linux (eleven candidate runtimes re-measured, all absent), so the WSL host
 re-runs the procedure at this close's commit or later, and that kept pair is what
 turns the platform row green and puts R21's answer to the maintainer. The opening
 battery and the close's pair are quoted in `docs/readout.md` (bbx-22, and CLOSE —
-bbx-22). Gotchas G1–G48; retractions X1–X39.
+bbx-22). Gotchas G1–G49; retractions X1–X40. G49: a WSL re-run met the pre-fix tree
+because the fix was not yet pushed when it was asked for; `429d3f8` was pushed before
+the close commit, and the platform procedure now carries a tree check.
 
 **Open rulings, three:** R21 (its next step is the WSL re-run), R44's BUILD (the
 ruling is answered; the printed-refreeze step is not yet written, and it joins R46's
