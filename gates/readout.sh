@@ -1,10 +1,10 @@
 #!/bin/sh
-# readout.sh — the readout screen says what the kept run says — verdict, counts, controls, blind spots, BBX-14; for a kept suite run the findings apart, the register's histogram and the real pairings by file — and its exit follows the verdict
+# readout.sh — the readout screen says what the kept run says — verdict, counts reconciled with the run's own tallies, controls, blind spots, BBX-14; for a kept suite run the findings apart, the register's histogram and the real pairings by file — and its exit follows the verdict
 # Ground truth for lib/py/bbx/readout.py (abstraction RO1–RO3, BBX-30): a synthetic consumer of
 # stub gates with known verdicts and known header declarations is run through the REAL static
 # runner with --log, and the screen generated from that run is read line by line. The run dir is
-# what `bbx-run-static --log` writes; nothing here re-derives a verdict. Portable, ~5 s measured 2026-09-13
-# (bbx-24: 5 s in the opening battery, 4 s alone with the two TRUNCATED controls).
+# what `bbx-run-static --log` writes; nothing here re-derives a verdict. Portable, ~9 s measured 2026-09-13
+# (bbx-25: 9 s alone with the two G57 controls, which run the real runner twice more; bbx-24: 5 s in the opening battery).
 # Usage: gates/readout.sh
 # MUST-FIRE: perturbed-copy: verdict-follows-run — a kept run with one PASS row rewritten as FAIL must read NOT GREEN with exit 1, or the screen decorates instead of reporting
 # MUST-FIRE: known-bad: bbx-14-unmet — --against a copy of the run with one verdict changed must report BBX-14 UNMET naming that gate, or "met" is silence
@@ -16,9 +16,12 @@
 # MUST-FIRE: perturbed-copy: header-not-found-named — a kept run whose recorded root is rewritten to a directory that does not exist must NAME every gate whose header was not found and count ZERO gates as declaring no blind spot, or a screen read on another host counts an unreadable header as silence (G50)
 # MUST-FIRE: known-bad: truncated-blind-spot-marked — a gate whose NOT-ASSERTED entry runs on to a second header line must print that blind spot with a TRUNCATED mark directly under it and no other mark, or a cut blind spot reads as a whole one (G53)
 # MUST-FIRE: known-bad: truncated-driver-blind-spot-marked — a kept suite run whose driver's NOT-ASSERTED entry runs on must mark it TRUNCATED on the suite screen the same way, or a driver's cut blind spot reads as a whole one (G53)
+# MUST-FIRE: known-bad: unrun-tier-named — a kept run of the REAL runner with both tiers asked, a registered static gate and its static_needs_env unset (run.txt skip=2, no row for the gate) must count the unrun gate in SKIP, print "(gates 3 kept, 1 not run)" and name the static tier on a "not run" line, while the same consumer with the variable set prints neither, or a tier that never ran reads as SKIP 0 (G57)
+# MUST-FIRE: perturbed-copy: counts-disagree-named — a kept run whose run.txt pass= is rewritten must print a "counts disagree" line naming run.txt's pass and the kept rows' count, while an untouched run prints none, or the screen can contradict the run it reports in silence (G57)
 # NOT-ASSERTED: that a declared blind spot is true or complete: the screen prints what the header says
 # NOT-ASSERTED: the sweep runner's runs: only bbx-run-static --log and bbx-run-suite --log are read
 # NOT-ASSERTED: that a register row's class is true of its file: the suite screen prints what the register says (gates/provenance.sh keeps it complete and inside the vocabulary)
+# NOT-ASSERTED: that run.txt's tallies are right: where they and the kept rows disagree the screen names both and decides nothing, and a gate the runner counted without a row is named by its tier alone (G57)
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME
@@ -93,6 +96,8 @@ want "g_a's two blind spots are listed" "^  g_a: the weather tomorrow"
 want "the skipping gate's declared blind spot is listed" "^  g_s: everything, when it skips"
 grep -q 'TRUNCATED' "$T/s1" && fail "a whole blind spot was marked TRUNCATED: $(grep TRUNCATED "$T/s1")" || ok "no blind spot of a well-formed header is marked TRUNCATED"
 want "the SKIP is listed as asserting nothing, with its reason" "^skipped (asserting nothing): g_s — "
+grep -q '^counts disagree' "$T/s1" && fail "a run whose tallies match its rows printed a disagreement: $(grep '^counts disagree' "$T/s1")" || ok "a kept run whose tallies match its rows prints no disagreement (G57)"
+grep -q '^not run' "$T/s1" && fail "a run with no tier left unrun printed a not-run line: $(grep '^not run' "$T/s1")" || ok "a kept run with no tier left unrun prints no not-run line (G57)"
 
 echo "== 2. two runs at the same HEAD: BBX-14 met =="
 run --log "$T/r2" > /dev/null || true
@@ -210,6 +215,50 @@ mkrun "$SR/run_drv" "$SR/drv"
 python3 -m bbx.readout "$SR/run_drv" > "$T/c7" 2>&1 || true
 if [ "$(grep -A1 '^  driver fake.sh: the colour of the moon$' "$T/c7" | tail -1)" = "  driver fake.sh: $TRUNC" ] && grep -q '^  driver fake.sh: the tide$' "$T/c7" && [ "$(grep -c 'TRUNCATED' "$T/c7")" = 1 ]; then echo "CONTROL FIRED: truncated-driver-blind-spot-marked — the driver's cut blind spot is marked on the suite screen, its whole neighbour is not"
 else fail "CONTROL DEAD: truncated-driver-blind-spot-marked — $(grep '^  driver' "$T/c7" | tr '\n' '|')"; fi
+
+# 8. unrun-tier-named: the REAL runner, both tiers asked, a registered static gate and its variable unset — the witnessed path (G57)
+FS="$T/frs"; cp -R "$FR" "$FS"
+cat > "$FS/bbx.toml" <<'TOML'
+[project]
+root = "."
+gates_dir = "tests"
+[registries]
+portable = "tests/ci_portable.txt"
+static = "tests/ci_static.txt"
+static_needs_env = "BBX_READOUT_G57_NEEDS"
+[tier]
+patterns = []
+[controls]
+enforce = true
+TOML
+cat > "$FS/tests/g_t.sh" <<'G'
+#!/bin/sh
+# g_t.sh — a static-tier gate: passes when its tier runs
+# MUST-FIRE: none — a fixture lister
+# NOT-ASSERTED: anything, when its tier is not run
+#
+echo "PASS: fine"
+G
+chmod +x "$FS/tests/g_t.sh"; printf 'g_t\n' > "$FS/tests/ci_static.txt"
+( cd "$FS" && git add -A && git -c user.name=bbx -c user.email=bbx@example.invalid commit -qm static )
+( unset BBX_READOUT_G57_NEEDS; cd "$FS" && "$BBX_HOME/bin/bbx-run-static" --config bbx.toml --log "$T/r8" ) > "$T/o8" 2>&1 || true
+if grep -q '^  NOT RUN: BBX_READOUT_G57_NEEDS is unset' "$T/o8" && grep -qx 'skip=2' "$T/r8/run.txt" && ! grep -q '^g_t	' "$T/r8/results.tsv"; then ok "the run took the witnessed path: the static tier NOT RUN, run.txt skip=2, no row for g_t"
+else fail "the unrun-tier run did not take the witnessed path: $(grep -E 'NOT RUN|^PASS' "$T/o8" | tr '\n' '|') $(grep '^skip=' "$T/r8/run.txt" 2>/dev/null)"; fi
+python3 -m bbx.readout "$T/r8" > "$T/c8" 2>&1 || true
+( BBX_READOUT_G57_NEEDS="$T"; export BBX_READOUT_G57_NEEDS; cd "$FS" && "$BBX_HOME/bin/bbx-run-static" --config bbx.toml --log "$T/r8s" ) > /dev/null 2>&1 || true
+python3 -m bbx.readout "$T/r8s" > "$T/c8s" 2>&1 || true
+if grep -qx 'VERDICT: GREEN   PASS 2  SKIP 2  FAIL 0  TIMEOUT 0  MISSING 0   (gates 3 kept, 1 not run)' "$T/c8" \
+   && grep -q '^not run (asserting nothing): the static tier — 1 gate(s) the runner counted as SKIP and kept no row for: ' "$T/c8" \
+   && ! grep -q '^counts disagree' "$T/c8" \
+   && grep -qx 'VERDICT: GREEN   PASS 3  SKIP 1  FAIL 0  TIMEOUT 0  MISSING 0   (gates 4)' "$T/c8s" && ! grep -q '^not run' "$T/c8s"; then echo "CONTROL FIRED: unrun-tier-named — the static tier left unrun is counted in SKIP and named; with its variable set, neither"
+else fail "CONTROL DEAD: unrun-tier-named — $(grep -E '^(VERDICT|not run|counts disagree)' "$T/c8" "$T/c8s" | tr '\n' '|')"; fi
+
+# 9. counts-disagree-named: a kept run whose run.txt pass= is rewritten no longer matches its rows (G57)
+cp -R "$T/r1" "$T/r1c"; sed -i.bak 's/^pass=2$/pass=5/' "$T/r1c/run.txt"
+grep -qx 'pass=5' "$T/r1c/run.txt" || fail "counts-disagree-named: the perturbation did not apply to run.txt"
+python3 -m bbx.readout "$T/r1c" > "$T/c9" 2>&1 || true
+if grep -qx "counts disagree: run.txt pass=5, kept rows 2 — the counts above are the kept rows'; this screen does not decide which is right (G57)" "$T/c9" && grep -q '^VERDICT: GREEN   PASS 2  SKIP 1 ' "$T/c9"; then echo "CONTROL FIRED: counts-disagree-named — run.txt's pass=5 against 2 kept PASS rows is named, and the verdict line still counts the rows"
+else fail "CONTROL DEAD: counts-disagree-named — $(grep -E '^(VERDICT|counts disagree)' "$T/c9" | tr '\n' '|')"; fi
 
 echo "== 5. R48 and G48: a skipped gate's declarations are set aside, named and never counted as proved; a gate with no controls line is named =="
 cat > "$FR/tests/g_k.sh" <<'G'

@@ -202,7 +202,9 @@ The READOUT is the one screen the maintainer acts on (CLAUDE.md §3.2).
 
 - **RO1 — CONTENT.** The verdict; what it rests on (the provenance class of
   every expectation relied upon, as a histogram); gates PASS / SKIP / FAIL /
-  TIMEOUT counted separately (BBX-1); controls fired / declared, and that each
+  TIMEOUT counted separately (BBX-1), and reconciled with every tally the run
+  records about itself — a gate counted but not kept, such as one of a tier
+  not run, is named, never read as absent (G57); controls fired / declared, and that each
   *can* fail (`[BBH-4]`); coverage as a number (BBX-18); BBX-14 met or unmet;
   the subject identity and version; the newest re-baseline line `[BBH-83]`.
 - **RO2 — WHAT THIS GREEN DOES NOT ASSERT.** Mandatory, every run (BBX-30).

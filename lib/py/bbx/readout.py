@@ -19,7 +19,10 @@ so rather than omitting the line); coverage as a number (BBX-18), taken from
 printed (a lineage's drift, bbh's source) listed as a note, since a number
 left in a log is a number the maintainer never saw (bbx-3's first fix); BBX-14 met or unmet — met only when
 `--against` names a second kept run of the same subject version and no gate's
-verdict differs; the newest re-baseline line. A kept SUITE run (run.txt carries
+verdict differs; the newest re-baseline line. The gate counts are the kept rows' reconciled with every tally
+run.txt records (G57): gates the runner counted as SKIP and kept no row for — a tier it did not run — are added to
+SKIP and named with their tier, and any other tally the rows do not reproduce is printed as a disagreement, never
+resolved. A kept SUITE run (run.txt carries
 `expset=`) gets its own screen (S2 step 4): the findings counted apart, the
 expectations relied upon as a histogram by R11 class from the register beside
 the tree, which classes PASSed on a pairing that is not fixture-class; since S3
@@ -96,6 +99,34 @@ def print_blind_spots(label, items):
         if run_on:
             print(f"  {label}: ^ TRUNCATED — the blind spot above runs on {run_on} more header line(s) that this screen "
                   f"does not print (one line per entry: docs/controls.md, G53)")
+
+
+# G57: the tallies run.txt records, each with the kept verdicts that should reproduce it (the runner counts a
+# TIMEOUT as a failure), and the tiers a run of `--tier all` asks for
+TALLIES = (("pass", ("PASS",)), ("skip", ("SKIP",)), ("fail", ("FAIL", "TIMEOUT")), ("missing", ("MISSING",)))
+TIERS = {"all": ("portable", "static")}
+
+
+def reconcile(meta, rows, counts):
+    """(unrun, tier, disagreements) between run.txt's tallies and the kept rows (G57). The runner counts the gates of
+    a tier it did not run as SKIP and keeps no row for them: `unrun` is run.txt's skip= above the kept SKIP rows;
+    `tier` is the one tier the run asked for that no kept row carries, '' when the screen cannot name exactly one;
+    every other tally the rows do not reproduce is a disagreement, named and never resolved here. A tally run.txt
+    does not record is not compared."""
+    kept = {k: sum(counts[v] for v in verdicts) for k, verdicts in TALLIES}
+    recorded = {}
+    for k, _ in TALLIES:
+        try:
+            recorded[k] = int(meta[k])
+        except (KeyError, ValueError):
+            pass
+    unrun = max(recorded.get("skip", kept["skip"]) - kept["skip"], 0)
+    asked = TIERS.get(meta.get("tier", ""), (meta.get("tier", ""),))
+    absent = [t for t in asked if t and not any(r.get("tier") == t for r in rows)]
+    tier = absent[0] if unrun and len(absent) == 1 else ""
+    disagree = [f"run.txt {k}={recorded[k]}, kept rows {kept[k]}" for k, _ in TALLIES
+                if k in recorded and recorded[k] != kept[k] and not (k == "skip" and unrun)]
+    return unrun, tier, disagree
 
 
 FINDINGS = ("pass", "skip", "pending", "no-expectation", "nondeterministic", "run-fail", "frozen", "authored",
@@ -242,8 +273,13 @@ def main(argv=None):
     print(f"== READOUT — {meta.get('kind', '?')} subject at {meta.get('root', '?')} @ {meta.get('head', '?')} "
           f"(porcelain {meta.get('porcelain', '?')}) — started {meta.get('started', '?')} on {meta.get('platform', '?')} ==")
     strict = " [--strict: SKIP counts as failure]" if meta.get("strict") == "1" else ""
-    print(f"VERDICT: {verdict}   PASS {counts['PASS']}  SKIP {counts['SKIP']}  FAIL {counts['FAIL']}  "
-          f"TIMEOUT {counts['TIMEOUT']}  MISSING {counts['MISSING']}   (gates {len(rows)}){strict}")
+    unrun, unrun_tier, disagree = reconcile(meta, rows, counts)
+    kept_txt = f"gates {len(rows)}" + (f" kept, {unrun} not run" if unrun else "")
+    print(f"VERDICT: {verdict}   PASS {counts['PASS']}  SKIP {counts['SKIP'] + unrun}  FAIL {counts['FAIL']}  "
+          f"TIMEOUT {counts['TIMEOUT']}  MISSING {counts['MISSING']}   ({kept_txt}){strict}")
+    if disagree:
+        print("counts disagree: " + "; ".join(disagree) + " — the counts above are the kept rows'; this screen does not decide "
+              "which is right (G57)")
     tree = meta.get("tree", "not-checked")
     ub, ua = meta.get("untracked_before"), meta.get("untracked_after")
     if ub is not None and ua is not None:
@@ -365,6 +401,11 @@ def main(argv=None):
               f"not absent (G50): " + ", ".join(unreadable))
     if counts["SKIP"]:
         print("skipped (asserting nothing): " + ", ".join(f"{r['gate']} — {r.get('detail', '')}" for r in rows if r["verdict"] == "SKIP"))
+    if unrun:
+        where = f"the {unrun_tier} tier" if unrun_tier else "a tier this screen cannot name"
+        print(f"not run (asserting nothing): {where} — {unrun} gate(s) the runner counted as SKIP and kept no row for: no verdict, "
+              f"control or blind spot of theirs is on this screen (run.txt tier={meta.get('tier', '?')} skip={meta.get('skip', '?')}; "
+              f"kept SKIP rows {counts['SKIP']}; G57)")
     if counts["FAIL"] or counts["TIMEOUT"] or counts["MISSING"]:
         print("not green: " + ", ".join(f"{r['gate']} {r['verdict']}" for r in rows if r["verdict"] in ("FAIL", "TIMEOUT", "MISSING")))
     ok = verdict == "GREEN" and bbx14 is not False
