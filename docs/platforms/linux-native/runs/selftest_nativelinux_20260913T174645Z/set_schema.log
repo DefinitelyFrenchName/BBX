@@ -1,0 +1,49 @@
+== 1. the driver on the tree's fixture, once per scenario ==
+  ok    01_all: END 23
+  ok    02_weights: END 7
+  ok    03_rows: END 7
+== 2. every kind of every scenario PASSes through the one dispatcher, the family from the kind (R23) ==
+  ok    01_all truth — PASS exact (23 indices, every token the truth's)
+  ok    01_all claims — PASS set-inventory (23 rows, the frozen inventory and the run agree both ways)
+  ok    01_all covered — PASS set-covered (20 frozen rows still covered)
+  ok    01_all schema — PASS schema (tsv: 4 columns, 12 rows)
+  ok    02_weights truth — PASS exact (7 indices, every token the truth's)
+  ok    02_weights claims — PASS set-inventory (7 rows, the frozen inventory and the run agree both ways)
+  ok    02_weights covered — PASS set-covered (6 frozen rows still covered)
+  ok    02_weights schema — PASS schema (tsv: 4 columns, 12 rows)
+  ok    03_rows truth — PASS exact (7 indices, every token the truth's)
+  ok    03_rows claims — PASS set-inventory (7 rows, the frozen inventory and the run agree both ways)
+  ok    03_rows covered — PASS set-covered (7 frozen rows still covered)
+  ok    03_rows schema — PASS schema (tsv: 4 columns, 12 rows)
+  ok    the families from the profile's table: truth=exact claims=set covered=set schema=schema 
+  ok    bin/bbx compare exact reaches the tool
+  ok    bin/bbx compare schema reaches the tool
+== 3. what is refused: a kind outside the profile, a spec outside its family, a truth log that is gone, a map that is not this log's ==
+  ok    a .masked under the document-set profile — FAIL kind 'masked' has no comparator family in the kind profile in force (R23: a kind is registered in the profile's table or not at all)
+  ok    a .truth under the frame-driven profile (BBX_CONFIG unset) has no family
+  ok    a truth spec whose class is not exact — FAIL unknown exact class 'sortof'
+  ok    a set spec whose mode is unknown — FAIL unknown set mode 'sortof'
+  ok    a set spec whose class is unknown — FAIL unknown set class 'sortof'
+  ok    a schema spec with a type outside the vocabulary — FAIL unknown schema type 'float'
+  ok    a schema spec with a rows op outside the vocabulary — FAIL unknown schema rows op '~'
+  ok    a truth log that is gone — NO-BASE-LOG /tmp/tmp.NxWGwYnGQz/x/fixture/logs/01_all.log
+  ok    the 02_weights log against 01_all's claim map — FAIL set: the run rows cannot be derived (the claim map does not describe this log at index 1 (the quoted hash differs))
+  ok    the set family without its two trailing arguments — FAIL set: the set family needs the scenario file and the artifact (compare_check's two trailing arguments)
+  ok    an expectation file that is not there — FAIL schema: /home/claude/BBX/fixture/docset/expected/fixture/09_none.schema is not a schema spec (no such file)
+  ok    a truth with no indices — FAIL exact: the truth has no indices — nothing compared
+== 4. must-fire controls, each on a COPY ==
+-- inventory-both-ways --
+CONTROL FIRED: inventory-both-ways — a frozen row removed names the run's row (overview.md:7), a frozen row added names it (ranks.md:99), both at once name both directions
+-- covered-shrink-only --
+CONTROL FIRED: covered-shrink-only — the paraphrase's literal perturbed (37 -> 36) loses overview.md:5 and FAILs naming it; a duplicated frozen row FAILs as hand-editing; 19 frozen of 20 covered PASSes with NOTE: covered-grew 1; a frozen row with status MISMATCH is refused
+-- schema-before-values --
+CONTROL FIRED: schema-before-values — a renamed column, a dropped cell (row 2) and a non-numeral (row 1, weight) each FAIL on shape naming it; rows 12 against a frozen '= 11' FAILs; a value perturbed (Dorin 57 -> 56) PASSes schema and FAILs exact at index 4 with the derived half named
+-- short-apart-from-diverged --
+CONTROL FIRED: short-apart-from-diverged — a log cut at index 20 reads FAIL-SHORT (finding short); one token changed reads FAIL exact at index 5 (diverged); a gap, an END that disagrees, an index the truth lacks and a duplicated index each FAIL naming the index; an edited document names the quoted half
+-- verdict-text --
+CONTROL FIRED: verdict-text — the shadow's changed string is exactly what the frozen-text check refuses: 'PASS set-inventory [23 rows, the frozen inventory and the run agree both ways)' is not the frozen line
+== 5. every verdict line this gate saw is classified (finding.py never reads unclassified) ==
+  ok    38 distinct verdict lines, every one classified
+NOTE: verdict-lines-frozen 38
+
+PASS: the exact, set and schema families hold both ways on the fixture, their verdict text is frozen and classified, and the dispatcher reaches each from its kind; 5 controls fired

@@ -1,0 +1,43 @@
+== 1. the driver on the tree's fixture: the three scenarios these families read ==
+  ok    01_list: END 9
+  ok    02_unordered: END 9
+  ok    03_show_json: END 5
+  ok    03_show_json wrote its JSON view beside the log (D54): {"id":"4D2B","name":"Maren","rank":6,"tags":["ash","elm"],"weight":83}
+  ok    01_list wrote no JSON view (stdout was lines)
+== 2. every kind of the three scenarios PASSes through the one dispatcher, the family from the kind (R23) ==
+  ok    03_show_json schema (json) — PASS schema (json: 5 keys)
+  ok    03_show_json truth — PASS exact (6 indices, every token the truth's)
+  ok    02_unordered unordered (the line shape) — PASS set-inventory (9 rows, the frozen inventory and the run agree both ways)
+  ok    02_unordered truth — PASS exact (10 indices, every token the truth's)
+  ok    01_list truth (the exit point is index 0 and END counts the points after it — X20) — PASS exact (10 indices, every token the truth's)
+  ok    the families from the profile's table: truth=exact unordered=set schema=schema 
+  ok    bin/bbx compare schema reaches the json format
+  ok    bin/bbx compare set reaches the line shape
+== 3. what is refused: a format or a spec outside the grammar, an artifact that is not one object, a shape that is mixed, a mode a stream has not ==
+  ok    a schema format outside the two — FAIL unknown schema format 'yaml'
+  ok    an items op outside the vocabulary — FAIL unknown schema items op '~'
+  ok    a list shorter than frozen — FAIL schema: key 'tags' has 2 items (frozen >= 3)
+  ok    keys not in sorted order — FAIL schema: /tmp/tmp.DlMNoJqfys/x/fixture/03_show_json.schema is not a schema spec ([k2] 'id' is not after 'name' in sorted order)
+  ok    a list with no items claim — FAIL schema: /tmp/tmp.DlMNoJqfys/x/fixture/03_show_json.schema is not a schema spec ([k4] is a list and lacks items_op or items_n)
+  ok    items on a key that is not a list — FAIL schema: /tmp/tmp.DlMNoJqfys/x/fixture/03_show_json.schema is not a schema spec ([k4] carries items_op or items_n but is not a list)
+  ok    the subject file handed as the artifact (what the suite passes today: S4 step 4's open point) — FAIL schema: the artifact is not one JSON object
+  ok    an artifact that is not there — FAIL schema: the artifact /tmp/tmp.DlMNoJqfys/nowhere.json cannot be read
+  ok    a line-shaped set in the shrink-only mode — FAIL set: /tmp/tmp.DlMNoJqfys/x/fixture/02_unordered.unordered is not a set spec (the line shape has no shrink-only mode: a stream is an inventory)
+  ok    a claim row in a file of line rows — FAIL set: frozen row [c1] is malformed (a claim row in a file of line rows)
+  ok    a run log that is not one (a truth spec handed as the log) — FAIL set: the run rows cannot be derived (the log has no END line last (a crash log is never compared))
+== 4. must-fire controls, each on a COPY ==
+-- schema-before-values --
+CONTROL FIRED: schema-before-values — weight renamed: schema FAILs naming the frozen key absent and exact FAILs at index 2 (mass sorts second); weight + 1: schema PASSes and exact FAILs at index 5; a key added: schema names it as not frozen; rank as a string: schema names the type
+-- two-vocabularies --
+CONTROL FIRED: two-vocabularies — hex (the TSV vocabulary's) and float are unknown types under json; list (JSON's) is an unknown type under tsv: two formats, two vocabularies, one comparator (R40)
+-- unordered-both-ways --
+CONTROL FIRED: unordered-both-ways — a frozen row removed names the run's row by its sha1 (the log holds hashes); a frozen row added names it by its text; a duplicated frozen row is hand-editing; a frozen row whose sha1 is not its line's is hand-editing; a run with its last line dropped names the lost frozen row (Vesna); a run with a line repeated names the one surplus row (Quillon)
+-- reversed-truth --
+CONTROL FIRED: reversed-truth — the ordered listing against its truth reversed FAILs exact at index 1; the same log PASSes the unordered inventory (the set family cannot see order) and FAILs the unordered scenario's truth at index 1 (the rank order is neither the name order nor its reverse, D50: the two listings differ in order alone, and only the exact family sees it)
+-- verdict-text --
+CONTROL FIRED: verdict-text — the shadow's changed string is exactly what the frozen-text check refuses: 'PASS schema [json: 5 keys)' is not the frozen line
+== 5. every verdict line this gate saw is classified (finding.py never reads unclassified) ==
+  ok    30 distinct verdict lines, every one classified
+NOTE: verdict-lines-frozen 30
+
+PASS: the json schema format and the line-shaped inventory hold both ways on the fixture, the exact family reads a command-line log by index, the verdict text is frozen and classified, and the dispatcher reaches each family from its kind; 5 controls fired

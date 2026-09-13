@@ -1,0 +1,40 @@
+== 1. one declaration, and with no config its values are the frame-driven profile's (D23: bbh's 2 / 60 / 8) ==
+  ok    kind=frame-driven flicker_max=2 reconverge=60 flicker_max_total=8
+== 2. every consumer resolves to that declaration ==
+  ok    lib/py/bbx/propose_temporal.py imports the shared declaration
+  ok    lib/py/bbx/compare_composite.py imports the shared declaration
+  ok    lib/py/bbx/compare_flicker.py imports the shared declaration
+  ok    lib/py/bbx/compare_window.py imports the shared declaration
+== 3. NO consumer re-declares a threshold locally ==
+  ok    lib/py/bbx/propose_temporal.py declares none locally
+  ok    lib/py/bbx/compare_composite.py declares none locally
+  ok    lib/py/bbx/compare_flicker.py declares none locally
+  ok    lib/py/bbx/compare_window.py declares none locally
+== 4. no consumer hard-codes the VALUES as argparse defaults ==
+  ok    lib/py/bbx/propose_temporal.py takes its defaults from the shared declaration
+  ok    lib/py/bbx/compare_composite.py takes its defaults from the shared declaration
+  ok    lib/py/bbx/compare_flicker.py takes its defaults from the shared declaration
+  ok    lib/py/bbx/compare_window.py takes its defaults from the shared declaration
+== 5. CONTROL local-literal: a re-introduced literal IS caught, a comment is NOT ==
+CONTROL FIRED: local-literal — the planted literal is caught, the comment is not
+== 6. a consumer override (with its ruling rows) reaches the proposer AND the enforcer alike ==
+  ok    the proposer under flicker_max=3 proposes a flicker
+  ok    the enforcer under the same config accepts the proposal verbatim
+  ok    without the config the same shape is a WINDOW (the profile's 2)
+== 7. the consumers compile ==
+  ok    lib/py/bbx/propose_temporal.py
+  ok    lib/py/bbx/compare_composite.py
+  ok    lib/py/bbx/compare_flicker.py
+  ok    lib/py/bbx/compare_window.py
+  ok    lib/py/bbx/check_diverge.py
+  ok    lib/py/bbx/logfmt.py
+  ok    lib/py/bbx/thresholds.py
+== 8. R25: looser needs a ruling row; tighter needs nothing; a kind with no family is refused ==
+CONTROL FIRED: loosened-without-ruling — flicker_max 3, reconverge 10, flicker_max_total 9: five tools × three keys, each one REFUSED line, exit 3
+  ok    tighter on every key needs no ruling: kind=frame-driven flicker_max=1 reconverge=100 flicker_max_total=4
+  ok    looser WITH its ruling rows is accepted: kind=frame-driven flicker_max=3 reconverge=10 flicker_max_total=8
+  ok    a kind with no temporal family is REFUSED, not defaulted
+== 9. CONTROL proposer-drift: a shadow lib whose proposer re-declares FLICKER_MAX makes the pair disagree, and the gate sees it ==
+CONTROL FIRED: proposer-drift — shadow proposer 'proposed: window b 100 102' vs enforcer 'FLICKER 3 100,101,102' (section 6 would fail on it), and section 3's check catches the literal
+
+PASS: the thresholds are declared once, cannot drift, and cannot loosen without a ruling

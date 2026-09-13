@@ -1433,3 +1433,25 @@ identity is `4465efe8a453`, is the close's evidence. And every command-line expe
 `derived` class: `PASSed on a real pairing: exact` on the unittest and selfgates screens means a real
 framework and BBX's own runner reproduced what a derivation froze, over a package and stub gates written
 here — never that any real test suite or gate battery is good.
+
+### bbx-24, continued — S4's DONE ruling deferred (option A), the native Linux pair, G57
+
+S4's slice readout was laid out to the maintainer on its §7 table. Laying it out found two gaps, both
+measured: BBX-25 had not been applied component by component — every S4 component has two instances except
+the tolerant-numeric family, whose one consumer is `fixture/fakecli` and which no gate header declares — and
+`gates/file_census.sh` had not run at the current commit, so its three controls were unseen. Three choices
+were put: close both next sitting and rule then (recommended); close them this sitting; rule DONE on the
+table as it stands (not recommended). **The maintainer chose the first: S4 is not DONE yet.**
+
+The maintainer then filed a native Linux pair made through claude.ai, with a warning about reading it on
+macOS. Measured before anything was written: GREEN twice at `f6f136d` over the 28 portable gates, the static
+tier not run (`BBX_BBH_HOME` unset); the warning's advice held and its predicted line did not (G50's fix
+prints 28 headers `NOT FOUND` and 0 declaring none); and the pair exposed G57 — the gate screen takes its
+SKIP count from the kept rows, while the runner counts an unrun tier with no rows — reproduced on macOS on a
+two-gate consumer. Three recommendations, all agreed by the maintainer: the pair is a PARTIAL platform row
+with a full native pair still owed; it is filed now; G57's fix is built next sitting in the same harness
+cycle as option A. The maintainer also asked for a root `README.md` for visitors, written the same evening.
+
+**Anti-hyperfocus (BBX-27).** The next sitting's first thread is fixed by these rulings — option A's two
+gaps and G57 in one harness cycle — and it is the right one: all three are small, all three are cases of a
+readout saying less than is true, and S4 cannot be ruled until two of them close.

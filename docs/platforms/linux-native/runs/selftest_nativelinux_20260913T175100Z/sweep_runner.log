@@ -1,0 +1,82 @@
+1. the three verdicts, plus SKIP-in-prose and MISSING
+  ok: PASS counted 4 (g_pass, g_prose, g_args, g_orphan): PASS 4     SKIP 1     FAIL 2     TIMEOUT 0     MISSING 1
+  ok: a SKIP marker with a NON-ZERO exit counts FAIL, not SKIP
+  ok: SKIP counted separately from PASS
+  ok: a non-executable registered gate is MISSING
+  ok: the release scope excluded the out-of-scope row
+  ok: a run with a FAIL is NOT GREEN
+  ok: the banner uses the consumer's instrument word
+  ok: builds under test: a present dir is fingerprinted (no zip -> '?'), the set from build_sets
+  ok: …and an absent dir says ABSENT
+2. placeholders reach the gate's argv; VAR=value becomes environment
+  ok: %MERGED_RP% and %DON% expanded into argv (the _RP suffix first)
+  ok: a VAR=value token became environment, not a positional
+  ok: an environment variable of the placeholder's name overrides its default
+3. the anti-orphan check, both directions
+  ok: an instrument-tier gate with no row is reported UNREGISTERED
+  ok: a row whose script is gone is reported DEAD
+4. --strict makes SKIP and an unregistered gate fatal
+  ok: --strict is non-zero on SKIP
+  ok: without --strict the same run is zero (SKIP is reported, not fatal)
+  ok: --strict is non-zero on an UNREGISTERED gate
+5. a red prereq STOPS the run
+CONTROL FIRED: prereq-stop — g_prereq_bad (exit 1) stopped the run before the mame lane
+  ok: the run stopped at the prereq lane
+  ok: …citing the consumer's prereq_cite
+  ok: no later lane ran after a red prereq
+  ok: --keep-going runs the later lanes anyway
+6. --scope all includes the out-of-release-scope rows; --only selects
+  ok: --scope all ran the out-of-scope row
+  ok: --only 'g_o*' ran exactly the two matching gates
+6b. CADENCE selects independently of scope, and --freeze ASKS the question
+  ok: cadence=all (the default) runs the bitstream row
+  ok: --freeze excluded the bitstream-cadence gate
+  ok: --freeze NAMED the dropped cadence
+  ok: …and the dropped gate by name
+  ok: …with the consumer's cadence_drop_note
+  ok: --freeze kept the romset-cadence gate
+7. a gate that overruns --timeout is TIMEOUT, not PASS
+  ok: an overrunning gate is TIMEOUT
+  ok: …with the lineage's detail 'killed after 2s'
+8. --lane ACCUMULATES
+  ok: two --lane flags select BOTH lanes
+  ok: a repeated --lane is not run twice
+  ok: …in the order given
+9. a lane WAITS for its own gates (--jobs > 1)
+  ok: a lane's gates finish before the next lane is announced
+  ok: its result is recorded under its OWN lane
+10. --resume skips gates already in results.tsv
+  ok: --resume: the done gate is announced as resumed, the rest run, results.tsv keeps one row per gate
+11. the runner EXPORTS the env default, and a caller's value wins
+  ok: unset by the caller -> the gate receives the instrument, and the log says 'runner default'
+  ok: the instruments banner names the override and says MISSING for a path that is not executable
+  ok: set by the caller -> the caller's value wins, and the log says so
+CONTROL FIRED: env-default-export — without the export line the gate reports mame_bin=UNSET
+  ok: the assertion depends on the export, not on the environment
+12. exit 0 after a SHELL ERROR is FAIL; a teardown segfault line is not
+  ok: a shell-error line with exit 0 is FAIL
+  ok: a teardown segfault line after the summary stays PASS
+13. a row's 7th column is its timeout; --jobs N on a scratch lane hands each slot its own scratch
+  ok: a 2-second 7th column killed a 20-second gate under a 60-second --timeout
+  ok: a 6-column row still runs under the global --timeout
+  ok: --jobs 2 on the scratch lane: slot 0 keeps the base scratch, slot 1 gets <base>-slot1
+  ok: …and the banner names the scratch layout
+  ok: --jobs 1: every gate keeps the caller's scratch
+  ok: the scratch variable unset: slot 0 gets ${TMPDIR:-/tmp}/<scratch_default>
+14. the precondition hook and the input demand
+  ok: a failing precondition stops the run before any gate, with the consumer's text
+  ok: the input variable is demanded (after --list, which needs none)
+  ok: --list needs no input and prints the lineage's summary line
+15. --jobs N is a PULL queue: a worker takes the next gate the moment it frees (R19)
+  ok: --jobs 2: the third short gate started at 1789321909, before the slow gate ended at 1789321911 — a pull, not a batch
+  ok: all four rows recorded (order is the workers', keyed by name)
+CONTROL FIRED: serial-order — at --jobs 1 the third short gate started at 1789321918, after the slow gate ended at 1789321916
+16. [sweep].clone_per_slot: every slot measures its own plain clone of HEAD; the base tree is never written
+  ok: two workers, two trees, neither the base: /tmp/bbx-clones.p74cGV/slot0 / /tmp/bbx-clones.p74cGV/slot1
+  ok: both clones are at the base's HEAD be23c53
+  ok: the banner names the clones, the commit and the working tree's porcelain
+  ok: the base tree received no file from the writing gates
+  ok: the clone directory is removed after the run
+CONTROL FIRED: no-clone-dirties — without clone_per_slot the two writing gates left 2 file(s) in the base tree
+
+PASS: bbx-run-sweep classifies every ground-truth case correctly

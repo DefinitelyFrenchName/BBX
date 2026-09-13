@@ -1,0 +1,26 @@
+== 1. accepted shapes read to the values they name ==
+  ok    every accepted shape reads to its value
+  ok    tomllib reads the same values (host has Python >= 3.11)
+== 2. MUST-FIRE: every refused construct is refused ==
+  ok    refused: dotted table header
+  ok    refused: dotted key
+  ok    refused: array of tables
+  ok    refused: duplicate key
+  ok    refused: duplicate table
+  ok    refused: signed hex
+  ok    refused: escape in a basic string
+  ok    refused: multi-line basic string
+  ok    refused: nested inline table
+  ok    refused: array of inline tables
+  ok    refused: float
+CONTROL FIRED: refused-constructs — all 11 refused constructs raised SubsetError
+== 3. defaults resolve through the kind profile ==
+  ok    a config with no kind is frame-driven: instrument_word=emulator, static_needs_env=ROMDIR (bbh's values, D9)
+  ok    the frame-driven profile carries bbh's tier patterns
+  ok    the self profile: gates_dir=gates, controls enforced, no instrument patterns
+  ok    an unknown kind is fatal (exit 3)
+  ok    a consumer value wins over both layers
+  ok    a missing key with no default is fatal (exit 3)
+  ok    --default supplies the value
+
+PASS: the config reader accepts the subset, refuses the rest, and resolves defaults through the kind profile

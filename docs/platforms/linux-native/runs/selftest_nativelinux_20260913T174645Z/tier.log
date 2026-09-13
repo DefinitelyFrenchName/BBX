@@ -1,0 +1,23 @@
+== 1. --list classifies each gate ==
+  ok    direct -> INSTRUMENT (-)
+  ok    comment -> PLAIN (-)
+  ok    via_lib -> INSTRUMENT (-)
+  ok    via_two -> INSTRUMENT (-)
+  ok    via_three -> PLAIN (-)
+  ok    plain -> PLAIN (portable)
+  ok    run_all -> PLAIN (-)
+== 2. --unregistered names the right gates ==
+  ok    the comment-only gate is unregistered (it is instrument-free)
+  ok    the depth-3 chain is reported (depth 2 does not reach it)
+  ok    no instrument gate is reported
+  ok    runner prefix and manual suffix are excluded
+  ok    a registered gate is not reported
+  ok    the report's count line is the lineage's text (a kindless config is frame-driven: 'emulator')
+== 3. MUST-FIRE: depth 3 reaches the third lib, depth 2 does not ==
+CONTROL FIRED: depth-3-chain — via_three is PLAIN at depth 2 and INSTRUMENT at depth 3
+  ok    source_depth decides the reach
+== 4. the clean case, and the empty-patterns generalization ==
+  ok    all registered -> the ok line
+  ok    an empty pattern list classifies nothing as INSTRUMENT (bbh's alternation of zero patterns would match everything)
+
+PASS: the tier classifier sees what the runners need it to see

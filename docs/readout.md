@@ -4521,3 +4521,35 @@ X39–X44 do. **Rulings:** R49 raised and answered. **S4 is laid before the main
 (the §7 table above), and with it the question of which slice follows (`DECISIONS_HISTORY.md`, bbx-24).
 
 **Sweeps on the final tree:** `PASS: close_sweeps=/Users/koneko/Developer/generalized-blackbox-harness/BBX files=163 retractions=46 retraction_hits=0 deferrals=0 defaults_rows=63 citations=921 unresolved=0 header_entries=240 continued=0 errors=0; 4 controls fired`; `PASS: rulings=/Users/koneko/Developer/generalized-blackbox-harness/BBX/docs/rulings.md entries=50 open=0 answered=50 decisions_rows=50 errors=0; 4 controls fired`.
+
+# bbx-24, after the close — S4 not yet DONE (option A); the native Linux pair, a partial row; G57; a README for visitors (2026-09-13)
+
+**S4's DONE ruling.** Laid out to the maintainer on the §7 table above, with two gaps measured while laying
+it out. (1) BBX-25 had not been applied component by component, as `docs/slices.md`'s S4 row asks. Measured
+then: the adapter contract has two frameworks, the schema family two formats, the set family two row shapes,
+the kinds loop two profiles, the exact family two kinds — and the tolerant-numeric family one consumer,
+`fixture/fakecli` (one `.band` file; bbh's tree has none), which no gate header declares. (2)
+`gates/file_census.sh`, step 6's release-scoped measurement, was not run at this commit, so its three
+controls have not been seen to fire against the current harness. The six controls the S4 row names were
+confirmed firing by name in the close pair's run B. **Ruled by the maintainer, 2026-09-13: option A — S4 is
+not DONE yet; both gaps close next sitting, and the amended table goes back for the ruling.**
+
+**The native Linux pair** (`docs/platforms/linux-native/`). Two runs at `f6f136d` on Linux x86_64, made
+through claude.ai and archived by the maintainer: GREEN twice over the 28 portable gates, controls fired 115
+/ declared 115, BBX-14 met; the static tier not run (`BBX_BBH_HOME` unset). Committed byte-identical to the
+archive (sha1 `04d6d574bc57…`, `diff -r` empty). **Ruled with it: a PARTIAL platform row; a full native pair
+is still owed.**
+
+**G57, found reading that pair.** The runner counted the unrun static tier as `skip=4` in `run.txt` but kept
+no rows for it, and the gate screen counts rows: `PASS 28  SKIP 0 … (gates 28)`. Reproduced on macOS on a
+two-gate consumer, with a control that agrees when the tier runs. **Ruled: fixed next sitting, in the same
+harness cycle as option A.** Checked the same hour, the maintainer's warning about reading the pair on
+macOS: its advice holds (rewrite `root=` to read the blind spots) and its predicted line does not — both
+readouts print `gates declaring no blind spot: 0` and 28 headers `NOT FOUND` (G50's fix).
+
+**A README for visitors** at the repository root, at the maintainer's request: what BBX is, why, how it
+works, what exists, how it is built, its lineage and how to try it — its numbers dated to `1c661c3`, and
+G57's under-count stated where it tells a visitor to run the battery.
+
+**What this does NOT assert:** that S4 is DONE; any platform green at `114a4a5` or later; the static tier on
+Linux; that any screen's SKIP count is right when a tier was not run (G57).

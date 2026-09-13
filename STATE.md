@@ -8,9 +8,10 @@ generalization of `blackbox-harness` (bbh) to any subject with testable inputs
 and outputs. Born 2026-09-09.
 
 **Status (bbx-24 close, 2026-09-13):** slices S1 and S2 complete; **S3 DONE**;
-**S4 BUILT AND READ OUT — its step 7, the slice readout, is in `docs/readout.md` with
-CLAUDE.md §7's six conditions answered one by one, and S4 waits on the maintainer's DONE
-ruling.** The sitting's first finding came off the opening screen, not off a gate: two blind
+**S4 BUILT AND READ OUT, and ruled NOT YET DONE after the close (option A)**: its step 7 slice readout
+is in `docs/readout.md`, and laying it out to the maintainer found two gaps — the tolerant-numeric family has
+one consumer and no gate header says so (BBX-25), and `gates/file_census.sh` was not run at this commit —
+which close next sitting before S4 is ruled again. The sitting's first finding came off the opening screen, not off a gate: two blind
 spots written over several header lines were printed cut mid-sentence, one of them on seven
 committed screens since bbx-17 (**G53**). **R49 was raised and ruled the same sitting — option
 1, the maintainer adding: "We don't compromise on discipline."** The two headers were put back
@@ -25,8 +26,12 @@ the build and nothing else), and the self subject was refrozen in one quoted lin
 the 31-gate count after R45 made it 32, one of them on the page followed on WSL. The opening
 battery at `f6f136d` was GREEN (PASS 32, controls 128 / 128); the close's pair is quoted in
 `docs/readout.md` (CLOSE — bbx-24). **The WSL platform row stays GREEN at `429d3f8` and attests
-that commit only**; the platform README's tree check now names a count this sitting moved.
-Gotchas G1–G56; retractions X1–X46.
+that commit only**; the platform README's tree check now names a count this sitting moved. **Native Linux
+is a PARTIAL row** (ruled after the close): a pair made through claude.ai, GREEN twice at `f6f136d` over the
+28 portable gates, the static tier not run (`docs/platforms/linux-native/`). **G57, found reading that
+pair:** the gate screen counts only kept rows, so a tier the runner did not run reads `SKIP 0` — reproduced
+on macOS; fixed next sitting with option A. A root `README.md` introduces BBX to visitors.
+Gotchas G1–G57; retractions X1–X46.
 
 **Open rulings: none.** Every ruling R0–R49 is answered and recorded in `DECISIONS.md`; R49 was
 raised and answered at bbx-24 and is built. The maintainer's words with it stand as a rule of
@@ -63,7 +68,7 @@ G30 → BBX-28/§3.2/BBX-30, G31 → §3.3/BBX-30, G32 → BBX-9/BBX-10/§3.3,
 G33 → §1/BBX-16/BBX-12, G34 → BBX-9/§1/BBX-6, G35 → BBX-25/§3.3/§1,
 G36 → BBX-16/BBX-6/BBX-12, G37 → §1/BBX-6/BBX-16. From G38 on, every entry in
 `docs/gotchas.md` names the rules it re-anchors in its own text (G26–G52 extracted at bbx-24,
-0 without one; G53 and G54 were written with theirs), and this list is not copied further. The
+0 without one; G53–G57 were written with theirs), and this list is not copied further. The
 formal promotion is slice S5.
 
 **Constitution:** BBX-5's citation corrected to `MJC-52` (R12, own commit).
@@ -77,11 +82,13 @@ number to bring down; the two added at bbx-2 are host facts the clone
 exposed (G13, rule 7), the only exception ever allowed to move it upward. Grammar in
 `docs/census/README.md`.
 
-**Next:** (1) **The maintainer's DONE ruling on S4**, on the §7 table of bbx-24's slice readout
-in `docs/readout.md`, as S3 had. (2) **Which slice comes next** — S5 (the skill) by the table, or
+**Next:** (1) **Option A and G57 in one harness cycle, then the DONE ruling on S4**: declare the tolerant-numeric
+family's single consumer in `gates/band.sh` and add a per-component BBX-25 table to S4's readout; run
+`gates/file_census.sh` at the final commit; make the gate screen reconcile `run.txt`'s `skip=` with its rows
+(G57); then the amended §7 table goes back to the maintainer. (2) **Which slice comes next** — S5 (the skill) by the table, or
 R29's executable controls (S6) first, since every controls count a readout quotes is still a
 gate's self-report; the contributor's answer is in `DECISIONS_HISTORY.md` (bbx-24) and the
-question goes to the maintainer with the DONE ruling. (3) **A WSL re-run** whenever the platform
+question goes to the maintainer with the DONE ruling. (3) **A full native Linux pair** (with `BBX_BBH_HOME` set) and **a WSL re-run** whenever the platform
 row should attest a commit newer than `429d3f8` (`docs/platforms/README.md`; its tree check now
 reads `gates/close_sweeps.sh` → `4`). (4) **G48's sweep, widened by G50 and G53**: every reader
 that may read LESS than is there — a count over something absent, a header read one line at a

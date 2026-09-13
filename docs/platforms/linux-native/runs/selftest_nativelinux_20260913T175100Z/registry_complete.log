@@ -1,0 +1,14 @@
+== 1. BBX's own tree: every registry complete both ways ==
+  ok    bbx tier bbx.toml --complete exits 0 on BBX's own registries
+          gates on disk 33: 32 instrument-free, 1 instrument, 0 runner/manual; rows: portable 28, static 4, sweep 1
+          ok: every instrument-free gate is in the portable or static registry
+          ok: every instrument gate has a sweep row
+          ok: every sweep row names a gate on disk
+== 2. a synthetic consumer: complete, and a pattern in a COMMENT is not a reach ==
+  ok    complete both ways: exit 0, three ok lines (g_comment's pattern sits in a comment and it stays PLAIN)
+== 3. MUST-FIRE controls ==
+CONTROL FIRED: plain-orphan — exit 1, g_orphan named
+CONTROL FIRED: instrument-orphan — exit 1, g_inst2 named
+CONTROL FIRED: dead-sweep-row — exit 1, no_such_gate named
+
+PASS: every registry is complete both ways on BBX's own tree, and an orphan of either tier and a dead sweep row each fail

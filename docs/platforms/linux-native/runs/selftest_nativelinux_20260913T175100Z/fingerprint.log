@@ -1,0 +1,36 @@
+== 1. registered / unregistered ==
+  ok    program key = sha1 of the program members in MEMBER ORDER (03 then 04, not zip order)
+  ok    a registered image resolves: 'MYSET'
+  ok    an unregistered image: exit 2, UNREGISTERED on stderr naming the registry, the program key on stdout
+  ok    a missing image is named
+== 1b. THE DUAL KEY ==
+  ok    a non-program delta: SAME program key, DIFFERENT whole-set key
+  ok    whole-set key resolves, and silently
+  ok    program key resolves and ANNOUNCES itself on stderr
+  ok    whole-set key WINS when both are present
+CONTROL FIRED: wholeset-only-row — the twin (same program key, other whole-set key) got exit 2 against a whole-set-only registry
+  ok    a whole-set-ONLY row is unreachable by the program fallback from the twin
+  ok    the whole-set key does not move with the search-path chain
+== 1c. --full: the resolved chain and the region rules ==
+  ok    --full IS chain-dependent (folds in the parent set along the path) — which is why it is not the dispatch key
+  ok    …and names the images it resolved
+  ok    the lineage's region rules: prg 2 / key 1 / gfx-qsnd 1 (a .13m is not program: the regex excludes 'm')
+== 2. [fingerprint] config: the program regex and the region rules are the consumer's ==
+  ok    under the lineage's regex a fake image has no program members (refused)
+  ok    a consumer regex selects fake.01+fake.02 as the program, in order
+  ok    the config's registry and default_set are used (no --set, no --registry)
+  ok    …and BBX_CONFIG selects the same config
+  ok    --full uses the consumer's region rules
+== 3. the other kinds ==
+  ok    file-sha1: the program key is the file's SHA-1
+  ok    file-sha1: the whole-set key covers the directory's other files; the program key does not
+  ok    command: {set} and {rompath} substituted, the commands' output is the key
+  ok    --full is refused for a non-zip kind
+== 4. the harness's own identity: ONE definition, --harness-identity (R38, R46) ==
+  ok    --harness-identity prints R38's two keys, each equal to the formula computed without the module
+  ok    an UNCOMMITTED edit does not move the key: it is the key of the commit
+CONTROL FIRED: gates-only-commit — the whole-set key moved and the program key held
+  ok    --harness-identity refuses outside a git repository
+  ok    --harness-identity refuses with no --root and no BBX_HOME
+
+PASS: fingerprint dispatch validated on synthetic images

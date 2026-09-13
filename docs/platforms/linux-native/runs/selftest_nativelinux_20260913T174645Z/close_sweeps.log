@@ -1,0 +1,8 @@
+== the real tree ==
+  ok    close_sweeps=/home/claude/BBX files=163 retractions=44 retraction_hits=0 deferrals=0 defaults_rows=63 citations=888 unresolved=0 errors=0
+== MUST-FIRE controls ==
+CONTROL FIRED: retraction-restated — ERROR: retraction X1 (retracted 2026-09-09) still stated in STATE.md:90
+CONTROL FIRED: deferral-planted — ERROR: deferral TODO in docs/abstraction.md:259
+CONTROL FIRED: default-unregistered — ERROR: defaults cited-not-registered D999 in docs/abstraction.md:259
+
+PASS: close_sweeps=/home/claude/BBX files=163 retractions=44 retraction_hits=0 deferrals=0 defaults_rows=63 citations=888 unresolved=0 errors=0; 3 controls fired

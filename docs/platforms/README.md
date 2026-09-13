@@ -73,6 +73,10 @@ Three things to hold to, each paid for here:
   pipe's exit instead of the command's (G16).
 * **Do NOT pass `--strict`.** It makes a SKIP fatal, and this host is expected to
   skip (next section).
+* **Set `BBX_BBH_HOME`, and check that it took.** Unset, the static tier — the four gates that
+  compare against bbh or recount the lineage — does not run at all, and until G57 is fixed the
+  screen still reads `SKIP 0` for them: only the kept run's `run.txt` (`skip=4`) shows it. The
+  native Linux pair at `f6f136d` (`linux-native/`) is exactly that case.
 
 ## 3. What is expected to SKIP, and why that is correct
 

@@ -1,0 +1,27 @@
+== 1. the tree's fixture equals its generator (read-only: --check regenerates under TMPDIR) ==
+  ok    mkdocset.py --check exit 0
+  ok    every chirality predicate holds on subject/records.tsv
+  ok    the generator prints its counts as a NOTE
+  ok    files under subject/, claims/, expected/: 24
+== 2. the consumer config resolves to the document-set profile ==
+  ok    kind = document-set
+  ok    seven kinds under the profile (the kind-blind three + truth, claims, covered, schema)
+  ok    kind row: truth exact EVAL log
+  ok    kind row: claims set EVAL subject
+  ok    kind row: covered set EVAL subject
+  ok    kind row: schema schema EVAL subject
+  ok    no temporal family under the profile (a temporal comparator is REFUSED, D23)
+  ok    scenario extension = claims (R32, D34)
+  ok    kind-blind scenario extension = rpl (bbh's literal)
+  ok    the identity is file-sha1 over {set}.tsv, whole-set key over subject/ (D33)
+  ok    one registry row (the whole-set key -> fixture)
+  ok    the registry row IS the fingerprint tool's whole-set key over subject/
+  ok    bbx.fingerprint resolves subject/ to expectation set 'fixture'
+NOTE: docset-fixture records=12 documents=3 claims=20 wrong=1 paraphrase=1 unbindable=2 scenarios=3 expectations=12 truth_logs=3
+  ok    the fixture's register: 16 expectation files, 16 rows, complete both ways
+  ok    every registered fixture file is tracked by git — a clone has the truth logs (G22)
+== 3. must-fire controls, each on a COPY ==
+CONTROL FIRED: edited-value — FAIL: 1 file(s) differ from the generator, 0 not generated
+CONTROL FIRED: symmetric-fixture — FAIL: chirality predicate(s) do not hold on subject/records.tsv: weights-distinct
+CONTROL FIRED: unknown-kind-under-profile — x|claims|EVAL x|masked|UNKNOWN-KIND
+PASS: the document-set fixture is its generator's, chiral, and its profile resolves; 3 controls fired

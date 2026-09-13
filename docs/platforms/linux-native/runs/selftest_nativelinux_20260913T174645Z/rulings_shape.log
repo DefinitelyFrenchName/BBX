@@ -1,0 +1,9 @@
+== the real files ==
+  ok    rulings=/home/claude/BBX/docs/rulings.md entries=49 open=0 answered=49 decisions_rows=49 errors=0
+== MUST-FIRE controls ==
+CONTROL FIRED: answered-under-open — ERROR: answered-under-open R20 line=143
+CONTROL FIRED: open-under-answered — ERROR: open-under-answered R999 line=3
+CONTROL FIRED: no-decisions-row — ERROR: no-decisions-row R20
+CONTROL FIRED: row-without-entry — ERROR: row-without-entry R999 decisions_line=66
+
+PASS: rulings=/home/claude/BBX/docs/rulings.md entries=49 open=0 answered=49 decisions_rows=49 errors=0; 4 controls fired

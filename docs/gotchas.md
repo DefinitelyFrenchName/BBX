@@ -1276,3 +1276,32 @@ the form every gate uses — in a probe as well. And a probe that prints nothing
 count the lines it should have printed before reading its silence. Rules re-anchored in fact: BBX-1
 (exit status decides, and the status read was the wrong process's), BBX-7 (an absence read as a
 result), §1.
+
+## G57 — The gate screen counts only the rows a run keeps, and a tier the runner does not run keeps none: the native Linux pair recorded skip=4 and its screen said SKIP 0 (paid: 0 battery runs — found after the bbx-24 close by reading the pair's run.txt against its screen, reproduced on a two-gate consumer in seconds; two scratch runs of the contributor's first took the wrong path; 2026-09-13)
+The native Linux pair at `f6f136d`, made through claude.ai and archived by the maintainer, ran `bin/bbx
+selftest` with `BBX_BBH_HOME` unset. `bin/bbx-run-static` then prints `NOT RUN: BBX_BBH_HOME is unset…` for
+the static tier and adds its 4 gates to the skip count — `run.txt` says `pass=28 skip=4` — but writes no
+row for them in `results.tsv`, and `lib/py/bbx/readout.py` counts the screen's PASS and SKIP from those rows
+alone: `VERDICT: GREEN   PASS 28  SKIP 0 … (gates 28)`, with no skipped line and no word about the tier.
+Reproduced on macOS with a two-gate consumer (one portable gate, one static, its variable unset): the
+runner's own console `PASS 1  SKIP 1` and `skipped: <static-tier:REPRO_NEEDS-unset>`, `run.txt` `skip=1`,
+one row, the screen `SKIP 0 … (gates 1)`; with the variable set to a directory, runner, `run.txt` and screen
+agree at `SKIP 0`. The accounting is bbh's (`bin/bbh-run-static`, the same lines), lifted at S1 step 2
+(`b212831`) and pinned by fidelity F13, so the fix belongs to the readout. None of the five committed WSL
+runs is affected (each `skip=1` against one SKIP row); macOS never walks the path, because every battery
+here sets `BBX_BBH_HOME` — the second host as the detector again (G47, G50).
+Two slips of the contributor's own in the same measurement, both caught at once: the first reproduction
+used `--tier static`, which runs that tier whatever the variable says, so it took a different path (and its
+screen was right: `SKIP 3`, three rows); and the first control set the variable to `1`, which the runner
+refuses before any gate runs (exit 2, nothing kept) — a hazard HANDOFF already carries.
+Measured the same hour: the maintainer's warning filed with the archive — that the pair, read on macOS,
+would print `gates declaring no blind spot: 28` — does not hold at `f6f136d` or at `114a4a5`; both readouts
+print `gates declaring no blind spot: 0` and `gates whose header was NOT FOUND: 28 … UNKNOWN` (G50's fix).
+Its advice stands: without `root=` rewritten to a local clone, no blind spot of the pair can be read.
+Learning (R27): a screen that counts from one source must agree with every count the run records about
+itself, or say where they differ — the mechanism, the readout reconciling `run.txt`'s `skip=` with its SKIP
+rows and naming a tier not run, with a control in `gates/readout.sh`, is ruled for the next sitting beside
+option A. And a reproduction is an instrument: it shows it takes the witnessed path before its result is
+read. Rules re-anchored in fact: BBX-1 (every count reported separately, and one was not), BBX-30 and §3.2
+(a green that hid four assertions it did not make), BBX-28 (the pair a witness until reproduced), BBX-25
+(the second host as the detector), §1.
