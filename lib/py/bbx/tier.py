@@ -3,6 +3,8 @@ anti-orphan report the runners print.
 
     python3 -m bbx.tier <config.toml> --unregistered   the runner's report block
     python3 -m bbx.tier <config.toml> --list           name / INSTRUMENT|PLAIN / registry
+    python3 -m bbx.tier <config.toml> --complete       every gate in the registry its tier needs, and
+                                                       every sweep row a gate on disk: exit 1 on a gap (R45)
 
 A gate needs an instrument (an emulator, a simulator, a driver, an external
 tool) if its body, comments stripped, matches any of [tier].patterns — or if
@@ -22,6 +24,13 @@ The report is REPORTED, NOT FAILED, by design: adding a gate and forgetting
 to register it is exactly the drift the runner exists to surface, but a new
 gate is also the moment a hard failure is most annoying and least
 informative. `--strict` on the sweep runner is where it becomes fatal.
+
+`--complete` is BBX's addition (ruled R45) and is the VERDICT that report never
+was: an instrument-free gate in neither the portable nor the static registry,
+an INSTRUMENT gate with no sweep row, and a sweep row naming a gate that is not
+on disk each FAIL, exit 1. It is a separate mode on purpose: `--list` and
+`--unregistered` stay the lineage's text (fidelity F13e diffs both), and
+neither runner changes. Ground truth: `gates/registry_complete.sh`.
 """
 import glob
 import os
@@ -83,6 +92,24 @@ def read_registry(path):
         return {l.split("#")[0].strip() for l in f} - {""}
 
 
+def read_sweep(path):
+    """The gate names a sweep registry holds, in file order: the FIRST field of every row
+    bin/bbx-run-sweep selects in its `rows()` — not a comment, at least three tab fields, a
+    non-empty first field. The first field is that runner's own contract for the gate (the
+    registry's COLUMNS comment names it `gate`), so it is read here exactly as the runner reads it."""
+    if not os.path.exists(path):
+        return []
+    out = []
+    with open(path) as f:
+        for line in f:
+            line = line.rstrip("\n").rstrip("\r")
+            cells = line.split("\t")
+            if line.startswith("#") or len(cells) < 3 or cells[0] == "":
+                continue
+            out.append(cells[0])
+    return out
+
+
 def main(argv):
     if not argv:
         print(__doc__, file=sys.stderr)
@@ -121,6 +148,39 @@ def main(argv):
         else:
             print(f"  ok: every {word}-free gate is registered")
         return 0
+    if mode == "--complete":
+        reg_w = os.path.join(root, C.get(cfg, "registries.sweep"))
+        sweep = read_sweep(reg_w)
+        on_disk = dict(t.gates())
+        rel = lambda p: os.path.relpath(p, root)
+        plain_orphans, inst_orphans, excluded, n_plain, n_inst = [], [], 0, 0, 0
+        for name, p in on_disk.items():
+            if t.is_runner_or_manual(name):
+                excluded += 1
+            elif t.needs_instrument(p):
+                n_inst += 1
+                if name not in sweep:
+                    inst_orphans.append(name)
+            else:
+                n_plain += 1
+                if name not in known:
+                    plain_orphans.append(name)
+        dead_rows = [n for n in sweep if n not in on_disk]
+        print(f"  gates on disk {len(on_disk)}: {n_plain} {word}-free, {n_inst} {word}, {excluded} runner/manual; "
+              f"rows: portable {len(portable)}, static {len(static)}, sweep {len(sweep)}")
+        for n in plain_orphans:
+            print(f"  FAIL orphan: {n} is {word}-free and in neither {rel(reg_p)} nor {rel(reg_s)}")
+        for n in inst_orphans:
+            print(f"  FAIL orphan: {n} reaches an {word} and has no row in {rel(reg_w)}")
+        for n in dead_rows:
+            print(f"  FAIL dead-row: {rel(reg_w)} names {n}, which is not a gate on disk")
+        if not plain_orphans:
+            print(f"  ok: every {word}-free gate is in the portable or static registry")
+        if not inst_orphans:
+            print(f"  ok: every {word} gate has a sweep row")
+        if not dead_rows:
+            print("  ok: every sweep row names a gate on disk")
+        return 1 if (plain_orphans or inst_orphans or dead_rows) else 0
     print(f"bbx tier: unknown mode {mode!r}", file=sys.stderr)
     return 2
 

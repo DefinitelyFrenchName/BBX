@@ -28,3 +28,4 @@ cli_suite
 adapters
 file_census_tool
 census_register
+registry_complete

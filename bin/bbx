@@ -5,7 +5,7 @@
 #   bbx run-static [args]         the pre-commit chain            (bin/bbx-run-static)
 #   bbx run-suite [args]          the suite: identity -> expectation set, every scenario twice, dispatch by kind (bin/bbx-run-suite; S2)
 #   bbx classify <exit> <log>     one verdict                      (bin/bbx-classify)
-#   bbx tier <config> [--list|--unregistered]                      (lib/py/bbx/tier.py)
+#   bbx tier <config> [--list|--unregistered|--complete]           (lib/py/bbx/tier.py)
 #   bbx config <config> get <section.key> [--default V] | dump | root | kind
 #   bbx controls declared <gate.sh> | report [--skipped g1,g2] <gates_dir> <logs_dir> <name>...   (lib/py/bbx/controls.py)
 #   bbx recount <census.md> [--only A1,A2] [--root DIR]            (lib/py/bbx/recount.py)
