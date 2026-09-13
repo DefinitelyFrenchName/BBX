@@ -34,7 +34,9 @@ gates that declare nothing — a gate with no declared blind spot is a gate
 nobody has asked, and that number is printed, never hidden. A header the screen
 cannot READ — the gate file or the driver absent at the root the run recorded, as
 on any host but the one that ran it — is named as NOT FOUND and its blind spots
-reported UNKNOWN, never counted as a gate that declares none (G50).
+reported UNKNOWN, never counted as a gate that declares none (G50). A blind spot
+whose entry runs on past its one line is printed with a TRUNCATED mark directly
+under it, never as a shorter whole (G53).
 RO3 — legible without the code: gate names and plain sentences only.
 
 Exit: 0 when the run's verdict is GREEN and (with --against) BBX-14 is met;
@@ -78,8 +80,22 @@ def header_block(path):
     return header_lines(path)
 
 
-def not_asserted(gate_path):
-    return [m.group(1).strip() for l in header_block(gate_path) for m in [NOT_ASSERTED.match(l)] if m]
+def blind_spots(path):
+    """(text, run_on) per NOT-ASSERTED entry of a gate's or a driver's header: run_on counts the header
+    lines the entry runs past its one line (controls.continued_entries, G53) — 0 for a whole entry."""
+    from .controls import continued_entries
+    run_on = {n: k for n, kind, k in continued_entries(path) if kind == "NOT-ASSERTED"}
+    return [(m.group(1).strip(), run_on.get(i + 2, 0))
+            for i, l in enumerate(header_block(path)) for m in [NOT_ASSERTED.match(l)] if m]
+
+
+def print_blind_spots(label, items):
+    """One screen line per blind spot; one cut by its header is MARKED under it, never printed as a shorter whole (G53)."""
+    for text, run_on in items:
+        print(f"  {label}: {text}")
+        if run_on:
+            print(f"  {label}: ^ TRUNCATED — the blind spot above runs on {run_on} more header line(s) that this screen "
+                  f"does not print (one line per entry: docs/controls.md, G53)")
 
 
 FINDINGS = ("pass", "skip", "pending", "no-expectation", "nondeterministic", "run-fail", "frozen", "authored",
@@ -187,9 +203,8 @@ def suite_screen(run, meta, rows, against):
         # G50: a header this host cannot read is UNKNOWN, never a driver that declares nothing
         print(f"  driver {dname}: header NOT FOUND at {drv} — its blind spots are UNKNOWN, not absent (G50)")
     else:
-        ditems = not_asserted(drv) if drv else []
-        for it in ditems:
-            print(f"  driver {dname}: {it}")
+        ditems = blind_spots(drv) if drv else []
+        print_blind_spots(f"driver {dname}", ditems)
         if not ditems:
             print(f"  driver {dname} declares no blind spot (a driver nobody has asked what its log leaves out)")
     print("  the correctness of any expectation beyond its class: a `self` expectation sees currency, never a regression against a reference (E4)")
@@ -338,12 +353,11 @@ def main(argv=None):
         if not os.path.isfile(gp):
             unreadable.append(r["gate"])      # G50: a header this host cannot read is UNKNOWN, never silence
             continue
-        items = not_asserted(gp)
+        items = blind_spots(gp)
         if not items:
             silent.append(r["gate"])
             continue
-        for it in items:
-            print(f"  {r['gate']}: {it}")
+        print_blind_spots(r["gate"], items)
     print(f"  gates declaring no blind spot: {len(silent)}{' — ' + ', '.join(silent) if silent else ''}"
           f"   (a gate nobody has asked what its green leaves out)")
     if unreadable:

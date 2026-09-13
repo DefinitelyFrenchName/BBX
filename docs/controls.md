@@ -102,7 +102,13 @@ leading comment block.** `# SKIP: <when this gate asserts nothing, and exits
 0>`; `# READ-ONLY (<rulings>): <which tree is never written, and how that is
 proved>`; and, from bbx-2, `# NOT-ASSERTED: <one blind spot of this gate's
 green>`, one line per blind spot, read by `lib/py/bbx/readout.py` for the
-screen's RO2 section (BBX-30). A gate with no `NOT-ASSERTED:` line is not an
+screen's RO2 section (BBX-30). **Every entry — `MUST-FIRE:` and `NOT-ASSERTED:` alike — is ONE
+line:** the header line after it is a bare `#` or another keyed header line (`# UPPER-KEY:` or
+`# UPPER-KEY (`), and anything else runs the entry on into text no reader reads. Two blind spots
+were written that way at bbx-17, and one of them reached seven committed screens cut mid-sentence
+(G53, found bbx-24). `gates/close_sweeps.sh` now fails the tree on such an entry in any `*.sh`
+header, and the readout marks a cut blind spot `^ TRUNCATED` directly under it instead of printing a
+shorter whole. A gate with no `NOT-ASSERTED:` line is not an
 error — it is COUNTED on the screen as "declaring no blind spot", which is the
 number the maintainer asks about. A header the readout cannot READ — the gate file absent at the root the run recorded, as on any host but the one that ran it — is named `NOT FOUND` with its blind spots UNKNOWN, and never counted as a gate declaring none (G50, fixed at bbx-23). `NOTE: <key> <value>` at column 0 of a
 gate's OUTPUT is the NOTE-class number (never fatal); the key `coverage` is

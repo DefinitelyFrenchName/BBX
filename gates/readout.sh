@@ -3,7 +3,8 @@
 # Ground truth for lib/py/bbx/readout.py (abstraction RO1–RO3, BBX-30): a synthetic consumer of
 # stub gates with known verdicts and known header declarations is run through the REAL static
 # runner with --log, and the screen generated from that run is read line by line. The run dir is
-# what `bbx-run-static --log` writes; nothing here re-derives a verdict. Portable, ~6 s measured 2026-09-13.
+# what `bbx-run-static --log` writes; nothing here re-derives a verdict. Portable, ~5 s measured 2026-09-13
+# (bbx-24: 5 s in the opening battery, 4 s alone with the two TRUNCATED controls).
 # Usage: gates/readout.sh
 # MUST-FIRE: perturbed-copy: verdict-follows-run — a kept run with one PASS row rewritten as FAIL must read NOT GREEN with exit 1, or the screen decorates instead of reporting
 # MUST-FIRE: known-bad: bbx-14-unmet — --against a copy of the run with one verdict changed must report BBX-14 UNMET naming that gate, or "met" is silence
@@ -13,6 +14,8 @@
 # MUST-FIRE: perturbed-copy: untracked-visible — a kept run whose untracked count rose during the run must say so on the tree line (G17), or a file written under the tree during a battery is invisible
 # MUST-FIRE: perturbed-copy: note-follows-log — a kept run with g_a's drift NOTE rewritten to ahead=9 must show ahead=9 and no longer ahead=2, or the note line is decoration, not the log
 # MUST-FIRE: perturbed-copy: header-not-found-named — a kept run whose recorded root is rewritten to a directory that does not exist must NAME every gate whose header was not found and count ZERO gates as declaring no blind spot, or a screen read on another host counts an unreadable header as silence (G50)
+# MUST-FIRE: known-bad: truncated-blind-spot-marked — a gate whose NOT-ASSERTED entry runs on to a second header line must print that blind spot with a TRUNCATED mark directly under it and no other mark, or a cut blind spot reads as a whole one (G53)
+# MUST-FIRE: known-bad: truncated-driver-blind-spot-marked — a kept suite run whose driver's NOT-ASSERTED entry runs on must mark it TRUNCATED on the suite screen the same way, or a driver's cut blind spot reads as a whole one (G53)
 # NOT-ASSERTED: that a declared blind spot is true or complete: the screen prints what the header says
 # NOT-ASSERTED: the sweep runner's runs: only bbx-run-static --log and bbx-run-suite --log are read
 # NOT-ASSERTED: that a register row's class is true of its file: the suite screen prints what the register says (gates/provenance.sh keeps it complete and inside the vocabulary)
@@ -88,6 +91,7 @@ grep -q "^  coverage: g_a: drift" "$T/s1" && fail "a drift NOTE was read as cove
 want "one run alone leaves BBX-14 UNMET, and says how to meet it" "^  BBX-14 (more than one run): UNMET in this screen — one run only"
 want "g_a's two blind spots are listed" "^  g_a: the weather tomorrow"
 want "the skipping gate's declared blind spot is listed" "^  g_s: everything, when it skips"
+grep -q 'TRUNCATED' "$T/s1" && fail "a whole blind spot was marked TRUNCATED: $(grep TRUNCATED "$T/s1")" || ok "no blind spot of a well-formed header is marked TRUNCATED"
 want "the SKIP is listed as asserting nothing, with its reason" "^skipped (asserting nothing): g_s — "
 
 echo "== 2. two runs at the same HEAD: BBX-14 met =="
@@ -190,6 +194,22 @@ cp -R "$T/r1" "$T/r1h"; sed -i.bak "s|^root=.*|root=$T/no-such-root|" "$T/r1h/ru
 python3 -m bbx.readout "$T/r1h" > "$T/c5" 2>&1 || true
 if grep -q "^  gates whose header was NOT FOUND: 3 under $T/no-such-root/tests — their blind spots are UNKNOWN, not absent (G50): g_a, g_b, g_s$" "$T/c5" && grep -q "^  gates declaring no blind spot: 0 " "$T/c5"; then echo "CONTROL FIRED: header-not-found-named — three unreadable headers named as UNKNOWN, zero counted as silent"
 else fail "CONTROL DEAD: header-not-found-named — $(grep -E 'NOT FOUND|declaring no blind spot' "$T/c5" | tr '\n' '|')"; fi
+
+# 6. truncated-blind-spot-marked: g_a's first blind spot run on to a second header line, read through a copy of the root (G53)
+TRUNC="^ TRUNCATED — the blind spot above runs on 1 more header line(s) that this screen does not print (one line per entry: docs/controls.md, G53)"
+cp -R "$FR" "$T/frt"; awk '{print} /^# NOT-ASSERTED: anything about the moon$/{print "#   and about the sea"}' "$FR/tests/g_a.sh" > "$T/frt/tests/g_a.sh"
+cp -R "$T/r1" "$T/r1t"; sed -i.bak "s|^root=.*|root=$T/frt|" "$T/r1t/run.txt"
+python3 -m bbx.readout "$T/r1t" > "$T/c6" 2>&1 || true
+if [ "$(grep -A1 '^  g_a: anything about the moon$' "$T/c6" | tail -1)" = "  g_a: $TRUNC" ] && grep -q '^  g_a: the weather tomorrow$' "$T/c6" && [ "$(grep -c 'TRUNCATED' "$T/c6")" = 1 ]; then echo "CONTROL FIRED: truncated-blind-spot-marked — the cut blind spot is marked directly under it, its whole neighbour is not"
+else fail "CONTROL DEAD: truncated-blind-spot-marked — $(grep '^  g_a' "$T/c6" | tr '\n' '|')"; fi
+
+# 7. truncated-driver-blind-spot-marked: a kept suite run whose driver's first blind spot runs on (G53)
+mkdir -p "$SR/drv/drivers" "$SR/run_drv"; cp "$SR/bbh.toml" "$SR/drv/"; cp -R "$SR/expected" "$SR/drv/"
+printf '#!/bin/sh\n# fake.sh — a stub driver whose first blind spot runs on\n# NOT-ASSERTED: the colour of the moon\n#   and of the sea\n# NOT-ASSERTED: the tide\n#\n' > "$SR/drv/drivers/fake.sh"
+mkrun "$SR/run_drv" "$SR/drv"
+python3 -m bbx.readout "$SR/run_drv" > "$T/c7" 2>&1 || true
+if [ "$(grep -A1 '^  driver fake.sh: the colour of the moon$' "$T/c7" | tail -1)" = "  driver fake.sh: $TRUNC" ] && grep -q '^  driver fake.sh: the tide$' "$T/c7" && [ "$(grep -c 'TRUNCATED' "$T/c7")" = 1 ]; then echo "CONTROL FIRED: truncated-driver-blind-spot-marked — the driver's cut blind spot is marked on the suite screen, its whole neighbour is not"
+else fail "CONTROL DEAD: truncated-driver-blind-spot-marked — $(grep '^  driver' "$T/c7" | tr '\n' '|')"; fi
 
 echo "== 5. R48 and G48: a skipped gate's declarations are set aside, named and never counted as proved; a gate with no controls line is named =="
 cat > "$FR/tests/g_k.sh" <<'G'

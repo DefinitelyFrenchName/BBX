@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""close_sweeps.py — the close ritual's sweeps as a check (HANDOFF.md, step 8; BBX-22, BBX-24).
+"""close_sweeps.py — the close ritual's sweeps as a check (HANDOFF.md, step 8; BBX-22, BBX-24; the header sweep G53).
 
     python3 -m bbx.close_sweeps <root> [--retractions docs/retractions.tsv] [--defaults docs/defaults.md]
 
-Three sweeps over the tree under <root> (every *.md *.sh *.py *.toml *.txt
+Four sweeps over the tree under <root> (every *.md *.sh *.py *.toml *.txt
 *.tsv file, skipping .git/, build/ and scratch/):
 
   retraction   every row of the retractions register (a wording BBX once stated
@@ -18,6 +18,12 @@ Three sweeps over the tree under <root> (every *.md *.sh *.py *.toml *.txt
                word defaults, or `(D<n>` in a parenthesis) names a row that
                exists; rows are unique. A default cited but never registered is
                a default nobody can veto (BBX-24, [BBH-84]).
+  header       every entry of a *.sh file's header (`# MUST-FIRE:`,
+               `# NOT-ASSERTED:`) is ONE line: the header line after it is a bare
+               `#` or a keyed header line (controls.continued_entries). Every
+               reader reads an entry as one line, so an entry that runs on is
+               text nobody reads — a blind spot the readout printed cut (G53,
+               added at bbx-24). The sweep's own two files are swept here too.
 
 The retractions register (docs/retractions.tsv): `id <TAB> pattern (Python
 regex) <TAB> retracted on <TAB> allowed in (comma-separated paths or dir/
@@ -25,13 +31,15 @@ prefixes) <TAB> why`. Lines starting with # are comments.
 
 Findings are printed as `ERROR: <sweep> <what> <path>:<line>`; the summary line
 is parsed by field name:
-    close_sweeps=<root> files=<n> retractions=<rows> retraction_hits=<n> deferrals=<n> defaults_rows=<n> citations=<n> unresolved=<n> errors=<n>
+    close_sweeps=<root> files=<n> retractions=<rows> retraction_hits=<n> deferrals=<n> defaults_rows=<n> citations=<n> unresolved=<n> header_entries=<n> continued=<n> errors=<n>
 Exit 0 when errors=0, 1 otherwise, 2 when the register or the root is unreadable.
 First written at bbx-2 (2026-09-10); until then the sweeps were hand-run at every close.
 """
 import os
 import re
 import sys
+
+from .controls import ENTRY, continued_entries, header_lines
 
 EXTS = (".md", ".sh", ".py", ".toml", ".txt", ".tsv")
 SKIP_DIRS = {".git", "build", "scratch", "__pycache__"}
@@ -91,7 +99,7 @@ def main(argv=None):
         print(f"close_sweeps={root} error=unreadable detail={e}")
         return 2
     errors = []
-    retraction_hits = deferrals = citations = unresolved = 0
+    retraction_hits = deferrals = citations = unresolved = header_entries = continued = 0
     # defaults rows
     d_rows = {}
     for n, line in enumerate(defaults_text, 1):
@@ -106,6 +114,14 @@ def main(argv=None):
             text = open(os.path.join(root, rel), encoding="utf-8", errors="replace").read()
         except OSError:
             continue
+        if rel.endswith(".sh"):
+            # the header sweep reads SELF too: nothing about it plants a pattern in a header
+            path = os.path.join(root, rel)
+            header_entries += sum(1 for line in header_lines(path) if ENTRY.match(line))
+            for n, kind, run_on in continued_entries(path):
+                continued += 1
+                errors.append(f"ERROR: header continued-entry {kind} in {rel}:{n} runs on {run_on} line(s) no reader reads "
+                              f"(one line per entry: docs/controls.md, G53)")
         if rel in SELF:
             continue
         for n, line in enumerate(text.split("\n"), 1):
@@ -126,7 +142,8 @@ def main(argv=None):
     for e in errors:
         print(e)
     print(f"close_sweeps={root} files={len(files)} retractions={len(rows)} retraction_hits={retraction_hits} "
-          f"deferrals={deferrals} defaults_rows={len(d_rows)} citations={citations} unresolved={unresolved} errors={len(errors)}")
+          f"deferrals={deferrals} defaults_rows={len(d_rows)} citations={citations} unresolved={unresolved} "
+          f"header_entries={header_entries} continued={continued} errors={len(errors)}")
     return 1 if errors else 0
 
 

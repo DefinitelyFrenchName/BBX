@@ -11,7 +11,10 @@ A gate DECLARES each of its must-fire controls as one header line:
 with <shape> one of perturbed-copy | shadow-tool | known-bad, or the
 explicit `# MUST-FIRE: none — <why this gate asserts no property>`. The
 header is the LEADING COMMENT BLOCK — every `#` line after the shebang up to
-the first non-comment line (R30; a bare `#` does not end it). When a control
+the first non-comment line (R30; a bare `#` does not end it). An entry is ONE
+line: the header line after it is a bare `#` or a keyed header line, and
+`continued_entries` names an entry that runs on, which no reader reads (G53,
+bbx-24; `gates/close_sweeps.sh` fails the tree on it). When a control
 fails for its stated reason the gate prints `CONTROL FIRED: <name> — …`;
 when it does not, `CONTROL DEAD: <name> — …`.
 
@@ -44,6 +47,10 @@ DECL = re.compile(r"^# MUST-FIRE: (perturbed-copy|shadow-tool|known-bad): ([a-z0
 NONE = re.compile(r"^# MUST-FIRE: none — (.+)$")
 FIRED = re.compile(r"^CONTROL FIRED: ([a-z0-9-]+)")
 DEAD = re.compile(r"^CONTROL DEAD: ([a-z0-9-]+)")
+ENTRY = re.compile(r"^# (MUST-FIRE|NOT-ASSERTED): ")
+# what may follow an entry inside the header (G53): a bare `#`, or a keyed header line — measured at bbx-24 as
+# `MUST-FIRE:` `NOT-ASSERTED:` `SKIP:` `READ-ONLY (` `PORTABILITY:`, read here by shape, never as a list to forget
+FOLLOWER = re.compile(r"^#\s*$|^# [A-Z][A-Z-]+(:| \()")
 
 
 def header_lines(path):
@@ -61,6 +68,26 @@ def header_lines(path):
         if not line.startswith("#"):
             break
         out.append(line)
+    return out
+
+
+def continued_entries(path):
+    """The entries that run past their one line (G53, bbx-24): a `# MUST-FIRE:` or `# NOT-ASSERTED:`
+    line followed, inside the header, by a line that is neither a bare `#` nor a keyed header line.
+    Every reader reads an entry as ONE line, so what runs on is text nobody reads — a blind spot or a
+    control's reason read as a shorter one ([BBH-73]). Returns (line, kind, run_on) per such entry:
+    its line in the file (the shebang is line 1) and how many lines run on before a legitimate one."""
+    block = header_lines(path)
+    out = []
+    for i, line in enumerate(block):
+        m = ENTRY.match(line)
+        if not m:
+            continue
+        run_on = 0
+        while i + 1 + run_on < len(block) and not FOLLOWER.match(block[i + 1 + run_on]):
+            run_on += 1
+        if run_on:
+            out.append((i + 2, m.group(1), run_on))
     return out
 
 
