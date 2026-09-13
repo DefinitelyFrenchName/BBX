@@ -32,7 +32,8 @@ control refuses a verdict; the fix is never to relax the control).
 **The registry.** The controls registry is derived every run from the
 headers, never hand-maintained: every gate in a gate registry contributes its
 declarations; the runner compares declared against `CONTROL FIRED:` lines in
-the gate's output. Declared and not fired is red. Fired and not declared is
+the gate's output. Declared and not fired is red — unless the gate SKIPPED
+(below). Fired and not declared is
 red (a control nobody can find in the header is a control nobody can review).
 The readout counts *fired / declared* for the run (RO1).
 
@@ -41,6 +42,29 @@ generator, a registry lister) may carry no `MUST-FIRE:` line; the header then
 says `# MUST-FIRE: none — <why this gate asserts no property>` so silence is
 distinguishable from omission. bbh's own selftests, read under fidelity, carry
 no declaration and are reported as *undeclared*, never as asserting.
+
+**A gate that SKIPS (ruled R48, 2026-09-13).** A gate the runner's classifier
+calls SKIP — exit 0 plus the marker, never the marker alone (BBX-1) — ran none
+of its checks, so a declared control that did not fire is *not asserting*,
+never dead. The reader prints `verdict=SKIPPED`; the runner leaves that gate's
+declarations out of *fired / declared* and prints how many it left out
+(`skipped: <n>, whose <m> declared control(s) assert nothing`); the readout
+names the gate and never counts it as having proved a control. **Nothing else
+is set aside:** a `CONTROL DEAD:` line, a firing no header declares, and a
+header with no `MUST-FIRE:` line are RED or UNDECLARED exactly as for a gate
+that ran. The reader never classifies; the runner hands it the classifier's
+list (`bbx controls report --skipped`). Why: [BBH-6] and this page already say
+a skipped gate asserts nothing, and demanding that it prove its controls fired
+asks for evidence from a measurement that did not happen — the first platform
+run went NOT GREEN on a skip that was correct (G47). **`--strict` admits no
+exception.** Under it every SKIP is fatal, whatever the gate declares and
+whatever the controls block set aside. An exemption of any shape — a list, a
+flag, a header line, a variable — is a ruling, never a change (the
+maintainer's addition to R48). Ground truth: `gates/controls.sh`, controls
+`skip-cannot-hide-dead`, `failed-skip-not-exempt`, `strict-admits-no-exemption`.
+What this does not judge: whether a skip is *justified* — a skip for a bad
+reason sets its controls aside exactly like a good one, which is why the
+screen names every one and `--strict` refuses them all.
 
 **What this contract does not do.** It does not prove a control is *right* —
 a control that fires on a perturbation unrelated to the property is a

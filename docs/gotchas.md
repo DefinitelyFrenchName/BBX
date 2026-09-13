@@ -1081,3 +1081,33 @@ nothing — the reader honours the first half and not the second), BBX-6 (a dead
 control refuses a verdict, which is right, and a control that never ran is not
 dead), BBX-25 (the second instance is the detector; here a second HOST), §1 (the
 green on this host was a measurement of a host where nothing skips).
+
+## G48 — A controls reader that CRASHED was read as "red: 0" and the battery GREEN: the verdict rested on counting RED lines in a report that was never written (paid: 0 sittings — found while building R48's fix, by a crash planted in a scratch clone before the claim was written; 2026-09-13)
+While changing the controls block for R48, one line of `bin/bbx-run-static` read
+wrong: `python3 -m bbx.controls report … > controls.txt && _cst=0 || _cst=$?`
+captured the reader's exit and never used it, and every count after it was a
+`grep -c` over the file. Measured before it was said (§1), in a clone of `fd63797`
+with one `raise` planted at the top of `report_one`, over a synthetic consumer whose
+one gate declares a control and never fires it: the tree's reader printed
+`verdict=RED`, NOT GREEN, exit 1; the planted reader printed a Traceback,
+`controls fired 0 / declared 0; gates with no declaration: 0; red: 0` and **GREEN,
+exit 0**. A broken reader silenced every dead control in the battery. The readout
+lied about it too, measured on a copy of the bbx-22 opening run with `controls.txt`
+emptied as a crashed reader leaves it: `each can fail: 31 of 31 gates proved a control
+fires on purpose`, because it counted every gate without a `declared=0` line as proved.
+The exit could not be the fix: the reader exits 1 for RED and 1 for an uncaught
+exception — the two-causes shape named at bbx-20. The fix reads the OUTPUT: one
+`controls=` line per gate that ran, or the run is NOT GREEN with `controls: the reader
+reported <n> of <m> gate(s) that ran`; the readout names a gate that ran with no
+controls line (`NOT REPORTED`) and counts proved gates from the lines it has (the same
+emptied copy now reads `NOT REPORTED for 31 gate(s)` and `0 of 31`). Ground truth:
+`gates/controls.sh` control `reader-crash-is-red`, a shadow harness whose reader is a
+copy with one line stripped — measured DEAD on the unfixed runner (NameError, GREEN,
+exit 0) and FIRED on the fixed one — and `gates/readout.sh`'s unreported-gate check.
+Learning (R27): the instrument that watches the controls had no control of its own —
+BBX-6's only silent failure mode, one level up. Any tool whose output is COUNTED
+rather than required to be present has this shape: the absence of a line is not a
+zero. Worth a sweep of the other `grep -c` counts over a tool's output in `bin/`,
+measured before anything is claimed about them. Rules re-anchored in fact: BBX-6,
+BBX-7 (a claim measured by absence needs a positive control), BBX-12 (the sums now
+read each line's first field of a name, never every field that starts with it), §1.
