@@ -1253,3 +1253,51 @@ distinguish "what I watch is broken" from "what I watch did not run". That is no
 strongest argument in the tree for R29's executable controls, and it is what S6
 should be aimed at.
 
+## bbx-22 (2026-09-13) — R48 answered and built; G48 found while building it
+
+**R48 answered — maintainer, 2026-09-13.** Agreed with the recommendation, with an
+addition in the maintainer's own words: "--strict flag must not accept exceptions
+(attempting to do so MUST be a ruling and I honestly doubt I'd ever rule in favor of
+it)". The recommendation itself was taken, not the narrower fallback of exempting only
+a gate whose header declares its skip. In force: a gate the runner's classifier calls
+SKIP gets `verdict=SKIPPED`; its declarations leave *fired / declared* and are counted
+and named; only declared-and-not-fired is set aside, so a `CONTROL DEAD:` line, a firing
+no header declares and a header declaring nothing stay red; and `--strict` admits no
+exception of any shape.
+
+**The order was the maintainer's too.** "I think S4 step 7 is indeed independent from
+R48 but I'd rather we do R48 and close the R21 question first, it's been a long time
+coming." So S4 step 7 waited, and R21 stays open for one reason only: the run that
+closes it needs the WSL host. This host has no container runtime (re-measured this
+sitting, eleven candidates, all absent).
+
+**Built in the order BBX-19 asks, one commit each:** two prose seams in the ledgers
+first (`a00a7e5`); the ruling and the contract (`23c86bc`); the code (`8d5f97d`); the
+reviewed refreeze of the self subject's row (`a614699`). The new checks were written
+before the code and measured red on it — the correct skip read `verdict=RED`, runner
+exit 1 — then green on the fix. Each of the three new R48 controls was then shown
+DEAD on a regression planted in a scratch clone of the fix: a `--strict` exception, an
+exemption keyed off the SKIP marker instead of the verdict, a skip forgiving a DEAD
+line. On the real gate that reddened WSL, `census_recount` alone with its census
+pointed at an absent tree: before the fix `dead=4 verdict=RED` and NOT GREEN; after it
+`verdict=SKIPPED` and GREEN; after it under `--strict`, NOT GREEN for `--strict` alone.
+
+**G48, found while building it — no ruling needed.** The contract already said a dead
+control refuses a verdict; the runner failed to enforce it when the READER itself
+crashed, because it counted RED lines in a report that was never written. Measured
+before it was said: a planted crash read `red: 0` and GREEN, exit 0, and the readout
+of such a run said `each can fail: 31 of 31`. Fixed in the same block — the verdict
+rests on the reader's output, one line per gate that ran, never on its exit, which is
+1 for RED and 1 for a crash — with its own control, measured DEAD before the fix and
+FIRED after.
+
+**Anti-hyperfocus (BBX-27).** The sitting stayed on the one thread the maintainer ruled
+first, and stopped short of S4 step 7 on purpose. Whether the last green means what it
+is taken to mean: on this host the REAL battery still cannot walk the R48 path, because
+nothing skips here — the stubs in `gates/controls.sh` and `gates/readout.sh` walk it
+every battery, and the real gate walked it once by hand. The WSL re-run is the only
+instrument for the real thing. The shape to keep watching is G48's: a tool's output
+COUNTED rather than required to be present, where a missing line reads as zero. It is
+the same two-causes-behind-one-exit shape bbx-20's three defects had, and this time
+the instrument that watches the controls had no control of its own. A sweep of the
+other `grep -c` counts over tool output in `bin/` is the cheap next measurement.

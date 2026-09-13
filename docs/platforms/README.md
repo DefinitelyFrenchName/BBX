@@ -58,7 +58,8 @@ Three things to hold to, each paid for here:
 * **Run it alone.** Nothing else of BBX's, and no editing of the tree while it
   runs — the runner reports a tracked file that changed mid-run as `dirtied`, and
   such a run is not a clean measurement (G44).
-* **It takes about eleven minutes** on the macOS host with 31 registered gates, so
+* **It takes about fourteen minutes** on the macOS host with 31 registered gates
+  (its gate runtimes summed 820, 820 and 827 s over three kept runs on 2026-09-13), so
   it is past a ten-minute foreground cap if you have one. Read the verdict off the
   **kept run**, never off a pipe: `| tail` keeps only the tail and hands you the
   pipe's exit instead of the command's (G16).
@@ -99,18 +100,26 @@ The gate total is worth re-deriving rather than trusting this page:
 `grep -hv '^#' gates/portable.txt gates/static.txt | wc -l`.
 
 A Linux screen showing `PASS 30  SKIP 1` with `census_recount` skipped is the
-expected shape, not a problem.
+expected shape, not a problem. **Since R48 (bbx-22, `8d5f97d`) that screen reads
+GREEN.** Measured on the macOS host with `census_recount` alone and its census
+pointed at an absent tree: the runner ends its controls block with
+`skipped: 1, whose 4 declared control(s) assert nothing`, and the readout's controls
+line ends `skipped 1, whose 4 declared control(s) assert nothing: census_recount`.
+On a commit before `8d5f97d` the same skip makes the battery NOT GREEN (G47), so run
+at bbx-22's close commit or later. `--strict` still makes the skip fatal, by design
+and with no exception.
 
 **One NOTE is expected on every screen right now**, on macOS and Linux alike:
 
 ```
-census_register   census-drift register=af2b1f085070 tree=1e40798f4530
+census_register   census-drift register=af2b1f085070 tree=bc18c672fdb9
                   (the harness moved past the census; the release gate re-measures it)
 ```
 
-The portability fix in §0 moved the harness identity, so the census artifacts
-record the previous one. That note is R47's ruling working as designed — loud and
-never fatal — and the regeneration belongs to the next sitting here. It is not
+The harness identity has moved since the census was regenerated — bbx-20's
+portability fix, then R48's build at bbx-22 — so the census artifacts record an
+earlier one. That note is R47's ruling working as designed — loud and
+never fatal — and the regeneration is planned after the next kernel build here. It is not
 something the Linux run should act on.
 
 ## 5. Bring the run back
@@ -154,3 +163,6 @@ reads it, not to the one that produced it). Send the archive and the screen.
   would have CRASHED rather than skipped. Fixed before the run, to `python3 -m
   bbx.sha1` — the point of a platform run is to find the differences nobody
   predicted, not the one that was sitting in the diff.
+- 2026-09-13 (bbx-22): R48 built. The expected Linux screen is GREEN with one skip, and
+  the lines it prints for that skip were measured on this host; the drift NOTE's tree
+  value moved with R48's build (`bc18c672fdb9`). Run at bbx-22's close commit or later.

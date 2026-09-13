@@ -32,18 +32,18 @@ Shape: operational map. Read this first, then `STATE.md`, then
 | **the two ADAPTERS (S4 step 5)** — an external framework and BBX ITSELF as subjects | `lib/py/bbx/adapters.py` (the two mappers over `bbx.cli`'s core: `resolve_set` — the set is a DIRECTORY on `CLI_PATH`, D58; `parse_cases` and `ran_count` reading the framework's STDERR by field, never the clock line; `read_results` reading a kept `results.tsv` BY COLUMN NAME; `fill` and `resolve_program` — the placeholders `{config}`/`{log}`/`{set}` and `$BBX_HOME/bin`, anything else REFUSED, D60; its own self-test, both directions on every check); `lib/py/bbx/cli.py`'s additions (`case`/`gate` in KINDS with two CLOSED verdict vocabularies D59, `token_case`/`token_gate`, `observation_tokens`/`crash_tokens`, `prepare_sandbox`/`exec_in_sandbox` as THE ONE place a subject process is started — three drivers share it — the `DRIVER` face so each refusal names its own driver, and `summary`'s two CONDITIONAL notes `cases <n>`/`gates <n>`, D43 amended); `drivers/unittest.sh` (`python3 -m unittest -v <modules>`, `PYTHONPATH` the set dir and nothing else, D61) and `drivers/gates.sh` (a harness program under `$BBX_HOME/bin` over a consumer directory); `fixture/unittest/` (BBX's FOURTH consumer: `mkunittest.py --check` runs the FRAMEWORK per scenario against the design; 8 cases in 2 modules covering all six verdict words, 4 scenarios, expectations class `derived`) and `fixture/selfgates/` (the FIFTH, whose subject is BBX: `mkselfgates.py --check` runs BBX's OWN runner per scenario and REPORTS A MOVED IDENTITY; 7 stub files, 6 registered portable in a deliberately unsorted order reading PASS SKIP PASS MISSING FAIL PASS, 1 static SKIP-or-PASS by its needs-env, 1 unregistered; `idkey.sh` is R38's identity, read through `$BBX_HOME`); `gates/adapters.sh` (6 controls, 9 firings, 42 ok lines, 14 suite runs, ~97 s) |
 | **the command-line driver (S4 step 2)** | `lib/py/bbx/cli.py` — the driver's core beside the vocabulary: `selftest` (FIPS 180-1's vectors as the reference anchor, the layout, the splitter, the scenario reader's refusals), `resolve` (the ONE resolver over `CLI_PATH`: per directory an executable `<set>` over `<set>.py`), `run` (the sandbox as cwd, HOME and TMPDIR — D52; D6's set plus the scenario's `[env]` and nothing from the caller; `argv.txt` / `stdin.bin` / `env.txt` recorded, O5; the crash log `CRASH signal:<n>:<NAME>` / `END-CRASH <n>` and the band view `<out>.bands` — D53; the fixture's own control dies by SIGKILL since R42, which the host does not report, while a REAL subject that dies by a FAULT signal still leaves a host crash report the driver never removes — declared in its header, G30; the JSON view `<out>.json` — D54, step 3; `--nondet`, `--timeout`), `summary` (`NOTE: exit / band-fields / emitted-files`); `drivers/cli.sh` (D4's four exits: a tool's non-zero exit is an OBSERVATION, a signal death exit 2, REFUSED exit 3 for the three families, `CLI_KEEP_ENV`, a scenario key the grammar lacks, a bad `CLI_TIMEOUT`; `CLI_TIMEOUT` default 60 s, D51, exit 1 DISCARDED); `drivers/README.md`; `gates/cli_driver.sh` (7 controls; two points re-hashed by `shasum`; ~10 s) |
 | **R21's step-by-step: running the battery on Linux or WSL** | `docs/platforms/README.md` (bbx-20; needs ONE bbh commit since R43, expects `census_recount` to SKIP, never `--strict`) |
-| **R21's FIRST RUN, and its finding** | `docs/platforms/wsl/` — WSL 2026-09-13: NOT GREEN on a CORRECT skip, because a skipped gate cannot fire its declared controls and the reader counts that as dead (G47, R48). Everything else identical to macOS. The run file is a WITNESS (the kept directory is not in the tree); the finding was reproduced here and is instrument-grade |
+| **R21's FIRST RUN, and what it led to** | `docs/platforms/wsl/` — WSL 2026-09-13: the battery went NOT GREEN because a skipped gate could not fire its declared controls and the reader counted them dead (G47). Fixed at bbx-22 by R48 (`8d5f97d`): a gate the classifier calls SKIP reads `verdict=SKIPPED`, its declarations set aside and named, and `--strict` refuses every skip. Everything else was identical to macOS. The run file is a WITNESS (the kept directory is not in the tree); **the WSL re-run at bbx-22's close commit or later is R21's next step** |
 | the maintainer readouts, one section per step, the CLOSE section last | `docs/readout.md` |
 | **the document-set kind (S3)** | the profile `lib/py/bbx/config.py` KINDS `document-set` (D33); `[suite].scenario_ext` (D34) via `bbx.expectations scenario-ext`; the fixture `fixture/docset/` (BBX's second consumer: `bbx.toml`, `mkdocset.py --check` — writes the `truth` kind from the design, `subject/`, `claims/`, `expected/` with `logs/<s>.log` the truth logs); `gates/docset_fixture.sh` |
 | **the document-set extractor and driver (S3 step 2)** | `lib/py/bbx/docset.py` (`selftest`, `run`, `map`, `summary`, and since step 3 `rows` — the run's rows joined by index with the map, proven the log's — and `resolve`, the ONE artifact resolver over `DOCSET_PATH`; the two strings and the token, D38; the forms' lexical classes and the record key, D39; the unlisted-claim guards, D40); `drivers/docset.sh` (`DOCSET_PATH` through `bbx.docset resolve`; REFUSED exit 3, DISCARDED exit 1); `drivers/README.md`; `gates/docset_driver.sh` (7 controls) |
 | **the document-set comparators (S3 step 3)** | `lib/py/bbx/compare_exact.py` (the truth log against the run log BY INDEX; `FAIL-SHORT` apart from `FAIL exact: index <i> differs`, BBX-4), `compare_set.py` (a frozen multiset of `(document, line, form, status)` rows both ways — `claims` inventory, `covered` shrink-only with `NOTE: covered-grew`, R33; a duplicate named as hand-editing), `compare_schema.py` (the artifact's shape before any value: header names in order, one type per column from D41's vocabulary, the rows line; the FIRST violation named; a wrong column count a schema FAIL); the `exact) set) schema)` branches of `lib/sh/compare.sh` (`compare_check` takes two trailing arguments, the scenario file and the artifact); `bin/bbx compare exact|set|schema`; `gates/set_schema.sh` (5 controls; every verdict line frozen there and classified by `finding.py`, 38 lines) |
 | **the suite's kinds loop and the kept run's notes (S3 step 4)** | `bin/bbx-run-suite` (the loop read off the kinds table: the temporal family means bbh's precedence loop verbatim, anything else the kinds loop — `schema` first, the table's order, `.sha1` last; `NOT-EVALUATED (schema failed)`; `--freeze` for the shrink-only kind through `bbx.compare_set --freeze`, never a self-freeze beside an authored kind); `notes.tsv` in the kept run (D44); `[suite].log_summary` (D43); `bbx.fingerprint --path` (the subject file, handed to the comparators); `finding.py`'s `NOT-EVALUATED` and `authored ` rules; the readout's suite screen (scenarios and pairings apart, `coverage:` per scenario, BBX-14 over pairings, the driver's blind spots); `gates/docset_suite.sh` (6 controls, 17 suite runs, ~55 s) |
-| the controls contract (must-fire grammar, R10) | `docs/controls.md` |
+| the controls contract (must-fire grammar R10; a skipped gate R48; the reader's OUTPUT, never its exit, G48) | `docs/controls.md`; ground truth `gates/controls.sh` (6 controls: the dead control, the header extent, and since bbx-22 `skip-cannot-hide-dead`, `failed-skip-not-exempt`, `strict-admits-no-exemption`, `reader-crash-is-red`) |
 | the defaults register (BBX-24) | `docs/defaults.md` |
 | the kernel | `bin/bbx` (dispatcher, MEASURED at bbx-18 from `bbx help` and from what it refuses: `run-static run-suite classify tier config controls recount readout compare selftest file-census` — there is no `run-sweep` and no `fingerprint` subcommand; the sweep runner is `bin/bbx-run-sweep` and the fingerprint is `python3 -m bbx.fingerprint`), `lib/sh/`, `lib/py/bbx/`, `bbx.toml` (BBX as its own consumer, kind `self`) |
 | the expectation register (S2 step 4, R24) | `lib/py/bbx/provenance.py` over `<expected_dir>/PROVENANCE.toml` (D31); `gates/provenance.sh`; the readout's suite screen for a kept `bbx-run-suite --log` run (D32) |
 | the comparison (S2 steps 1–3) | the temporal family `lib/py/bbx/compare_{flicker,window,composite}.py`, `check_diverge.py`, `propose_temporal.py`, `thresholds.py` (R25), `logfmt.py`; the one dispatcher `lib/sh/compare.sh` (R23: family by kind); the kinds table `lib/py/bbx/config.py` `[expectations].kinds` read by `lib/py/bbx/expectations.py` and `lib/sh/expectation_kinds.sh`; the suite `bin/bbx-run-suite` (`--log DIR`: results.tsv with a FINDING column, `lib/py/bbx/finding.py`; R26 driver home) |
-| BBX's gates and registries | `gates/*.sh` (32 on disk, 31 REGISTERED in a tier the battery runs: 27 portable incl. `census_register` (R47), `file_census_tool`, `adapters`, `temporal`, `thresholds`, `compare_dispatch`, `expectation_kinds`, `provenance`, `docset_fixture`, `docset_driver`, `set_schema`, `docset_suite`, `cli_fixture`, `cli_driver`, `band`, `json_schema`, `cli_suite`; 4 static incl. `fidelity_bbh_s2` (F12, F16, F17) and `suite`; plus `file_census` in `gates/sweep.tsv` at the release scope, INSTRUMENT by `[tier].patterns` and so not an orphan) — the old row follows for its runtimes: (25 portable incl. `adapters`, `temporal`, `thresholds`, `compare_dispatch`, `expectation_kinds`, `provenance`, `docset_fixture`, `docset_driver`, `set_schema`, `docset_suite`, `cli_fixture`, `cli_driver`, `band`, `json_schema`, `cli_suite`; 4 static incl. `fidelity_bbh_s2` (F12, F16, F17) and `suite`), `gates/portable.txt`, `gates/static.txt`, `gates/sweep.tsv` (empty) — run with `BBX_BBH_HOME=~/Developer/blackbox-harness bin/bbx selftest` (**~10.5 min on this host since `adapters` joined at ~100 s: it no longer fits a ten-minute foreground command, so run it in the BACKGROUND and wait on its tally**; the two S2 static gates are ~100 s and ~60 s, `docset_suite` ~55 s, `cli_suite` ~95 s, `adapters` ~97 s) |
+| BBX's gates and registries | `gates/*.sh` (32 on disk, 31 REGISTERED in a tier the battery runs: 27 portable incl. `census_register` (R47), `file_census_tool`, `adapters`, `temporal`, `thresholds`, `compare_dispatch`, `expectation_kinds`, `provenance`, `docset_fixture`, `docset_driver`, `set_schema`, `docset_suite`, `cli_fixture`, `cli_driver`, `band`, `json_schema`, `cli_suite`; 4 static incl. `fidelity_bbh_s2` (F12, F16, F17) and `suite`; plus `file_census` in `gates/sweep.tsv` at the release scope, INSTRUMENT by `[tier].patterns` and so not an orphan) — the old row follows for its runtimes: (25 portable incl. `adapters`, `temporal`, `thresholds`, `compare_dispatch`, `expectation_kinds`, `provenance`, `docset_fixture`, `docset_driver`, `set_schema`, `docset_suite`, `cli_fixture`, `cli_driver`, `band`, `json_schema`, `cli_suite`; 4 static incl. `fidelity_bbh_s2` (F12, F16, F17) and `suite`), `gates/portable.txt`, `gates/static.txt`, `gates/sweep.tsv` (empty) — run with `BBX_BBH_HOME=~/Developer/blackbox-harness bin/bbx selftest` (**~14 min on this host (the bbx-22 opening run's gate runtimes sum to 827 s): it no longer fits a ten-minute foreground command, so run it in the BACKGROUND and wait on its tally**; the two S2 static gates are ~100 s and ~60 s, `docset_suite` ~55 s, `cli_suite` ~95 s, `adapters` ~97 s) |
 | the readout, generated | `bin/bbx selftest --log build/selftest_<stamp>` keeps the run; `bin/bbx readout <dir> [--against <dir>]` prints the one screen (RO1–RO3; BBX-14 met only with `--against` a second kept run at the same HEAD) |
 | the retractions register (BBX-22) | `docs/retractions.tsv`, read by `gates/close_sweeps.sh` |
 | the recount tool | `bin/bbx recount <census.md> [--only A1,A2] [--root DIR] [--in-place]` — runs on a plain local clone of the recorded commit (R18, R20); `--in-place` is the unproved escape hatch |
@@ -63,7 +63,7 @@ bbh is **never modified** from here. VampireSaved and SMS are read only.
 ## What is running
 
 Nothing in the background. `BBX_BBH_HOME=~/Developer/blackbox-harness bin/bbx selftest`
-takes **~11 min on this host** (31 registered gates) (30 registered gates since `file_census_tool` joined at ~13 s),
+takes **~14 min on this host** (31 registered gates; the bbx-22 opening run's gate runtimes sum to 827 s),
 which is past the ten-minute cap on a foreground command: run it in the BACKGROUND and wait on
 its tally. Read the tally off the KEPT RUN, not off a backgrounded pipe — a `| tail` keeps only
 the tail AND hands you the pipe's exit instead of the tool's (G16, which bit again at bbx-19 and
@@ -76,7 +76,7 @@ set, at a release or after a kernel change.
 ## The ritual (ruled R17 at the bbx-1 close, 2026-09-09; adapted from VampireSaved VSP-17/VSP-18/VSP-162)
 
 Sessions are keyed `bbx-N`, one key per sitting, never renamed (pointers in
-readouts, gotchas and history resolve through it). The last closed sitting is **bbx-21** (2026-09-13); the next is **bbx-22**.
+readouts, gotchas and history resolve through it). The last closed sitting is **bbx-22** (2026-09-13); the next is **bbx-23**.
 
 **Open**
 1. Read this file, `STATE.md`, `docs/rulings.md`. (`CLAUDE.md` is the
@@ -93,8 +93,8 @@ readouts, gotchas and history resolve through it). The last closed sitting is **
 
 **Close, in this order**
 1. **Green first, twice, kept.** Run the battery alone, twice, each with
-   `--log build/selftest_<stamp>` and each IN THE BACKGROUND (it is ~11 min
-   with 30 registered gates, past the foreground cap); BBX-14 needs two runs at one HEAD;
+   `--log build/selftest_<stamp>` and each IN THE BACKGROUND (it is ~14 min
+   with 31 registered gates, past the foreground cap); BBX-14 needs two runs at one HEAD;
    the close quotes the tally line and the controls line verbatim, read off the
    kept run rather than off a screen that may have been truncated. Not green:
    the close says NOT GREEN and why; the next session's first task is ruled
@@ -146,58 +146,44 @@ readouts, gotchas and history resolve through it). The last closed sitting is **
 Steps 8 and 9 are checked, not remembered: step 8 by `close_sweeps`, step 9
 by construction (the recount's clone) and by `fidelity_bbh`'s proof.
 
-**FIRST TASK, ruled by BBX-26 (written 2026-09-13):** R21's first platform run (WSL)
-is **NOT GREEN**, and the cause is a defect in BBX's own controls contract, not in
-WSL: a gate that SKIPS runs none of its checks, so its declared must-fire controls
-cannot fire, and `docs/controls.md`'s "declared and not fired is red" turns a
-CORRECT skip into a red battery. `gates/census_recount.sh` skips off macOS because
-the three lineage censuses record absolute paths from this host. Reproduced here the
-same day with `BBX_CENSUS_DIR` pointed at a census naming an absent tree, so the
-finding is instrument-grade (G47). **R48 is raised and must be ruled before the fix**,
-because it amends a contract R10 ruled; the recommendation, its four declined
-alternatives and a narrower fallback are in the queue. Nothing else about the two
-hosts differs: 31 gates, 119 declared controls, every NOTE-class value equal, which
-is the strong half of the result.
-
-**Next-session orientation (written at the bbx-21 close, 2026-09-13)**
-- **The FIRST TASK is above and is ruled by BBX-26**: R48, then the fix it licenses.
-  Do not start S4 step 7 before it.
-- Open with the battery **in the background** (~11 min, 31 registered gates), with
-  `--log build/selftest_<stamp>`, alone, nothing edited while it runs. On THIS host
-  it is green; the divergence is off-host.
-- **Expect `NOTE: census-drift register=af2b1f085070 tree=1e40798f4530` on every
-  screen.** The bbx-20 portability fix moved the harness identity after the census
-  was regenerated, so the artifacts record the previous one. It is R47's ruling
-  working as designed — loud, never fatal. It clears when a release-scoped census run
-  regenerates them, and the next sitting will move the identity again anyway for
-  R44's and R46's build, so regenerate ONCE after that build rather than twice.
-- **After R48: S4 step 7, the slice readout** (`docs/plans/S4.md` §8.7), the last
-  thing the slice asks for, then S4 goes to the maintainer for a DONE ruling as S3
-  did.
-- **R44's and R46's builds are ONE step, not two.** Both touch the single identity
-  key that `fixture/selfgates/idkey.sh`, `lib/py/bbx/file_census.py` and the census
-  document all read. R44's mismatch half is already RED with both keys on the screen
-  (measured twice at bbx-19), so only the PASSING half may be missing — measure before
-  writing.
-- **THREE THINGS move on a commit touching `bin`, `lib`, `drivers` or `gates`**: the
-  self subject's registry row (reviewed refreeze, R38/R44), the census's key (D62),
-  and — if the commit adds a harness FILE — the BATTERY itself, because
-  `gates/census_register.sh` fails on a file with no frozen row (R47). A commit
-  touching only `docs/`, `expected/` or `fixture/` moves none of them.
-- **The order that avoids paying twice**, learned three times at bbx-20 at twenty
-  minutes each: land every code change FIRST, then the census regeneration, then
-  commit the document and register (docs-only, the key holds), then the fixture
-  refreeze (fixture-only, the key still holds), then the battery twice. Prove any
-  instrument change on a two-gate `--only` probe (seconds) before paying for a run.
-- **R45 is rescoped and waiting** (three directions over three registries; the
-  tier-listing fix measured and RULED OUT because F13e diffs that listing).
-- **Still wanted for R21, if it exists:** the WSL run's kept directory
-  (`build/selftest_linux_*`, tarred). `docs/platforms/wsl/run_2026-09-13.txt` is the
-  printed output only, so it is a WITNESS; the archive would make it a kept result
-  keyed by version (BBX-29).
-- If the census cadence starts to bite, the lever is its RUNTIME, not the gates: most
-  of the twenty minutes is five heavy gates in the shadow, and nothing the register
-  check does depends on them. Worth measuring before it becomes a complaint.
+**Next-session orientation (written at the bbx-22 close, 2026-09-13)**
+- **No BBX-26 halt is in force.** R48 is answered and built (`8d5f97d`); on this host the
+  battery is green — the close's pair is quoted in `docs/readout.md`, CLOSE — bbx-22.
+- **R21's next step is the maintainer's WSL re-run** of `docs/platforms/README.md` at bbx-22's
+  close commit or later: twice, kept, tarred. Expected: GREEN, `PASS 30  SKIP 1`, the one skip
+  `census_recount`, and on the runner's screen `skipped: 1, whose 4 declared control(s) assert
+  nothing`. When the archive arrives: commit the kept pair under `docs/platforms/wsl/`, run
+  `bin/bbx readout <second> --against <first>` on it, and put R21's answer to the maintainer.
+  Anything red in it is the finding, and BBX-26 applies to it.
+- **Then S4 step 7, the slice readout** (`docs/plans/S4.md` §8.7), the last thing the slice asks
+  for; then S4 goes to the maintainer for a DONE ruling as S3 did. The maintainer judged it
+  independent of R48 and chose to finish R48 and R21 first.
+- Open with the battery **in the background** (~14 min, 31 registered gates), with
+  `--log build/selftest_<stamp>`, alone, nothing edited while it runs.
+- **Expect `NOTE: census-drift register=af2b1f085070 tree=bc18c672fdb9` on every screen.** R48's
+  build moved the identity again; R47's ruling makes that loud and never fatal. Regenerate ONCE,
+  after R44's and R46's build, not before.
+- **R44's and R46's builds are ONE step, not two.** Both touch the single identity key that
+  `fixture/selfgates/idkey.sh`, `lib/py/bbx/file_census.py` and the census document all read.
+  R44's mismatch half is already RED with both keys on the screen (measured twice at bbx-19), so
+  only the PASSING half may be missing — measure before writing.
+- **THREE THINGS move on a commit touching `bin`, `lib`, `drivers` or `gates`**: the self
+  subject's registry row (reviewed refreeze, R38/R44 — bbx-22's was one line, `a614699`), the
+  census's key (D62), and — if the commit adds a harness FILE — the BATTERY itself, because
+  `gates/census_register.sh` fails on a file with no frozen row (R47). A commit touching only
+  `docs/`, `expected/` or `fixture/` moves none of them.
+- **The order that avoids paying twice**: land every code change FIRST, then the census
+  regeneration, then commit the document and register (docs-only, the key holds), then the fixture
+  refreeze (fixture-only, the key still holds), then the battery twice. Prove any instrument change
+  on a two-gate `--only` probe (seconds) before paying for a run.
+- **G48's sweep is the cheap next measurement**: every count a runner in `bin/` takes over a
+  tool's output, asking whether a missing line would read as zero. Measure before claiming any of
+  them is a defect.
+- **R45 is rescoped and waiting** (three directions over three registries; the tier-listing fix
+  measured and RULED OUT because F13e diffs that listing).
+- If the census cadence starts to bite, the lever is its RUNTIME, not the gates: most of the
+  twenty minutes is five heavy gates in the shadow, and nothing the register check does depends on
+  them. Worth measuring before it becomes a complaint.
 
 **Orientation carried from the bbx-1 close (still true where not superseded above)**
 - S1 has two items left: the readout generator (abstraction RO1–RO3 as a
@@ -258,7 +244,7 @@ is the strong half of the result.
   tools in the SMS tree do run for minutes; run the gate alone.
 - An entrance check in a runner reads only variables defined ABOVE it; under `set -u` the consumer whose table reaches the branch aborts (`SUBJECT_FILE: unbound variable`) and the consumer that does not runs GREEN — the neighbouring gate is the detector, which is why the shadow runs every neighbour and not only the new gate (G28).
 - A gate's frozen text, its header's counts and its quoted runtime are READ FROM THE RUN — the output file pasted, the NOTE line's number — never typed from a screen read: one character, one column and one count were wrong in one gate's first draft (G29; G27's family). A verdict is taken after the scenario field and past the kind's WORD, never at a fixed column: `unordered` is 9 wide where every earlier kind was ≤ 8.
-- The battery takes ~10.5 min since `gates/adapters.sh` joined it, which is PAST the 10-minute cap on a foreground command: run it with `run_in_background` and wait on its tally, and remember that a backgrounded pipe through `tail` keeps only the tail — the kept run under `build/selftest_<stamp>` is where the whole thing lives, and `bin/bbx readout` on it prints the tally, the controls line and the blind spots (bbx-18 lost a battery's screen that way and read it back off the kept run).
+- The battery takes ~14 min (the bbx-22 opening run), which is PAST the 10-minute cap on a foreground command: run it with `run_in_background` and wait on its tally, and remember that a backgrounded pipe through `tail` keeps only the tail — the kept run under `build/selftest_<stamp>` is where the whole thing lives, and `bin/bbx readout` on it prints the tally, the controls line and the blind spots (bbx-18 lost a battery's screen that way and read it back off the kept run).
 - A commit that touches `bin`, `lib`, `drivers` or `gates` moves the self subject's identity and leaves `gates/adapters.sh` RED until the registry row is refrozen (R38, R44): 22 of BBX's first 53 commits would have done it. The refreeze is one line, reviewed, and must be the sitting's last commit.
 - This session's shell is zsh, where a bare `$c:lib` applies the history modifier `:l` and reaches the command as `headib`: `git rev-parse "$c:bin" "$c:lib" "$c:drivers"` silently measured TWO of three trees and printed a plausible 40-hex key (G33). `${c}:lib`, `"$c":lib` and `/bin/sh -c` are correct. Never build a measurement's command line from a variable followed by a colon in this shell.
 - A wait loop must not be able to match ITSELF: `until ! pgrep -f 'bbx-run-static --config'; do sleep 15; done` never exits, because `pgrep -f` reads full command lines and the watcher's own line contains the pattern (G37 — four of them were still sleeping after the bbx-18 close and were killed by PID). Use `pgrep -f '[b]bx-run-static'`, or watch the run's OUTPUT FILE for the tally, which is what the next step reads anyway.
@@ -273,6 +259,7 @@ is the strong half of the result.
 - A gate that asserts something about a GENERATED artifact must be asked whether its question still means anything inside the generator's own copy of the tree. The census runs the whole battery against an instrumented shadow of itself, and it COMMITS its own `lib/py/sitecustomize.py` there — so a gate checking that every harness file has a census row read FAIL in every shadow, the contamination rule discarded the run, and the register became completable only by a run that could not complete (G46). The instrument now exports `BBX_FILE_CENSUS_SHADOW=1`, such a gate SKIPs with its reason, and a SKIP does not contaminate but IS named in the checked text. This is the second instance of the shape (G38 was the first); a third should become a contract line in `docs/controls.md`, not a third ad-hoc fix.
 - A read-only proof must compare against what it asserts about, not against `git status`. `gates/census_register.sh` checked the register with `git status --porcelain` and so reported ITSELF writing a file the census had legitimately left uncommitted — the normal state straight after a census run, which is exactly when that gate runs. Take the file's sha1 before and compare after (bbx-20).
 - Three defects at bbx-20 shared one shape: a check whose non-zero exit had TWO possible causes and could not tell them apart (a control whose copy inherited a real failure, a run refused for a reason the shadow guaranteed, a read-only proof reading a legitimate edit). When a check can fail two ways, make it name which.
-- A gate that SKIPS cannot fire its declared must-fire controls, and the controls reader counts a control that did not fire as DEAD — so a CORRECT skip reds the whole battery. It cannot happen on this host (nothing skips here) and it happened on the first WSL run (G47, R48 open). When adding a `# SKIP:` path to a gate that declares controls, know that the gate is now unable to be green on any host that takes the skip, until R48 lands.
+- A gate that SKIPS cannot fire its declared must-fire controls. Since R48 (bbx-22) the reader reads that as `verdict=SKIPPED`, never dead — but ONLY when the runner's classifier called the gate SKIP (exit 0 plus the marker), and only declared-and-not-fired is set aside. A gate that prints `SKIP:` and exits non-zero is still a FAIL with dead controls, and `--strict` still refuses every skip: never add an exception to `--strict` without a ruling (the maintainer's words: attempting to do so MUST be a ruling). A skip for a bad reason sets its controls aside exactly like a good one, so a new `# SKIP:` path needs a reason a reviewer can check. On THIS host nothing skips, so the real battery never walks this path here; the stubs in `gates/controls.sh` and `gates/readout.sh` walk it every battery.
+- A runner that COUNTS a tool's output reads a missing line as zero. The controls block counted `verdict=RED` lines in a report the reader never wrote when it crashed, and read `red: 0` and GREEN (G48); the reader's exit was no help, because it is 1 for RED and 1 for a crash. Require the lines to be PRESENT — one per item the tool was asked about — and never rest a verdict on an exit status two causes share.
 - A second HOST is a detector in the same way a second consumer is (BBX-25). Three sittings running, the second instance found what the first could not: the third subject kind found the census attributing an imported module to the wrong kind (G39), the second consumer of the exact family found its END rule (G26), and the second platform found the skip/controls defect (G47). When something has one instance, its green is a measurement of that instance.
 

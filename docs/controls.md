@@ -75,12 +75,21 @@ the contract makes the control findable and its silence loud.
 **The runner.** `bin/bbx-run-static` reads the declarations with
 `lib/py/bbx/controls.py` when `[controls].enforce = true` and prints one
 line per gate it ran — `controls=<gate> declared=<n> fired=<n> dead=<n>
-undeclared=<n> verdict=OK|RED|UNDECLARED` — then the sum `controls fired
-<n> / declared <n>`. RED (a declared control that did not fire, a `CONTROL
-DEAD:` line, a firing no header declares) and, under enforcement, UNDECLARED
-(no `MUST-FIRE:` line at all) make the run NOT GREEN with exit 1. With
+undeclared=<n> verdict=OK|RED|UNDECLARED|SKIPPED` — then the sum `controls fired
+<n> / declared <n>; gates with no declaration: <n>; red: <n>; skipped: <n>`,
+a SKIPPED gate's declarations left out of the sum and counted after it. RED (a
+declared control that did not fire in a gate that ran, a `CONTROL DEAD:` line,
+a firing no header declares) and, under enforcement, UNDECLARED (no
+`MUST-FIRE:` line at all) make the run NOT GREEN with exit 1. **The block's
+verdict rests on the reader's OUTPUT, never on its exit** (G48, measured
+2026-09-13): the reader exits 1 for RED and 1 for a crash, and a crashed reader
+leaves no lines, which a count of RED lines reads as `red: 0`. So the runner
+requires one `controls=` line per gate that ran — fewer is NOT GREEN with
+`controls: the reader reported <n> of <m> gate(s) that ran` — and the readout
+names every gate that ran with no line and never counts it as proved. With
 enforcement off the block is absent and the output is bbh's byte for byte
-(fidelity F13). Ground truth: `gates/controls.sh`.
+(fidelity F13). Ground truth: `gates/controls.sh` (control
+`reader-crash-is-red` for the output rule).
 
 **First instances.** Every gate in `gates/` declares its controls; the first
 self-run (2026-09-09) read `controls fired 9 / declared 9` over 7 gates. The

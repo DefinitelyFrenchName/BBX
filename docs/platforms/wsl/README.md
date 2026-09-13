@@ -1,7 +1,12 @@
 # WSL — the first platform run of R21 (reported 2026-09-13)
 
-**Status: NOT GREEN, and the red is a defect in BBX's own controls contract, not
-in any gate and not in WSL.** The run did exactly what R21 exists for.
+**Status: this run was NOT GREEN, and the red was a defect in BBX's own controls
+contract, not in any gate and not in WSL.** The run did exactly what R21 exists for.
+**The defect is fixed at bbx-22** (R48 answered and built, `8d5f97d`): a gate the
+classifier calls SKIP now reads `verdict=SKIPPED`, its declared controls set aside
+and named, and the battery can be green; `--strict` still refuses every skip. **A
+re-run at bbx-22's close commit or later is R21's next step**; until it exists, this
+page records one NOT GREEN run and no green one.
 
 | | |
 |---|---|
@@ -18,9 +23,9 @@ in any gate and not in WSL.** The run did exactly what R21 exists for.
 `gates/census_recount.sh` SKIPPED, exactly as `docs/platforms/README.md` predicted,
 because the three lineage census files record absolute paths from the macOS host. A
 skipped gate asserts nothing and runs none of its checks — so none of its four
-declared must-fire controls could fire. The controls reader counts a declared
-control that did not fire as DEAD, the runner makes that RED, and the whole battery
-reads NOT GREEN.
+declared must-fire controls could fire. The controls reader then counted a declared
+control that did not fire as DEAD, the runner made that RED, and the whole battery
+read NOT GREEN (the contract until R48, bbx-22).
 
 **Reproduced on macOS the same day**, so it is a contract defect and not a platform
 difference: pointing `BBX_CENSUS_DIR` at a census naming an absent tree gives
@@ -58,8 +63,9 @@ procedure said it should be.
 
 ## What this run does NOT establish
 
-- **A green battery on any platform but macOS.** Until R48 is ruled, WSL cannot be
-  green, because the skip that is correct there is also what reds it.
+- **A green battery on any platform but macOS.** This run could not be green: the
+  skip that was correct there was also what reddened it, until R48 (bbx-22). A green
+  WSL battery needs the re-run.
 - **The census recount on Linux.** It skipped, asserting nothing, by design.
 - **`gates/file_census.sh`**, which is release-scoped and was not run.
 - **A second architecture.** A second operating system only.

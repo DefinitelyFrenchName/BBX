@@ -598,3 +598,57 @@ files, 31 gates, 0 unreached. Defaults D1–D63 (D62 amended for R47). Gotchas
 G1–G46. Retractions X1–X38. Open rulings THREE: R21, R44's build, R45.
 
 **In force:** `DECISIONS.md` — R0–R20, R22–R43, R46, R47 and method M1–M4.
+
+## bbx-21 (closed 2026-09-13)
+
+**Status (bbx-21 close, 2026-09-13):** slices S1 and S2 complete; **S3 DONE**;
+**S4's BUILD IS COMPLETE — only step 7, the slice readout, remains.** One subject
+this sitting: **R21's first platform run came in, and it found a defect in BBX's own
+controls contract.** The WSL battery read `PASS 30 SKIP 1 FAIL 0 MISSING 0` and then
+NOT GREEN, because `gates/census_recount.sh` SKIPS off macOS (the three lineage
+censuses record absolute paths from this host) and a gate that skips runs none of its
+checks — so its four declared must-fire controls cannot fire, and
+`docs/controls.md`'s "declared and not fired is red" turns a CORRECT skip into a red
+battery. **Reproduced on macOS the same day** with `BBX_CENSUS_DIR` pointed at a
+census naming an absent tree, so the finding is instrument-grade and the defect is
+the contract's, not WSL's and not any gate's (G47). **Not fixed here:** the fix
+amends a contract R10 ruled, so **R48 is raised** with its recommendation, four
+declined alternatives and a narrower fallback — and **BBX-26 applies**, so it is the
+next sitting's FIRST task. **The larger half of the result: everything else is
+identical across the two hosts** — 31 gates, 119 declared controls, the same
+anti-orphan and working-tree results, both fidelity gates, and every NOTE-class value
+equal down to both fixtures' full count lines. Runtimes differ and are not gated.
+Third sitting running in which a SECOND INSTANCE exposed what the first could not:
+the third subject kind (G39), the second consumer of the exact family (G26), and now
+the second host. `docs/platforms/wsl/` holds the run and what it does and does not
+establish; the run file is a WITNESS because the kept directory is not in the tree.
+Gotchas G1–G47.
+
+**R21 HAS PRODUCED ITS FIRST RUN** (2026-09-13, WSL): `PASS 30 SKIP 1 FAIL 0 MISSING 0` and then
+**NOT GREEN**, on a skip that was CORRECT — `gates/census_recount.sh` skips because the three lineage
+censuses record absolute macOS paths, and a skipped gate cannot fire its four declared controls, which
+`docs/controls.md` counts as dead. Reproduced on macOS the same day, so it is a contract defect and not
+a WSL property (G47, R48 open, BBX-26 applies). Everything else is IDENTICAL across the two hosts: 31
+gates, 119 declared controls, every NOTE-class value equal. `docs/platforms/wsl/`.
+
+**Open
+rulings, four:** R21 (its first run is in; the platform ROW is still not green, pending R48), R44's BUILD
+(the ruling is answered; the printed-refreeze step is not yet written, and it
+joins R46's one-definition work because both touch the single identity key), R45 (rescoped to three directions over three registries, with the tier-listing fix
+measured and ruled out), and R48 (what a SKIPPED gate's declared controls mean — the
+first platform run's finding, and the next sitting's FIRST task under BBX-26). Each carries a recommendation and its
+declined alternatives; none blocks S4 step 7.
+In force since bbx-2: R18 (the census and the tests
+work on a clone or are explicitly, provably read-only), R19 (parallel work
+is a pull queue; the FIFO token queue is the default implementation, the
+principle is the ruling), R20 (fidelity on a plain clone of bbh at the
+baseline; the recount's clone plain too).
+BBX = Black Box harness eXpanded; GPL-3; sh + Python 3 on macOS, Linux and
+Windows/WSL; kinds: frame-driven (bbh), document set, command-line tool, with BBX ITSELF a
+subject and an external test framework a driver — five consumers:
+bbh's `example/`, `fixture/docset/`, `fixture/fakecli/`, `fixture/unittest/`,
+`fixture/selfgates/` (R14, R15, R37, R38). **BBX's own harness files are now
+measured by a gate**, not by a document: 44 files, 30 gates, 0 unreached
+(`docs/census/bbx_files.md`, generated; R39, D62, D63).
+
+**In force:** `DECISIONS.md` — R0–R20, R22–R43, R46, R47 and method M1–M4.

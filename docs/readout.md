@@ -3601,3 +3601,87 @@ untouched-by-construction=clone`. Fidelity F12–F17 unchanged; no verdict text 
 
 **Sweeps** on the final tree: `close_sweeps` exit 0, `rulings_shape` exit 0
 (`open=4`), the `readout` gate exit 0.
+
+
+# bbx-22 — R48 answered and built: a correct SKIP can be green, `--strict` still refuses it, and building it found G48 (2026-09-13)
+
+One subject, in the order the maintainer set: R48 first, and R21 as far as this host
+can take it, before S4 step 7.
+
+**The ruling.** The maintainer agreed with R48's recommendation and added, in their
+words: "--strict flag must not accept exceptions (attempting to do so MUST be a ruling
+and I honestly doubt I'd ever rule in favor of it)". In force: a gate the runner's
+classifier calls SKIP gets `verdict=SKIPPED`; its declared controls leave *fired /
+declared* and are counted and named; only declared-and-not-fired is set aside; and
+`--strict` makes every skip fatal, with no exception of any shape.
+
+**What it changes on a screen.** On a host where `census_recount` skips — the WSL
+run's one red — the runner now ends its controls block with `skipped: 1, whose 4
+declared control(s) assert nothing` and reads GREEN; the readout's controls line ends
+`skipped 1, whose 4 declared control(s) assert nothing: census_recount`, and the next
+line says `skipped, proving nothing this run: census_recount`. On this host, where
+nothing skips, the visible change is `; skipped 0` on the controls line and one more
+declared blind spot, from `gates/controls.sh`.
+
+**How it was proved, in the order that makes the proof mean something.**
+1. The new checks were written first and run against the unfixed code: `gates/controls.sh`
+   exit 1, the correct skip read `verdict=RED`; `gates/readout.sh` exit 1. The checks can
+   see G47.
+2. The fix landed; both gates exit 0.
+3. Each of the three new R48 controls was shown DEAD on a regression planted in a scratch
+   clone of the fix — a `--strict` exception (the run read GREEN), an exemption keyed off the
+   SKIP marker instead of the verdict (an exit-2 gate read SKIPPED), and a skip forgiving a
+   DEAD line (read SKIPPED, GREEN). None of them can only pass.
+4. The real gate, `census_recount` alone with its census pointed at an absent tree: before
+   the fix `dead=4 verdict=RED`, NOT GREEN, exit 1; after it `dead=0 verdict=SKIPPED`, GREEN,
+   exit 0; after it under `--strict`, NOT GREEN, exit 1, for `--strict` alone.
+
+**G48, found while building it.** The runner's controls verdict counted RED lines in the
+reader's report and never asked whether the report existed. Measured in a scratch clone of
+`fd63797` with a crash planted in the reader: `red: 0`, GREEN, exit 0, where the working
+reader on the same consumer said NOT GREEN, exit 1. The readout of such a run said `each can
+fail: 31 of 31` (measured on a copy of this sitting's opening run with the report emptied).
+Fixed in the same block: one `controls=` line per gate that ran, or NOT GREEN naming the
+shortfall; the readout names a gate with no line and counts proved gates from the lines it
+has. Its control plants a crash in a shadow copy of the reader, and was DEAD before the fix
+and FIRED after.
+
+**R21 is not closed, and cannot be from here.** The run that closes its platform row has to
+come from the WSL host again, at this close's commit or later. This host has no way to run
+Linux: eleven candidate runtimes re-measured, all absent.
+
+## Counts, separately (measured this sitting by the commands named)
+
+| what | count | how |
+|---|---|---|
+| opening battery at `fd63797` | `PASS 31  SKIP 0  FAIL 0  TIMEOUT 0  MISSING 0`, GREEN; controls fired 119 / declared 119; tree unchanged | `bin/bbx selftest --log build/selftest_20260913T114947Z`, then `bin/bbx readout` |
+| `gates/controls.sh`, unfixed code | exit 1: the correct skip `verdict=RED`; `strict-admits-no-exemption` and `reader-crash-is-red` DEAD | the new gate with `lib/` and `bin/` at `fd63797` |
+| `gates/controls.sh`, fixed code | exit 0; 6 controls fired; 16 ok lines; 14 s | the gate, run twice |
+| the three new R48 controls under planted regressions | 3 of 3 DEAD | three scratch clones of the fix, one regression each — measured once, not gated |
+| `gates/readout.sh` | exit 1 unfixed; exit 0 fixed, 7 controls fired, 30 ok lines, 6 s | the gate |
+| the real skip, `census_recount` alone | unfixed RED, NOT GREEN, exit 1; fixed SKIPPED, GREEN, exit 0; fixed under `--strict` NOT GREEN, exit 1 | `build/r48/bbx.toml`, `BBX_CENSUS_DIR` at a census naming `/nonexistent/…` — measured once, not gated (the mechanism is gated on stubs) |
+| its readout | `skipped 1, whose 4 declared control(s) assert nothing: census_recount`; `each can fail: 0 of 1 …; skipped, proving nothing this run: census_recount` | `--log build/r48/kept`, then `bin/bbx readout` — measured once, not gated |
+| G48, the planted crash | GREEN, exit 0 (the working reader: NOT GREEN, exit 1) | scratch clone of `fd63797` — now gated by `reader-crash-is-red` |
+| G48, the readout on an emptied report | unfixed `each can fail: 31 of 31`; fixed `NOT REPORTED for 31 gate(s)` and `0 of 31` | a copy of the opening run — measured once; gated on a synthetic run by `gates/readout.sh` |
+| `gates/static_runner.sh`, `gates/fidelity_bbh.sh` | PASS; PASS (F13a-e, F14, F14f), 49 s | the gates, on the fixed code |
+| the self subject's refreeze | 1 line of `fixture/selfgates/expected/registry.tsv`; whole-set key `1e40798f…` → `bc18c672…`; `mkselfgates.py --check` exit 0 | `python3 fixture/selfgates/mkselfgates.py`, `git diff --numstat` |
+| `gates/adapters.sh` after the refreeze | PASS, 135 s | the gate |
+| `gates/census_register.sh` | PASS; `census-drift register=af2b1f085070 tree=bc18c672fdb9`; files 45, rows 45 | the gate |
+| retraction X39's positive control | 5 hits before the pages were rewritten: `HANDOFF.md` ×3, `STATE.md` ×1, `docs/platforms/wsl/README.md` ×1 | `gates/close_sweeps.sh` |
+| rulings | open 3 (R21, R44, R45), answered 46 | `gates/rulings_shape.sh` |
+| container runtimes on this host | 0 of 11 present | `command -v` for docker, podman, limactl, multipass, orb, colima, nerdctl, container, wsl.exe, utmctl, VBoxManage |
+
+## What this green does NOT assert
+
+- **That the REAL battery walks the R48 path on this host.** Nothing skips here, so every
+  battery on this host takes the old path through the real gates. The new path is walked every
+  battery by the stubs in `gates/controls.sh` and `gates/readout.sh`, and by the real gate once,
+  by hand.
+- **That WSL is green.** That needs the re-run.
+- **That a SKIP is justified.** A skip for a bad reason sets its controls aside exactly like a
+  good one; the screen names it and `--strict` refuses it, and nothing judges the reason (a new
+  NOT-ASSERTED line in `gates/controls.sh`).
+- **That no other runner in `bin/` counts a tool's output where it should require it.** G48's
+  sweep has not been done.
+- **That the census is fresh.** The drift NOTE carries until the regeneration planned after
+  R44's and R46's build.
