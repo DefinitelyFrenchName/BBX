@@ -21,16 +21,18 @@ CRASHED was read as `red: 0` and GREEN, and the readout of such a run said `each
 fail: 31 of 31`. Fixed in the same block — the verdict rests on the reader's output,
 one line per gate that ran, never on its exit. Four new must-fire controls in
 `gates/controls.sh`, each measured DEAD on a regression and FIRED on the fix; bbh
-fidelity unchanged. **R21 is not closed from this side:** this host has no way to
-run Linux (eleven candidate runtimes re-measured, all absent), so the WSL host
-re-runs the procedure at this close's commit or later, and that kept pair is what
-turns the platform row green and puts R21's answer to the maintainer. The opening
+fidelity unchanged. **R21 ANSWERED after the close** (maintainer, 2026-09-13):
+platform runs are the maintainer's, brought back as a kept pair and committed keyed by
+commit; a platform reads green only on such a pair at a commit whose macOS battery is
+green; SSH or basic automation is a later decision that depends on how often runs are
+needed. The WSL re-run at the fix reported `PASS 30  SKIP 1 … GREEN` (three pasted
+lines, a witness); the platform row turns green when the kept pair is committed. The opening
 battery and the close's pair are quoted in `docs/readout.md` (bbx-22, and CLOSE —
 bbx-22). Gotchas G1–G49; retractions X1–X40. G49: a WSL re-run met the pre-fix tree
 because the fix was not yet pushed when it was asked for; `429d3f8` was pushed before
 the close commit, and the platform procedure now carries a tree check.
 
-**Open rulings, three:** R21 (its next step is the WSL re-run), R44's BUILD (the
+**Open rulings, two:** R44's BUILD (the
 ruling is answered; the printed-refreeze step is not yet written, and it joins R46's
 one-definition work because both touch the single identity key), and R45 (rescoped
 to three directions over three registries, with the tier-listing fix measured and
@@ -82,10 +84,10 @@ number to bring down; the two added at bbx-2 are host facts the clone
 exposed (G13, rule 7), the only exception ever allowed to move it upward. Grammar in
 `docs/census/README.md`.
 
-**Next:** (1) **the WSL re-run** of `docs/platforms/README.md` at bbx-22's close
-commit or later — twice, kept, tarred. Expected GREEN with one skip, `census_recount`,
-and `skipped: 1, whose 4 declared control(s) assert nothing` on the runner's screen.
-It turns R21's platform row green; answering R21 is the maintainer's. (2) **S4 step 7,
+**Next:** (1) **the kept WSL pair.** The re-run at the fix reported GREEN with
+one skip, `census_recount` (three pasted lines, a witness); its archive, committed under
+`docs/platforms/wsl/` with `bin/bbx readout <second> --against <first>`, is what turns the
+platform row green under R21's ruling. (2) **S4 step 7,
 the slice readout** (`docs/plans/S4.md` §8.7), after which S4 goes to the maintainer
 for a DONE ruling as S3 did. (3) **R44's printed refreeze and R46's one definition of
 the identity key, built as ONE step**, then ONE census regeneration. The order that

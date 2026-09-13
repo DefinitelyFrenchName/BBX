@@ -1301,3 +1301,23 @@ COUNTED rather than required to be present, where a missing line reads as zero. 
 the same two-causes-behind-one-exit shape bbx-20's three defects had, and this time
 the instrument that watches the controls had no control of its own. A sweep of the
 other `grep -c` counts over tool output in `bin/` is the cheap next measurement.
+
+### bbx-22, continued — R21 answered after the close
+
+**R21 answered — maintainer, 2026-09-13.** Agreed, in the maintainer's words: "I agree with the proposal for the other half of R21. depending on how often these runs are needed we may need to get some tooling either via SSH or basic automation for instance so I don't have to run them myself but on principe I agree completely with your recommendation".
+What was agreed is the four-point proposal put at the bbx-22 close: the maintainer runs the
+platform procedure and brings back the kept pair; the pair is committed under
+`docs/platforms/<platform>/` keyed by its commit; a platform reads green only on such a pair at a
+commit whose macOS battery is also green; and the container route stays declined while this host
+has none.
+
+**How it came to be.** R21 was raised at bbx-2, when this host was measured to have no way to run
+Linux, and waited eleven sittings for its first run. That run (bbx-21) found G47, which R48 fixed at
+bbx-22; a re-run that met the pre-fix tree cost one run (G49); the re-run at the fix reported GREEN
+with one skip, `census_recount`, as three pasted lines. The ruling answers the question R21 asked —
+how the runs are obtained — and not the platform row, which still waits on the kept pair.
+
+**The rider, kept apart from the ruling on purpose.** The maintainer named SSH or basic automation
+as the likely next step if these runs become frequent. Nothing in the tree measures that frequency
+today, so it is recorded as a condition for a future ruling rather than decided on a guess: the
+number that would raise it is how many sittings in a row need a platform run.

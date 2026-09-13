@@ -5,8 +5,9 @@ contract, not in any gate and not in WSL.** The run did exactly what R21 exists 
 **The defect is fixed at bbx-22** (R48 answered and built, `8d5f97d`): a gate the
 classifier calls SKIP now reads `verdict=SKIPPED`, its declared controls set aside
 and named, and the battery can be green; `--strict` still refuses every skip. **A
-re-run at bbx-22's close commit or later is R21's next step**; until it exists, this
-page records one NOT GREEN run and no green one.
+re-run at the fix has reported GREEN** (below, a witness); until its kept pair is
+committed, this page records one NOT GREEN run and no kept green one. R21 is answered
+(after the bbx-22 close): a platform reads green only on a kept pair.
 
 | | |
 |---|---|
@@ -70,3 +71,14 @@ procedure said it should be.
 - **`gates/file_census.sh`**, which is release-scoped and was not run.
 - **A second architecture.** A second operating system only.
 - **Anything about a native Windows shell** outside WSL.
+
+## The re-runs after R48 (reported 2026-09-13)
+
+- **A re-run pulled while the fix was still unpushed** met `fd63797` and reproduced the run above
+  exactly — `controls fired 115 / declared 119; red: 1`, NOT GREEN (G49). A witness of the pre-fix
+  behaviour, and evidence about nothing R48 changed.
+- **A re-run at the fix** reported `PASS 30    SKIP 1     FAIL 0     MISSING 0`, `skipped:
+  census_recount`, `GREEN — every registered instrument-free gate passed.` Three lines pasted: a
+  WITNESS, not a kept result. That it ran the fix is inferred from the output, not measured: no
+  pushed commit before `429d3f8` prints GREEN beside that skip. The kept pair, when committed here,
+  replaces this line as the evidence.
