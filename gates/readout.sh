@@ -12,6 +12,7 @@
 # MUST-FIRE: known-bad: no-register-honest — a kept suite run whose tree has no register must read 'none registered' with the file count, 'unknown' for the real pairings, and the blind spot named, or an absent register reads as an empty one
 # MUST-FIRE: perturbed-copy: untracked-visible — a kept run whose untracked count rose during the run must say so on the tree line (G17), or a file written under the tree during a battery is invisible
 # MUST-FIRE: perturbed-copy: note-follows-log — a kept run with g_a's drift NOTE rewritten to ahead=9 must show ahead=9 and no longer ahead=2, or the note line is decoration, not the log
+# MUST-FIRE: perturbed-copy: header-not-found-named — a kept run whose recorded root is rewritten to a directory that does not exist must NAME every gate whose header was not found and count ZERO gates as declaring no blind spot, or a screen read on another host counts an unreadable header as silence (G50)
 # NOT-ASSERTED: that a declared blind spot is true or complete: the screen prints what the header says
 # NOT-ASSERTED: the sweep runner's runs: only bbx-run-static --log and bbx-run-suite --log are read
 # NOT-ASSERTED: that a register row's class is true of its file: the suite screen prints what the register says (gates/provenance.sh keeps it complete and inside the vocabulary)
@@ -183,6 +184,12 @@ cp -R "$T/r1" "$T/r1n"; sed -i.bak 's/ ahead=2$/ ahead=9/' "$T/r1n/g_a.log"
 python3 -m bbx.readout "$T/r1n" > "$T/c4" 2>&1 || true
 if grep -q "^  note: g_a: drift census=x.md recorded=abc1234 tip=def5678 ahead=9" "$T/c4" && ! grep -q "ahead=2" "$T/c4"; then echo "CONTROL FIRED: note-follows-log — $(grep '^  note: g_a' "$T/c4" | cut -c1-70)"
 else fail "CONTROL DEAD: note-follows-log — $(grep '^  note' "$T/c4" | tr '\n' ' ')"; fi
+
+# 5. header-not-found-named: the kept run's recorded root rewritten to a directory that does not exist (G50)
+cp -R "$T/r1" "$T/r1h"; sed -i.bak "s|^root=.*|root=$T/no-such-root|" "$T/r1h/run.txt"
+python3 -m bbx.readout "$T/r1h" > "$T/c5" 2>&1 || true
+if grep -q "^  gates whose header was NOT FOUND: 3 under $T/no-such-root/tests — their blind spots are UNKNOWN, not absent (G50): g_a, g_b, g_s$" "$T/c5" && grep -q "^  gates declaring no blind spot: 0 " "$T/c5"; then echo "CONTROL FIRED: header-not-found-named — three unreadable headers named as UNKNOWN, zero counted as silent"
+else fail "CONTROL DEAD: header-not-found-named — $(grep -E 'NOT FOUND|declaring no blind spot' "$T/c5" | tr '\n' '|')"; fi
 
 echo "== 5. R48 and G48: a skipped gate's declarations are set aside, named and never counted as proved; a gate with no controls line is named =="
 cat > "$FR/tests/g_k.sh" <<'G'

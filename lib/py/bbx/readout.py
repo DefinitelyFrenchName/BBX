@@ -31,7 +31,10 @@ RO2 — what this green does NOT assert (BBX-30): every gate declares it in its
 header as `# NOT-ASSERTED: <text>` (one line per blind spot, in the header
 block, read like MUST-FIRE); the screen lists them per gate and COUNTS the
 gates that declare nothing — a gate with no declared blind spot is a gate
-nobody has asked, and that number is printed, never hidden.
+nobody has asked, and that number is printed, never hidden. A header the screen
+cannot READ — the gate file or the driver absent at the root the run recorded, as
+on any host but the one that ran it — is named as NOT FOUND and its blind spots
+reported UNKNOWN, never counted as a gate that declares none (G50).
 RO3 — legible without the code: gate names and plain sentences only.
 
 Exit: 0 when the run's verdict is GREEN and (with --against) BBX-14 is met;
@@ -180,11 +183,15 @@ def suite_screen(run, meta, rows, against):
     # the driver's own blind spots (RO2, S3 step 4): its header's NOT-ASSERTED lines, read like a gate's
     drv = meta.get("driver", "")
     dname = _os.path.basename(drv) or "?"
-    ditems = not_asserted(drv) if drv and _os.path.isfile(drv) else []
-    for it in ditems:
-        print(f"  driver {dname}: {it}")
-    if not ditems:
-        print(f"  driver {dname} declares no blind spot (a driver nobody has asked what its log leaves out)")
+    if drv and not _os.path.isfile(drv):
+        # G50: a header this host cannot read is UNKNOWN, never a driver that declares nothing
+        print(f"  driver {dname}: header NOT FOUND at {drv} — its blind spots are UNKNOWN, not absent (G50)")
+    else:
+        ditems = not_asserted(drv) if drv else []
+        for it in ditems:
+            print(f"  driver {dname}: {it}")
+        if not ditems:
+            print(f"  driver {dname} declares no blind spot (a driver nobody has asked what its log leaves out)")
     print("  the correctness of any expectation beyond its class: a `self` expectation sees currency, never a regression against a reference (E4)")
     print("  anything about a SKIP scenario: it asserts nothing")
     if unknown:
@@ -325,9 +332,13 @@ def main(argv=None):
 
     print("what this green does NOT assert (declared by each gate's header):")
     gates_dir = os.path.join(meta.get("root", "."), meta.get("gates_dir", "."))
-    silent = []
+    silent, unreadable = [], []
     for r in rows:
-        items = not_asserted(os.path.join(gates_dir, r["gate"] + ".sh"))
+        gp = os.path.join(gates_dir, r["gate"] + ".sh")
+        if not os.path.isfile(gp):
+            unreadable.append(r["gate"])      # G50: a header this host cannot read is UNKNOWN, never silence
+            continue
+        items = not_asserted(gp)
         if not items:
             silent.append(r["gate"])
             continue
@@ -335,6 +346,9 @@ def main(argv=None):
             print(f"  {r['gate']}: {it}")
     print(f"  gates declaring no blind spot: {len(silent)}{' — ' + ', '.join(silent) if silent else ''}"
           f"   (a gate nobody has asked what its green leaves out)")
+    if unreadable:
+        print(f"  gates whose header was NOT FOUND: {len(unreadable)} under {gates_dir} — their blind spots are UNKNOWN, "
+              f"not absent (G50): " + ", ".join(unreadable))
     if counts["SKIP"]:
         print("skipped (asserting nothing): " + ", ".join(f"{r['gate']} — {r.get('detail', '')}" for r in rows if r["verdict"] == "SKIP"))
     if counts["FAIL"] or counts["TIMEOUT"] or counts["MISSING"]:

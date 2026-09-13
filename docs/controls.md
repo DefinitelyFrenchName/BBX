@@ -104,7 +104,7 @@ proved>`; and, from bbx-2, `# NOT-ASSERTED: <one blind spot of this gate's
 green>`, one line per blind spot, read by `lib/py/bbx/readout.py` for the
 screen's RO2 section (BBX-30). A gate with no `NOT-ASSERTED:` line is not an
 error — it is COUNTED on the screen as "declaring no blind spot", which is the
-number the maintainer asks about. `NOTE: <key> <value>` at column 0 of a
+number the maintainer asks about. A header the readout cannot READ — the gate file absent at the root the run recorded, as on any host but the one that ran it — is named `NOT FOUND` with its blind spots UNKNOWN, and never counted as a gate declaring none (G50, fixed at bbx-23). `NOTE: <key> <value>` at column 0 of a
 gate's OUTPUT is the NOTE-class number (never fatal); the key `coverage` is
 what the screen reads as coverage (BBX-18), and every other key (`drift`,
 `bbh-source`, `bbh-drift`, …) is listed on the screen as a note, one line per
