@@ -10,6 +10,7 @@
 # frame-driven profile (D9), which is why the lineage's regex applies below. Portable, ~3 s.
 # Usage: gates/fingerprint.sh
 # MUST-FIRE: known-bad: wholeset-only-row — a twin image sharing the program key must NOT resolve through a registry row keyed by the other image's whole-set key (exit 2), or two builds differing outside the program would share a set
+# MUST-FIRE: known-bad: gates-only-commit — in a synthetic harness repository a commit touching only gates/ must move the WHOLE-SET key and leave the PROGRAM key, or `--harness-identity` has one key under two names (R38, R46)
 # NOT-ASSERTED: the identity of any artifact that is not a single file: the kind-blind fingerprint is file-sha1 (D16)
 #
 set -eu
@@ -116,6 +117,25 @@ p=$($FP "$T/fs" --set img --config "$T/cmd.toml" --sha-only); w=$($FP "$T/fs" --
 [ "$p" = "prog-img-$T/fs" ] && [ "$w" = "whole-img" ] && ok "command: {set} and {rompath} substituted, the commands' output is the key" || fail "command kind: '$p' '$w'"
 $FP "$T/fs" --set img --config "$T/cmd.toml" --full >/dev/null 2>&1 && fail "--full accepted for kind command" || ok "--full is refused for a non-zip kind"
 
+
+echo "== 4. the harness's own identity: ONE definition, --harness-identity (R38, R46) =="
+H="$T/harness"; mkdir -p "$H/bin" "$H/lib" "$H/drivers" "$H/gates"
+for d in bin lib drivers gates; do printf '%s v1\n' "$d" > "$H/$d/f"; done
+( cd "$H" && git init -q && git add -A && git -c user.name=bbx -c user.email=bbx@example.invalid commit -qm one )
+# the oracle is R38's formula computed WITHOUT the module: git's tree hashes, one SHA-1 over what rev-parse prints
+oracle() { ( cd "$H" && git rev-parse $1 ) | python3 -c 'import hashlib,sys;print(hashlib.sha1(sys.stdin.read().encode()).hexdigest())'; }
+w1=$($FP --harness-identity wholeset --root "$H" 2>&1) || true; p1=$($FP --harness-identity program --root "$H" 2>&1) || true
+[ "$w1" = "$(oracle 'HEAD:bin HEAD:lib HEAD:drivers HEAD:gates')" ] && [ "$p1" = "$(oracle 'HEAD:bin HEAD:lib HEAD:drivers')" ] && ok "--harness-identity prints R38's two keys, each equal to the formula computed without the module" || fail "harness identity: wholeset '$w1' program '$p1'"
+printf 'lib edited, uncommitted\n' > "$H/lib/f"; wd=$($FP --harness-identity wholeset --root "$H" 2>&1) || true
+[ "$wd" = "$w1" ] && ok "an UNCOMMITTED edit does not move the key: it is the key of the commit" || fail "an uncommitted edit moved the key: $wd"
+( cd "$H" && git checkout -q -- lib/f )
+# CONTROL gates-only-commit
+printf 'gates v2\n' > "$H/gates/f"; ( cd "$H" && git -c user.name=bbx -c user.email=bbx@example.invalid commit -qam gates-only )
+w2=$($FP --harness-identity wholeset --root "$H" 2>&1) || true; p2=$($FP --harness-identity program --root "$H" 2>&1) || true
+if [ "${#w2}" = 40 ] && [ "$w2" != "$w1" ] && [ "$p2" = "$p1" ]; then echo "CONTROL FIRED: gates-only-commit — the whole-set key moved and the program key held"
+else echo "CONTROL DEAD: gates-only-commit — wholeset $w1 -> $w2, program $p1 -> $p2"; fail "a gates-only commit did not separate the two keys"; fi
+$FP --harness-identity wholeset --root "$T/not-a-repo" >/dev/null 2>&1 && fail "--harness-identity answered outside a git repository" || ok "--harness-identity refuses outside a git repository"
+BBX_HOME= $FP --harness-identity wholeset >/dev/null 2>&1 && fail "--harness-identity answered with no --root and no BBX_HOME" || ok "--harness-identity refuses with no --root and no BBX_HOME"
 
 echo
 [ "$rc" = 0 ] && echo "PASS: fingerprint dispatch validated on synthetic images" || { echo "FAIL: see above"; exit 1; }

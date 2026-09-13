@@ -48,6 +48,16 @@ KINDS (`[fingerprint].kind`):
   command      `program_command` / `wholeset_command` are run with
                `{rompath}` and `{set}` substituted and must print the key —
                for a system whose identity no file rule captures
+
+THE HARNESS'S OWN IDENTITY (R38; ruled R46 to have ONE definition, here):
+
+    python3 -m bbx.fingerprint --harness-identity program|wholeset [--root DIR]
+
+prints the tree hashes of `bin`, `lib`, `drivers` (program) — plus `gates`
+(wholeset) — at HEAD, as `git rev-parse` prints them, hashed into one SHA-1;
+the root defaults to $BBX_HOME. `fixture/selfgates/idkey.sh` is a shim over it
+and `bbx.file_census` keys the census by it. The key is of the COMMIT, so an
+uncommitted edit does not move it. Ground truth: `gates/fingerprint.sh` §4.
 """
 
 import argparse
@@ -176,6 +186,20 @@ def command_key(template, rompath, setname):
 
 # ── resolution ───────────────────────────────────────────────────────────────
 
+# ── the harness's own identity (R38; R46: the ONE definition) ───────────────
+HARNESS_TREES = {"program": ("HEAD:bin", "HEAD:lib", "HEAD:drivers"),
+                 "wholeset": ("HEAD:bin", "HEAD:lib", "HEAD:drivers", "HEAD:gates")}
+
+
+def harness_identity(root, which="wholeset"):
+    """R38's key of a harness tree: one SHA-1 over what `git rev-parse` prints for its trees at HEAD."""
+    out = subprocess.run(["git", "-C", str(root), "rev-parse", *HARNESS_TREES[which]],
+                         capture_output=True, text=True)
+    if out.returncode != 0:
+        raise RuntimeError(f"git rev-parse failed under {root} ({out.returncode}): {out.stderr.strip()}")
+    return hashlib.sha1(out.stdout.encode()).hexdigest()
+
+
 def resolve_image(rompath, setname, s):
     """The first image found along the ';'-separated search path, or None."""
     kind = s["kind"]
@@ -241,6 +265,23 @@ def lookup(rows, wkey, sha, zpath, registry):
 
 
 def main(argv=None):
+    argv = list(sys.argv[1:] if argv is None else argv)
+    if argv[:1] == ["--harness-identity"]:
+        rest, root = argv[1:], os.environ.get("BBX_HOME", "")
+        if "--root" in rest:
+            i = rest.index("--root")
+            root = rest[i + 1] if i + 1 < len(rest) else ""
+            del rest[i:i + 2]
+        if len(rest) != 1 or rest[0] not in HARNESS_TREES or not root:
+            print("usage: python3 -m bbx.fingerprint --harness-identity program|wholeset [--root DIR]"
+                  "   (the root defaults to $BBX_HOME)", file=sys.stderr)
+            return 2
+        try:
+            print(harness_identity(root, rest[0]))
+        except RuntimeError as e:
+            print(f"fingerprint: {e}", file=sys.stderr)
+            return 2
+        return 0
     ap = argparse.ArgumentParser()
     ap.add_argument("rompath", help="';'-separated search path, emulator resolution order")
     ap.add_argument("--set", dest="setname", default=None)

@@ -109,9 +109,6 @@ def uncomment(path):
         return ""
 
 
-ID_TREES = ("HEAD:bin", "HEAD:lib", "HEAD:drivers", "HEAD:gates")
-
-
 def identity(root):
     """THE SUBJECT'S IDENTITY — R38's whole-set key, not HEAD.
 
@@ -119,14 +116,13 @@ def identity(root):
     commit that writes the regenerated document moves HEAD, so `--check` would
     fail on its own output for ever after (measured at bbx-19, the gate's own
     first red). The key is the tree hash of `bin`, `lib`, `drivers` and `gates`
-    hashed into one, exactly as `fixture/selfgates/subject/idkey.sh wholeset`
-    computes it for the self subject: a docs-only commit leaves it unchanged,
+    hashed into one — defined ONCE in `bbx.fingerprint.harness_identity` (R46),
+    which `fixture/selfgates/idkey.sh` is a shim over: a docs-only commit leaves it unchanged,
     and a commit that touches the harness moves it — which is precisely when
     the census IS stale. The two writers are proven to agree on BBX's own tree
     by `gates/file_census_tool.sh`. Registered as default D62."""
-    import hashlib
-    text = git(root, "rev-parse", *ID_TREES)
-    return hashlib.sha1(text.encode()).hexdigest()
+    from .fingerprint import harness_identity    # R46: the one definition
+    return harness_identity(root, "wholeset")
 
 
 def universe(root):
