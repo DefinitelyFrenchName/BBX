@@ -76,7 +76,7 @@ set, at a release or after a kernel change.
 ## The ritual (ruled R17 at the bbx-1 close, 2026-09-09; adapted from VampireSaved VSP-17/VSP-18/VSP-162)
 
 Sessions are keyed `bbx-N`, one key per sitting, never renamed (pointers in
-readouts, gotchas and history resolve through it). The last closed sitting is **bbx-20** (2026-09-12). **bbx-21 is OPEN** (2026-09-13): R21's first platform run came in and is NOT GREEN pending R48.
+readouts, gotchas and history resolve through it). The last closed sitting is **bbx-21** (2026-09-13); the next is **bbx-22**.
 
 **Open**
 1. Read this file, `STATE.md`, `docs/rulings.md`. (`CLAUDE.md` is the
@@ -159,40 +159,45 @@ alternatives and a narrower fallback are in the queue. Nothing else about the tw
 hosts differs: 31 gates, 119 declared controls, every NOTE-class value equal, which
 is the strong half of the result.
 
-**Next-session orientation (written at the bbx-20 close, 2026-09-12)**
-- Open first: the battery, **in the background** (~11 min, 31 registered gates),
-  with `--log build/selftest_<stamp>`, alone; then `bin/bbx readout` on it. Two
-  `drift` NOTEs are expected for the lineage censuses; re-read the NOTE rather
-  than any line here.
-- **S4's build is COMPLETE. Step 7, the slice readout, is next and is the last of
-  the slice** (`docs/plans/S4.md` §8.7), after which S4 goes to the maintainer for
-  a DONE ruling as S3 did.
+**Next-session orientation (written at the bbx-21 close, 2026-09-13)**
+- **The FIRST TASK is above and is ruled by BBX-26**: R48, then the fix it licenses.
+  Do not start S4 step 7 before it.
+- Open with the battery **in the background** (~11 min, 31 registered gates), with
+  `--log build/selftest_<stamp>`, alone, nothing edited while it runs. On THIS host
+  it is green; the divergence is off-host.
+- **Expect `NOTE: census-drift register=af2b1f085070 tree=1e40798f4530` on every
+  screen.** The bbx-20 portability fix moved the harness identity after the census
+  was regenerated, so the artifacts record the previous one. It is R47's ruling
+  working as designed — loud, never fatal. It clears when a release-scoped census run
+  regenerates them, and the next sitting will move the identity again anyway for
+  R44's and R46's build, so regenerate ONCE after that build rather than twice.
+- **After R48: S4 step 7, the slice readout** (`docs/plans/S4.md` §8.7), the last
+  thing the slice asks for, then S4 goes to the maintainer for a DONE ruling as S3
+  did.
 - **R44's and R46's builds are ONE step, not two.** Both touch the single identity
   key that `fixture/selfgates/idkey.sh`, `lib/py/bbx/file_census.py` and the census
-  document all read: R46 puts its definition in one place, R44 makes the refreeze a
-  printed step (the gate printing the identity it computed and the row it matched;
-  on a mismatch that is already RED with both keys, measured twice at bbx-19, so
-  only the PASSING half may be missing — measure before writing). Built together or
-  they fight each other.
-- **THREE THINGS now move on a commit touching `bin`, `lib`, `drivers` or `gates`**:
-  the self subject's registry row (R38, R44 — `gates/adapters.sh` RED until the
-  reviewed refreeze), the census's key (D62 — the document and register stale), and
-  since R47 the BATTERY ITSELF if that commit adds a harness FILE, because
-  `gates/census_register.sh` fails on a file with no frozen row. A commit touching
-  only `docs/`, `expected/` or `fixture/` moves none of them.
-- **The order that avoids paying twice** — learned three times at bbx-20, each
-  costing a twenty-minute run: land every code change FIRST, then the census
-  regeneration, then commit the document and register (docs-only, the key holds),
-  then the fixture refreeze (fixture-only, the key still holds), then the battery
-  twice. And **prove any instrument change on a two-gate `--only` probe** (seconds)
-  before paying for a full run.
+  document all read. R44's mismatch half is already RED with both keys on the screen
+  (measured twice at bbx-19), so only the PASSING half may be missing — measure before
+  writing.
+- **THREE THINGS move on a commit touching `bin`, `lib`, `drivers` or `gates`**: the
+  self subject's registry row (reviewed refreeze, R38/R44), the census's key (D62),
+  and — if the commit adds a harness FILE — the BATTERY itself, because
+  `gates/census_register.sh` fails on a file with no frozen row (R47). A commit
+  touching only `docs/`, `expected/` or `fixture/` moves none of them.
+- **The order that avoids paying twice**, learned three times at bbx-20 at twenty
+  minutes each: land every code change FIRST, then the census regeneration, then
+  commit the document and register (docs-only, the key holds), then the fixture
+  refreeze (fixture-only, the key still holds), then the battery twice. Prove any
+  instrument change on a two-gate `--only` probe (seconds) before paying for a run.
 - **R45 is rescoped and waiting** (three directions over three registries; the
-  tier-listing fix measured and RULED OUT because F13e diffs that listing). R21
-  still needs a Linux or WSL host.
-- If the census cadence starts to bite, the lever is its RUNTIME, not the gates:
-  most of the twenty minutes is five heavy gates in the shadow, and nothing the
-  register check does depends on them. Worth measuring before it becomes a
-  complaint; not a ruling today.
+  tier-listing fix measured and RULED OUT because F13e diffs that listing).
+- **Still wanted for R21, if it exists:** the WSL run's kept directory
+  (`build/selftest_linux_*`, tarred). `docs/platforms/wsl/run_2026-09-13.txt` is the
+  printed output only, so it is a WITNESS; the archive would make it a kept result
+  keyed by version (BBX-29).
+- If the census cadence starts to bite, the lever is its RUNTIME, not the gates: most
+  of the twenty minutes is five heavy gates in the shadow, and nothing the register
+  check does depends on them. Worth measuring before it becomes a complaint.
 
 **Orientation carried from the bbx-1 close (still true where not superseded above)**
 - S1 has two items left: the readout generator (abstraction RO1–RO3 as a
@@ -268,4 +273,6 @@ is the strong half of the result.
 - A gate that asserts something about a GENERATED artifact must be asked whether its question still means anything inside the generator's own copy of the tree. The census runs the whole battery against an instrumented shadow of itself, and it COMMITS its own `lib/py/sitecustomize.py` there — so a gate checking that every harness file has a census row read FAIL in every shadow, the contamination rule discarded the run, and the register became completable only by a run that could not complete (G46). The instrument now exports `BBX_FILE_CENSUS_SHADOW=1`, such a gate SKIPs with its reason, and a SKIP does not contaminate but IS named in the checked text. This is the second instance of the shape (G38 was the first); a third should become a contract line in `docs/controls.md`, not a third ad-hoc fix.
 - A read-only proof must compare against what it asserts about, not against `git status`. `gates/census_register.sh` checked the register with `git status --porcelain` and so reported ITSELF writing a file the census had legitimately left uncommitted — the normal state straight after a census run, which is exactly when that gate runs. Take the file's sha1 before and compare after (bbx-20).
 - Three defects at bbx-20 shared one shape: a check whose non-zero exit had TWO possible causes and could not tell them apart (a control whose copy inherited a real failure, a run refused for a reason the shadow guaranteed, a read-only proof reading a legitimate edit). When a check can fail two ways, make it name which.
+- A gate that SKIPS cannot fire its declared must-fire controls, and the controls reader counts a control that did not fire as DEAD — so a CORRECT skip reds the whole battery. It cannot happen on this host (nothing skips here) and it happened on the first WSL run (G47, R48 open). When adding a `# SKIP:` path to a gate that declares controls, know that the gate is now unable to be green on any host that takes the skip, until R48 lands.
+- A second HOST is a detector in the same way a second consumer is (BBX-25). Three sittings running, the second instance found what the first could not: the third subject kind found the census attributing an imported module to the wrong kind (G39), the second consumer of the exact family found its END rule (G26), and the second platform found the skip/controls defect (G47). When something has one instance, its green is a measurement of that instance.
 

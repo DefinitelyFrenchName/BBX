@@ -554,3 +554,47 @@ instances in two sittings:** a check that cannot reach its own failing state —
 the orphan verdict (G34), the clock stub (X32), the watcher loop (G37), the
 two-line retraction pattern (G41), and the portable gate's own ground truth,
 which lacked the one idiom that triggered G43.
+
+## bbx-20 (closed 2026-09-12)
+
+**Status (bbx-20 close, 2026-09-12):** slices S1 (but for R21's platform run) and
+S2 complete; **S3 DONE**; **S4's BUILD IS COMPLETE — only step 7, the slice
+readout, remains.** This sitting answered FOUR rulings and built three of them.
+**R46** (agreed): the harness's own identity key gets ONE definition in the
+harness, the fixture reading it — in force, not yet built. **R43** (agreed,
+BUILT): `lib/sh/baseline.sh` is the one definition of the bbh baseline
+(`bbx_baseline`), sourced by `gates/fidelity_bbh.sh`, `gates/fidelity_bbh_s2.sh`
+and `gates/suite.sh`, the last of which had cloned the wrong commit for six
+sittings while its header said otherwise (G32). The config-key alternative was
+DECLINED BY MEASUREMENT: fidelity pair F13e diffs bbh's and BBX's `config dump`
+and a new kind-blind section would break it. **R47** (agreed, with an addition
+the maintainer chose, BUILT): `gates/census_register.sh` holds the census
+register complete both ways on every battery via `bbx file-census
+--check-register` — a tracked harness file with no frozen row FAILS, a row naming
+a file the universe does not hold FAILS, and the census being STALE is
+`NOTE: census-drift`, loud and never fatal on R18's split. **R44** (agreed, for
+after this work): keep R38's key as ruled and make the refreeze a printed step —
+its build joins R46's next sitting, since both touch the one identity.
+**R45 RE-MEASURED and rescoped** at the maintainer's request from one direction
+to three: step 6's own tier pattern had opened a second orphan class nobody
+reports (G45), so four directions now exist across three registries. One
+candidate fix was measured and RULED OUT rather than attempted — the tier
+listing's registry column cannot say `sweep`, because F13e diffs that listing and
+all five INSTRUMENT gates in bbh's example are sweep-registered and print `-`.
+**Four defects in this sitting's own work, all found by measurement** (G43–G46
+and the gate-fix below), and three of them one shape: a check whose non-zero exit
+had two possible causes and could not tell them apart. R47's new gate DEADLOCKED
+the census — the register is completable only by a traced run, and the run refuses
+itself when a gate fails in the shadow, which the new gate did because the
+instrument's own `sitecustomize.py` is committed into the shadow and the tree's
+register can never hold it (G46). Fixed by letting the instrument declare the
+shadow (`BBX_FILE_CENSUS_SHADOW`), the gate SKIP there with its reason, and the
+contamination rule split: a FAIL discards a run, a SKIP does not but is NAMED in
+the checked text. The register gate's own read-only proof also fired for the wrong
+reason, reading `git status` where it meant its own sha1. **The census now proves
+R43 rather than my asserting it:** `lib/sh/baseline.sh` is executed by exactly the
+three gates that source it, measured from what the processes ran. 45 harness
+files, 31 gates, 0 unreached. Defaults D1–D63 (D62 amended for R47). Gotchas
+G1–G46. Retractions X1–X38. Open rulings THREE: R21, R44's build, R45.
+
+**In force:** `DECISIONS.md` — R0–R20, R22–R43, R46, R47 and method M1–M4.

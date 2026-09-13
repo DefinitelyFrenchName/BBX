@@ -7,47 +7,30 @@ paragraph per sitting, the outgoing status verbatim). Read `HANDOFF.md` first.
 generalization of `blackbox-harness` (bbh) to any subject with testable inputs
 and outputs. Born 2026-09-09.
 
-**Status (bbx-20 close, 2026-09-12):** slices S1 (but for R21's platform run) and
-S2 complete; **S3 DONE**; **S4's BUILD IS COMPLETE — only step 7, the slice
-readout, remains.** This sitting answered FOUR rulings and built three of them.
-**R46** (agreed): the harness's own identity key gets ONE definition in the
-harness, the fixture reading it — in force, not yet built. **R43** (agreed,
-BUILT): `lib/sh/baseline.sh` is the one definition of the bbh baseline
-(`bbx_baseline`), sourced by `gates/fidelity_bbh.sh`, `gates/fidelity_bbh_s2.sh`
-and `gates/suite.sh`, the last of which had cloned the wrong commit for six
-sittings while its header said otherwise (G32). The config-key alternative was
-DECLINED BY MEASUREMENT: fidelity pair F13e diffs bbh's and BBX's `config dump`
-and a new kind-blind section would break it. **R47** (agreed, with an addition
-the maintainer chose, BUILT): `gates/census_register.sh` holds the census
-register complete both ways on every battery via `bbx file-census
---check-register` — a tracked harness file with no frozen row FAILS, a row naming
-a file the universe does not hold FAILS, and the census being STALE is
-`NOTE: census-drift`, loud and never fatal on R18's split. **R44** (agreed, for
-after this work): keep R38's key as ruled and make the refreeze a printed step —
-its build joins R46's next sitting, since both touch the one identity.
-**R45 RE-MEASURED and rescoped** at the maintainer's request from one direction
-to three: step 6's own tier pattern had opened a second orphan class nobody
-reports (G45), so four directions now exist across three registries. One
-candidate fix was measured and RULED OUT rather than attempted — the tier
-listing's registry column cannot say `sweep`, because F13e diffs that listing and
-all five INSTRUMENT gates in bbh's example are sweep-registered and print `-`.
-**Four defects in this sitting's own work, all found by measurement** (G43–G46
-and the gate-fix below), and three of them one shape: a check whose non-zero exit
-had two possible causes and could not tell them apart. R47's new gate DEADLOCKED
-the census — the register is completable only by a traced run, and the run refuses
-itself when a gate fails in the shadow, which the new gate did because the
-instrument's own `sitecustomize.py` is committed into the shadow and the tree's
-register can never hold it (G46). Fixed by letting the instrument declare the
-shadow (`BBX_FILE_CENSUS_SHADOW`), the gate SKIP there with its reason, and the
-contamination rule split: a FAIL discards a run, a SKIP does not but is NAMED in
-the checked text. The register gate's own read-only proof also fired for the wrong
-reason, reading `git status` where it meant its own sha1. **The census now proves
-R43 rather than my asserting it:** `lib/sh/baseline.sh` is executed by exactly the
-three gates that source it, measured from what the processes ran. 45 harness
-files, 31 gates, 0 unreached. Defaults D1–D63 (D62 amended for R47). Gotchas
-G1–G46. Retractions X1–X38. Open rulings THREE: R21, R44's build, R45.
+**Status (bbx-21 close, 2026-09-13):** slices S1 and S2 complete; **S3 DONE**;
+**S4's BUILD IS COMPLETE — only step 7, the slice readout, remains.** One subject
+this sitting: **R21's first platform run came in, and it found a defect in BBX's own
+controls contract.** The WSL battery read `PASS 30 SKIP 1 FAIL 0 MISSING 0` and then
+NOT GREEN, because `gates/census_recount.sh` SKIPS off macOS (the three lineage
+censuses record absolute paths from this host) and a gate that skips runs none of its
+checks — so its four declared must-fire controls cannot fire, and
+`docs/controls.md`'s "declared and not fired is red" turns a CORRECT skip into a red
+battery. **Reproduced on macOS the same day** with `BBX_CENSUS_DIR` pointed at a
+census naming an absent tree, so the finding is instrument-grade and the defect is
+the contract's, not WSL's and not any gate's (G47). **Not fixed here:** the fix
+amends a contract R10 ruled, so **R48 is raised** with its recommendation, four
+declined alternatives and a narrower fallback — and **BBX-26 applies**, so it is the
+next sitting's FIRST task. **The larger half of the result: everything else is
+identical across the two hosts** — 31 gates, 119 declared controls, the same
+anti-orphan and working-tree results, both fidelity gates, and every NOTE-class value
+equal down to both fixtures' full count lines. Runtimes differ and are not gated.
+Third sitting running in which a SECOND INSTANCE exposed what the first could not:
+the third subject kind (G39), the second consumer of the exact family (G26), and now
+the second host. `docs/platforms/wsl/` holds the run and what it does and does not
+establish; the run file is a WITNESS because the kept directory is not in the tree.
+Gotchas G1–G47.
 
-**In force:** `DECISIONS.md` — R0–R20, R22–R43, R46, R47 and method M1–M4. **R21 HAS PRODUCED ITS FIRST RUN** (2026-09-13, WSL): `PASS 30 SKIP 1 FAIL 0 MISSING 0` and then
+**R21 HAS PRODUCED ITS FIRST RUN** (2026-09-13, WSL): `PASS 30 SKIP 1 FAIL 0 MISSING 0` and then
 **NOT GREEN**, on a skip that was CORRECT — `gates/census_recount.sh` skips because the three lineage
 censuses record absolute macOS paths, and a skipped gate cannot fire its four declared controls, which
 `docs/controls.md` counts as dead. Reproduced on macOS the same day, so it is a contract defect and not

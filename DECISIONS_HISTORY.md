@@ -1213,3 +1213,43 @@ said so in the readout. The thread worth watching is that three of this sitting'
 four defects were one shape — a check that could not tell its two failure causes
 apart — which is a sharper version of the pattern S6 is already aimed at.
 
+## bbx-21 (2026-09-13) — R21's first platform run, and the ruling it raised
+
+**Nothing was ruled this sitting; one ruling was raised, and it halts work.**
+
+**R48 — what a SKIPPED gate's declared controls mean.** The WSL run went NOT GREEN
+on a skip that was correct. A gate that skips runs none of its checks, so its
+declared must-fire controls cannot fire, and the contract counts a control that did
+not fire as dead. The recommendation is that a skipped gate's declarations be
+reported as not-asserting rather than dead — the treatment `docs/controls.md`
+already gives bbh's undeclared selftests, and the direct consequence of [BBH-6]'s
+own words that a skipped gate asserts nothing — paired with the screen reporting the
+skip count so the exemption cannot become a place to hide a real dead control.
+Declined in the entry: leaving it (no host where anything skips could ever be green,
+which makes R3 unreachable); firing the controls on the skip path (a control
+asserting against inputs the gate declined to measure is a control that lies);
+removing the gate's controls (they are real and fire here every battery); making the
+census paths relative (treats the symptom and leaves the contract wrong for every
+future skip); and exempting without reporting. A narrower fallback is offered:
+exempt only gates whose skip is DECLARED in their header.
+
+**Why the ruling and not the fix.** The contract is R10's. A contributor who finds a
+defect in a ruled contract files it with the proposed wording and waits — the same
+discipline R16 sets for the constitution, applied where the maintainer has ruled.
+
+**What the run established that no ruling is needed for.** Every other number is
+identical between Darwin arm64 and WSL. That is the first evidence BBX has that it is
+not a macOS program, and it is worth more than the red: 31 gates, 119 declared
+controls, both fidelity gates, and every NOTE-class value equal. The platform ROW of
+R21 stays *not green* because of the red, but the portability claim R3 makes is now
+supported by a measurement instead of by the POSIX-ness of the scripts.
+
+**Anti-hyperfocus (BBX-27).** The sitting did one thing and stopped, which was
+right: BBX-26 forbids feature work while the suite diverges, and the divergence is
+one ruling away from resolution. The shape to keep watching is the one this finding
+mirrors — five times in three sittings a check could not reach its own failing state,
+and here a check reaches one it should not. Both come from verdict rules that do not
+distinguish "what I watch is broken" from "what I watch did not run". That is now the
+strongest argument in the tree for R29's executable controls, and it is what S6
+should be aimed at.
+
