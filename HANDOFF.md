@@ -25,7 +25,7 @@ Shape: operational map. Read this first, then `STATE.md`, then
 | the slice sequence with the estimate | `docs/slices.md` |
 | slice S2's plan (measured census of the lift, design, fidelity rows, controls, rulings R23–R26) | `docs/plans/S2.md` — built bbx-3/bbx-4 |
 | **slice S3's plan** (the ancestors measured, the design contract by contract, the fixture, fourteen controls, rulings R31–R34) | `docs/plans/S3.md` — R31–R34 answered; **steps 1–5 built (bbx-7 … bbx-11); S3 ruled DONE by the maintainer 2026-09-10** (`docs/readout.md`, bbx-11: §7's six conditions in a table; the ruling recorded under it); §5's shifted-artifact row corrected at bbx-8 (G21), §5/§8.3's control placement at bbx-9 (X10), §5's nondeterminism row at bbx-10 (X11), §6's screen line at bbx-11 (X12) |
-| **slice S4's plan** (the ancestors measured, the design contract by contract, the fixture `fixture/fakecli/`, eighteen controls, the adapters, the self subject, the file census as a gate, rulings R35–R40) | `docs/plans/S4.md` — bbx-12; R35–R40 answered 2026-09-10 (R40 with the TSV caveat); **steps 1–5 built (bbx-13, bbx-14, bbx-15, bbx-16, bbx-18)**; §3/§4 corrected at bbx-13 before step 1 landed (X14–X19, BBX-19); step 2 needed no correction; §2/§3/§5 corrected at bbx-15 before step 3 landed (X20, X21); §3/§6/§8 corrected at bbx-16 before step 4 landed (X22–X24); §7's feature-options row and §5's `--crash-at` row corrected at bbx-17 before R42's change landed (X25, BBX-19); §3/§4/§5/§8 corrected at bbx-18 before step 5 landed (X29–X34, six measured wordings); **step 6 is next** (the file census as a gate, R39) |
+| **slice S4's plan** (the ancestors measured, the design contract by contract, the fixture `fixture/fakecli/`, eighteen controls, the adapters, the self subject, the file census as a gate, rulings R35–R40) | `docs/plans/S4.md` — bbx-12; R35–R40 answered 2026-09-10 (R40 with the TSV caveat); **steps 1–5 built (bbx-13, bbx-14, bbx-15, bbx-16, bbx-18)**; §3/§4 corrected at bbx-13 before step 1 landed (X14–X19, BBX-19); step 2 needed no correction; §2/§3/§5 corrected at bbx-15 before step 3 landed (X20, X21); §3/§6/§8 corrected at bbx-16 before step 4 landed (X22–X24); §7's feature-options row and §5's `--crash-at` row corrected at bbx-17 before R42's change landed (X25, BBX-19); §3/§4/§5/§8 corrected at bbx-18 before step 5 landed (X29–X34, six measured wordings); **step 6 built at bbx-19** (the file census as a gate, R39); **step 7, the slice readout, at bbx-24** (`docs/readout.md`, §7's six conditions in a table), S4 waiting on the maintainer's DONE ruling |
 | **the command-line kind (S4 step 1)** | the profile `lib/py/bbx/config.py` KINDS `command-line` (D45; `log_summary = python3 -m bbx.cli summary` since step 2, D43); `[suite].scenario_ext = "cli"` (D34); the token vocabulary `lib/py/bbx/cli.py` (D47 — the ONE writer of every token); the fixture `fixture/fakecli/` (BBX's third consumer: `bbx.toml`, `mkfakecli.py --check` — the design's predicates on the tree's tool, regenerate-and-diff, and the TOOL-CHECK that runs `subject/fakecli.py` for every scenario against the design; `scenarios/*.cli` (D46), `expected/fixture/` with `truth` + `logs/`, `unordered`, `schema` json (D49), `band` (D48), the registry and the 22-row register); `gates/cli_fixture.sh` (4 controls) |
 | **the command-line comparators (S4 step 3)** | `lib/py/bbx/compare_band.py` — the tolerant-numeric family over the driver's band view `<log>.bands` (D48, D53; `FAIL band <field>: <v> outside [<min>, <max>]`, the inventory both ways, `NOTE: band-fields <n>`; `--freeze <frozen> <proposed>` REFUSES to widen a band with no `rulings` entry and any inventory move, exit 3, the file unchanged — D55); the `tolerant-numeric)` branch and `compare_band` of `lib/sh/compare.sh` (the four S3 functions byte-identical); the json format of `compare_schema.py` (D49: keys both ways before any type, R40's seven types, `items_op`/`items_n`; the artifact is the driver's JSON view `<log>.json`, D54, handed by the kinds loop from the kind's view column since step 4, D57); the line row shape of `compare_set.py` (D56: `[l<i>] line, sha1`, compared by sha1 both ways; a wrong sha1 or a duplicate is hand-editing); `compare_exact.py`'s END rule counting the indices above zero (X20, G26); `bin/bbx compare band`; `gates/band.sh` (4 controls, ~4 s) and `gates/json_schema.sh` (5 controls, ~7 s), every verdict line frozen and classified, `finding.py` unchanged |
 | **the suite over the command-line fixture (S4 step 4)** | the kinds table's VIEW column (D57: `-` / `log` / `subject` / `json` / `bands` — the fourth field of every `[expectations].kinds` row in `lib/py/bbx/config.py`, read by `lib/py/bbx/expectations.py` (`kinds` prints four fields, `view <ext>`; a three-field row refused on one line) and by `bin/bbx-run-suite` (`view_of`, `view_path` — THE ONE RESOLVER, checked at the entrance after the identity and before any scenario runs, handed to every family as `compare_check`'s artifact; the tolerant-numeric branch hands it to `compare_band`, which derives no path); `gates/cli_suite.sh` (7 controls: identity-before-any-scenario, nondeterministic-before-any-class three ways, crash-vs-refusal, wrong-truth, schema-before-any-value over the JSON view, band-through-the-loop, unknown-view; 43 printed lines frozen — `NOTE: band-fields 1` TWICE under 04_band, ruled KEPT at bbx-17 (R41); 15 suite runs, ~99 s); the readout's suite screen for the fixture: `fixture 21`, classes `band, exact, multiset, schema`, the exit / band-fields / emitted-files notes |
@@ -38,13 +38,13 @@ Shape: operational map. Read this first, then `STATE.md`, then
 | **the document-set extractor and driver (S3 step 2)** | `lib/py/bbx/docset.py` (`selftest`, `run`, `map`, `summary`, and since step 3 `rows` — the run's rows joined by index with the map, proven the log's — and `resolve`, the ONE artifact resolver over `DOCSET_PATH`; the two strings and the token, D38; the forms' lexical classes and the record key, D39; the unlisted-claim guards, D40); `drivers/docset.sh` (`DOCSET_PATH` through `bbx.docset resolve`; REFUSED exit 3, DISCARDED exit 1); `drivers/README.md`; `gates/docset_driver.sh` (7 controls) |
 | **the document-set comparators (S3 step 3)** | `lib/py/bbx/compare_exact.py` (the truth log against the run log BY INDEX; `FAIL-SHORT` apart from `FAIL exact: index <i> differs`, BBX-4), `compare_set.py` (a frozen multiset of `(document, line, form, status)` rows both ways — `claims` inventory, `covered` shrink-only with `NOTE: covered-grew`, R33; a duplicate named as hand-editing), `compare_schema.py` (the artifact's shape before any value: header names in order, one type per column from D41's vocabulary, the rows line; the FIRST violation named; a wrong column count a schema FAIL); the `exact) set) schema)` branches of `lib/sh/compare.sh` (`compare_check` takes two trailing arguments, the scenario file and the artifact); `bin/bbx compare exact|set|schema`; `gates/set_schema.sh` (5 controls; every verdict line frozen there and classified by `finding.py`, 38 lines) |
 | **the suite's kinds loop and the kept run's notes (S3 step 4)** | `bin/bbx-run-suite` (the loop read off the kinds table: the temporal family means bbh's precedence loop verbatim, anything else the kinds loop — `schema` first, the table's order, `.sha1` last; `NOT-EVALUATED (schema failed)`; `--freeze` for the shrink-only kind through `bbx.compare_set --freeze`, never a self-freeze beside an authored kind); `notes.tsv` in the kept run (D44); `[suite].log_summary` (D43); `bbx.fingerprint --path` (the subject file, handed to the comparators); `finding.py`'s `NOT-EVALUATED` and `authored ` rules; the readout's suite screen (scenarios and pairings apart, `coverage:` per scenario, BBX-14 over pairings, the driver's blind spots); `gates/docset_suite.sh` (6 controls, 17 suite runs, ~55 s) |
-| the controls contract (must-fire grammar R10; a skipped gate R48; the reader's OUTPUT, never its exit, G48) | `docs/controls.md`; ground truth `gates/controls.sh` (6 controls: the dead control, the header extent, and since bbx-22 `skip-cannot-hide-dead`, `failed-skip-not-exempt`, `strict-admits-no-exemption`, `reader-crash-is-red`) |
+| the controls contract (must-fire grammar R10; a skipped gate R48; the reader's OUTPUT, never its exit, G48; an entry is ONE line, R49) | `docs/controls.md`; ground truth `gates/controls.sh` (6 controls: the dead control, the header extent, and since bbx-22 `skip-cannot-hide-dead`, `failed-skip-not-exempt`, `strict-admits-no-exemption`, `reader-crash-is-red`); the one-line rule held every battery by `gates/close_sweeps.sh` (`header_entries=<n> continued=<n>`, control `entry-continued`) through `bbx.controls.continued_entries` (G53, bbx-24) |
 | the defaults register (BBX-24) | `docs/defaults.md` |
 | the kernel | `bin/bbx` (dispatcher, MEASURED at bbx-18 from `bbx help` and from what it refuses: `run-static run-suite classify tier config controls recount readout compare selftest file-census` — there is no `run-sweep` and no `fingerprint` subcommand; the sweep runner is `bin/bbx-run-sweep` and the fingerprint is `python3 -m bbx.fingerprint` — which since R46 (bbx-23) also DEFINES the harness's own identity, `--harness-identity program|wholeset [--root DIR]`; `bbx tier <config> --complete` is R45's registry verdict), `lib/sh/`, `lib/py/bbx/`, `bbx.toml` (BBX as its own consumer, kind `self`) |
 | the expectation register (S2 step 4, R24) | `lib/py/bbx/provenance.py` over `<expected_dir>/PROVENANCE.toml` (D31); `gates/provenance.sh`; the readout's suite screen for a kept `bbx-run-suite --log` run (D32) |
 | the comparison (S2 steps 1–3) | the temporal family `lib/py/bbx/compare_{flicker,window,composite}.py`, `check_diverge.py`, `propose_temporal.py`, `thresholds.py` (R25), `logfmt.py`; the one dispatcher `lib/sh/compare.sh` (R23: family by kind); the kinds table `lib/py/bbx/config.py` `[expectations].kinds` read by `lib/py/bbx/expectations.py` and `lib/sh/expectation_kinds.sh`; the suite `bin/bbx-run-suite` (`--log DIR`: results.tsv with a FINDING column, `lib/py/bbx/finding.py`; R26 driver home) |
-| BBX's gates and registries | `gates/*.sh` (33 on disk, 32 REGISTERED in a tier the battery runs, counted at bbx-23: 28 portable incl. `registry_complete` (R45), `census_register` (R47), `file_census_tool`, `adapters`, `temporal`, `thresholds`, `compare_dispatch`, `expectation_kinds`, `provenance`, `docset_fixture`, `docset_driver`, `set_schema`, `docset_suite`, `cli_fixture`, `cli_driver`, `band`, `json_schema`, `cli_suite`; 4 static incl. `fidelity_bbh_s2` (F12, F16, F17) and `suite`; plus `file_census` in `gates/sweep.tsv` at the release scope, INSTRUMENT by `[tier].patterns` and so not an orphan) — the old row follows for its runtimes: (25 portable incl. `adapters`, `temporal`, `thresholds`, `compare_dispatch`, `expectation_kinds`, `provenance`, `docset_fixture`, `docset_driver`, `set_schema`, `docset_suite`, `cli_fixture`, `cli_driver`, `band`, `json_schema`, `cli_suite`; 4 static incl. `fidelity_bbh_s2` (F12, F16, F17) and `suite`), `gates/portable.txt`, `gates/static.txt`, `gates/sweep.tsv` (one row, `file_census`) — run with `BBX_BBH_HOME=~/Developer/blackbox-harness bin/bbx selftest` (**~14 min on this host (the bbx-23 pre-commit run's 32 gate runtimes sum to 860 s): it no longer fits a ten-minute foreground command, so run it in the BACKGROUND and wait on its tally**; measured in that run: `fidelity_bbh` 48 s, `fidelity_bbh_s2` 103 s, `docset_suite` 78 s, `cli_suite` 137 s, `adapters` 139 s) |
-| the readout, generated | `bin/bbx selftest --log build/selftest_<stamp>` keeps the run; `bin/bbx readout <dir> [--against <dir>]` prints the one screen (RO1–RO3; BBX-14 met only with `--against` a second kept run at the same HEAD); a gate header or driver the screen cannot read at the root the run recorded is named `NOT FOUND`, its blind spots UNKNOWN, never counted as declaring none (G50, bbx-23) |
+| BBX's gates and registries | `gates/*.sh` (33 on disk, 32 REGISTERED in a tier the battery runs, counted at bbx-23: 28 portable incl. `registry_complete` (R45), `census_register` (R47), `file_census_tool`, `adapters`, `temporal`, `thresholds`, `compare_dispatch`, `expectation_kinds`, `provenance`, `docset_fixture`, `docset_driver`, `set_schema`, `docset_suite`, `cli_fixture`, `cli_driver`, `band`, `json_schema`, `cli_suite`; 4 static incl. `fidelity_bbh_s2` (F12, F16, F17) and `suite`; plus `file_census` in `gates/sweep.tsv` at the release scope, INSTRUMENT by `[tier].patterns` and so not an orphan) — the old row follows for its runtimes: (25 portable incl. `adapters`, `temporal`, `thresholds`, `compare_dispatch`, `expectation_kinds`, `provenance`, `docset_fixture`, `docset_driver`, `set_schema`, `docset_suite`, `cli_fixture`, `cli_driver`, `band`, `json_schema`, `cli_suite`; 4 static incl. `fidelity_bbh_s2` (F12, F16, F17) and `suite`), `gates/portable.txt`, `gates/static.txt`, `gates/sweep.tsv` (one row, `file_census`) — run with `BBX_BBH_HOME=~/Developer/blackbox-harness bin/bbx selftest` (**10 to 15 min on this host (32 gate runtimes summed 865, 841, 666 and 618 s over four kept runs on 2026-09-13): past a ten-minute foreground command, so run it in the BACKGROUND and wait on its tally**; the heaviest in bbx-24's opening run: `adapters` 107 s, `cli_suite` 102 s, `sweep_runner` 81 s, `fidelity_bbh_s2` 71 s, `docset_suite` 65 s) |
+| the readout, generated | `bin/bbx selftest --log build/selftest_<stamp>` keeps the run; `bin/bbx readout <dir> [--against <dir>]` prints the one screen (RO1–RO3; BBX-14 met only with `--against` a second kept run at the same HEAD); a gate header or driver the screen cannot read at the root the run recorded is named `NOT FOUND`, its blind spots UNKNOWN, never counted as declaring none (G50, bbx-23); a blind spot whose header entry runs past its one line is printed with `^ TRUNCATED` directly under it, never as a shorter whole (G53, R49, bbx-24) |
 | the retractions register (BBX-22) | `docs/retractions.tsv`, read by `gates/close_sweeps.sh` |
 | the recount tool | `bin/bbx recount <census.md> [--only A1,A2] [--root DIR] [--in-place]` — runs on a plain local clone of the recorded commit (R18, R20); `--in-place` is the unproved escape hatch |
 
@@ -63,7 +63,7 @@ bbh is **never modified** from here. VampireSaved and SMS are read only.
 ## What is running
 
 Nothing in the background. `BBX_BBH_HOME=~/Developer/blackbox-harness bin/bbx selftest`
-takes **~14 min on this host** (31 registered gates; the bbx-22 opening run's gate runtimes sum to 827 s),
+takes **about 10 to 15 min on this host** (32 registered gates; the gate runtimes of four kept runs on 2026-09-13 summed 865, 841, 666 and 618 s, re-derived from their `results.tsv` at bbx-24),
 which is past the ten-minute cap on a foreground command: run it in the BACKGROUND and wait on
 its tally. Read the tally off the KEPT RUN, not off a backgrounded pipe — a `| tail` keeps only
 the tail AND hands you the pipe's exit instead of the tool's (G16, which bit again at bbx-19 and
@@ -76,7 +76,7 @@ set, at a release or after a kernel change.
 ## The ritual (ruled R17 at the bbx-1 close, 2026-09-09; adapted from VampireSaved VSP-17/VSP-18/VSP-162)
 
 Sessions are keyed `bbx-N`, one key per sitting, never renamed (pointers in
-readouts, gotchas and history resolve through it). The last closed sitting is **bbx-23** (2026-09-13); the next is **bbx-24**.
+readouts, gotchas and history resolve through it). The last closed sitting is **bbx-24** (2026-09-13); the next is **bbx-25**.
 
 **Open**
 1. Read this file, `STATE.md`, `docs/rulings.md`. (`CLAUDE.md` is the
@@ -93,8 +93,8 @@ readouts, gotchas and history resolve through it). The last closed sitting is **
 
 **Close, in this order**
 1. **Green first, twice, kept.** Run the battery alone, twice, each with
-   `--log build/selftest_<stamp>` and each IN THE BACKGROUND (it is ~14 min
-   with 31 registered gates, past the foreground cap); BBX-14 needs two runs at one HEAD;
+   `--log build/selftest_<stamp>` and each IN THE BACKGROUND (it is 10 to 15 min
+   with 32 registered gates, past the foreground cap); BBX-14 needs two runs at one HEAD;
    the close quotes the tally line and the controls line verbatim, read off the
    kept run rather than off a screen that may have been truncated. Not green:
    the close says NOT GREEN and why; the next session's first task is ruled
@@ -146,44 +146,46 @@ readouts, gotchas and history resolve through it). The last closed sitting is **
 Steps 8 and 9 are checked, not remembered: step 8 by `close_sweeps`, step 9
 by construction (the recount's clone) and by `fidelity_bbh`'s proof.
 
-**Next-session orientation (written at the bbx-23 close, 2026-09-13)**
-- **No BBX-26 halt, and no ruling open.** R0–R48 are answered; R44, R45 and R46 are built, and G50
-  is fixed (bbx-23). On this host the battery is green — the close's pair is quoted in
-  `docs/readout.md`, CLOSE — bbx-23.
-- **FIRST: S4 step 7, the slice readout** (`docs/plans/S4.md` §8.7): the selftest run twice, kept;
-  the families per kind (the design target B = 4); controls declared and fired; provenance classes;
-  defaults rows; the file census FROM THE GATE with its three-kind rows; what the green does not
-  assert. Then S4 goes to the maintainer for a DONE ruling as S3 did. It moves no harness file. The
-  census was regenerated at bbx-23 (`367f5e7`); whether step 7 wants `gates/file_census.sh`'s own
-  `--check` run as well is a question to measure against the plan's wording, not to assume.
-- Open with the battery **in the background** (~14 min, 32 registered gates), with
+**Next-session orientation (written at the bbx-24 close, 2026-09-13)**
+- **No BBX-26 halt, and no ruling open.** R0–R49 are answered; R49 (a header entry is one line, and that
+  is checked) was raised and built at bbx-24. On this host the battery is green — the close's pair is
+  quoted in `docs/readout.md`, CLOSE — bbx-24.
+- **FIRST: the maintainer's DONE ruling on S4.** bbx-24 wrote S4's slice readout (step 7) with CLAUDE.md
+  §7's six conditions answered one by one. Nothing is built before the ruling. The question of which
+  slice follows goes with it: S5 (the skill) by the table, or R29's executable controls (S6) first; the
+  contributor recommends S5 (`DECISIONS_HISTORY.md`, bbx-24).
+- Open with the battery **in the background** (10 to 15 min, 32 registered gates), with
   `--log build/selftest_<stamp>`, alone, nothing edited while it runs.
-- **Expect NO `census-drift` NOTE** at `3202a22` or at any docs-only descendant: the census records
-  identity `afd52caf8a96`. A commit touching `bin`, `lib`, `drivers` or `gates` brings the NOTE back,
+- **Expect NO `census-drift` NOTE** at `af8846c` or at any docs-only descendant: the census records
+  identity `4465efe8a453`. A commit touching `bin`, `lib`, `drivers` or `gates` brings the NOTE back,
   loud and never fatal (R47).
-- **The WSL platform row attests `429d3f8`, not the current commit.** The build changed the readout,
-  the tier classifier and the identity since. A re-run follows `docs/platforms/README.md` unchanged
-  (its tree check, `grep -c '^# MUST-FIRE' gates/controls.sh` → `6`, still holds); push first and
-  confirm on the remote before asking (G49). The maintainer's rider — SSH or basic automation —
+- **Expect `header_entries=240 continued=0`** on the close sweep's PASS line. A gate or driver added with
+  entries moves the first number; an entry wrapped onto a second line makes the battery red, naming the
+  file and line (R49). Keep every `MUST-FIRE:` and `NOT-ASSERTED:` entry on ONE line, however long.
+- **The WSL platform row attests `429d3f8`, not the current commit.** The readout, the tier classifier,
+  the identity and the close sweep have changed since. A re-run follows `docs/platforms/README.md`,
+  whose tree check is now `grep -c '^# MUST-FIRE' gates/close_sweeps.sh` → `4` (`3` at `429d3f8`); push
+  first and confirm on the remote before asking (G49). The maintainer's rider — SSH or basic automation —
   becomes a ruling once the cadence of platform runs is known.
 - **THREE THINGS move on a commit touching `bin`, `lib`, `drivers` or `gates`**: the self
   subject's registry row (a reviewed refreeze whose commit quotes the changed line, R38/R44 —
-  bbx-23's was `3202a22`), the census's key (D62), and — if the commit adds a FILE under `bin/`,
+  bbx-24's was `af8846c`), the census's key (D62), and — if the commit adds a FILE under `bin/`,
   `lib/` or `drivers/` (the census universe; a new file under `gates/` does not count, measured at
   bbx-23) — the BATTERY itself, because `gates/census_register.sh` fails on a file with no frozen
   row (R47). A commit touching only `docs/`, `expected/` or `fixture/` moves none of them.
-- **The order that avoids paying twice**, which bbx-23 followed for four changes at once: land
-  every code change FIRST (each measured red on the old code in a scratch clone, then green), then
-  a battery over the uncommitted tree, then the commits, then the census regeneration, then commit
-  the document and register (docs-only, the key holds), then the fixture refreeze (fixture-only, the
-  key still holds), then the battery twice.
-- **G48's sweep, widened by G50, is the cheap next measurement**: every count a runner in `bin/`
-  takes over a tool's output, and every reader in the readout that takes something that may be
-  absent, asking whether the absence reads as zero or as silence. Measure before claiming any of
-  them is a defect.
-- If the census cadence starts to bite, the lever is its RUNTIME, not the gates: bbx-23's run took
-  848 s, most of it the heaviest gates in the shadow, and nothing the register check does depends
-  on them. Worth measuring before it becomes a complaint.
+- **The order that avoids paying twice**, which bbx-23 and bbx-24 both followed: land every code change
+  FIRST (each measured red on the old code in a scratch clone, then green), then a battery over the
+  uncommitted tree, then the commits (a document the new check reads corrected first, in its own commit,
+  BBX-19), then the census regeneration and its docs-only commit, then the fixture refreeze, then the
+  ledgers, then the battery twice.
+- **G48's sweep, widened by G50 and G53, is the cheap next measurement**: every reader that may read
+  LESS than is there — a count over a tool's output that may be absent, a header or a row read one line
+  at a time — asking whether the shortfall reads as silence. Measure before claiming any of them is a
+  defect.
+- **G54's candidate ruling**, named and not queued: BBX's own `docs/` checked as a document-set subject,
+  so that a count a registry defines (gates, controls, rows) cannot go stale in prose again.
+- The census tool's runtime was 632 s at bbx-24 (848 s at bbx-23); if its cadence starts to bite, the
+  lever is that runtime, not the gates.
 
 **Orientation carried from the bbx-1 close (still true where not superseded above)**
 - S1 has two items left: the readout generator (abstraction RO1–RO3 as a
@@ -244,7 +246,7 @@ by construction (the recount's clone) and by `fidelity_bbh`'s proof.
   tools in the SMS tree do run for minutes; run the gate alone.
 - An entrance check in a runner reads only variables defined ABOVE it; under `set -u` the consumer whose table reaches the branch aborts (`SUBJECT_FILE: unbound variable`) and the consumer that does not runs GREEN — the neighbouring gate is the detector, which is why the shadow runs every neighbour and not only the new gate (G28).
 - A gate's frozen text, its header's counts and its quoted runtime are READ FROM THE RUN — the output file pasted, the NOTE line's number — never typed from a screen read: one character, one column and one count were wrong in one gate's first draft (G29; G27's family). A verdict is taken after the scenario field and past the kind's WORD, never at a fixed column: `unordered` is 9 wide where every earlier kind was ≤ 8.
-- The battery takes ~14 min (the bbx-22 opening run), which is PAST the 10-minute cap on a foreground command: run it with `run_in_background` and wait on its tally, and remember that a backgrounded pipe through `tail` keeps only the tail — the kept run under `build/selftest_<stamp>` is where the whole thing lives, and `bin/bbx readout` on it prints the tally, the controls line and the blind spots (bbx-18 lost a battery's screen that way and read it back off the kept run).
+- The battery takes 10 to 15 min (four kept 32-gate runs on 2026-09-13), which is PAST the 10-minute cap on a foreground command: run it with `run_in_background` and wait on its tally, and remember that a backgrounded pipe through `tail` keeps only the tail — the kept run under `build/selftest_<stamp>` is where the whole thing lives, and `bin/bbx readout` on it prints the tally, the controls line and the blind spots (bbx-18 lost a battery's screen that way and read it back off the kept run).
 - A commit that touches `bin`, `lib`, `drivers` or `gates` moves the self subject's identity and leaves `gates/adapters.sh` RED until the registry row is refrozen (R38, R44): 34 of BBX's first 92 commits did (counted at bbx-22). The refreeze is one line, reviewed and PRINTED — since R44's build the passing `adapters` shows the key it matched as `NOTE: self-identity` and `mkselfgates.py --check` prints `identity(wholeset)=` — its commit message QUOTES the old line and the new one, and it is the last commit touching the harness before the battery pair.
 - This session's shell is zsh, where a bare `$c:lib` applies the history modifier `:l` and reaches the command as `headib`: `git rev-parse "$c:bin" "$c:lib" "$c:drivers"` silently measured TWO of three trees and printed a plausible 40-hex key (G33). `${c}:lib`, `"$c":lib` and `/bin/sh -c` are correct. Never build a measurement's command line from a variable followed by a colon in this shell.
 - A wait loop must not be able to match ITSELF: `until ! pgrep -f 'bbx-run-static --config'; do sleep 15; done` never exits, because `pgrep -f` reads full command lines and the watcher's own line contains the pattern (G37 — four of them were still sleeping after the bbx-18 close and were killed by PID). Use `pgrep -f '[b]bx-run-static'`, or watch the run's OUTPUT FILE for the tally, which is what the next step reads anyway.
@@ -265,4 +267,6 @@ by construction (the recount's clone) and by `fidelity_bbh`'s proof.
 - `bin/bbx readout` reads gate headers from the root a kept run RECORDED: on any other host it finds none. Before G50's fix (bbx-23) it counted every such gate as declaring no blind spot (31 for the WSL pair, where the truth is 0); it now names them `NOT FOUND` with their blind spots UNKNOWN. Read a platform's screen where it ran, or on a copy whose `root=` points at a clone of the same commit — and say so.
 - A ruling answered with its build DEFERRED is still ANSWERED: move it under an Answered heading and write its DECISIONS row in the same edit. R44 sat under Open for two sittings while the history twin said "agreed", and `gates/rulings_shape.sh` passed because the two files it compares were wrong the same way (G51).
 - A second HOST is a detector in the same way a second consumer is (BBX-25). Three sittings running, the second instance found what the first could not: the third subject kind found the census attributing an imported module to the wrong kind (G39), the second consumer of the exact family found its END rule (G26), and the second platform found the skip/controls defect (G47). When something has one instance, its green is a measurement of that instance.
-
+- A header entry (`# MUST-FIRE:`, `# NOT-ASSERTED:`) is ONE line, however long: two entries wrapped onto indented lines at bbx-17 were read as their first line for seven sittings (G53), and since R49 a wrapped entry fails `gates/close_sweeps.sh` naming the file and line. What may follow an entry is a bare `#` or a keyed header line (`# UPPER-KEY:` / `# UPPER-KEY (`); a prose line directly after an entry is refused as well, so put a bare `#` between the entries and any prose.
+- A control that plants a defect in a COPY of the tree must require the change the plant causes, RELATIVE to what the real tree reads, never an absolute count: the copy inherits every real defect, and `entry-continued`'s first draft (`continued=2`) would have read DEAD on a tree already carrying a run-on entry — a control failing for a reason it did not plant (G53; bbx-20's hazard again).
+- A count that a registry defines (registered gates, declared controls, census rows), repeated in a living page, is a hand-kept copy of the registry: three sentences kept "31 gates" for a sitting after R45 made it 32, one of them on the page followed on WSL (G54). Quote the command beside the count, re-derive before relying on it, and when a registry moves, grep the old number.

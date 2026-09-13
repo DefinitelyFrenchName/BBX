@@ -44,10 +44,12 @@ plain local clone of it under `TMPDIR` and never touch your checkout. Until R43
 landed this sitting, one gate needed a second, older commit; it does not any more.
 
 **Check which BBX tree you have before paying for a run.** `git -C BBX log --oneline -1`
-names the commit, and it must be the one you were asked to test or later. Since R48
-(bbx-22), `grep -c '^# MUST-FIRE' BBX/gates/controls.sh` prints `6`; a tree from before
-the fix prints `2` (both measured on the macOS host). A pull taken while the fix was
-still unpushed has already run the pre-fix harness once (G49).
+names the commit, and it must be the one you were asked to test or later. Since R49
+(bbx-24, `64dfd85`), `grep -c '^# MUST-FIRE' BBX/gates/close_sweeps.sh` prints `4`; a tree
+from before it prints `3` (measured on the macOS host at `64dfd85`, `f6f136d` and
+`429d3f8`). The older check, `grep -c '^# MUST-FIRE' BBX/gates/controls.sh`, prints `6`
+at all three since R48 (bbx-22) and no longer tells a new tree from the last one tested.
+A pull taken while a fix was still unpushed has already run the pre-fix harness once (G49).
 
 ## 2. Run the battery twice, in the background, alone
 
@@ -64,8 +66,8 @@ Three things to hold to, each paid for here:
 * **Run it alone.** Nothing else of BBX's, and no editing of the tree while it
   runs — the runner reports a tracked file that changed mid-run as `dirtied`, and
   such a run is not a clean measurement (G44).
-* **It takes about fourteen minutes** on the macOS host with 31 registered gates
-  (its gate runtimes summed 820, 820 and 827 s over three kept runs on 2026-09-13), so
+* **It takes about ten to fifteen minutes** on the macOS host with 32 registered gates
+  (the gate runtimes of four kept runs on 2026-09-13 summed 865, 841, 666 and 618 s), so
   it is past a ten-minute foreground cap if you have one. Read the verdict off the
   **kept run**, never off a pipe: `| tail` keeps only the tail and hands you the
   pipe's exit instead of the command's (G16).

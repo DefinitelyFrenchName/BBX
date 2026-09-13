@@ -1385,3 +1385,51 @@ last green means what it is taken to mean: the pre-commit battery attests the fo
 uncommitted tree over `f72a2e1`, and only the close pair — at the committed HEAD, after the census and
 the refreeze — is the close's evidence. The next thread is S4 step 7, the slice readout, which moves no
 harness file and which names the file census among its inputs.
+
+## bbx-24 (2026-09-13) — R49 raised from the opening screen and ruled the same sitting: a header entry is one line, and that is checked
+
+**One ruling, raised and answered.** The opening battery at `f6f136d` was GREEN (PASS 32, controls
+fired 128 / declared 128), and its generated screen printed one of `cli_suite`'s blind spots cut
+mid-sentence. Two `NOT-ASSERTED:` entries — `gates/cli_suite.sh:26` and `drivers/cli.sh:43` — had been
+wrapped onto indented comment lines at bbx-17, and the one-line reader dropped the rest with no error;
+the cut line is on 7 committed screens (G53). Three options were put: fix the headers and make the
+readers flag a continued entry, with a control that must fire (recommended); fix the headers only; file
+and defer. The maintainer chose the first: "option 1. We don't compromise on discipline. The only
+arbitrations may be on time/practicality but even so they would be arbitrations on method of
+application, not on how to compromise on the discipline" (R49).
+
+**How it was built.** The layout was measured before the rule was written: after the 236 entries in 37
+gate and driver headers came another entry 198 times, a bare `#` 32, the end of the block 4 and a
+run-on line 2 — so the definition refuses anything but a bare `#` or a keyed header line, which catches
+a one-space continuation as well as an indented one. The headers were corrected first, in their own
+commit (`398a64f`, BBX-19), their texts proven identical once joined; then the check (`64dfd85`). Each
+new control was run against the old code in a scratch clone of `f6f136d` and read DEAD, then FIRED on
+the new; the new sweep failed the unfixed tree naming both entries and passed once they were joined.
+One of the contributor's own controls was wrong in its first draft — an absolute count that a real
+run-on entry would have turned into a DEAD reading for a reason it did not plant — and was rewritten
+before its first run. A battery over the uncommitted build read PASS 32, controls fired 131 / declared
+131.
+
+**The census and the refreeze, paid once.** The regeneration ran every gate in its shadow — all PASS,
+`census_register` SKIPping there by design (G46) — in 632 s (`c2e654c`). The register's only changed
+line is `measured_at`, and the document moved exactly where the build did: `controls.py` gains the close
+sweep. The refreeze was one line, `afd52caf…` → `4465efe8…`, quoted old and new in `af8846c`.
+
+**The stale spot, fixed with its ledger.** Three living-page sentences still gave 31 registered gates
+after R45 made it 32 — HANDOFF twice and the platform README followed on WSL — and
+`gates/close_sweeps.sh` quoted ~1 s for a gate the opening battery timed at 6 s (G54, X45). Corrected
+with the gate runtimes of four kept 32-gate runs re-derived from their `results.tsv` (865, 841, 666 and
+618 s). X45 was made to fire on a planted copy of the tree before its zero was believed.
+
+**Anti-hyperfocus (BBX-27), at the end of S4 as `docs/slices.md` asks.** Is the next slice still the
+most valuable one? S5 (the skill) is next by the table, estimated at one session, and S4 alone filed 27
+gotchas that name the rules they re-anchor, which is S5's raw material. The case for S6 first is that
+every controls count this slice reads out — 131 fired of 131 declared in the build battery — is still
+each gate's self-report until R29's executable controls exist. The contributor's answer: S5 as planned,
+with R29's place put to the maintainer beside the DONE ruling, because it is a question of which blind
+spot to retire first and not of method. Does the last green mean what it is taken to mean? The build
+battery attests an uncommitted tree over `f6f136d`; only the close pair, at the committed harness whose
+identity is `4465efe8a453`, is the close's evidence. And every command-line expectation is `fixture` or
+`derived` class: `PASSed on a real pairing: exact` on the unittest and selfgates screens means a real
+framework and BBX's own runner reproduced what a derivation froze, over a package and stub gates written
+here — never that any real test suite or gate battery is good.

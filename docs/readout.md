@@ -4078,3 +4078,56 @@ it was caught by the measurement discipline that exists. The registry gate faili
 it was registered is not an incident: it is the gate's first positive, recorded in the bbx-23 section.
 
 **Sweeps on the final tree:** `PASS: close_sweeps=/Users/koneko/Developer/generalized-blackbox-harness/BBX files=163 retractions=44 retraction_hits=0 deferrals=0 defaults_rows=63 citations=888 unresolved=0 errors=0; 3 controls fired`; `PASS: rulings=/Users/koneko/Developer/generalized-blackbox-harness/BBX/docs/rulings.md entries=49 open=0 answered=49 decisions_rows=49 errors=0; 4 controls fired`.
+
+# bbx-24 — R49: a header entry is one line, and that is checked; the census current again; the stale spot fixed (2026-09-13)
+
+One subject, found by reading the opening screen rather than by any gate, and ruled by the maintainer the
+same sitting (R49): two blind spots the screen printed cut mid-sentence (G53). Then the stale counts
+HANDOFF and the platform README carried (G54), and S4 step 7.
+
+**What changed on the screen.**
+- **G53 / R49.** A blind spot whose header entry runs past its one line is printed with `  <gate>: ^
+  TRUNCATED — the blind spot above runs on <n> more header line(s) that this screen does not print (one
+  line per entry: docs/controls.md, G53)` directly under it — on the battery screen for a gate, on a suite
+  screen for a driver. No such line appears on this sitting's screens: the two entries that ran on are
+  one line each since `398a64f`, and `cli_suite`'s blind spot now reads to its end.
+- **The close sweep** prints `header_entries=<n> continued=<n>` and fails the battery on any `*.sh` header
+  entry that runs on, naming the file, the line and the kind.
+- `close_sweeps` declares one more blind spot: a blind spot or a control written as prose, without its
+  key, is read by nobody.
+
+**How it was proved.** The layout was measured before the rule was written. The headers were corrected
+first, in their own commit, their texts proven identical once joined. Each new check was run against the
+old code in a scratch clone, where it had to read DEAD, and against the new, where it had to fire; the
+new sweep failed the unfixed tree by name and passed the fixed one. A battery ran over the uncommitted
+build before the commits; the census regeneration and the refreeze followed.
+
+## Counts, separately (measured this sitting by the commands named)
+
+| what | count | how |
+|---|---|---|
+| opening battery at `f6f136d` | `PASS 32  SKIP 0  FAIL 0  TIMEOUT 0  MISSING 0`, GREEN; controls fired 128 / declared 128; each can fail 32 of 32; tree unchanged; gate runtimes 666 s | `bin/bbx selftest --log build/selftest_20260913T161111Z`, `bin/bbx readout` |
+| header entries in 37 gate and driver headers at `f6f136d`, and what follows each | 236 entries: another entry 198, a bare `#` 32, the end of the block 4, a run-on line 2 (`gates/cli_suite.sh:26` over 2 lines, `drivers/cli.sh:43` over 3) | a script over the header blocks, then `bbx.controls.continued_entries` — gated by `close_sweeps` since `64dfd85` |
+| committed screens carrying the cut `cli_suite` line | 7 (`docs/readout.md`, bbx-17 … bbx-23); the driver's cut line: 0 | `grep -c` on the line's fixed end |
+| the new gates on the OLD code | `close_sweeps.sh` exit 1, `entry-continued` DEAD; `readout.sh` exit 1, `truncated-blind-spot-marked` and `truncated-driver-blind-spot-marked` DEAD; the 11 existing controls fired | a scratch clone of `f6f136d` |
+| the new sweep with the headers still broken | exit 1, `header_entries=240 continued=2 errors=2`; `close_sweeps.sh` FAIL on the real tree by name, its 4 controls fired (`continued rose 2 -> 4`) | the tree, uncommitted |
+| the new code with the headers joined | sweep exit 0, `header_entries=240 continued=0`; `close_sweeps.sh` PASS, 4 fired, 7 s; `readout.sh` PASS, 10 fired, 4 s; `controls.sh` PASS, 6 fired; the opening run re-read by the new readout: 2 lines differ, TRUNCATED 0 | the tree, uncommitted |
+| the header joins | NOT-ASSERTED texts identical once joined (5 → 5 and 3 → 3 entries); every non-comment line unchanged | `git show HEAD:<file>` against the tree, a script |
+| the battery over the uncommitted build | `PASS 32`, GREEN; controls fired 131 / declared 131; each can fail 32 of 32; tree unchanged; gate runtimes 618 s | `bin/bbx selftest --log build/selftest_20260913T165109Z` |
+| the census regeneration | exit 0 in 632 s, every shadow gate PASS but `census_register` (SKIP by design, G46); 45 rows, only `measured_at` changed; 3 document lines: the identity, `close_sweeps` 2 → 3 files, `controls.py` 4 → 5 gates; then `--check-register` exit 0, files 45 rows 45, no drift | `build/file_census_20260913T170349Z` |
+| the refreeze | one line of `fixture/selfgates/expected/registry.tsv`, `afd52caf…` → `4465efe8…`; `mkselfgates.py --check` exit 0, `identity(wholeset)=4465efe8…` | `git diff --numstat -- fixture` |
+| retraction X45 (`31 registered gates`) | 0 hits on the tree; 1 hit (`STATE.md:90`) on a copy with the wording planted | `bbx.close_sweeps` over a copy of 163 files |
+| battery runtimes at 32 gates, re-derived | 865 s and 841 s (bbx-23's pair), 666 s and 618 s (bbx-24) | each kept run's `results.tsv`, by column name |
+| kept suite runs over the three command-line fixtures | fakecli GREEN, PASS 12 (9 scenarios, 12 pairings), fixture 21; unittest GREEN, PASS 4, derived 8; selfgates GREEN, PASS 3, derived 6; each fixture unchanged by its run; every driver blind spot whole, TRUNCATED 0 | `bin/bbx-run-suite --log build/suite_<fixture>_bbx24` at `af8846c` — measured once, not gated beyond the lines `cli_suite` and `adapters` freeze |
+
+## What this green does NOT assert
+
+- **That every keyed header line is one line.** R49's rule covers `MUST-FIRE:` and `NOT-ASSERTED:` entries in
+  `*.sh` headers; a `SKIP:`, `READ-ONLY (…)` or `PORTABILITY:` line that runs on is not checked, and no
+  screen prints those texts today.
+- **That a blind spot is written as one.** A sentence that should have been a `NOT-ASSERTED:` entry and was
+  written as prose is read by nobody, and nothing notices.
+- **That the earlier screens are corrected.** The 7 committed screens carrying the cut line stay as they were
+  generated (BBX-21); G53 names them.
+- **That the WSL platform row attests this commit.** Its kept pair is at `429d3f8`.
+- **That no other reader stops short.** G48's sweep, widened by G50 and G53, has not been done.

@@ -706,3 +706,45 @@ R39, D62, D63); the register holds 45 rows for 45 harness files, measured by
 until the next regeneration (`census-drift register=af2b1f085070 tree=bc18c672fdb9`).
 
 **In force:** `DECISIONS.md` — R0–R48 (none open) and method M1–M4.
+
+## bbx-23 (closed 2026-09-13)
+
+**Status (bbx-23 close, 2026-09-13):** slices S1 and S2 complete; **S3 DONE**;
+**S4's BUILD IS COMPLETE — only step 7, the slice readout, remains.** One subject: the
+combined build of what was answered after the bbx-22 close, paid once. **G50 fixed**
+(`bffd698`): the readout names a gate header it cannot read as `NOT FOUND`, its blind
+spots UNKNOWN, instead of counting it as declaring none. **R45 built** (`ff7c06f`): `bbx
+tier --complete` and `gates/registry_complete.sh` (portable, 3 controls) make an orphan of
+either tier and a dead sweep row FAIL — and the gate's first run against BBX's own tree,
+before it was registered, failed naming itself. **R46 built** (`d2501cf`): the harness
+identity has one definition, `bbx.fingerprint.harness_identity`; `idkey.sh` is a shim and
+the census delegates, and the old and new paths gave one key each way. **R44 built**
+(`5a449ed`): the passing `adapters` prints `NOTE: self-identity …`, and the refreeze
+commit quotes its changed line (`3202a22` did). Each change was measured red on the old
+code and green on the new, and a full battery over all four read PASS 32, controls fired
+128 / declared 128, before the first commit. **The file census is CURRENT again**
+(`367f5e7`): 32 gates run in its shadow, 45 rows, no kind lost, and the register check
+reads no drift. A claim was corrected before any code (`f72a2e1`): R45's gate forces no
+census run, because `gates/` is outside the census universe (G52, retraction X43). The
+opening battery at `7b83477` was GREEN (PASS 31, controls 123 / 123); the close's pair is
+quoted in `docs/readout.md` (CLOSE — bbx-23). **The WSL platform row stays GREEN at
+`429d3f8` and attests that commit only:** the build changed the readout, the tier
+classifier and the identity since. Gotchas G1–G52; retractions X1–X44.
+
+**Open rulings: none.** Every ruling R0–R48 is answered and recorded in `DECISIONS.md`;
+R21, R44 and R45 were answered after the bbx-22 close, and R44, R45 and R46 are built.
+In force since bbx-2: R18 (the census and the tests
+work on a clone or are explicitly, provably read-only), R19 (parallel work
+is a pull queue; the FIFO token queue is the default implementation, the
+principle is the ruling), R20 (fidelity on a plain clone of bbh at the
+baseline; the recount's clone plain too).
+BBX = Black Box harness eXpanded; GPL-3; sh + Python 3 on macOS, Linux and
+Windows/WSL; kinds: frame-driven (bbh), document set, command-line tool, with BBX ITSELF a
+subject and an external test framework a driver — five consumers:
+bbh's `example/`, `fixture/docset/`, `fixture/fakecli/`, `fixture/unittest/`,
+`fixture/selfgates/` (R14, R15, R37, R38). **BBX's own harness files are
+measured by a gate**, not by a document (`docs/census/bbx_files.md`, generated;
+R39, D62, D63): regenerated at bbx-23 at identity `afd52caf8a96`, 32 gates, 45 rows for
+45 harness files, and `bbx file-census --self --check-register` reads no drift.
+
+**In force:** `DECISIONS.md` — R0–R48 (none open) and method M1–M4.

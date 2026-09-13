@@ -1193,3 +1193,53 @@ probe is an instrument: it is wrong until it has shown, on a known case beside i
 show (BBX-5). Rules re-anchored in fact: §1 (the claim was measured after it was written, not before),
 BBX-16 (the wrong reading of "harness" yielded a plausible cost), BBX-5 (the probe had no positive
 control of its own).
+
+## G53 — Two blind spots were written over several header lines and the readout printed the first line of each as the whole: one reached seven committed screens cut mid-sentence, because nothing checked the one-line grammar (paid: 7 sittings of committed screens carrying a cut blind spot, bbx-17 to bbx-23; the fix one extra battery, one census regeneration and one refreeze; 2026-09-13)
+At the bbx-17 close (`eb47db6`) two `NOT-ASSERTED:` entries were wrapped onto indented comment lines:
+`gates/cli_suite.sh:26` over two and `drivers/cli.sh:43` over three. The grammar has been one line per
+blind spot since bbx-2 (`docs/controls.md`) and every reader matches one line, but nothing checked the
+grammar: the readout printed `…both counts trace to one `bands` list written once by` and dropped the
+point of the sentence ("nothing here compares them for a driver that would write the log and the band
+view apart"), and the driver's warning about host crash reports (G30) would have read `…(SIGABRT,
+SIGSEGV,` on any suite screen. The cut line is on 7 committed screens in `docs/readout.md`. Found at the
+bbx-24 open by reading the generated screen, not by a gate. Measured before any fix: 236 entries in 37
+gate and driver headers; after an entry came another entry 198 times, a bare `#` 32, the end of the
+block 4, a run-on line 2. Fixed under R49: the headers first, in their own commit (`398a64f`), then
+`controls.continued_entries`, a fourth close sweep and `^ TRUNCATED` on the screen (`64dfd85`), with
+three new controls that read DEAD on the old code in a scratch clone and FIRED on the new.
+Two more instances of a reader or a check that stops short, the same sitting, both the contributor's
+and both caught before use. (1) The new control `entry-continued` was first written to require
+`continued=2` on a copy of the tree; a copy of a tree that already carries a run-on entry reads 4, so
+the control would have read DEAD for a reason it did not plant (bbx-20's hazard: a check that can fail
+two ways). It was rewritten to require a rise of exactly two from the real tree's count, and measured on
+the unfixed tree: `continued rose 2 -> 4`, FIRED, while the real-tree check failed by name. (2) An
+extraction of the rules each gotcha re-anchors, written for S4's slice readout, stopped at the first
+period and turned `§3.3` into `§3.` in six entries — a shorter, plausible list; caught by checking one
+entry against its raw line and the whole result against STATE's hand-written list (12 of 12).
+Learning (R27): a shape ruled in prose and read by a pattern that matches one line is a lenient parser
+([BBH-73]) — a malformed entry reads as a shorter valid one, never as an error. The check for a ruled
+shape belongs beside its reader from the day the shape is ruled; the mechanism is built. Rules
+re-anchored in fact: BBX-30 and §3.2 (a green whose blind spots were printed in part), BBX-16 (one line
+of a multi-line entry is the wrong view, and it yields plausible text), BBX-5 (each new control proven
+DEAD on the old code first), BBX-7 (the sweep must read entries above zero before its zero means
+anything), §1.
+
+## G54 — Three living-page sentences kept the gate count from before R45 added a gate, one of them on the page the maintainer follows on another host, and a gate header quoted a runtime six times too short (paid: 0 runs — the counts found reading HANDOFF and the platform README at the bbx-24 open, the runtime by the opening battery's own results; 2026-09-13)
+R45 added `gates/registry_complete.sh` at bbx-23, so the battery registers 32 gates (`gates/portable.txt`
+28 + `gates/static.txt` 4, measured at bbx-24). HANDOFF's "What is running" and its close step 1 still
+said 31 registered gates, with bbx-22's 827 s, while its own routing table and orientation said 32; and
+`docs/platforms/README.md`, the page followed on WSL, said "about fourteen minutes on the macOS host with
+31 registered gates". That page's expected screen is dated (`429d3f8`) and was true of its commit; it is
+replaced at the close with the close pair's lines, and its tree check gains a count this sitting's commit
+moved. Separately, `gates/close_sweeps.sh` quoted "Portable, ~1 s": the bbx-24 opening battery measured
+it at 6 s on the old gate, before the header sweep was added (8 s after it, in the build battery), so the
+figure was stale before this sitting touched it. Corrected: HANDOFF and the README with the gate runtimes
+of four kept 32-gate runs re-derived from their `results.tsv` (865, 841, 666 and 618 s), the header in
+`64dfd85`; retraction X45.
+Learning (R27): a count that a registry defines, repeated in prose, is a hand-kept copy of the registry
+— BBX-9's smaller thing to forget — and a runtime in a header is a measurement with a date or it is a
+guess. The platform README already gives the command that re-derives the total; a living page that
+quotes a count should quote its command beside it. The mechanism that would catch this class is BBX's
+own `docs/` checked as a document-set subject (BBX-18: quote the claim, derive it, compare), which the S3
+and S4 plans left out (their §9); it is a candidate for a ruling, not built. Rules re-anchored in fact:
+BBX-20 (a living page states what is true; three sentences did not), BBX-9, §1.
