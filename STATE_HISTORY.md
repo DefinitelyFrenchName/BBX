@@ -795,3 +795,48 @@ R39, D62, D63): regenerated at bbx-24 at identity `4465efe8a453`, 32 gates, 45 r
 45 harness files, and `bbx file-census --self --check-register` reads no drift.
 
 **In force:** `DECISIONS.md` — R0–R49 (none open) and method M1–M4.
+
+## bbx-25 (closed 2026-09-13)
+
+**Status (bbx-25 close, 2026-09-13; S4's ruling after it, 2026-09-14):** slices S1 and S2 complete; **S3 DONE**;
+**S4 DONE — ruled by the maintainer after the bbx-25 close, on the amended §7 table, with a rider: BBX-25's scope
+and status are gone over again as F20 lands and BBX covers more ground. S5 is next (ruled the same day).**
+Both gaps the bbx-24 layout found are closed, and the build met a ruling first. **R50 was raised and
+ruled before option A was built:** re-deriving bbx-24's claim that every S4 component had two instances
+except the tolerant-numeric family, it held per comparison family and failed per format and per driver;
+the maintainer chose "Family decides, all declared" — BBX-25 is judged per family or contract, and every
+format, row shape, view and driver with one consumer is declared in the gate that holds it. Eight gate
+headers now say so (`7b7af0e`, `1cad369`), the tolerant-numeric and temporal families the two unmet. The
+question as put named band alone; the temporal family was measured after the answer and the maintainer
+was told (**G58**). The sweep that followed found two blind spots S4 had made false, corrected first in
+their own commit (`7b7af0e`, X47, X48). **G57 is fixed** (`da4a4b8`): the gate screen reconciles its rows
+with `run.txt`'s tallies, counts gates the runner did not keep as `(gates N kept, M not run)` and names
+the unrun tier; its two controls read DEAD on the old code in a scratch clone and FIRED on the new, the
+native Linux pair's screen now reads `SKIP 4` and names the static tier, and the macOS screen is
+byte-identical. **`gates/file_census.sh` PASSed at `e81417d`** (633 s; `edited-census-row`,
+`shrunk-kind-set` and `contaminated-trace` fired; 45 files each reached by a gate, kind-sets frozen 45
+measured 45). **The file census is current** (`610bba7`, identity `c26e5a94b344`: 32 gates, 45 rows, only
+the identity line moved) and the self subject was refrozen in one quoted line (`e81417d`). The opening
+battery at `a2ec618` was GREEN (PASS 32, controls 131 / 131); a battery over the uncommitted build read
+PASS 32, controls 133 / 133; the close's pair is quoted in `docs/readout.md` (CLOSE — bbx-25). **The WSL
+platform row stays GREEN at `429d3f8` and attests that commit only; native Linux is a PARTIAL row** at
+`f6f136d` (the static tier not run). Gotchas G1–G59; retractions X1–X48.
+
+**Open rulings: none.** Every ruling R0–R50 is answered and recorded in `DECISIONS.md`; R50 was
+raised and answered at bbx-25 and is built. The maintainer's words with R49 stand as a rule of
+method: discipline is never arbitrated — only the method of applying it, on time or practicality.
+In force since bbx-2: R18 (the census and the tests
+work on a clone or are explicitly, provably read-only), R19 (parallel work
+is a pull queue; the FIFO token queue is the default implementation, the
+principle is the ruling), R20 (fidelity on a plain clone of bbh at the
+baseline; the recount's clone plain too).
+BBX = Black Box harness eXpanded; GPL-3; sh + Python 3 on macOS, Linux and
+Windows/WSL; kinds: frame-driven (bbh), document set, command-line tool, with BBX ITSELF a
+subject and an external test framework a driver — five consumers:
+bbh's `example/`, `fixture/docset/`, `fixture/fakecli/`, `fixture/unittest/`,
+`fixture/selfgates/` (R14, R15, R37, R38). **BBX's own harness files are
+measured by a gate**, not by a document (`docs/census/bbx_files.md`, generated;
+R39, D62, D63): regenerated at bbx-25 at identity `c26e5a94b344`, 32 gates, 45 rows for
+45 harness files, and `bbx file-census --self --check-register` reads no drift.
+
+**In force:** `DECISIONS.md` — R0–R50 (none open) and method M1–M4.

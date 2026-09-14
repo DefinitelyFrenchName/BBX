@@ -1537,3 +1537,24 @@ against bbh's anchored BBH-53 paragraph, which says "the lineage's vocabulary" a
 VampireSaved" was a provenance nobody had measured. The question put "(bbh BBH-53, extended)", and that is the
 wording approved. BBX-20's "VS L1" was checked the same way and stands (census row V-C25). R55's part (1) is made in
 its own commit after this record; part (2) waits for R53's reader and R52's page.
+
+### bbx-26, continued — S5 steps 1 and 2 built under R51, R54 and R56; R43's recorded reason corrected; the close
+
+**Step 1** lifted bbh's skills lock and guide generator into `lib/py/bbx/` under R51 and R56, and F18 became a gate
+(`gates/fidelity_bbh_s5.sh`): 26 pairs identical over bbh's skill, bbh's synthetic test consumer, the lock's selftest
+and VampireSaved's eight skills, and red on the pre-lift code. Its own F13e run measured a reason R43 had recorded as
+false — a kind-blind config section leaves the config-dump pair identical, because a dump prints the consumer's file —
+so the reason was corrected in `DECISIONS.md` R43, D20 and `lib/sh/baseline.sh` first, in its own commit (`5a31db5`,
+G68, X55); R43's ruling, one sourced definition of the baseline, stands on its other recorded reason. **Step 2**
+built R54's two deltas and `gates/skills.sh`. One detail R54's words did not fix was settled by measurement inside
+the ruling's intent, and is recorded here rather than ruled: the `integers` vocabulary finds an integer in the logs
+as a whole token, because every two-digit integer occurs as a substring of BBX's own ledgers, and a substring test
+that could never fail on one is the silent mode R54 declined (D66). No ruling was raised or answered after R51–R57.
+
+**Anti-hyperfocus (BBX-27).** The thread was the one ruled at the open, and it kept to its plan: two of its five
+steps, each measured red on the old code before it landed. The detours were corrections the steps exposed — two
+documents, three lineage citations, one ruling's stated reason, three counts on the platform page — and each went
+first, in its own commit, rather than being carried. The last green means that the two steps' gates and F18 hold
+over bbh's and VampireSaved's inputs and a synthetic consumer; it asserts nothing yet about BBX's own skill, which
+does not exist before step 4. Nothing measured this sitting argues that S5 has stopped being the most valuable
+thread; the sitting closed at step 2 on the contributor's recommendation, and step 3 is the next sitting's first task.

@@ -7,33 +7,31 @@ paragraph per sitting, the outgoing status verbatim). Read `HANDOFF.md` first.
 generalization of `blackbox-harness` (bbh) to any subject with testable inputs
 and outputs. Born 2026-09-09.
 
-**Status (bbx-25 close, 2026-09-13; S4's ruling after it, 2026-09-14):** slices S1 and S2 complete; **S3 DONE**;
-**S4 DONE — ruled by the maintainer after the bbx-25 close, on the amended §7 table, with a rider: BBX-25's scope
-and status are gone over again as F20 lands and BBX covers more ground. S5 is next (ruled the same day).**
-Both gaps the bbx-24 layout found are closed, and the build met a ruling first. **R50 was raised and
-ruled before option A was built:** re-deriving bbx-24's claim that every S4 component had two instances
-except the tolerant-numeric family, it held per comparison family and failed per format and per driver;
-the maintainer chose "Family decides, all declared" — BBX-25 is judged per family or contract, and every
-format, row shape, view and driver with one consumer is declared in the gate that holds it. Eight gate
-headers now say so (`7b7af0e`, `1cad369`), the tolerant-numeric and temporal families the two unmet. The
-question as put named band alone; the temporal family was measured after the answer and the maintainer
-was told (**G58**). The sweep that followed found two blind spots S4 had made false, corrected first in
-their own commit (`7b7af0e`, X47, X48). **G57 is fixed** (`da4a4b8`): the gate screen reconciles its rows
-with `run.txt`'s tallies, counts gates the runner did not keep as `(gates N kept, M not run)` and names
-the unrun tier; its two controls read DEAD on the old code in a scratch clone and FIRED on the new, the
-native Linux pair's screen now reads `SKIP 4` and names the static tier, and the macOS screen is
-byte-identical. **`gates/file_census.sh` PASSed at `e81417d`** (633 s; `edited-census-row`,
-`shrunk-kind-set` and `contaminated-trace` fired; 45 files each reached by a gate, kind-sets frozen 45
-measured 45). **The file census is current** (`610bba7`, identity `c26e5a94b344`: 32 gates, 45 rows, only
-the identity line moved) and the self subject was refrozen in one quoted line (`e81417d`). The opening
-battery at `a2ec618` was GREEN (PASS 32, controls 131 / 131); a battery over the uncommitted build read
-PASS 32, controls 133 / 133; the close's pair is quoted in `docs/readout.md` (CLOSE — bbx-25). **The WSL
-platform row stays GREEN at `429d3f8` and attests that commit only; native Linux is a PARTIAL row** at
-`f6f136d` (the static tier not run). Gotchas G1–G69; retractions X1–X58.
+**Status (bbx-26 close, 2026-09-14):** slices S1 and S2 complete; **S3 DONE**; **S4 DONE** (ruled after the bbx-25
+close, with a rider on BBX-25 that F20 meets); **S5 — the skill — IN PROGRESS: planned, ruled, and steps 1 and 2 of
+five built.** The plan (`docs/plans/S5.md`, `230ea95`) measured H10 on clones of bbh `10a82d2` and VampireSaved
+`0cdd9726`, and BBX's 30 rules against 60 incidents — 23 re-anchored in fact, 7 by none (BBX-2, BBX-3, BBX-4, BBX-11,
+BBX-13, BBX-17, BBX-27) — and STOPPED at R51–R57, which the maintainer ruled the same sitting, all as recommended
+(R55 on a reworded §3.3 citation: the draft's "from VampireSaved" was found unmeasured before the question was put).
+**Step 1** lifted bbh's skills lock and guide generator (`lib/py/bbx/checkskills.py`, `gen_skill_guide.py`, `bin/bbx
+check-skills` and `skill-guide`, D64, D65) and made F18 a gate (`gates/fidelity_bbh_s5.sh`: 26 pairs identical over
+bbh's skill, bbh's synthetic test consumer, the lock's selftest and VampireSaved's eight skills; red on the pre-lift
+code). **Step 2** added R54's two deltas — a definition is ONE line; a per-skill `numbers` vocabulary whose `integers`
+are found in the logs as whole tokens, because every two-digit integer occurs as a substring of BBX's own ledgers
+(D66) — and `gates/skills.sh` (portable, 16 controls, red on the pre-delta code for exactly its five delta controls);
+F18 stayed identical. The battery over each build was GREEN (PASS 33, controls 134 / 134; then PASS 34, controls
+150 / 150); the census was regenerated after each (47 rows, no kind lost; identity `1fbb91c0bff1`) and the self
+subject refrozen each time. **Corrected on the way, each first and in its own commit:** F18's filed bbh command, which
+exits 2 (G62, X49); STATE's gotcha count and its hand-kept re-anchor list, wrong in 6 of 30 entries (X50, X51); three
+lineage citations in CLAUDE.md, under R55's approved wording (`581eced`, G65, X52–X54); R43's recorded reason for
+declining a config key, an inference that step 1's own F13e run measured false (G68, X55); three current-tense counts
+on the platform step-by-step (G69, X56–X58). The opening battery at `f89eec2` was GREEN (PASS 32, controls 133 / 133);
+the close's pair is quoted in `docs/readout.md` (CLOSE — bbx-26). **The WSL platform row stays GREEN at `429d3f8` and
+attests that commit only; native Linux is a PARTIAL row** at `f6f136d` (the static tier not run). Gotchas G1–G69;
+retractions X1–X58.
 
-**Open rulings: none.** R51–R57, raised by S5's plan at bbx-26 (`docs/plans/S5.md` §12), were ruled the same
-sitting, all as recommended — R55 on a reworded §3.3 citation; R0–R57 are recorded in `DECISIONS.md`. The maintainer's words with R49 stand as a rule of
-method: discipline is never arbitrated — only the method of applying it, on time or practicality.
+**Open rulings: none.** R0–R57 are answered and recorded in `DECISIONS.md`. The maintainer's words with R49 stand as
+a rule of method: discipline is never arbitrated — only the method of applying it, on time or practicality.
 In force since bbx-2: R18 (the census and the tests
 work on a clone or are explicitly, provably read-only), R19 (parallel work
 is a pull queue; the FIFO token queue is the default implementation, the
@@ -45,52 +43,46 @@ subject and an external test framework a driver — five consumers:
 bbh's `example/`, `fixture/docset/`, `fixture/fakecli/`, `fixture/unittest/`,
 `fixture/selfgates/` (R14, R15, R37, R38). **BBX's own harness files are
 measured by a gate**, not by a document (`docs/census/bbx_files.md`, generated;
-R39, D62, D63): regenerated at bbx-25 at identity `c26e5a94b344`, 32 gates, 45 rows for
-45 harness files, and `bbx file-census --self --check-register` reads no drift.
+R39, D62, D63): regenerated at bbx-26 after S5 step 2 at identity `1fbb91c0bff1`, 34 gates, 47 rows for
+47 harness files, and `bbx file-census --self --check-register` reads no drift.
 
 **Lineage, measured 2026-09-09** (`docs/census/README.md`):
 
 | repository | HEAD | tracked | note |
 |---|---|---|---|
-| bbh | `10a82d2` | 190 | fidelity baseline (R8; re-baselined from `f675710` on 2026-09-10, `docs/rebaselines.md`); tip `529f9d2`, 8 past with bbh's own tree at `porcelain=3`, at the bbx-25 open; `f4094c2` (the maintainer's commit, a selftest capture fix in 3 files), NINE past with `porcelain=0`, at the close pair (`bbh-drift baseline=10a82d2 tip=f4094c2 ahead=9`) — a NOTE; every fidelity pair runs on a clone of the baseline, untouched by construction |
-| VampireSaved | `0cdd9726` | 7497 | 555 rules across 8 skills; 311 gate scripts; 4,808 expectation files; re-measured at bbx-2 (was `5df1d8be`: one count and 13 line citations moved); its tip is past the census (a NOTE every run, `b48e8cc0b53b` and 69 ahead at the bbx-25 open; not re-measured by design) |
-| SMS-FrenchName-edition | `ecc5481` | 633 | 66 rules; 28 traps; the Measurement Rule's origin at `CLAUDE.md:19-33`; the S3 plan's rows A35–A41 re-derived on the clone at bbx-6 (7 of 7 match) |
+| bbh | `10a82d2` | 190 | fidelity baseline (R8; re-baselined from `f675710` on 2026-09-10, `docs/rebaselines.md`); tip `f4094c2`, nine past with `porcelain=0`, at the bbx-26 open (`bbh-drift baseline=10a82d2 tip=f4094c2 ahead=9`) — a NOTE; its skill carries 87 rules at the baseline and 91 at the tip (measured bbx-26); every fidelity pair runs on a clone of the baseline, untouched by construction |
+| VampireSaved | `0cdd9726` | 7497 | 555 rules across 8 skills, their lock identical through VampireSaved's own checker and bbh's at bbx-26, and through BBX's since (F18d); 311 gate scripts; 4,808 expectation files; re-measured at bbx-2 (was `5df1d8be`: one count and 13 line citations moved); its tip is past the census (a NOTE every run, `d86e3a46ab5e` and 70 ahead at the bbx-26 open; not re-measured by design) |
+| SMS-FrenchName-edition | `ecc5481` | 633 | 66 rules; 28 traps; the Measurement Rule's origin at `CLAUDE.md:19-33`; the first skills lock, `tools/checkskills.py` (168 lines, two renditions per tier, read at bbx-26); the S3 plan's rows A35–A41 re-derived on the clone at bbx-6 (7 of 7 match) |
 
-**Rules:** 29 of the 30 rule lines in CLAUDE.md §4 carry `[inherited]` and BBX-30 is
-`[this project]`, as it was written (re-measured at bbx-25); none is promoted (edits
-need R16); incidents that re-anchor one in fact: G8 → §1, G9 → BBX-15,
-G10 → BBX-8, G11 → BBX-16/BBX-15, G12 → BBX-29/BBX-9, G13 → BBX-16/BBX-15, G14 → BBX-20/BBX-9, G15 → §0/§1,
-G16 → BBX-1/§1, G17 → BBX-24/BBX-26, G18 → BBX-1, G19 → BBX-10, G20 → BBX-5,
-G21 → §1/BBX-16, G22 → BBX-10/§1, G23 → BBX-1, G24 → none written (its entry calls itself G19's shape, BBX-10's rot class 4, and carries no re-anchor line), G25 → BBX-5/BBX-16, G26 → §1/§3.3/BBX-19/BBX-25, G27 → §1, G28 → BBX-5/§1, G29 → §1,
-G30 → BBX-28/§3.2/BBX-30, G31 → §3.3/BBX-30, G32 → BBX-9/BBX-10/§3.3,
-G33 → §1/BBX-16/BBX-12, G34 → BBX-9/§1/BBX-6, G35 → BBX-25/§3.3/§1,
-G36 → BBX-16/BBX-6/BBX-12, G37 → §1/BBX-6/BBX-16. From G38 on, every entry in
-`docs/gotchas.md` names the rules it re-anchors in its own text (G26–G52 extracted at bbx-24,
-0 without one; G53–G59 were written with theirs), and this list is not copied further. The
-formal promotion is slice S5.
+**Rules:** 29 of the 30 rule lines in CLAUDE.md §4 carry `[inherited …]` and BBX-30 is `[this project]`; none is
+promoted yet. **Measured at bbx-26, in R53's reading:** 23 rules are named by at least one gotcha's explicit re-anchor
+list and 7 by none (BBX-2, BBX-3, BBX-4, BBX-11, BBX-13, BBX-17, BBX-27). The table, entry by entry, is
+`docs/plans/S5.md` §3.2 over G1–G60, re-read over G1–G69 with the same count; it is not copied here, because the
+hand-kept list this paragraph used to carry rotted (X51). S5 step 3 builds the reader that derives it every run, step
+4 the generated `docs/rules.md`, and R55's part (2) promotes the 23 tags after both.
 
-**Constitution:** BBX-5's citation corrected to `MJC-52` (R12, own commit).
-Every further edit to `CLAUDE.md` needs maintainer approval (R16). The counts
-"304 gates / 4,000 expectations" are in bbh's README, not in CLAUDE.md
-(measured 311 / 4,808; G3, G8).
+**Constitution:** BBX-5's citation corrected to `MJC-52` (R12, own commit); BBX-1's and BBX-20's tags and §3.3's
+citation corrected under R55's part (1) (`581eced`). Every further edit to `CLAUDE.md` needs maintainer approval
+(R16). The counts "304 gates / 4,000 expectations" are in bbh's README, not in CLAUDE.md (measured 311 / 4,808;
+G3, G8).
 
 **Census:** 300 count rows, 244 recountable by command on a plain clone of
 the recorded commit (R18, R20), 56 not recountable (bbh 1, VS 27, SMS 28) — the
-number to bring down (the bbx-25 opening battery: `NOTE: coverage rows=300 recountable=244
+number to bring down (the bbx-26 opening battery: `coverage: census_recount: rows=300 recountable=244
 not_recountable=56`); the two added at bbx-2 are host facts the clone
 exposed (G13, rule 7), the only exception ever allowed to move it upward. Grammar in
 `docs/census/README.md`.
 
-**Next:** (1) **S5 — the skill** (ruled next by the maintainer, 2026-09-14): its plan, `docs/plans/S5.md` — a
-measured census of what the skill is generated from, the bins, the fidelity plan (F18), the open rulings — is
-written at bbx-26 and STOPs for the maintainer's rulings before any tool (CLAUDE.md §6).
-**Standing with S4's DONE ruling:** BBX-25's scope and status are gone over again as F20 lands and BBX covers more
-ground (the maintainer's rider, filed on S7's row in `docs/slices.md`).
-(2) **Named, not queued (bbx-25):** `docs/generality.md` says a component used by one kind is moved to
-that kind's profile, and neither single-kind family's comparators were — they sit in `lib/py/bbx/` beside
-the kind-blind families, reported by the census and moved by nothing. (3) **A full native Linux pair**
-(with `BBX_BBH_HOME` set) and **a WSL re-run** whenever the platform row should attest a commit newer than
-`429d3f8` (`docs/platforms/README.md`). (4) **G48's sweep, widened by G50, G53, G59 and G60**: every reader —
-the contributor's probes included — that may read LESS than is there, asking whether the shortfall reads
-as silence. (5) **The candidate ruling G54 names**: BBX's own `docs/` checked as a document-set subject.
-For any future harness change, the order that avoids paying twice is in HANDOFF.
+**Next:** (1) **S5 step 3 — the ledger reader** (`docs/plans/S5.md` §5 K4, §8, R53): each gotcha's explicit re-anchor
+list read by one reader — the five measured wordings, parenthesized explanations skipped, a population check — so
+the 23 re-anchored and 7 inherited are derived every run, with the controls appendix A's three failures define (a
+wrapped list, a parenthesized id, a quoted lead) and a dangling rule id; then step 4 (the skill generator, the
+generated `docs/rules.md`, the `[BBH-N]` check in the F18 gate, BBX's skill locked) and step 5 (R55's promotion, the
+slice readout). **Standing with S4's DONE ruling:** BBX-25's scope and status are gone over again as F20 lands (S7's
+row in `docs/slices.md`). (2) **Named, not queued (bbx-25):** where the single-kind comparators live
+(`docs/generality.md`). (3) **A full native Linux pair** (with `BBX_BBH_HOME` set) and **a WSL re-run** whenever a
+platform row should attest a commit newer than its own (`docs/platforms/README.md`). (4) **G48's sweep, widened by
+G50, G53, G59, G60, G61 and G67**: every reader — the contributor's probes included — that may read LESS than is
+there, asking whether the shortfall reads as silence. (5) **The candidate ruling G54 names, strengthened by G69**:
+BBX's own `docs/` checked as a document-set subject. For any future harness change, the order that avoids paying
+twice is in HANDOFF.
