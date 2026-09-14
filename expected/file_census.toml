@@ -8,7 +8,7 @@
 [spec]
 class = "self"
 # measured_at is R38's whole-set key over bin, lib, drivers, gates — NOT HEAD
-measured_at = "da6bb9deb618675fbb9264bf17ff01678d06021e"
+measured_at = "670d71385e8a28b0236e42f5c2a0cb50a461eb55"
 mode = "shrink-only"
 
 [f1]
@@ -132,73 +132,77 @@ file = "lib/py/bbx/fingerprint.py"
 kinds = "KFDC"
 
 [f31]
+file = "lib/py/bbx/gen_skill.py"
+kinds = "K"
+
+[f32]
 file = "lib/py/bbx/gen_skill_guide.py"
 kinds = "KF"
 
-[f32]
+[f33]
 file = "lib/py/bbx/logfmt.py"
 kinds = "FDC"
 
-[f33]
+[f34]
 file = "lib/py/bbx/propose_temporal.py"
 kinds = "F"
 
-[f34]
+[f35]
 file = "lib/py/bbx/provenance.py"
 kinds = "KDC"
 
-[f35]
+[f36]
 file = "lib/py/bbx/readout.py"
 kinds = "KDC"
 
-[f36]
+[f37]
 file = "lib/py/bbx/reanchors.py"
 kinds = "K"
 
-[f37]
+[f38]
 file = "lib/py/bbx/recount.py"
 kinds = "KFDC"
 
-[f38]
+[f39]
 file = "lib/py/bbx/rulings_shape.py"
 kinds = "K"
 
-[f39]
+[f40]
 file = "lib/py/bbx/sha1.py"
 kinds = "DC"
 
-[f40]
+[f41]
 file = "lib/py/bbx/thresholds.py"
 kinds = "F"
 
-[f41]
+[f42]
 file = "lib/py/bbx/tier.py"
 kinds = "KFC"
 
-[f42]
+[f43]
 file = "lib/py/bbx/toml_subset.py"
 kinds = "KFDC"
 
-[f43]
+[f44]
 file = "lib/sh/baseline.sh"
 kinds = "F"
 
-[f44]
+[f45]
 file = "lib/sh/classify.sh"
 kinds = "KFC"
 
-[f45]
+[f46]
 file = "lib/sh/compare.sh"
 kinds = "FDC"
 
-[f46]
+[f47]
 file = "lib/sh/config.sh"
 kinds = "KFDC"
 
-[f47]
+[f48]
 file = "lib/sh/expectation_kinds.sh"
 kinds = "KFDC"
 
-[f48]
+[f49]
 file = "lib/sh/registry.sh"
 kinds = "KFC"
