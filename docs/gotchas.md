@@ -1428,3 +1428,19 @@ failed as well — that reader takes two ids from it, not seven — so the line 
 Learning (R27): no new mechanism; the check exists for exactly this (G14, G51) and fired at its first chance. The trap
 worth naming: a raised ruling is written in four places (the queue, DECISIONS.md's open-rulings line, STATE, HANDOFF),
 and a range is not a list to the reader of the second. Rules re-anchored in fact: BBX-9, BBX-20.
+
+## G67 — This host's `git grep -E` ignores `\b`: a word-bounded search matches nothing and exits 1, the exit of a true absence (paid: 0 — probes re-read, no number reached a document; 2026-09-14)
+Twice at bbx-26 a probe put `\b` inside `git grep -E`: a count of bare `BBH-N` tokens in VampireSaved at `0cdd9726`
+read 0 beside 5 literal `BBH-` occurrences, and a search of BBX's tree for BBH-53 or BBH-9 with a trailing `\b` printed
+nothing while CLAUDE.md held both ids. Measured on CLAUDE.md with git 2.54.0 (Apple Git-157): `-E` with `BBH-9\b`
+exits 1 with no output; `-F 'BBH-9'`, `-w -F 'BBH-9'`, `-P` with `BBH-9\b` and `-E 'BBH-9([^0-9]|$)'` each find the
+line; `-E` with a leading `\b` before `BBH-` exits 1. The first zero was never used (the plan counts with `-F`); the
+second was caught because CLAUDE.md was known to hold both ids. In the same hour a filter over `git diff -U0` for
+changed lines, `^[-+][^-+]`, hid two of three edited CLAUDE.md lines, whose content begins with `- `; the edit script's
+own asserts said three, and the full diff shows three. BBX's own `bin`, `lib`, `drivers` and `gates` — 82 files, 544
+lines calling grep — hold no `\b`, `\<` or `\>` in a grep line (the scan flagged both escapes on synthetic lines and
+passed a plain `-F` line before it was believed).
+Learning (R27): G59 and G60's shape, silence read as a count, through two new tools. For probes on this host a word
+boundary is `git grep -P` or `-w`, a zero from any search carries a positive control of the same shape, and a diff
+filter never excludes a leading `-`. No harness mechanism (the scan above); the trap is a HANDOFF hazard. Rules
+re-anchored in fact: §1, BBX-7.

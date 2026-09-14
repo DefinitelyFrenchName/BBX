@@ -1517,3 +1517,23 @@ contributor's recommendation, S5, stands.
 since bbx-24. S5 (the skill) opens at bbx-26 with its plan, a measured census, the bins, the fidelity plan (F18)
 and its open rulings, and STOPs for the maintainer's rulings before any tool is written (CLAUDE.md §6). S6 and S7
 keep their places in `docs/slices.md`; the BBX-25 rider stays on S7's row.
+
+## bbx-26 (2026-09-14) — S5's plan measured and STOPPED; R51–R57 raised and ruled the same sitting
+
+The sitting opened on a GREEN battery at `f89eec2` (PASS 32, controls 133 / 133, no `census-drift` NOTE) and wrote
+S5's plan, `docs/plans/S5.md`, from measurements on plain clones of bbh `10a82d2` and VampireSaved `0cdd9726` and on
+BBX's own tree. Two pages were found wrong on the way and corrected first, in their own commit (`736949e`): F18's
+filed bbh command, which exits 2, and STATE's gotcha count with its re-anchor list, wrong in 6 of the 30 entries its
+range covered (X49–X51). The plan (`230ea95`) stopped at seven rulings, each queued with its recommendation and the
+alternatives declined.
+
+The maintainer ruled all seven the same sitting. They were put as questions in two rounds, the declined alternatives
+beside each recommendation, and the recommendation was chosen every time: R51, the skill generated from §4 by a BBX
+generator; R52, its anchors in a generated `docs/rules.md`; R53, "re-anchored" means named by an explicit list, the
+7 inherited rules reported as candidates for dropping; R54, the lift's two deltas; R55, the CLAUDE.md wording; R56,
+F18a–d with the `[BBH-N]` check; R57, `bbx`, level 0, a symlink the maintainer installs. **R55's wording changed
+before it was asked.** The queued draft gave §3.3's citation as "(bbh BBH-53, from VampireSaved; extended)"; checked
+against bbh's anchored BBH-53 paragraph, which says "the lineage's vocabulary" and names no project, "from
+VampireSaved" was a provenance nobody had measured. The question put "(bbh BBH-53, extended)", and that is the
+wording approved. BBX-20's "VS L1" was checked the same way and stands (census row V-C25). R55's part (1) is made in
+its own commit after this record; part (2) waits for R53's reader and R52's page.
