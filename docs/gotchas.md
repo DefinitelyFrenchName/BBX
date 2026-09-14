@@ -1683,3 +1683,17 @@ against the uncorrected pages again before they were edited.
 Learning (R27): G41's rule, that a planted pattern must be seen to fire, is met by one hit, and one hit is not the
 population the pattern was written for; a retraction pattern is checked against the number of occurrences its wording
 has. No harness mechanism beyond G41's filed candidate. Rules re-anchored in fact: §1.
+
+## G85 — S6's plan proposed two TSV registers and its questions offered deferral options, against two of the maintainer's standing words already in the tree (paid: R62 put twice, R64 rewritten before it was put, and one exchange with the maintainer; 2026-09-14)
+Drafting K4 and K5, the plan copied VampireSaved's register format, `docs/doc_shape.tsv`, into `docs/documents.tsv`
+and `docs/rot.tsv`, and was committed with both (`e95be35`). R34's row in `DECISIONS.md` records "TSV breaks silently"
+and R40's answer "a caveat on the use of TSV elsewhere"; neither was read before the format was chosen. The maintainer
+declined R62: "I've said it before, I'll say it as many times as necessary: I am very wary of TSV as it breaks easily
+and cannot be mended after the fact. My personal choice is always more structured data like TOML, JSON, etc." R62 was
+put again and R64 rewritten, both as TOML-subset registers in R24's shape, and both were answered as recommended
+(`c106028`). The same questions had offered options such as deferring R29, a mechanism without its retrofit, and the
+rot classes left as prose; the maintainer's words with R49, repeated in STATE, are that discipline is never arbitrated,
+only the method of meeting it. The maintainer chose the full form every time.
+Learning (R27): both sets of words were in the tree, and the plan read the ancestors' files but not the maintainer's
+rulings on form. No harness mechanism; a hazard line in HANDOFF and the contributor's memory. No rule of §4 is named
+here: the incident concerns the maintainer's rulings on form and method.

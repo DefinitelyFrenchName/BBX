@@ -7,29 +7,28 @@ paragraph per sitting, the outgoing status verbatim). Read `HANDOFF.md` first.
 generalization of `blackbox-harness` (bbh) to any subject with testable inputs
 and outputs. Born 2026-09-09.
 
-**Status (bbx-27 close, 2026-09-14):** slices S1 and S2 complete; **S3 DONE**; **S4 DONE** (ruled after the bbx-25
-close, with a rider on BBX-25 that F20 meets); **S5 DONE** (built in five steps; ruled after the bbx-27 close on its slice readout in
-`docs/readout.md`, with a rider on BBX-25 following S4's precedent); **S6 ruled next**. bbx-26 planned S5 and built steps 1 and 2 (the
-lifted lock with F18; R54's two deltas). **Step 3** (`c17ae40`): `bbx reanchors`, R53's reader — every gotcha's explicit
-list read, the plan's §3.2 table reproduced through G60 (23 re-anchored, 7 inherited), the whole ledger's reading on
-every screen (D67). **Step 4** (`23a10c6`): BBX's skill `skill/bbx/`, generated from CLAUDE.md §4 by `bbx skill-gen` and
-locked to the generated `docs/rules.md` — one anchored paragraph per rule, its re-anchoring entries or its tag and "a
-candidate for dropping" — its guide current, every `[BBH-N]` resolved against bbh's skill at the baseline (R51, R52,
-R56, R57; D68, D69). **Step 5** (`24cfb12`): the 23 re-anchored tags promoted in CLAUDE.md, derived from the reader — 22
-as `[re-anchored; inherited …]` under R55's part (2), BBX-30 as `[re-anchored; this project]` under **R58, raised and
-ruled this sitting**. **The battery went NOT GREEN once**, on `gates/sweep_runner.sh` §15, a check comparing two clocks
-on a 1–2 s margin; feature work halted until it was made a handshake (`b07edbc`, G76). **Corrected first, each in its own
-commit:** two stale status lines (`11c6dcd`, G74, X60, X61) and four of this sitting's own lines saying the promotion
-awaited an approval R55 had given (`9353ff2`, G77, X62); and one missing BBX-25 declaration, for the `integers` vocabulary, found drafting the slice readout (`c5f1312`, G78). **One cost fell outside the tree:** a load test's cleanup ran
-in zsh and left 24 CPU burners up for 1 h 41 min (G75). The census was regenerated and committed three times (48, 49 and 49
-rows; identity `5059aa730eb5`), a fourth run superseded before its commit (G78), and the self subject refrozen each time. The close's pair is quoted in `docs/readout.md`
-(CLOSE — bbx-27). **The WSL platform row stays GREEN at `429d3f8` and attests that commit only; native Linux is a
-PARTIAL row** at `f6f136d` (the static tier not run). Gotchas G1–G81; retractions X1–X63.
+**Status (bbx-28 close, 2026-09-14):** slices S1 and S2 complete; **S3, S4 and S5 DONE** (S4 and S5 with riders on
+BBX-25); **S6 — rot and registers — IN PROGRESS: planned and ruled, no step built.** The opening battery at `35faa56`
+was GREEN (PASS 34, controls 179 / 179, no `census-drift` NOTE). The plan (`docs/plans/S6.md`, `e95be35`) measured
+bbh's five hygiene sub-commands at `10a82d2` and the executable controls at its tip `e7d6767`, VampireSaved's rot classes
+and documents register at `0cdd9726`, SMS at `ecc5481`, and BBX's own controls, defaults, documents, prose references and
+gate headers at `35faa56`, every count from a probe kept in `docs/plans/S6_probes/`; it STOPPED at R59–R65, which the
+maintainer ruled the same sitting (`c106028`), all as recommended — R62 on its second form: a TSV register was declined
+in the maintainer's words (R34's and R40's caveat, restated) and `docs/documents.toml` ruled, with R64 put as
+`docs/rot.toml`. **Corrected first, in their own commit** (`4376831`): F19's row (X64), `docs/controls.md` on what the
+screen says (X65), and the count of VampireSaved's §7 decisions in the census and bins (X66); G37's description of R29 as
+built retracted in the register (X67). **G80's temporary directories attributed (G82):** bbh's fake driver never removes
+the sandbox it makes when none is named, 594 per battery through three of BBX's static gates; the maintainer deleted the
+40,312 attributed directories after a listing proven on a synthetic root, and a listing afterwards read 0. Two probes'
+controls could not reach their population and were caught before use (G83, G84); two of the maintainer's standing words
+were not applied when the plan and its questions were drafted (G85). No harness file changed this sitting: the census
+identity `5059aa730eb5` and the self subject stand. The close's pair is quoted in `docs/readout.md` (CLOSE — bbx-28).
+**The WSL platform row stays GREEN at `429d3f8` and attests that commit only; native Linux is a PARTIAL row** at
+`f6f136d` (the static tier not run). Gotchas G1–G85; retractions X1–X67.
 
-**Open rulings: none.** R0–R65 are answered and recorded in `DECISIONS.md`; R59–R65, raised by S6's plan
-(`docs/plans/S6.md`, bbx-28), were ruled the same sitting, all as recommended — R62 on its second form, a TOML register,
-after the maintainer declined a TSV (R40's caveat, restated). The maintainer's words with R49 stand as
-a rule of method: discipline is never arbitrated — only the method of applying it, on time or practicality.
+**Open rulings: none.** R0–R65 are answered and recorded in `DECISIONS.md`. The maintainer's words with R49 stand as
+a rule of method: discipline is never arbitrated — only the method of applying it, on time or practicality. The maintainer's caveat on TSV stands the same way (R34, R40, restated at R62): a new
+register or row file is a TOML-subset file.
 In force since bbx-2: R18 (the census and the tests
 work on a clone or are explicitly, provably read-only), R19 (parallel work
 is a pull queue; the FIFO token queue is the default implementation, the
@@ -48,8 +47,8 @@ R39, D62, D63): regenerated at bbx-27 after the skills gate's anchor fix at iden
 
 | repository | HEAD | tracked | note |
 |---|---|---|---|
-| bbh | `10a82d2` | 190 | fidelity baseline (R8; re-baselined from `f675710` on 2026-09-10, `docs/rebaselines.md`); tip `f4094c2`, nine past with `porcelain=0`, at the bbx-26 open (`bbh-drift baseline=10a82d2 tip=f4094c2 ahead=9`) — a NOTE; its skill carries 87 rules at the baseline and 91 at the tip (measured bbx-26); every fidelity pair runs on a clone of the baseline, untouched by construction |
-| VampireSaved | `0cdd9726` | 7497 | 555 rules across 8 skills, their lock identical through VampireSaved's own checker and bbh's at bbx-26, and through BBX's since (F18d); 311 gate scripts; 4,808 expectation files; re-measured at bbx-2 (was `5df1d8be`: one count and 13 line citations moved); its tip is past the census (a NOTE every run, `d86e3a46ab5e` and 70 ahead at the bbx-26 open; not re-measured by design) |
+| bbh | `10a82d2` | 190 | fidelity baseline (R8; re-baselined from `f675710` on 2026-09-10, `docs/rebaselines.md`); tip `e7d6767`, 13 past with `porcelain=0`, at the bbx-28 open (`bbh-drift baseline=10a82d2 tip=e7d6767 ahead=13`) — a NOTE; its skill carries 87 rules at the baseline and 91 at the tip (measured bbx-26); every fidelity pair runs on a clone of the baseline, untouched by construction |
+| VampireSaved | `0cdd9726` | 7497 | 555 rules across 8 skills, their lock identical through VampireSaved's own checker and bbh's at bbx-26, and through BBX's since (F18d); 311 gate scripts; 4,808 expectation files; re-measured at bbx-2 (was `5df1d8be`: one count and 13 line citations moved); its tip is past the census (a NOTE every run, `cb1ca29d3f8f` and 79 ahead at the bbx-28 open; not re-measured by design) |
 | SMS-FrenchName-edition | `ecc5481` | 633 | 66 rules; 28 traps; the Measurement Rule's origin at `CLAUDE.md:19-33`; the first skills lock, `tools/checkskills.py` (168 lines, two renditions per tier, read at bbx-26); the S3 plan's rows A35–A41 re-derived on the clone at bbx-6 (7 of 7 match) |
 
 **Rules:** 30 rule lines in CLAUDE.md §4. **23 are re-anchored in R53's reading and promoted** (`24cfb12`): 22 tags

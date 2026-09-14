@@ -1617,3 +1617,37 @@ by the thousand (G80); S7's F20 gives none of S5's three unmet units a second co
 it is treated as meaning? It means that BBX's rules, the evidence the ledger gives them and BBX's generated skill agree
 as one reader reads them; it says nothing about whether a rule is right, and nothing generic about the three declared
 units.
+
+## bbx-28 (2026-09-14) — S6's plan measured and STOPPED; R59–R65 raised and ruled the same sitting, R62 on its second form
+
+The sitting opened on a GREEN battery at `35faa56` (PASS 34, controls 179 / 179, no `census-drift` NOTE) and wrote S6's
+plan on clones of bbh `10a82d2` (its tip `e7d6767` read from the object store), VampireSaved `0cdd9726` and SMS
+`ecc5481`, and on BBX's own tree. Four census agents read the three ancestors and BBX in parallel; every number of
+theirs the plan rests on was re-derived by a probe kept in `docs/plans/S6_probes/`. Measuring corrected three pages
+first, in their own commit (`4376831`: X64 to X66), and retracted G37's description of R29 as built (X67).
+
+**R59–R65 were put as questions, four and then three, the recommendation first.** The maintainer answered R59 (K1–K9
+in this slice, BBX's `docs/` as a document-set subject later), R60 (bbh rebaselined to `e7d6767` and its executable
+controls lifted, every registered gate given its mode before DONE) and R61 (the defaults register's class grammar,
+checked both ways against the code) as recommended. **R62 was declined in its first form**, a TSV register copied from
+VampireSaved's `doc_shape.tsv`: "I've said it before, I'll say it as many times as necessary: I am very wary of TSV as
+it breaks easily and cannot be mended after the fact. My personal choice is always more structured data like TOML,
+JSON, etc." The caveat stood in R34's row and R40's answer, and the plan had not applied it. R62 was put again as
+`docs/documents.toml` in the TOML subset and R64 rewritten as `docs/rot.toml` before it was put; both were answered as
+recommended, with R63 (the gate index and the trap lint lifted with their deltas) and R65 (a `TMPDIR` per gate and a
+host-residue NOTE) (`c106028`). The questions also offered deferral and partial options, which the maintainer's rule of
+method with R49 says are never offered; the maintainer chose the full form each time (G85).
+
+**G80's source was attributed (G82)** from the opening battery's own window: 594 directories per battery, bbh's fake
+driver's unremoved sandbox. After R65, at the maintainer's request, the contributor wrote a listing and deletion script,
+proven on a synthetic root (14 checks: two leftovers among nine look-alikes; refusals without an expected count and with
+a wrong one), and ran only its listing; the maintainer ran the deletion, and a listing afterwards read 0 of the 40,312.
+
+**Anti-hyperfocus (BBX-27).** The thread was the one the bbx-27 close named, and it ended where CLAUDE.md §6 says a
+slice's first sitting ends: a measured census, a plan, the rulings. The detours — the leftover directories' attribution
+and removal, two probe controls that could not reach their population (G83, G84), the TSV declined (G85) — were each
+settled before the work moved on. Is S6 still the most valuable next thread? The measurement strengthened it: the
+screen's "proved a control fires on purpose" rests on self-reports (X65, R60), and that line is what the maintainer
+reads. Does the last green mean what it is treated as meaning? It means the battery's 34 gates passed and their 179
+controls printed that they fired; until R60 lands, it does not mean any control was executed against its gate's real
+input.

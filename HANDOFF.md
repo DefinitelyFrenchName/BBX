@@ -81,7 +81,7 @@ set, at a release or after a kernel change.
 ## The ritual (ruled R17 at the bbx-1 close, 2026-09-09; adapted from VampireSaved VSP-17/VSP-18/VSP-162)
 
 Sessions are keyed `bbx-N`, one key per sitting, never renamed (pointers in
-readouts, gotchas and history resolve through it). The last closed sitting is **bbx-27** (2026-09-14); the next is **bbx-28**.
+readouts, gotchas and history resolve through it). The last closed sitting is **bbx-28** (2026-09-14); the next is **bbx-29**.
 
 **Open**
 1. Read this file, `STATE.md`, `docs/rulings.md`. (`CLAUDE.md` is the
@@ -151,21 +151,22 @@ readouts, gotchas and history resolve through it). The last closed sitting is **
 Steps 8 and 9 are checked, not remembered: step 8 by `close_sweeps`, step 9
 by construction (the recount's clone) and by `fidelity_bbh`'s proof.
 
-**Next-session orientation (written at the bbx-27 close, 2026-09-14; its first bullets updated after the maintainer's S5 ruling the same day)**
-- **bbx-28 (in progress, 2026-09-14): S6's plan written, and R59–R65 ruled the same sitting** (`docs/plans/S6.md`; R62
-  and R64 as TOML registers — the maintainer declined TSV again, R40's caveat); the opening battery at `35faa56` GREEN,
-  PASS 34, controls 179 / 179 (`build/selftest_20260914T180055Z`). Next: S6 step 1, the registers' pages (§10).
-- **No ruling open.** R0–R65 are answered; R58 (BBX-30's promoted tag) was raised and ruled at bbx-27, as recommended.
-  On this host the battery is green — the close's pair is quoted in `docs/readout.md`, CLOSE — bbx-27.
+**Next-session orientation (written at the bbx-28 close, 2026-09-14)**
+- **bbx-28 closed (2026-09-14): S6's plan written, and R59–R65 ruled the same sitting** (`docs/plans/S6.md`; R62
+  and R64 as TOML registers — the maintainer declined TSV again, R34's and R40's caveat). No harness file changed this
+  sitting. On this host the battery is green — the close's pair is quoted in `docs/readout.md`, CLOSE — bbx-28.
+- **No ruling open.** R0–R65 are answered; R59–R65 were raised by S6's plan and ruled at bbx-28.
 - **S5 ruled DONE by the maintainer after the bbx-27 close** (2026-09-14), on its slice readout, with a rider on BBX-25
   following S4's precedent: the ledger reader, the skill generator with its page and the `integers` vocabulary stay BBX's
   own, never called generic, and are gone over again when a second consumer is in view (`docs/readout.md`, "bbx-27,
   after the close"; `docs/generality.md`).
-- **S6's plan — written at bbx-28, see the first bullet** (ruled next, 2026-09-14) — `docs/slices.md`'s S6 row: the controls, defaults and documents
-  registers and the seven rot classes as gates (F19). Like every slice it opens with a measured census, the bins, the
-  fidelity plan and its open rulings, and STOPs for the maintainer's rulings before any tool is written (CLAUDE.md §6).
-  Measure first where bbx-27's incidents point: counts and status lines gone stale in pages (G69, G74), a
-  single-consumer unit left undeclared (G78), and `$TMPDIR`'s leftover directories (G80).
+- **FIRST: S6 step 1** (`docs/plans/S6.md` §10, under R59–R65): the registers' pages, docs only. `docs/defaults.md`
+  made one table of six cells in id order (D62's unescaped pipe, D67's `;`, the paragraph at lines 34–37, 2 rows out of
+  order), and a row with its class for every default the code has and the register lacks — 32 `DEFAULTS` keys and 9
+  `${BBX_*:-}` fallbacks by the probe's rule at bbx-28: re-derive with `docs/plans/S6_probes/probe_bbx_prose.py` and
+  `probe_bbx_refined.py` before relying on either number (§1). Then routing lines for the 10 pages HANDOFF does not name
+  by path. Step 2 is K3 and K4 (the two readers, their gate, `docs/documents.toml` in the TOML subset); R65's per-gate
+  `TMPDIR` is step 4; R60's rebaseline and the gates' modes are step 5.
 - **BBX's skill is installed** — by the maintainer after the bbx-27 close (R57): `~/.claude/skills/bbx` is a symlink to
   `skill/bbx`, its `SKILL.md` measured byte-identical to the tree's. Being a link, it loads whatever the working tree
   holds, uncommitted edits included; nothing in the tree reads `~/.claude/skills`.
@@ -192,9 +193,11 @@ by construction (the recount's clone) and by `fidelity_bbh`'s proof.
   line of any page whose row the step moved (`docs/fidelity.md` called F18 open for a sitting after it was gated).
 - **Named, not queued (bbx-25):** the tolerant-numeric and temporal comparators sit in `lib/py/bbx/` beside the
   kind-blind families, and only their kinds-table rows are in a profile; R50 settled declaration, not location.
-- **Named, not queued (bbx-27):** `$TMPDIR` held 81,224 `tmp.*` entries at the bbx-27 close, 21,327 older than a day
-  and 36,909 empty, 594 of them changed in 15 minutes around a census and a battery: some gate or tool leaves temporary
-  directories behind. Attribute the source before any cleanup; the count is measured once, not gated (G80).
+- **`$TMPDIR`, attributed at bbx-28 (G82, R65):** every battery leaves 594 `tmp.*` directories holding only
+  `fake_replay.log` — bbh's fake driver's unremoved sandbox, reached through `fidelity_bbh`, `fidelity_bbh_s2` and
+  `suite` — until S6 step 4 gives each gate its own `TMPDIR`. The maintainer deleted the 40,312 such directories at
+  bbx-28, after a listing proven on a synthetic root, and a listing afterwards read 0. The 36,909 empty directories are
+  not attributed (a nightly 03:00 process empties old temporary files) and stay.
 - **The WSL platform row attests `429d3f8`; native Linux is a PARTIAL row at `f6f136d`** (the static tier not run).
   A re-run follows `docs/platforms/README.md`; push first and confirm on the remote before asking (G49). Its tree
   check reads `gates/band.sh`'s blind spots, which do not tell bbx-26's tree from bbx-25's: on a newer tree, check
@@ -317,3 +320,4 @@ by construction (the recount's clone) and by `fidelity_bbh`'s proof.
 - A verdict that compares two clocks has a margin, and a margin is a tolerance nobody ratified: `gates/sweep_runner.sh` §15 passed 91 of 92 kept runs on 1-2 s and failed a battery once (G76). Prove order by a handshake (a marker the later party leaves, which the earlier one reads), print clocks for the reader, and never re-run a red timing check into green (BBX-14).
 - `docs/rules.md` and `skill/bbx/GUIDE.md` quote every re-anchoring gotcha's HEADING: a heading that repeats a retracted wording puts it into both generated files, where the retraction sweep finds it (X20 through G26's heading, widened at bbx-27 to the two views). Word a new heading without a retracted phrase, or widen that row to the two generated views with the reason stated.
 - The host can stop a background command for low memory (G80: 16 GB, Zoom and WhatsApp open, a battery stopped a minute in). A stopped battery's kept run reads FAIL, exit 143, on the gate it cut, which says nothing about that gate. Run a pair one battery per background command, print `memory_pressure` before each, and if one is stopped, report it before retrying.
+- Before putting a ruling to the maintainer or recommending a file format, read the maintainer's standing words in `DECISIONS.md` and `docs/rulings.md`: a new register or row file is a TOML-subset file in R24's shape, never TSV (R34, R40, restated at R62), and a question offers only ways of meeting a rule in full, never deferral or a partial form (R49's rule of method). S6's plan proposed two TSV registers and its questions offered deferrals (G85). And a probe's control must reach the population it guards: a planted edit asserts that it removed what it claims to remove (G83), and a retraction pattern is checked against the number of occurrences its wording has, not for one match (G84).
