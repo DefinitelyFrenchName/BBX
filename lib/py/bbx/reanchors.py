@@ -164,6 +164,33 @@ def read_lists(n, body, errors):
     return leads, refs
 
 
+def registry(rules, entries, errors, rules_name, ledger_name):
+    """({rule: [entry ids]}, lists, [entry ids with no list]) — the relation R53 defines, read once for every
+    caller (`bbx reanchors` and `bbx skill-gen`), each finding appended to `errors`."""
+    ids = [n for n, _, _ in entries]
+    if ids != list(range(1, len(ids) + 1)):
+        errors.append(f"entry-sequence {ledger_name}: the ids read are not G1..G{len(ids)} in order")
+    by_rule = {r: [] for r in rules}
+    no_list, lists = [], 0
+    for n, _, body in entries:
+        leads, refs = read_lists(n, body, errors)
+        if n >= 61:
+            for lead in leads:
+                if lead != ONE_WORDING:
+                    errors.append(f"old-wording G{n}: '{lead}' — from G61 on a list is written '{ONE_WORDING}' (R53)")
+        if leads:
+            lists += 1
+        else:
+            no_list.append(n)
+        for r in refs:
+            if r in by_rule:
+                if n not in by_rule[r]:
+                    by_rule[r].append(n)
+            else:
+                errors.append(f"dangling-rule-id G{n} {r}: the list names a rule {rules_name} does not define")
+    return by_rule, lists, no_list
+
+
 def read_against(path, errors):
     table = {}
     for i, line in enumerate(open(path, encoding="utf-8"), 1):
@@ -203,27 +230,7 @@ def main(argv=None):
     if not entries:
         print(f"ERROR: no-entries {a.ledger}: no `## G<n> — ` heading")
         return 2
-    ids = [n for n, _, _ in entries]
-    if ids != list(range(1, len(ids) + 1)):
-        errors.append(f"entry-sequence {a.ledger}: the ids read are not G1..G{len(ids)} in order")
-    by_rule = {r: [] for r in rules}
-    no_list, lists = [], 0
-    for n, _, body in entries:
-        leads, refs = read_lists(n, body, errors)
-        if n >= 61:
-            for lead in leads:
-                if lead != ONE_WORDING:
-                    errors.append(f"old-wording G{n}: '{lead}' — from G61 on a list is written '{ONE_WORDING}' (R53)")
-        if leads:
-            lists += 1
-        else:
-            no_list.append(n)
-        for r in refs:
-            if r in by_rule:
-                if n not in by_rule[r]:
-                    by_rule[r].append(n)
-            else:
-                errors.append(f"dangling-rule-id G{n} {r}: the list names a rule {a.rules} does not define")
+    by_rule, lists, no_list = registry(rules, entries, errors, a.rules, a.ledger)
     if a.against:
         try:
             table = read_against(os.path.join(a.root, a.against) if not os.path.isabs(a.against) else a.against, errors)

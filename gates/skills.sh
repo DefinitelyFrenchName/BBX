@@ -1,5 +1,5 @@
 #!/bin/sh
-# skills.sh — the skills lock fires on every perturbation of a synthetic consumer, refuses a wrapped definition, and reads a plain integer under the integers vocabulary; the ledger reader derives which rules the incident ledger re-anchors (S5 steps 2 and 3)
+# skills.sh — the skills lock fires on every perturbation of a synthetic consumer, refuses a wrapped definition, and reads a plain integer under the integers vocabulary; the ledger reader derives which rules the incident ledger re-anchors; BBX's own generated skill is current, locked and guided (S5 steps 2 to 4)
 # Ground truth for lib/py/bbx/checkskills.py and gen_skill_guide.py through `bin/bbx check-skills` and `bin/bbx
 # skill-guide`, on a host with nothing but sh and python3. §1–§4 lift the shapes of bbh selftest/test_skills.sh at the
 # fidelity baseline: a matched consumer passes and its guide generates and checks current; each perturbation fails for
@@ -12,6 +12,9 @@
 # ledger carry every list shape that G61 and docs/plans/S5.md appendix A name, read against the true table and against
 # the table a defective reader would give; each guard is planted once; then BBX's own ledger is read through G60 against
 # the §3.2 table quoted from the plan, and whole, its NOTE lines printed for the screen.
+# §8 is BBX's own skill (R51, R52, R57; D68, D69): `bin/bbx skill-gen --check`, the lock and the guide over
+# skill/skills.toml; then the slice's controls re-run on a copy of the files the skill is generated from, locked to and
+# guided by, and each refusal of the generator planted once, with nothing written.
 # Usage: gates/skills.sh     (portable)
 # MUST-FIRE: perturbed-copy: unanchored-rule — a rule added to a copy of the skill with no anchor must FAIL naming it ANCHORED NOWHERE
 # MUST-FIRE: perturbed-copy: stripped-anchor — an anchor removed from a copy of the doc must FAIL its rule as ANCHORED NOWHERE
@@ -41,7 +44,22 @@
 # MUST-FIRE: perturbed-copy: no-rules — a rules document with no `## 4.` section must be refused, never read as zero rules
 # MUST-FIRE: known-bad: no-entries — a ledger with no entry heading must be refused, never read as zero entries
 # MUST-FIRE: known-bad: wrong-population — the table quoted from docs/plans/S5.md §3.2 (G1–G60) against BBX's whole ledger must FAIL, while through G60 it reproduces (BBX-8)
-# NOT-ASSERTED: anything about a real skill: every input to the lock and the guide here is a synthetic consumer (fixture class); bbh's and VampireSaved's skills are read by gates/fidelity_bbh_s5.sh (F18)
+# MUST-FIRE: perturbed-copy: stale-skill — a rule body edited in a copy of CLAUDE.md, the skill not regenerated, must make skill-gen --check FAIL naming skill/bbx/SKILL.md STALE
+# MUST-FIRE: perturbed-copy: stale-rules-page — an entry re-anchoring an inherited rule appended to a copy of the ledger must make skill-gen --check FAIL naming docs/rules.md STALE while the skill stays current
+# MUST-FIRE: perturbed-copy: own-unanchored-rule — a rule added to a copy of BBX's generated skill with no anchor must FAIL as ANCHORED NOWHERE
+# MUST-FIRE: perturbed-copy: own-orphan-anchor — an anchor added to a copy of docs/rules.md with no rule must FAIL as NOT DEFINED in the skill
+# MUST-FIRE: perturbed-copy: own-number-in-no-log — a two-digit integer neither of the skill's logs holds, planted in a copy of a rule, must FAIL as in NO log
+# MUST-FIRE: perturbed-copy: own-forbidden-token — a lineage name R57 added to the forbid list, planted in a copy of a rule, must FAIL naming the token
+# MUST-FIRE: perturbed-copy: own-foreign-bracket — another lineage skill's bracket citation planted in a copy of a rule must FAIL naming its prefix
+# MUST-FIRE: perturbed-copy: own-stale-guide — an anchor paragraph changed in a copy of docs/rules.md, the guide not regenerated, must make skill-guide --check FAIL as STALE
+# MUST-FIRE: perturbed-copy: unread-rule — a copy of CLAUDE.md whose rule lost its tag must be refused naming the line, the two readers disagreeing, with nothing written
+# MUST-FIRE: perturbed-copy: rule-outside-group — a rule planted before the first group heading must be refused naming its line
+# MUST-FIRE: perturbed-copy: empty-group — a group heading with no rule under it must be refused naming the group
+# MUST-FIRE: perturbed-copy: gen-duplicate-rule — a rule id defined twice in a copy of CLAUDE.md must be refused by the generator naming it
+# MUST-FIRE: perturbed-copy: range-citation — a tag citing a range of bbh ids must be refused naming the rule
+# MUST-FIRE: perturbed-copy: page-not-in-docs — a skills table whose page is not among its docs must be refused
+# MUST-FIRE: perturbed-copy: lacking-key — a skills table without a key the generator reads must be refused naming the key
+# MUST-FIRE: perturbed-copy: ledger-finding-refused — a ledger entry naming a rule the constitution does not define must refuse the generation, with nothing written
 # NOT-ASSERTED: that the lift left bbh's messages unchanged: gates/fidelity_bbh_s5.sh diffs them
 # NOT-ASSERTED: the guide generator alone over a wrapped definition: it still quotes the first line, and the lock is what refuses the skill (R54)
 # NOT-ASSERTED: that a small integer a skill quotes is the one its log means: only its presence as a token somewhere in the declared logs is read, and over docs/gotchas.md and docs/census/*.md 89 of the 90 two-digit integers occur (measured bbx-26)
@@ -49,6 +67,10 @@
 # NOT-ASSERTED: that an incident truly re-anchors the rules its list names: only an entry's explicit list is read, never its prose, and never whether the incident happened in this tree (R53)
 # NOT-ASSERTED: a list written in a wording the reader does not know: that entry reads as having no list and is named on the ledger NOTE line, never failed (D67)
 # NOT-ASSERTED: BBX-25 for the ledger reader: its one consumer is BBX's own constitution and ledger (R50)
+# NOT-ASSERTED: that a [BBH-N] BBX's skill cites is defined in bbh's skill: gates/fidelity_bbh_s5.sh resolves each against bbh's skill at the fidelity baseline (R56)
+# NOT-ASSERTED: that a rule of BBX's skill is true or well chosen: the lock asserts anchoring, liftability, numbers and cross-references, and the page says which ledger entries name a rule, never that they justify it
+# NOT-ASSERTED: that the installed skill is this tree's: the symlink under ~/.claude/skills is the maintainer's act (R57), and nothing here reads it
+# NOT-ASSERTED: BBX-25 for the skill generator and its anchor page: their one consumer is BBX's own constitution and ledger (R50)
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME
@@ -262,5 +284,94 @@ control wrong-population "ERROR: against BBX-6 table=" real --against "$T/table3
 if real > "$T/real.out"; then ok "BBX's whole ledger: $(tail -1 "$T/real.out")"; else fail "BBX's whole ledger is refused:"; grep '^ERROR' "$T/real.out" | sed 's/^/        /'; fi
 grep '^NOTE: ' "$T/real.out" || fail "the reader printed no NOTE line over BBX's ledger"
 
+echo "== 8. BBX's own skill (S5 step 4): generated from CLAUDE.md §4 and the ledger, locked to docs/rules.md, its guide current =="
+BT="$BBX_HOME/skill/skills.toml"
+bx() { "$BBX_HOME/bin/bbx" "$@" 2>&1; }
+if [ ! -f "$BT" ]; then
+    fail "BBX's skills table skill/skills.toml is missing: §8 cannot run, and its controls stay unfired"
+else
+passes "skill-gen --check: skill/bbx/SKILL.md and docs/rules.md are current" bx skill-gen --config "$BT" --check
+passes "check-skills over BBX's own skill" bx check-skills --config "$BT" -v
+passes "skill-guide --check over BBX's own guide" bx skill-guide --config "$BT" --check
+bx check-skills --config "$BT" -v | grep -q -x -F '  BBX: 30 rules defined in skill/bbx/SKILL.md' && ok "the lock reads the 30 rules of CLAUDE.md §4 in the generated skill" || fail "the lock does not read 30 rules in skill/bbx/SKILL.md"
+PYTHONPATH="$BBX_HOME/lib/py" python3 -c 'import sys; from bbx import config as C; f = C.load(sys.argv[1])["skill_BBX"]["forbid"]; sys.exit(1 if not f or any("bbh" in t.lower() for t in f) else 0)' "$BT" && ok "the forbid list is not empty and bars no [BBH- and no bbh token (R4, R57)" || fail "the forbid list is empty or bars what R4 allows"
+_ownfiles="$(PYTHONPATH="$BBX_HOME/lib/py" python3 -c 'import sys; from bbx import config as C; t = C.load(sys.argv[1])["skill_BBX"]; fs = ["skill/skills.toml", t["path"], t["path"].rsplit("/", 1)[0] + "/GUIDE.md", t["constitution"], t["ledger"], t["page"]] + list(t["docs"]) + list(t["logs"]); print(" ".join(dict.fromkeys(fs)))' "$BT")"
+own() {  # own <name> — a copy of the files BBX's skill is generated from, locked to and guided by
+    rm -rf "$T/o_$1"
+    for _f in $_ownfiles; do mkdir -p "$(dirname "$T/o_$1/$_f")"; cp "$BBX_HOME/$_f" "$T/o_$1/$_f"; done
+}
+repl() {  # repl <file> <old> <new> — one literal replacement; <old> must occur exactly once, or the gate stops here
+    python3 - "$1" "$2" "$3" <<'EOF'
+import sys
+p, old, new = sys.argv[1:4]
+s = open(p, encoding="utf-8").read()
+if s.count(old) != 1:
+    sys.exit("repl: %r occurs %d times in %s" % (old, s.count(old), p))
+open(p, "w", encoding="utf-8").write(s.replace(old, new))
+EOF
+}
+ogen()   { _d="$T/o_$1"; shift; "$BBX_HOME/bin/bbx" skill-gen --config "$_d/skill/skills.toml" "$@" 2>&1; }
+olock()  { _d="$T/o_$1"; shift; "$BBX_HOME/bin/bbx" check-skills --config "$_d/skill/skills.toml" --no-selftest "$@" 2>&1; }
+oguide() { _d="$T/o_$1"; shift; "$BBX_HOME/bin/bbx" skill-guide --config "$_d/skill/skills.toml" "$@" 2>&1; }
+unwritten() {  # unwritten <name> — a refused generation left the copy's two generated files as the tree has them
+    cmp -s "$T/o_$1/skill/bbx/SKILL.md" "$BBX_HOME/skill/bbx/SKILL.md" && cmp -s "$T/o_$1/docs/rules.md" "$BBX_HOME/docs/rules.md"
+}
+own base
+passes "a copy of the files reads as the tree does: the skill and the page current" ogen base --check
+passes "a copy of the files reads as the tree does: the lock passes" olock base
+passes "a copy of the files reads as the tree does: the guide current" oguide base --check
+own sk; repl "$T/o_sk/CLAUDE.md" '- [BBX-3] `[inherited bbh; VS ".pending"]` An unvalidated expectation is a' '- [BBX-3] `[inherited bbh; VS ".pending"]` An always unvalidated expectation is a'
+control stale-skill "skill/bbx/SKILL.md is STALE" ogen sk --check
+own pg; _next=$(( $(grep -c '^## G[0-9]' "$T/o_pg/docs/gotchas.md") + 1 ))
+printf '\n## G%d — a planted incident (paid: 0)\nRules re-anchored in fact: BBX-2.\n' "$_next" >> "$T/o_pg/docs/gotchas.md"
+control stale-rules-page "docs/rules.md is STALE" ogen pg --check
+ogen pg --check | grep -q -F 'ok    skill/bbx/SKILL.md is current' && ok "stale-rules-page: the skill itself stays current, only the page moved" || fail "stale-rules-page: the skill moved with the page"
+own ua; printf -- '- [BBX-99] a planted rule nobody anchored.\n' >> "$T/o_ua/skill/bbx/SKILL.md"
+control own-unanchored-rule "ANCHORED NOWHERE: BBX-99" olock ua
+own oa; printf -- '\n**[BBX-99]** a planted anchor with no rule.\n' >> "$T/o_oa/docs/rules.md"
+control own-orphan-anchor "NOT DEFINED in the skill: BBX-99" olock oa
+_absent="$(PYTHONPATH="$BBX_HOME/lib/py" python3 -c 'import sys; from bbx import config as C; from bbx.checkskills import integers; t = C.load(sys.argv[1])["skill_BBX"]; have = set().union(*[integers(open(sys.argv[2] + "/" + p, encoding="utf-8").read()) for p in t["logs"]]); print(next((str(n) for n in range(10, 100) if str(n) not in have), ""))' "$BT" "$BBX_HOME")"
+own nl
+if [ -n "$_absent" ]; then
+    repl "$T/o_nl/skill/bbx/SKILL.md" '- [BBX-3] An unvalidated expectation is a FAILURE' "- [BBX-3] A sweep counted $_absent reds. An unvalidated expectation is a FAILURE"
+    control own-number-in-no-log "in NO log: $_absent" olock nl
+else
+    echo "CONTROL DEAD: own-number-in-no-log — every two-digit integer occurs in the skill's logs, so no figure can be planted"; fail "own-number-in-no-log: the logs hold every two-digit integer, and the integers check cannot fail on one"
+fi
+own ft; repl "$T/o_ft/skill/bbx/SKILL.md" '- [BBX-3] An unvalidated' '- [BBX-3] On fbneo, an unvalidated'
+control own-forbidden-token "names 'fbneo'" olock ft
+own fb; repl "$T/o_fb/skill/bbx/SKILL.md" 'is a FAILURE, not a pending note.' 'is a FAILURE, not a pending note [SSP-3].'
+control own-foreign-bracket "names '[SSP-'" olock fb
+own sg; repl "$T/o_sg/docs/rules.md" '**[BBX-2]** INHERITED: no entry' '**[BBX-2]** INHERITED (planted): no entry'
+control own-stale-guide "is STALE" oguide sg --check
+own ur; repl "$T/o_ur/CLAUDE.md" '- [BBX-3] `[inherited bbh; VS ".pending"]` ' '- [BBX-3] '
+control unread-rule "unread-rule line" ogen ur
+ogen ur | grep -q -F 'readers-disagree' && unwritten ur && ok "unread-rule: the two readers disagree on the ids, and nothing was written" || fail "unread-rule: no readers-disagree line, or a generated file was written"
+own og; repl "$T/o_og/CLAUDE.md" '
+**Verdicts**
+' '
+- [BBX-98] `[this project]` a planted rule before any group.
+**Verdicts**
+'
+control rule-outside-group "rule-outside-group line" ogen og
+own eg; repl "$T/o_eg/CLAUDE.md" '**Controls**' '**A planted empty group**
+
+**Controls**'
+control empty-group "empty-group 'A planted empty group'" ogen eg
+own dr; repl "$T/o_dr/CLAUDE.md" '- [BBX-4] `' '- [BBX-3] `'
+control gen-duplicate-rule "duplicate-rule BBX-3" ogen dr
+own rc; repl "$T/o_rc/CLAUDE.md" '`[inherited bbh BBH-49]`' '`[inherited bbh BBH-49..50]`'
+control range-citation "unresolvable-citation BBX-14" ogen rc
+own pd; repl "$T/o_pd/skill/skills.toml" 'docs = ["docs/rules.md"]' 'docs = ["DECISIONS.md"]'
+control page-not-in-docs "is not among its docs" ogen pd
+own lk; repl "$T/o_lk/skill/skills.toml" 'cite = "BBH"
+' ''
+control lacking-key "lacks cite" ogen lk
+own lf; _next=$(( $(grep -c '^## G[0-9]' "$T/o_lf/docs/gotchas.md") + 1 ))
+printf '\n## G%d — a planted incident naming a rule nobody defined (paid: 0)\nRules re-anchored in fact: BBX-99.\n' "$_next" >> "$T/o_lf/docs/gotchas.md"
+control ledger-finding-refused "dangling-rule-id G$_next BBX-99" ogen lf
+unwritten lf && ok "ledger-finding-refused: nothing was written" || fail "ledger-finding-refused: a generated file was written"
+fi
+
 echo
-[ "$rc" = 0 ] && echo "PASS: the skills lock fires on every perturbation of a synthetic consumer, refuses a wrapped definition both ways, and reads a plain integer under the integers vocabulary; the ledger reader reads every list shape both ways and reproduces the plan's 23 re-anchored and 7 inherited through G60" || { echo "FAIL: see above"; exit 1; }
+[ "$rc" = 0 ] && echo "PASS: the skills lock fires on every perturbation of a synthetic consumer, refuses a wrapped definition both ways, and reads a plain integer under the integers vocabulary; the ledger reader reads every list shape both ways and reproduces the plan's 23 re-anchored and 7 inherited through G60; BBX's own skill is generated current, locked and guided, and every control of the slice fires on a copy of it" || { echo "FAIL: see above"; exit 1; }

@@ -11,15 +11,17 @@
 # (docs/census/vampiresaved.md, read by bbx.recount's one parser) through a private copy of bbh's
 # example/consumers/bbh.vampire.toml whose root is that clone (bbh's rule on a config that lives outside its tree).
 # ONE normalisation: the generator's stale line names the command to run, `bbx skill-guide` on BBX's side, read as
-# `bbh skill-guide` before the diff.
+# `bbh skill-guide` before the diff. Beside the pairs, every `[BBH-N]` BBX's own generated skill (skill/bbx/SKILL.md)
+# cites is resolved against bbh's skill on the same clone at the baseline (R4, R56; S5 step 4).
 # Usage: BBX_BBH_HOME=~/Developer/blackbox-harness gates/fidelity_bbh_s5.sh     (static tier)
 # SKIP: BBX_BBH_HOME unset or not a bbh tree (exit 0; asserts nothing).
 # READ-ONLY (R18, R20): bbh on a PLAIN LOCAL CLONE of the baseline (lib/sh/baseline.sh, docs/defaults.md D20) and
 # VampireSaved on a plain clone of its census commit, both under TMPDIR, each required clean of tracked, untracked AND
 # ignored entries after the run; PYTHONDONTWRITEBYTECODE=1 for the whole gate, as in fidelity_bbh_s2.sh.
 # MUST-FIRE: shadow-tool: verdict-text-f18 — a shadow BBX home whose lifted lock prints one verdict string changed must make an F18a pair differ, or the diff cannot fail
+# MUST-FIRE: perturbed-copy: unresolved-bbh-citation — a copy of BBX's skill with a planted [BBH-999] must FAIL naming it, or the citation check cannot fail
 # NOT-ASSERTED: a skill whose rule definitions wrap onto a second line, or a number outside bbh's six patterns: no F18 input carries either, and gates/skills.sh is where BBX's two deltas for them are asserted (R54)
-# NOT-ASSERTED: that a [BBH-N] a BBX skill cites names a rule bbh defines (R56)
+# NOT-ASSERTED: that a [BBH-N] BBX's skill cites says what the BBX rule says: only that bbh's skill at the fidelity baseline defines the id is read (R56)
 # NOT-ASSERTED: the --help text of the two lifted tools, which names bbx and $BBX_CONFIG by design; no pair asks for help
 # NOT-ASSERTED: VampireSaved's eight skills on a host whose census-recorded VampireSaved path holds no copy of the recorded commit: F18d is then not run, and a NOTE says so
 # NOT-ASSERTED: that any skill says anything true, or that bbh's H10 is correct: identical output on both sides is fidelity, not truth
@@ -185,6 +187,35 @@ else
     if [ "$bad" -gt "$_bb" ]; then echo "CONTROL FIRED: verdict-text-f18 — one changed verdict string in the lifted lock, the pair differs: $(grep '^[<>]' "$T/d.txt" | tr '\n' ' ' | cut -c1-80)"; bad=$_bb; rc=$_rb; ok "the F18 diff can fail"
     else echo "CONTROL DEAD: verdict-text-f18 — a changed verdict string produced an empty diff"; fail "the diff cannot fail"; fi
     pairs=$_pb
+fi
+
+echo "== [BBH-N]: every bbh rule BBX's own skill cites is defined in bbh's skill at $BASELINE (R4, R56) =="
+cite_check() {  # cite_check <a BBX SKILL.md> — one verdict line; exit 1 when a citation does not resolve
+    PYTHONPATH="$BBX_HOME/lib/py" python3 - "$1" "$B/skill/blackbox-harness/SKILL.md" <<'EOF'
+import re, sys
+from bbx.checkskills import skill_defs
+skill = open(sys.argv[1], encoding="utf-8").read()
+defined = set(skill_defs(open(sys.argv[2], encoding="utf-8").read()))
+cited = re.findall(r"(?<!\*)\[(BBH-\d+)\](?!\*)", skill.split("\n---\n", 1)[-1])
+if not defined:
+    sys.exit("FAIL bbh-citations: bbh's skill at the baseline defines no rule, so the extractor read nothing")
+if not cited:
+    sys.exit("FAIL bbh-citations: BBX's skill cites no [BBH-N], so the check would pass on nothing")
+missing = sorted({c for c in cited if c not in defined}, key=lambda c: int(c.split("-")[1]))
+if missing:
+    sys.exit(f"FAIL bbh-citations: {', '.join('[' + m + ']' for m in missing)} not defined in bbh's skill ({len(defined)} rules)")
+print(f"bbh-citations cited={len(cited)} distinct={len(set(cited))} defined_in_bbh={len(defined)} unresolved=0")
+EOF
+}
+if [ -f "$BBX_HOME/skill/bbx/SKILL.md" ]; then
+    if _c="$(cite_check "$BBX_HOME/skill/bbx/SKILL.md" 2>&1)"; then ok "$_c"; else fail "$_c"; fi
+    cp "$BBX_HOME/skill/bbx/SKILL.md" "$T/cite_skill.md"
+    printf -- '- [BBX-999] a planted rule citing a bbh rule no skill defines. [BBH-999]\n' >> "$T/cite_skill.md"
+    if _c="$(cite_check "$T/cite_skill.md" 2>&1)"; then echo "CONTROL DEAD: unresolved-bbh-citation — a planted [BBH-999] resolved"; fail "the citation check cannot fail"
+    elif printf '%s\n' "$_c" | grep -q -F '[BBH-999] not defined'; then echo "CONTROL FIRED: unresolved-bbh-citation — $_c"; ok "an unresolved citation fails"
+    else echo "CONTROL DEAD: unresolved-bbh-citation — it failed for another reason: $_c"; fail "the citation check failed for another reason"; fi
+else
+    fail "BBX's own skill skill/bbx/SKILL.md is missing, so no citation was resolved"
 fi
 
 echo "== READ-ONLY: the bbh clone after the run (R18, R20) =="
