@@ -10,13 +10,14 @@
 # gate. One value, one place, every reader named in `docs/defaults.md` D20.
 #
 # WHY A SOURCED SHELL FILE AND NOT A CONFIG KEY. The alternative R43 offered was
-# a `[fidelity]` key in the kind-blind config layer. Measured at bbx-20 and
-# declined: fidelity pair F13e diffs `bbh.config example/bbh.toml dump` against
-# `bbx.config example/bbh.toml dump`, the two dumps carry the SAME section list
-# today, and a new kind-blind section would appear in BBX's dump and in bbh's
-# never — so the pair would stop being empty. The baseline is a fact about BBX's
-# relationship to the lineage, not a consumer value, and `lib/sh/` is where
-# BBX's own shared shell already lives.
+# a `[fidelity]` key in the kind-blind config layer, declined at bbx-20. The
+# baseline is a fact about BBX's relationship to the lineage, not a consumer
+# value, and `lib/sh/` is where BBX's own shared shell already lives. (The other
+# reason recorded then — that fidelity pair F13e, which diffs the two `config
+# dump`s of bbh's example, would stop being empty once a kind-blind section
+# existed — was never measured, and is false: a dump prints the consumer's file,
+# never the defaults, and F13e stayed identical when S5 added `[skills]` at
+# bbx-26, G68.)
 #
 # Changing the value is the R28 PROCEDURE, not a ruling (ruled at bbx-5): a
 # dated line in `docs/rebaselines.md`, this file, D20 by its own definition, and

@@ -1444,3 +1444,16 @@ Learning (R27): G59 and G60's shape, silence read as a count, through two new to
 boundary is `git grep -P` or `-w`, a zero from any search carries a positive control of the same shape, and a diff
 filter never excludes a leading `-`. No harness mechanism (the scan above); the trap is a HANDOFF hazard. Rules
 re-anchored in fact: §1, BBX-7.
+
+## G68 — R43 recorded an inference as a measurement: a kind-blind config section was said to break F13e, and a config dump prints the consumer's file only (paid: 0 — found by S5 step 1's own F13e run; 2026-09-14)
+R43 (bbx-20) declined a `[fidelity]` config key "by measurement", and the measured part was true: F13e's two `config
+dump`s of bbh's example carried the same section list. The conclusion drawn from it, that a new kind-blind section
+would put a line in BBX's dump and none in bbh's, was never run: `bbx.config` `main` prints `cfg.items()`, the
+consumer's file, and never `DEFAULTS` (bbh's dump behaves the same — its defaults carry `[skills]` and its dump of
+bbh's example printed no such line, measured bbx-26). S5 step 1 added a kind-blind `[skills]` section, and
+`gates/fidelity_bbh.sh` read `F13e config dump of example/bbh.toml: identical (108 lines)` and PASS. The ruling's
+choice, one sourced definition of the baseline, stands on its other recorded reason; the false one was corrected in
+`DECISIONS.md`, `docs/defaults.md` D20 and `lib/sh/baseline.sh`, first and in its own commit (X55).
+Learning (R27): "declined by measurement" covers what was measured and nothing drawn from it; a prediction taken from
+a measurement is a claim until it has run. S5's plan wrote the opposite prediction as "expected" and measured it at
+the step that could. No harness mechanism. Rules re-anchored in fact: §1, BBX-19, BBX-21.
