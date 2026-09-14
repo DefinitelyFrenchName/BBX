@@ -1569,3 +1569,40 @@ slow stub's end in the same second, which the old strict comparison would have r
 Learning (R27): mechanism built (the marker). A verdict decided by comparing two clocks has a margin, and a margin is
 a tolerance nobody ratified: order is proven by a handshake, and a clock is printed, never compared. Feature work
 halted on the red until the gate was fixed and measured. Rules re-anchored in fact: BBX-14, BBX-26.
+
+## G77 — Moving HANDOFF, STATE and the S5 plan to step 5, the contributor wrote that the promotion waited for the maintainer to approve its wording, although R55 had approved that form at bbx-26 and the bullet being rewritten had said so (paid: 0 — found by reading R55 before the next question was put, before any edit of CLAUDE.md; one correction commit; 2026-09-14)
+The step 4 ledger commit `5fcde57` replaced HANDOFF's orientation bullet, which at `db5a1ca` read "R55's part (2) (the
+23 tags promoted, wording approved)", with "on wording the maintainer approves BEFORE the edit (R16)", and wrote the same
+claim twice into STATE and once into the S5 plan's status line; the contributor also told the maintainer twice that
+step 5 needed an approval first. `docs/rulings.md` R55 records "Approve both as worded", part (2) being the tag form
+`[re-anchored; inherited <lineage as written>]`. Read before the question "step 5 or close" was put, it also showed the
+one case that form does not cover: BBX-30's tag is `[this project]`, the only one of the 30 not `[inherited …]` (29 by
+`grep -c`), which the maintainer then ruled as R58. X62, planted in a clone of `5fcde57`, fired on the four lines
+(retraction_hits=4) and read 0 once the copies were corrected; the tree was corrected in its own commit first.
+Learning (R27): §1's own failure, in prose: a status about a ruling written from memory while the ruling was one read
+away, over a sentence that had been right. No harness mechanism (G54's candidate would have to read the rulings as a
+subject); when a sentence about a ruling is rewritten, the ruling is read first. Rules re-anchored in fact: §1, BBX-22.
+
+## G78 — S5 step 2's `integers` vocabulary has one real consumer and no gate declared it, as R50 requires; found drafting S5's slice readout, four harness commits after it landed (paid: one census regeneration superseded before its commit, about 11 min; 2026-09-14)
+Drafting the per-component BBX-25 table of S5's slice readout (R50), the number vocabulary `integers` (R54, delta 6,
+D66) came out with one consumer: `git grep '^numbers' -- '*.toml'` over BBX's tree finds only `skill/skills.toml:28`,
+and neither bbh's `skill/skills.toml` nor its VampireSaved consumer config (8 skill tables) at `10a82d2` sets
+`numbers`. `gates/skills.sh` declared BBX-25 for the ledger reader and for the skill generator, both built at bbx-27,
+and not for the vocabulary built at bbx-26 (`da62aa3`): R50's declaration was applied to what the sitting built, not
+to what the slice built. The census regenerated at `24cfb12` (identity `7c34a438ca8e`, 49 rows, 33 gates PASS in its
+shadow) was superseded by the declaration's own commit `c5f1312` and set back to HEAD, never committed.
+Learning (R27): G58's shape at a slice readout: the population of BBX-25's per-component table is every unit the
+slice built, across all its sittings, and each unit with one consumer is declared before the table is written. No
+harness mechanism; the readout draft is where it was caught. Rules re-anchored in fact: BBX-25, §1.
+
+## G79 — A commit message took the census's row count from the wrong field: a `sed` matched `missing-rows 0` where `rows 49` was meant, and the subject read "0 rows" (paid: 0 — read off the printed values straight after the commit and rewritten before the push, the tree proven identical; 2026-09-14)
+Committing the bbx-27 census after the skills gate's two changes, the message took its row count from the register line
+`register   files 49   rows 49   missing-rows 0   dead-rows 0` with `sed 's/.*rows \([0-9]*\) .*/\1/'`: the greedy
+`.*` ran to the last `rows `, the one inside `missing-rows`, and handed back 0. The subject was committed as "34 gates,
+0 rows, no kind lost", beside a body that quoted the register line correctly, and the same value went into the close's
+parameter file. Read in the values the command printed after it, the two unpushed commits were rebuilt with the
+subject reading 49 rows, and `git diff` between the old and the new head read empty.
+Learning (R27): G27's shape, a commit message's number not read off the run, through BBX-12's mechanism, a value taken
+by its position in a line rather than by its field name. No harness mechanism (the harness's own readers take
+`rows=`-style fields by name); for probes a field is taken by an anchored name, `rows \([0-9]*\)   missing`, or with
+`awk` over split fields, never by a greedy match. Rules re-anchored in fact: §1, BBX-12.

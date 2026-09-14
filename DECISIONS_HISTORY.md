@@ -1558,3 +1558,40 @@ first, in its own commit, rather than being carried. The last green means that t
 over bbh's and VampireSaved's inputs and a synthetic consumer; it asserts nothing yet about BBX's own skill, which
 does not exist before step 4. Nothing measured this sitting argues that S5 has stopped being the most valuable
 thread; the sitting closed at step 2 on the contributor's recommendation, and step 3 is the next sitting's first task.
+
+## bbx-27 (2026-09-14) — S5 steps 3 to 5 built; R58 raised and ruled the same sitting; the sweep runner's queue check made a handshake
+
+The sitting opened on a GREEN battery at `db5a1ca` (PASS 34, controls 150 / 150, no `census-drift` NOTE) and built the
+rest of S5 under bbx-26's rulings. **Step 3** (`c17ae40`) is R53's reader: `bbx reanchors` reads every gotcha's
+explicit re-anchor list, and its first run reproduced the plan's §3.2 table through G60 rule by rule, 23 re-anchored and
+7 inherited, with no difference to report. **Step 4** (`23a10c6`) is R51's generator and R52's page: BBX's skill
+`skill/bbx/` generated from CLAUDE.md §4, locked to the generated `docs/rules.md`, its guide written by the lifted
+generator, every `[BBH-N]` resolved in the F18 gate (R56), the table as R57 names it. Its logs were chosen by
+measurement inside R54's intent and recorded as D69, not ruled: the two narrowest pages quoting the skill's integers,
+40 of the 90 two-digit integers between them against 86 with the census page in place of one. X20's allowance was
+widened to the two generated views that quote G26's heading verbatim; not a ruling, and not a relaxation, because every
+character of those views comes from a file the sweep still reads or from the ledger X20 already allowed. **Step 5**
+(`24cfb12`) promoted the 23 re-anchored tags in CLAUDE.md, derived from the reader, under R55's part (2).
+
+**R58 was raised by the promotion's own measurement.** Reading R55 before putting "step 5 or close", the contributor
+found two things: its own step-4 ledgers had said the promotion waited for an approval R55 had already given
+(corrected first, `9353ff2`, G77, X62), and R55's approved form `[re-anchored; inherited <lineage as written>]` could
+not fit BBX-30, whose tag was `[this project]`. Put to the maintainer with the recommendation and one declined
+alternative, it was answered as recommended, `[re-anchored; this project]` (`a92d5d3`). No other ruling was raised or
+answered.
+
+**The battery went NOT GREEN once, and the halt held (BBX-26).** Over step 4's uncommitted build `gates/sweep_runner.sh`
+§15 read the third short stub starting 5 s after the slow stub ended, where over 92 kept runs the margin had been 1 or
+2 s. It did not reproduce alone or under CPU load, and its cause is unmeasured. The check was made deterministic rather
+than re-run into green: a handshake, red on the old code under 2 s late starts and green twice on the new (`b07edbc`,
+G76). The load test run to investigate it left 24 CPU burners up for 1 h 41 min on the maintainer's machine, because its
+cleanup ran in zsh (G75).
+
+**Anti-hyperfocus (BBX-27).** The thread was the one the bbx-26 close named, and it reached the end of its plan: three
+steps, the code of each measured red on the old tree before it landed. The detours were a flaky gate that halted
+feature work, two stale status lines, one wrong sentence about a ruling, a control whose anchor the promotion would
+have broken, and a BBX-25 declaration R50 required for the `integers` vocabulary, found drafting the slice readout (G78), and one commit subject's number taken from the wrong field and rewritten before the push (G79); each was settled in its own commit before the work resumed, and one cost fell outside the tree (G75). The
+last green means that BBX's rules, the evidence the ledger's explicit lists give them, and the skill generated from
+them agree with each other as one reader reads them; it does not mean any rule is true, that an incident justifies the
+rule its list names, or that the 7 inherited rules should be dropped. S5's slice readout is written for the
+maintainer's ruling, and nothing measured this sitting argues that another thread is more valuable before it.

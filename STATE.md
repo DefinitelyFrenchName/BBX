@@ -7,34 +7,24 @@ paragraph per sitting, the outgoing status verbatim). Read `HANDOFF.md` first.
 generalization of `blackbox-harness` (bbh) to any subject with testable inputs
 and outputs. Born 2026-09-09.
 
-**Status (bbx-26 close, 2026-09-14):** slices S1 and S2 complete; **S3 DONE**; **S4 DONE** (ruled after the bbx-25
-close, with a rider on BBX-25 that F20 meets); **S5 — the skill — IN PROGRESS: planned, ruled, and steps 1 and 2 of
-five built.** The plan (`docs/plans/S5.md`, `230ea95`) measured H10 on clones of bbh `10a82d2` and VampireSaved
-`0cdd9726`, and BBX's 30 rules against 60 incidents — 23 re-anchored in fact, 7 by none (BBX-2, BBX-3, BBX-4, BBX-11,
-BBX-13, BBX-17, BBX-27) — and STOPPED at R51–R57, which the maintainer ruled the same sitting, all as recommended
-(R55 on a reworded §3.3 citation: the draft's "from VampireSaved" was found unmeasured before the question was put).
-**Step 1** lifted bbh's skills lock and guide generator (`lib/py/bbx/checkskills.py`, `gen_skill_guide.py`, `bin/bbx
-check-skills` and `skill-guide`, D64, D65) and made F18 a gate (`gates/fidelity_bbh_s5.sh`: 26 pairs identical over
-bbh's skill, bbh's synthetic test consumer, the lock's selftest and VampireSaved's eight skills; red on the pre-lift
-code). **Step 2** added R54's two deltas — a definition is ONE line; a per-skill `numbers` vocabulary whose `integers`
-are found in the logs as whole tokens, because every two-digit integer occurs as a substring of BBX's own ledgers
-(D66) — and `gates/skills.sh` (portable, 16 controls, red on the pre-delta code for exactly its five delta controls);
-F18 stayed identical. The battery over each build was GREEN (PASS 33, controls 134 / 134; then PASS 34, controls
-150 / 150); the census was regenerated after each (47 rows, no kind lost; identity `1fbb91c0bff1`) and the self
-subject refrozen each time. **Corrected on the way, each first and in its own commit:** F18's filed bbh command, which
-exits 2 (G62, X49); STATE's gotcha count and its hand-kept re-anchor list, wrong in 6 of 30 entries (X50, X51); three
-lineage citations in CLAUDE.md, under R55's approved wording (`581eced`, G65, X52–X54); R43's recorded reason for
-declining a config key, an inference that step 1's own F13e run measured false (G68, X55); three current-tense counts
-on the platform step-by-step (G69, X56–X58). The opening battery at `f89eec2` was GREEN (PASS 32, controls 133 / 133);
-the close's pair is quoted in `docs/readout.md` (CLOSE — bbx-26). **The WSL platform row stays GREEN at `429d3f8` and
-attests that commit only; native Linux is a PARTIAL row** at `f6f136d` (the static tier not run). Gotchas G1–G76;
-retractions X1–X61. **bbx-27, in progress: S5 steps 3 and 4 built** — step 3 the ledger reader (`c17ae40`); step 4
-BBX's skill `skill/bbx/` generated from §4 and locked to the generated `docs/rules.md`, every `[BBH-N]` resolved in F18
-(`23a10c6`); the sweep runner gate's queue check made deterministic after it read one battery NOT GREEN (`b07edbc`,
-G76); the census regenerated (`b2a7080`, `025e90b`) and the self subject refrozen (`2446418`, `9332c51`). The opening
-battery at `db5a1ca` was GREEN (PASS 34, controls 150 / 150), the battery over the step 3 build GREEN (162 / 162),
-the one over the step 4 build NOT GREEN on `sweep_runner` alone (PASS 33, controls 179 / 179,
-`build/selftest_20260914T092705Z`), and the one over the step 4 build with the fix GREEN (PASS 34, controls 179 / 179).
+**Status (bbx-27 close, 2026-09-14):** slices S1 and S2 complete; **S3 DONE**; **S4 DONE** (ruled after the bbx-25
+close, with a rider on BBX-25 that F20 meets); **S5 — the skill — BUILT, all five steps, its slice readout awaiting the
+maintainer's ruling** (`docs/readout.md`, "S5 — the slice readout"). bbx-26 planned S5 and built steps 1 and 2 (the
+lifted lock with F18; R54's two deltas). **Step 3** (`c17ae40`): `bbx reanchors`, R53's reader — every gotcha's explicit
+list read, the plan's §3.2 table reproduced through G60 (23 re-anchored, 7 inherited), the whole ledger's reading on
+every screen (D67). **Step 4** (`23a10c6`): BBX's skill `skill/bbx/`, generated from CLAUDE.md §4 by `bbx skill-gen` and
+locked to the generated `docs/rules.md` — one anchored paragraph per rule, its re-anchoring entries or its tag and "a
+candidate for dropping" — its guide current, every `[BBH-N]` resolved against bbh's skill at the baseline (R51, R52,
+R56, R57; D68, D69). **Step 5** (`24cfb12`): the 23 re-anchored tags promoted in CLAUDE.md, derived from the reader — 22
+as `[re-anchored; inherited …]` under R55's part (2), BBX-30 as `[re-anchored; this project]` under **R58, raised and
+ruled this sitting**. **The battery went NOT GREEN once**, on `gates/sweep_runner.sh` §15, a check comparing two clocks
+on a 1–2 s margin; feature work halted until it was made a handshake (`b07edbc`, G76). **Corrected first, each in its own
+commit:** two stale status lines (`11c6dcd`, G74, X60, X61) and four of this sitting's own lines saying the promotion
+awaited an approval R55 had given (`9353ff2`, G77, X62); and one missing BBX-25 declaration, for the `integers` vocabulary, found drafting the slice readout (`c5f1312`, G78). **One cost fell outside the tree:** a load test's cleanup ran
+in zsh and left 24 CPU burners up for 1 h 41 min (G75). The census was regenerated and committed three times (48, 49 and 49
+rows; identity `5059aa730eb5`), a fourth run superseded before its commit (G78), and the self subject refrozen each time. The close's pair is quoted in `docs/readout.md`
+(CLOSE — bbx-27). **The WSL platform row stays GREEN at `429d3f8` and attests that commit only; native Linux is a
+PARTIAL row** at `f6f136d` (the static tier not run). Gotchas G1–G79; retractions X1–X62.
 
 **Open rulings: none.** R0–R58 are answered and recorded in `DECISIONS.md`. The maintainer's words with R49 stand as
 a rule of method: discipline is never arbitrated — only the method of applying it, on time or practicality.
@@ -49,7 +39,7 @@ subject and an external test framework a driver — five consumers:
 bbh's `example/`, `fixture/docset/`, `fixture/fakecli/`, `fixture/unittest/`,
 `fixture/selfgates/` (R14, R15, R37, R38). **BBX's own harness files are
 measured by a gate**, not by a document (`docs/census/bbx_files.md`, generated;
-R39, D62, D63): regenerated at bbx-27 after S5 step 4 at identity `670d71385e8a`, 34 gates, 49 rows for
+R39, D62, D63): regenerated at bbx-27 after the skills gate's anchor fix at identity `5059aa730eb5`, 34 gates, 49 rows for
 49 harness files, and `bbx file-census --self --check-register` reads no drift.
 
 **Lineage, measured 2026-09-09** (`docs/census/README.md`):
@@ -60,18 +50,16 @@ R39, D62, D63): regenerated at bbx-27 after S5 step 4 at identity `670d71385e8a`
 | VampireSaved | `0cdd9726` | 7497 | 555 rules across 8 skills, their lock identical through VampireSaved's own checker and bbh's at bbx-26, and through BBX's since (F18d); 311 gate scripts; 4,808 expectation files; re-measured at bbx-2 (was `5df1d8be`: one count and 13 line citations moved); its tip is past the census (a NOTE every run, `d86e3a46ab5e` and 70 ahead at the bbx-26 open; not re-measured by design) |
 | SMS-FrenchName-edition | `ecc5481` | 633 | 66 rules; 28 traps; the Measurement Rule's origin at `CLAUDE.md:19-33`; the first skills lock, `tools/checkskills.py` (168 lines, two renditions per tier, read at bbx-26); the S3 plan's rows A35–A41 re-derived on the clone at bbx-6 (7 of 7 match) |
 
-**Rules:** 29 of the 30 rule lines in CLAUDE.md §4 carry `[inherited …]` and BBX-30 is `[this project]`; none is
-promoted yet. **Measured at bbx-26, in R53's reading:** 23 rules are named by at least one gotcha's explicit re-anchor
-list and 7 by none (BBX-2, BBX-3, BBX-4, BBX-11, BBX-13, BBX-17, BBX-27). The table, entry by entry, is
-`docs/plans/S5.md` §3.2 over G1–G60, re-read over G1–G69 with the same count; it is not copied here, because the
-hand-kept list this paragraph used to carry rotted (X51). Since S5 step 3 (bbx-27, `c17ae40`) `bin/bbx reanchors`
-derives it every run: `gates/skills.sh` reproduces the plan's table through G60 and prints the whole ledger's reading
-on the screen (23 and 7 over G1–G76). Since step 4 (`23a10c6`) the generated `docs/rules.md` states each rule's
-evidence in one anchored paragraph, and BBX's generated skill is locked to it. R55's part (2) promotes the 23 tags next,
-in the form the maintainer approved at bbx-26.
+**Rules:** 30 rule lines in CLAUDE.md §4. **23 are re-anchored in R53's reading and promoted** (`24cfb12`): 22 tags
+read `[re-anchored; inherited …]` and BBX-30's `[re-anchored; this project]` (R55 part (2), R58). **7 are still
+inherited**, candidates for dropping and never dropped by S5: BBX-2, BBX-3, BBX-4, BBX-11, BBX-13, BBX-17, BBX-27. The
+relation is derived every run by `bin/bbx reanchors` (`gates/skills.sh` prints it on the screen) and stated rule by rule
+in the generated `docs/rules.md`; it is not copied here, because the hand-kept list this paragraph once carried rotted
+(X51).
 
 **Constitution:** BBX-5's citation corrected to `MJC-52` (R12, own commit); BBX-1's and BBX-20's tags and §3.3's
-citation corrected under R55's part (1) (`581eced`). Every further edit to `CLAUDE.md` needs maintainer approval
+citation corrected under R55's part (1) (`581eced`); the 23 re-anchored tags promoted under R55's part (2) and R58
+(`24cfb12`). Every further edit to `CLAUDE.md` needs maintainer approval
 (R16). The counts "304 gates / 4,000 expectations" are in bbh's README, not in CLAUDE.md (measured 311 / 4,808;
 G3, G8).
 
@@ -82,14 +70,12 @@ not_recountable=56`); the two added at bbx-2 are host facts the clone
 exposed (G13, rule 7), the only exception ever allowed to move it upward. Grammar in
 `docs/census/README.md`.
 
-**Next:** (1) **S5 step 5** (`docs/plans/S5.md` §5 K5, §10; R55 part (2)): the 23 re-anchored tags promoted in
-CLAUDE.md in the form R55 approved at bbx-26, then the slice readout with CLAUDE.md §7's six conditions.
-Steps 3 and 4 were built at bbx-27 (`c17ae40`, `23a10c6`); BBX's skill is not installed until the maintainer links
-`~/.claude/skills/bbx` to `skill/bbx` (R57). **Standing with S4's DONE ruling:** BBX-25's scope and status are gone over again as F20 lands (S7's
+**Next:** (1) **The maintainer's ruling on S5**, on its slice readout (`docs/readout.md`, §7's six conditions); BBX's
+skill is installed by the maintainer's symlink `~/.claude/skills/bbx` → `skill/bbx` (R57). **Standing with S4's DONE ruling:** BBX-25's scope and status are gone over again as F20 lands (S7's
 row in `docs/slices.md`). (2) **Named, not queued (bbx-25):** where the single-kind comparators live
 (`docs/generality.md`). (3) **A full native Linux pair** (with `BBX_BBH_HOME` set) and **a WSL re-run** whenever a
 platform row should attest a commit newer than its own (`docs/platforms/README.md`). (4) **G48's sweep, widened by
 G50, G53, G59, G60, G61, G67 and G71**: every reader — the contributor's probes included — that may read LESS than is
-there, asking whether the shortfall reads as silence. (5) **The candidate ruling G54 names, strengthened by G69**:
+there, asking whether the shortfall reads as silence. (5) **The candidate ruling G54 names, strengthened by G69 and G74**:
 BBX's own `docs/` checked as a document-set subject. For any future harness change, the order that avoids paying
 twice is in HANDOFF.

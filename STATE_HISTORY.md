@@ -840,3 +840,44 @@ R39, D62, D63): regenerated at bbx-25 at identity `c26e5a94b344`, 32 gates, 45 r
 45 harness files, and `bbx file-census --self --check-register` reads no drift.
 
 **In force:** `DECISIONS.md` — R0–R50 (none open) and method M1–M4.
+
+## bbx-26 (closed 2026-09-14)
+
+**Status (bbx-26 close, 2026-09-14):** slices S1 and S2 complete; **S3 DONE**; **S4 DONE** (ruled after the bbx-25
+close, with a rider on BBX-25 that F20 meets); **S5 — the skill — IN PROGRESS: planned, ruled, and steps 1 and 2 of
+five built.** The plan (`docs/plans/S5.md`, `230ea95`) measured H10 on clones of bbh `10a82d2` and VampireSaved
+`0cdd9726`, and BBX's 30 rules against 60 incidents — 23 re-anchored in fact, 7 by none (BBX-2, BBX-3, BBX-4, BBX-11,
+BBX-13, BBX-17, BBX-27) — and STOPPED at R51–R57, which the maintainer ruled the same sitting, all as recommended
+(R55 on a reworded §3.3 citation: the draft's "from VampireSaved" was found unmeasured before the question was put).
+**Step 1** lifted bbh's skills lock and guide generator (`lib/py/bbx/checkskills.py`, `gen_skill_guide.py`, `bin/bbx
+check-skills` and `skill-guide`, D64, D65) and made F18 a gate (`gates/fidelity_bbh_s5.sh`: 26 pairs identical over
+bbh's skill, bbh's synthetic test consumer, the lock's selftest and VampireSaved's eight skills; red on the pre-lift
+code). **Step 2** added R54's two deltas — a definition is ONE line; a per-skill `numbers` vocabulary whose `integers`
+are found in the logs as whole tokens, because every two-digit integer occurs as a substring of BBX's own ledgers
+(D66) — and `gates/skills.sh` (portable, 16 controls, red on the pre-delta code for exactly its five delta controls);
+F18 stayed identical. The battery over each build was GREEN (PASS 33, controls 134 / 134; then PASS 34, controls
+150 / 150); the census was regenerated after each (47 rows, no kind lost; identity `1fbb91c0bff1`) and the self
+subject refrozen each time. **Corrected on the way, each first and in its own commit:** F18's filed bbh command, which
+exits 2 (G62, X49); STATE's gotcha count and its hand-kept re-anchor list, wrong in 6 of 30 entries (X50, X51); three
+lineage citations in CLAUDE.md, under R55's approved wording (`581eced`, G65, X52–X54); R43's recorded reason for
+declining a config key, an inference that step 1's own F13e run measured false (G68, X55); three current-tense counts
+on the platform step-by-step (G69, X56–X58). The opening battery at `f89eec2` was GREEN (PASS 32, controls 133 / 133);
+the close's pair is quoted in `docs/readout.md` (CLOSE — bbx-26). **The WSL platform row stays GREEN at `429d3f8` and
+attests that commit only; native Linux is a PARTIAL row** at `f6f136d` (the static tier not run). Gotchas G1–G69;
+retractions X1–X58.
+
+**Open rulings: none.** R0–R57 are answered and recorded in `DECISIONS.md`. The maintainer's words with R49 stand as
+a rule of method: discipline is never arbitrated — only the method of applying it, on time or practicality.
+In force since bbx-2: R18 (the census and the tests
+work on a clone or are explicitly, provably read-only), R19 (parallel work
+is a pull queue; the FIFO token queue is the default implementation, the
+principle is the ruling), R20 (fidelity on a plain clone of bbh at the
+baseline; the recount's clone plain too).
+BBX = Black Box harness eXpanded; GPL-3; sh + Python 3 on macOS, Linux and
+Windows/WSL; kinds: frame-driven (bbh), document set, command-line tool, with BBX ITSELF a
+subject and an external test framework a driver — five consumers:
+bbh's `example/`, `fixture/docset/`, `fixture/fakecli/`, `fixture/unittest/`,
+`fixture/selfgates/` (R14, R15, R37, R38). **BBX's own harness files are
+measured by a gate**, not by a document (`docs/census/bbx_files.md`, generated;
+R39, D62, D63): regenerated at bbx-26 after S5 step 2 at identity `1fbb91c0bff1`, 34 gates, 47 rows for
+47 harness files, and `bbx file-census --self --check-register` reads no drift.
