@@ -68,7 +68,7 @@ hand-kept list this paragraph used to carry rotted (X51). Since S5 step 3 (bbx-2
 derives it every run: `gates/skills.sh` reproduces the plan's table through G60 and prints the whole ledger's reading
 on the screen (23 and 7 over G1–G76). Since step 4 (`23a10c6`) the generated `docs/rules.md` states each rule's
 evidence in one anchored paragraph, and BBX's generated skill is locked to it. R55's part (2) promotes the 23 tags next,
-on wording the maintainer approves.
+in the form the maintainer approved at bbx-26.
 
 **Constitution:** BBX-5's citation corrected to `MJC-52` (R12, own commit); BBX-1's and BBX-20's tags and §3.3's
 citation corrected under R55's part (1) (`581eced`). Every further edit to `CLAUDE.md` needs maintainer approval
@@ -83,7 +83,7 @@ exposed (G13, rule 7), the only exception ever allowed to move it upward. Gramma
 `docs/census/README.md`.
 
 **Next:** (1) **S5 step 5** (`docs/plans/S5.md` §5 K5, §10; R55 part (2)): the 23 re-anchored tags promoted in
-CLAUDE.md on wording the maintainer approves first (R16), then the slice readout with CLAUDE.md §7's six conditions.
+CLAUDE.md in the form R55 approved at bbx-26, then the slice readout with CLAUDE.md §7's six conditions.
 Steps 3 and 4 were built at bbx-27 (`c17ae40`, `23a10c6`); BBX's skill is not installed until the maintainer links
 `~/.claude/skills/bbx` to `skill/bbx` (R57). **Standing with S4's DONE ruling:** BBX-25's scope and status are gone over again as F20 lands (S7's
 row in `docs/slices.md`). (2) **Named, not queued (bbx-25):** where the single-kind comparators live

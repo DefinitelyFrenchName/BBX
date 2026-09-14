@@ -165,8 +165,8 @@ by construction (the recount's clone) and by `fidelity_bbh`'s proof.
   two narrowest pages holding the skill's integers, 40 of the 90 two-digit integers between them (D69), and
   `gates/skills.sh` plants an integer neither holds every run. **The skill is not installed**: the symlink
   `~/.claude/skills/bbx` → `skill/bbx` is the maintainer's act (R57).
-- **FIRST: step 5** — R55's part (2): the 23 re-anchored tags promoted in CLAUDE.md, read off `docs/rules.md`, on wording
-  the maintainer approves BEFORE the edit (R16); then `bbx skill-gen --check` and the lock over the result (the skill
+- **FIRST: step 5** — R55's part (2): the 23 re-anchored tags promoted in CLAUDE.md, read off `docs/rules.md`, in the
+  form the maintainer approved at bbx-26 (R55, under R16: `[re-anchored; inherited <lineage as written>]`); then `bbx skill-gen --check` and the lock over the result (the skill
   and the page are expected unchanged, since neither quotes a re-anchored rule's tag, and that is measured when it
   lands, G26), and the slice readout with CLAUDE.md §7's six conditions.
 - **The rider on S4's DONE ruling, standing:** "we should note to go over the BBX-25 scope and status as we F20 and
