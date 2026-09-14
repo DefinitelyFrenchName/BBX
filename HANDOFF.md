@@ -151,7 +151,8 @@ Steps 8 and 9 are checked, not remembered: step 8 by `close_sweeps`, step 9
 by construction (the recount's clone) and by `fidelity_bbh`'s proof.
 
 **Next-session orientation (written at the bbx-26 close, 2026-09-14; its first bullets and expectations updated at bbx-27 after S5 steps 3 and 4)**
-- **No ruling open.** R0–R57 are answered; R51–R57 (S5's plan) were raised and ruled at bbx-26, all as recommended.
+- **No ruling open.** R0–R58 are answered; R51–R57 (S5's plan) were raised and ruled at bbx-26, all as recommended, and R58
+  (BBX-30's promoted tag) at bbx-27, as recommended.
   On this host the battery is green — the close's pair is quoted in `docs/readout.md`, CLOSE — bbx-26.
 - **S5 step 3, the ledger reader, is BUILT** (bbx-27, `c17ae40`; `docs/plans/S5.md` §5 K4, R53, D67). Its first run
   reproduced the plan's §3.2 table through G60 rule by rule — 23 re-anchored, 7 inherited, no difference to report — and

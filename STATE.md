@@ -36,7 +36,7 @@ battery at `db5a1ca` was GREEN (PASS 34, controls 150 / 150), the battery over t
 the one over the step 4 build NOT GREEN on `sweep_runner` alone (PASS 33, controls 179 / 179,
 `build/selftest_20260914T092705Z`), and the one over the step 4 build with the fix GREEN (PASS 34, controls 179 / 179).
 
-**Open rulings: none.** R0–R57 are answered and recorded in `DECISIONS.md`. The maintainer's words with R49 stand as
+**Open rulings: none.** R0–R58 are answered and recorded in `DECISIONS.md`. The maintainer's words with R49 stand as
 a rule of method: discipline is never arbitrated — only the method of applying it, on time or practicality.
 In force since bbx-2: R18 (the census and the tests
 work on a clone or are explicitly, provably read-only), R19 (parallel work

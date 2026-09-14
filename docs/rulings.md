@@ -447,6 +447,14 @@ written until the ruling its slice needs is answered (CLAUDE.md §6, §9).
 - **Declined:** (2) a level-2 skill about BBX the tool, naming its commands and fixtures — the rules as generated are project-blind, and a tool's usage is its README's; (3) an installed COPY — SMS's user-pair check exists because copies drift, and a symlink cannot.
 - **Answer:** "bbx, level 0, symlink" (the recommendation) — maintainer, 2026-09-14 (bbx-26). The symlink is the maintainer's act, outside the tree BBX writes.
 
+## Answered 2026-09-14 (bbx-27) — R58, raised by the promotion's measurement and ruled the same sitting
+
+### R58 — BBX-30's tag after promotion (raised bbx-27, S5 step 5)
+- **Context measured (2026-09-14, bbx-27):** R55 part (2) approved the form `[re-anchored; inherited <lineage as written>]` for the re-anchored rules' tags. `bbx reanchors` reads 23 rules re-anchored; 22 of their tags open `[inherited`, and BBX-30's reads `[this project]` (29 of the 30 tags in CLAUDE.md §4 open `[inherited`, by `grep -c`), so the approved form does not cover it. BBX-30 is named by 8 entries (G30, G31, G46, G50, G53, G57, G58, G63).
+- **Recommendation:** `[re-anchored; this project]` — the approved form's shape with the tag's own words where the lineage stands, so every re-anchored rule reads `[re-anchored; …]` and promotion can be counted by one prefix.
+- **Declined:** (2) leave `[this project]` — BBX-30 was never inherited, so nothing is promoted and its evidence stays in `docs/rules.md` only; the promoted tags would number 22 and the prefix would no longer count the re-anchored rules.
+- **Answer:** "[re-anchored; this project]" (the recommendation) — maintainer, 2026-09-14 (bbx-27), with "Step 5, then close".
+
 
 ## Open
 
