@@ -29,7 +29,7 @@ the identity line moved) and the self subject was refrozen in one quoted line (`
 battery at `a2ec618` was GREEN (PASS 32, controls 131 / 131); a battery over the uncommitted build read
 PASS 32, controls 133 / 133; the close's pair is quoted in `docs/readout.md` (CLOSE — bbx-25). **The WSL
 platform row stays GREEN at `429d3f8` and attests that commit only; native Linux is a PARTIAL row** at
-`f6f136d` (the static tier not run). Gotchas G1–G68; retractions X1–X56.
+`f6f136d` (the static tier not run). Gotchas G1–G69; retractions X1–X58.
 
 **Open rulings: none.** R51–R57, raised by S5's plan at bbx-26 (`docs/plans/S5.md` §12), were ruled the same
 sitting, all as recommended — R55 on a reworded §3.3 citation; R0–R57 are recorded in `DECISIONS.md`. The maintainer's words with R49 stand as a rule of

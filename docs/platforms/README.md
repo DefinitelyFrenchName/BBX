@@ -67,18 +67,19 @@ Three things to hold to, each paid for here:
 * **Run it alone.** Nothing else of BBX's, and no editing of the tree while it
   runs — the runner reports a tracked file that changed mid-run as `dirtied`, and
   such a run is not a clean measurement (G44).
-* **It takes about ten to fifteen minutes** on the macOS host with 33 registered gates since bbx-26
+* **It takes about ten to fifteen minutes** on the macOS host with 34 registered gates since bbx-26 (S5 step 2)
   (the gate runtimes of four kept runs on 2026-09-13 summed 865, 841, 666 and 618 s), so
   it is past a ten-minute foreground cap if you have one. Read the verdict off the
   **kept run**, never off a pipe: `| tail` keeps only the tail and hands you the
   pipe's exit instead of the command's (G16).
 * **Do NOT pass `--strict`.** It makes a SKIP fatal, and this host is expected to
   skip (next section).
-* **Set `BBX_BBH_HOME`, and check that it took.** Unset, the static tier — the four gates that
-  compare against bbh or recount the lineage — does not run at all. Since G57's fix (`da4a4b8`) the
-  screen counts those gates in SKIP, writes `(gates 28 kept, 4 not run)` and names the static tier on
-  a `not run` line; a screen generated before that commit reads `SKIP 0`, and only the kept run's
-  `run.txt` (`skip=4`) shows it. The native Linux pair at `f6f136d` (`linux-native/`) is exactly that case.
+* **Set `BBX_BBH_HOME`, and check that it took.** Unset, the static tier — every gate in `gates/static.txt`
+  (`grep -cv '^#' gates/static.txt`), each comparing against bbh or recounting the lineage — does not run at
+  all. Since G57's fix (`da4a4b8`) the screen counts those gates in SKIP, writes `(gates <kept> kept, <static>
+  not run)` and names the static tier on a `not run` line; a screen generated before that commit reads `SKIP 0`,
+  and only the kept run's `run.txt` shows it. The native Linux pair at `f6f136d` (`linux-native/`) is exactly
+  that case, recorded when the static tier held 4: `skip=4`, `(gates 28 kept, 4 not run)`.
 
 ## 3. What is expected to SKIP, and why that is correct
 
@@ -129,18 +130,19 @@ On a commit before `8d5f97d` the same skip makes the battery NOT GREEN (G47), so
 at bbx-22's close commit or later. `--strict` still makes the skip fatal, by design
 and with no exception.
 
-**One NOTE is expected on every screen right now**, on macOS and Linux alike:
+**A `census-drift` NOTE appears on a screen whenever the harness has moved past its census**, on macOS
+and Linux alike:
 
 ```
-census_register   census-drift register=af2b1f085070 tree=bc18c672fdb9
+census_register   census-drift register=<the census's identity> tree=<the tree's identity>
                   (the harness moved past the census; the release gate re-measures it)
 ```
 
-The harness identity has moved since the census was regenerated — bbx-20's
-portability fix, then R48's build at bbx-22 — so the census artifacts record an
-earlier one. That note is R47's ruling working as designed — loud and
-never fatal — and the regeneration is planned after the next kernel build here. It is not
-something the Linux run should act on.
+That note is R47's ruling working as designed — loud and never fatal — and it is not something the
+Linux run should act on. Whether it is expected depends on the commit: at a commit whose census was
+regenerated after the last change to `bin`, `lib`, `drivers` or `gates` it is absent (measured at bbx-26:
+`bbx file-census --self --frozen expected/file_census.toml --check-register` read no drift after the
+census commit `56ef986`, and the refreeze `61430f3` after it touches no harness file).
 
 ## 5. Bring the run back
 

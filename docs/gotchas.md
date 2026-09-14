@@ -1457,3 +1457,18 @@ choice, one sourced definition of the baseline, stands on its other recorded rea
 Learning (R27): "declined by measurement" covers what was measured and nothing drawn from it; a prediction taken from
 a measurement is a claim until it has run. S5's plan wrote the opposite prediction as "expected" and measured it at
 the step that could. No harness mechanism. Rules re-anchored in fact: §1, BBX-19, BBX-21.
+
+## G69 — The platform step-by-step carried three current-tense counts a registry defines, and two had been false for sittings: a Linux screen's `PASS 30 SKIP 1`, the static tier's "four gates", and a census-drift NOTE "expected on every screen right now" (paid: 0 — found reading the page's own diff while S5 moved the gate counts; 2026-09-14)
+`docs/platforms/README.md` is the page a platform run follows. Updating its gate count for S5 step 1 showed three more
+statements of status: the Linux screen shape `PASS 30  SKIP 1`, true of 31 registered gates and false since R45 added a
+gate at bbx-23 (X56); the static tier as "the four gates" with the screen `(gates 28 kept, 4 not run)`, false since S5
+step 1 made it 5 (X57, and HANDOFF's hazard line carried the same count); and "One NOTE is expected on every screen
+right now" over `census-drift register=af2b1f085070`, false since the census was regenerated at bbx-25 — the register
+check read no drift after the census commit `56ef986` at bbx-26 (X58). A search for the second wording by its whole
+sentence found nothing, because the sentence wraps and the search reads one line at a time; its retraction pattern
+takes the part that sits on one line. Each statement is now the shape without a copied number, the count re-derived by
+a command the page gives; the recorded runs keep their own counts, as records.
+Learning (R27): G54's shape again — a procedure page quotes registry counts as the reader's expectation, and nothing
+reads the page against the registry; when a slice moves a registry, sweep the procedure pages as well as HANDOFF. No
+harness mechanism; it strengthens G54's named candidate, BBX's own `docs/` checked as a document-set subject.
+Rules re-anchored in fact: BBX-20, BBX-9, §1.
