@@ -128,7 +128,7 @@ for dropping, not for keeping on faith. The skill this project will
 eventually carry is generated from these, never hand-written.
 
 **Verdicts**
-- [BBX-1] `[inherited bbh BBH-6, BBH-12, BBH-13, BBH-16]` Exit status decides before any text.
+- [BBX-1] `[re-anchored; inherited bbh BBH-6, BBH-12, BBH-13, BBH-16]` Exit status decides before any text.
   SKIP is not PASS and asserts nothing; TIMEOUT is its own verdict; a
   non-zero exit with a skip marker is a FAILURE. Every count is reported
   separately.
@@ -143,24 +143,24 @@ eventually carry is generated from these, never hand-written.
   Report them differently.
 
 **Controls**
-- [BBX-5] `[inherited VS MJC-52]` Separate the author from the verdict.
+- [BBX-5] `[re-anchored; inherited VS MJC-52]` Separate the author from the verdict.
   Prove an instrument fires on a known positive and stays quiet on a known
   negative before its first real use; name its implausible value in advance.
-- [BBX-6] `[inherited VS rot class 3]` A must-fire control that no longer
+- [BBX-6] `[re-anchored; inherited VS rot class 3]` A must-fire control that no longer
   fires is the only *silent* failure mode. Gates check their own controls
   and refuse a verdict on a dead one. The fix is never to relax the control.
-- [BBX-7] `[inherited VS VSP-22]` A claim measured by absence ("nothing ever
+- [BBX-7] `[re-anchored; inherited VS VSP-22]` A claim measured by absence ("nothing ever
   uses X") needs a positive control, a named guard, and a stated fallback.
   Prefer designs where being wrong is safe *and* loud.
-- [BBX-8] `[inherited SMS checkdocs]` A validator is re-run where it must
+- [BBX-8] `[re-anchored; inherited SMS checkdocs]` A validator is re-run where it must
   fail (a wrong base, a wrong seed, a wrong address) and required to fail —
   a check that survives being pointed at the wrong thing goes green on rot.
 
 **Registries and rot**
-- [BBX-9] `[inherited bbh; VS rot class 1]` Every registry is complete both
+- [BBX-9] `[re-anchored; inherited bbh; VS rot class 1]` Every registry is complete both
   ways and re-derived every run: an unregistered item and a dead row both
   fail. A hand-maintained list is a smaller thing to forget to update.
-- [BBX-10] `[inherited VS harness_hardening_history]` The seven ways a
+- [BBX-10] `[re-anchored; inherited VS harness_hardening_history]` The seven ways a
   harness rots (orphan, silent downgrade, dead control, stale reference,
   outgrown parser, deleted mechanism, missing operand) are a standing
   checklist, and harness maintenance is a workstream, not an interruption.
@@ -169,7 +169,7 @@ eventually carry is generated from these, never hand-written.
 - [BBX-11] `[inherited VS]` The diagnostic that beats all rot: a red gate
   that fails far faster than its own header's quoted runtime bailed before
   measuring anything.
-- [BBX-12] `[inherited VS rot class 5]` Parse instrument output by field
+- [BBX-12] `[re-anchored; inherited VS rot class 5]` Parse instrument output by field
   name, never by position.
 
 **Comparison**
@@ -178,65 +178,65 @@ eventually carry is generated from these, never hand-written.
   class may be tightened freely but loosened only with a measured mechanism
   named and a maintainer ruling. A growing tolerance inventory means stop
   and root-cause, never "noise".
-- [BBX-14] `[inherited bbh BBH-49]` Every scenario runs more than once, and
+- [BBX-14] `[re-anchored; inherited bbh BBH-49]` Every scenario runs more than once, and
   any difference between runs is a failure *before any class is consulted*.
   Non-determinism is a defect of the instrument or the subject; it is never
   absorbed by tolerance.
-- [BBX-15] `[inherited VS gotchas "mirrored decode"]` Self-consistency
+- [BBX-15] `[re-anchored; inherited VS gotchas "mirrored decode"]` Self-consistency
   cannot catch a convention error shared with the oracle. Only a third,
   lineage-independent party can. All synthesized test content is *chiral* —
   asymmetric — so mirror, order and orientation errors cannot hide.
-- [BBX-16] `[inherited VS L3]` An artifact has *views*, and every claim,
+- [BBX-16] `[re-anchored; inherited VS L3]` An artifact has *views*, and every claim,
   extractor and comparator declares which view it reads. Reading in the
   wrong view yields plausible garbage, not an error.
 - [BBX-17] `[inherited VS L3; bbh]` Frozen inventories are compared as
   multisets, both ways. A duplicate is itself a signal of hand-editing.
 
 **Documents are subjects too**
-- [BBX-18] `[inherited SMS checkdocs; VS L3]` A documented claim with a
+- [BBX-18] `[re-anchored; inherited SMS checkdocs; VS L3]` A documented claim with a
   checkable shape is *quoted from the document* (so an edited document fails
   loudly), *derived from the artifact*, and *compared*. Coverage — every
   documented fact no check reaches — is reported as a number.
-- [BBX-19] `[inherited VS L3 S3]` When a document is found wrong, the
+- [BBX-19] `[re-anchored; inherited VS L3 S3]` When a document is found wrong, the
   document is corrected first, in its own commit; only then is a check
   written against the corrected wording. A document is never bent to match
   a tool.
-- [BBX-20] `[inherited bbh BBH-9; VS L1]` A living page states what is true; its
+- [BBX-20] `[re-anchored; inherited bbh BBH-9; VS L1]` A living page states what is true; its
   history twin states how it came to be known. Every document declares its
   shape at birth and is reachable from the map; completeness is a check.
 
 **Provenance and memory**
-- [BBX-21] `[inherited VS; SMS]` Every rule cites its incident; every number
+- [BBX-21] `[re-anchored; inherited VS; SMS]` Every rule cites its incident; every number
   in a skill appears in a log, never only in a synthesis. The generated
   guide is never hand-edited.
-- [BBX-22] `[inherited VS VSP-13]` A retracted claim is swept: grep the
+- [BBX-22] `[re-anchored; inherited VS VSP-13]` A retracted claim is swept: grep the
   claim's wording across the tree *and every artifact that has left it*, and
   show the empty result.
-- [BBX-23] `[inherited VS VSP-14]` Before theorizing about a failure, do
+- [BBX-23] `[re-anchored; inherited VS VSP-14]` Before theorizing about a failure, do
   the archaeology: what changed, what was measured last, what the last
   green rested on.
-- [BBX-24] `[inherited bbh conventions.md]` Every default value carries a
+- [BBX-24] `[re-anchored; inherited bbh conventions.md]` Every default value carries a
   provenance class (`principled` / reference-calibrated / `arbitrary`) in a
   register; changing one is a ruling. A default calibrated on one consumer
   and presented as generic is the *biased default*, and the second consumer
   is its detector.
-- [BBX-25] `[inherited VS; this lineage]` A generic thing needs two
+- [BBX-25] `[re-anchored; inherited VS; this lineage]` A generic thing needs two
   instances. A component with one consumer stays with that consumer until
   a second, genuinely different one exists.
 
 **Working discipline**
-- [BBX-26] `[inherited VS VSP-3/7]` No untested change. A diverging suite
+- [BBX-26] `[re-anchored; inherited VS VSP-3/7]` No untested change. A diverging suite
   halts feature work until it is green or the divergence is ruled.
 - [BBX-27] `[inherited VS VSP-15]` Anti-hyperfocus: at a fixed cadence,
   step back and ask whether the current thread is still the most valuable
   one and whether the last green means what it is being treated as meaning.
-- [BBX-28] `[inherited VS MSV-34/35]` A report from outside the harness (a
+- [BBX-28] `[re-anchored; inherited VS MSV-34/35]` A report from outside the harness (a
   human, a field test, a screenshot) is a *witness*, not an instrument.
   Convert it into a reproducible case before any theory is built on it.
-- [BBX-29] `[inherited SMS; this file]` Results are keyed by (case, subject
+- [BBX-29] `[re-anchored; inherited SMS; this file]` Results are keyed by (case, subject
   version), never by the date they finished. A long-running check attests
   the version that started it and says so.
-- [BBX-30] `[this project]` Every green states what it does not assert
+- [BBX-30] `[re-anchored; this project]` Every green states what it does not assert
   (§3.2). This rule has no lineage citation because it is the reason this
   repository exists.
 
