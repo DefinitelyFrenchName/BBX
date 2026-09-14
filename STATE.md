@@ -8,8 +8,8 @@ generalization of `blackbox-harness` (bbh) to any subject with testable inputs
 and outputs. Born 2026-09-09.
 
 **Status (bbx-27 close, 2026-09-14):** slices S1 and S2 complete; **S3 DONE**; **S4 DONE** (ruled after the bbx-25
-close, with a rider on BBX-25 that F20 meets); **S5 — the skill — BUILT, all five steps, its slice readout awaiting the
-maintainer's ruling** (`docs/readout.md`, "S5 — the slice readout"). bbx-26 planned S5 and built steps 1 and 2 (the
+close, with a rider on BBX-25 that F20 meets); **S5 DONE** (built in five steps; ruled after the bbx-27 close on its slice readout in
+`docs/readout.md`, with a rider on BBX-25 following S4's precedent); **S6 ruled next**. bbx-26 planned S5 and built steps 1 and 2 (the
 lifted lock with F18; R54's two deltas). **Step 3** (`c17ae40`): `bbx reanchors`, R53's reader — every gotcha's explicit
 list read, the plan's §3.2 table reproduced through G60 (23 re-anchored, 7 inherited), the whole ledger's reading on
 every screen (D67). **Step 4** (`23a10c6`): BBX's skill `skill/bbx/`, generated from CLAUDE.md §4 by `bbx skill-gen` and
@@ -24,7 +24,7 @@ awaited an approval R55 had given (`9353ff2`, G77, X62); and one missing BBX-25 
 in zsh and left 24 CPU burners up for 1 h 41 min (G75). The census was regenerated and committed three times (48, 49 and 49
 rows; identity `5059aa730eb5`), a fourth run superseded before its commit (G78), and the self subject refrozen each time. The close's pair is quoted in `docs/readout.md`
 (CLOSE — bbx-27). **The WSL platform row stays GREEN at `429d3f8` and attests that commit only; native Linux is a
-PARTIAL row** at `f6f136d` (the static tier not run). Gotchas G1–G80; retractions X1–X62.
+PARTIAL row** at `f6f136d` (the static tier not run). Gotchas G1–G81; retractions X1–X63.
 
 **Open rulings: none.** R0–R58 are answered and recorded in `DECISIONS.md`. The maintainer's words with R49 stand as
 a rule of method: discipline is never arbitrated — only the method of applying it, on time or practicality.
@@ -70,9 +70,11 @@ not_recountable=56`); the two added at bbx-2 are host facts the clone
 exposed (G13, rule 7), the only exception ever allowed to move it upward. Grammar in
 `docs/census/README.md`.
 
-**Next:** (1) **The maintainer's ruling on S5**, on its slice readout (`docs/readout.md`, §7's six conditions); BBX's
-skill is installed by the maintainer's symlink `~/.claude/skills/bbx` → `skill/bbx` (R57). **Standing with S4's DONE ruling:** BBX-25's scope and status are gone over again as F20 lands (S7's
-row in `docs/slices.md`). (2) **Named, not queued (bbx-25):** where the single-kind comparators live
+**Next:** (1) **S6's plan** (ruled next after S5's DONE ruling, 2026-09-14): a measured census, the bins, F19 and its
+open rulings, STOPping before any tool is written (CLAUDE.md §6). BBX's skill is installed, a symlink
+`~/.claude/skills/bbx` → `skill/bbx` measured after the close (R57). **Standing with S4's DONE ruling:** BBX-25's scope and status are gone over again as F20 lands (S7's
+row in `docs/slices.md`). **Standing with S5's:** the ledger reader, the skill generator and the `integers` vocabulary
+stay BBX's own, never called generic, until a second consumer is in view (`docs/generality.md`). (2) **Named, not queued (bbx-25):** where the single-kind comparators live
 (`docs/generality.md`). (3) **A full native Linux pair** (with `BBX_BBH_HOME` set) and **a WSL re-run** whenever a
 platform row should attest a commit newer than its own (`docs/platforms/README.md`). (4) **G48's sweep, widened by
 G50, G53, G59, G60, G61, G67 and G71**: every reader — the contributor's probes included — that may read LESS than is

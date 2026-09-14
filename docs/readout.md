@@ -5364,3 +5364,39 @@ it); that nothing else ran on the host during the 1 h 41 min of G75's burners; a
 `429d3f8` or native Linux's partial `f6f136d`.
 
 **Sweeps on the final tree:** `PASS: close_sweeps=BBX files=182 retractions=62 retraction_hits=0 deferrals=0 defaults_rows=69 citations=1046 unresolved=0 header_entries=313 continued=0 errors=0; 4 controls fired`
+
+# bbx-27, after the close — S5 ruled DONE, with a rider on BBX-25; S6 next (2026-09-14)
+
+**S5's DONE ruling.** Laid before the maintainer on the §7 table above — all six conditions yes, with BBX-25 unmet for
+two contracts, the ledger reader and the skill generator, and declared for the `integers` vocabulary — and published
+for reading as a private page that restates that section at `48c013c`. Asked what an unmet BBX-25 entails, the
+contributor measured it (below) and recommended DONE with a rider, on S4's precedent. **Ruled by the maintainer,
+2026-09-14: "I agree with the recommendation and align with S4's precedent."**
+
+**The rider, as recommended:** the ledger reader (`lib/py/bbx/reanchors.py`), the skill generator with its page
+(`lib/py/bbx/gen_skill.py`) and the `integers` number vocabulary (`lib/py/bbx/checkskills.py`) stay BBX's own and are
+never described as generic (CLAUDE.md §9); they are gone over again when a second consumer is in view; and where they
+live joins the question S4 left open. Filed where the work meets it: S5's row in `docs/slices.md`, R50's paragraph in
+`docs/generality.md`, and HANDOFF's orientation.
+
+**Measured for the ruling** (measured once, not gated). What is wired to BBX, for a second consumer to find: the `BBX`
+prefix (`reanchors.py:49`), the `## 4.` rules section (`:60`), the `## G<n> — ` entry headings (`:52`), the list
+wordings measured on BBX's ledger (`:55`), the G61 cutoff for the one wording (`:177`), and the default files CLAUDE.md
+and `docs/gotchas.md` (`:209`, `:210`); the generator calls the reader three times (`gen_skill.py:162`, `:169`, `:170`);
+the `integers` token rule and its year skip (`checkskills.py:137`, `:145`). A second consumer in the lineage, at the
+census commits, under `/bin/sh` with a positive control per repository: bbh `10a82d2` (1 `SKILL.md`), VampireSaved
+`0cdd9726` (8) and SMS `ecc5481` (2) hold 0 files with an explicit re-anchor list, 0 skill tables setting `numbers` and
+0 skill generators; VampireSaved ties an incident to a rule by an anchor in the incident's paragraph (`**[VSE-31]**`
+in its gotcha ledgers), not by a list. A first run of that search printed three zeros that measured nothing (G81).
+
+**Then: S6 is next.** Asked which slice follows, the maintainer chose "S6 — rot and registers", the contributor's
+recommendation. S6 opens with its plan, which STOPs for the maintainer's rulings before any tool is written (CLAUDE.md
+§6); S7 keeps its place and S4's rider.
+
+**After the close, measured:** the maintainer installed BBX's skill. `~/.claude/skills/bbx` is a symlink to the tree's
+`skill/bbx`, created at 18:18 local time, and its `SKILL.md` read byte-identical to the tree's. HANDOFF's line saying
+the skill was not installed is corrected (X63).
+
+**What this does NOT assert:** anything re-measured by a battery — the ruling rests on the close pair at `790b71a`, and
+this record is documents only; that BBX-25 is met for any of the three units; that the installed skill matches a
+commit, since a link reads whatever the working tree holds.

@@ -1595,3 +1595,25 @@ last green means that BBX's rules, the evidence the ledger's explicit lists give
 them agree with each other as one reader reads them; it does not mean any rule is true, that an incident justifies the
 rule its list names, or that the 7 inherited rules should be dropped. S5's slice readout is written for the
 maintainer's ruling, and nothing measured this sitting argues that another thread is more valuable before it.
+
+### bbx-27, after the close — S5 ruled DONE, with a rider on BBX-25; S6 next (2026-09-14)
+
+S5 was laid before the maintainer on its §7 table, published for reading as a private page that restates
+`docs/readout.md` at `48c013c`. Asked what an unmet BBX-25 entails, the contributor measured the three units'
+BBX-specific wiring and looked for a second consumer in the lineage — none: bbh, VampireSaved and SMS at their census
+commits hold 0 explicit re-anchor lists, 0 skill tables setting `numbers` and 0 skill generators — and recommended
+DONE with a rider, on S4's precedent. **The maintainer ruled S5 DONE**, in these words: "I agree with the
+recommendation and align with S4's precedent." The rider: the ledger reader, the skill generator with its page and the
+`integers` vocabulary stay BBX's own and are never called generic; they are gone over again when a second consumer is
+in view; and where they live joins the question S4 left open. It is filed on S5's row in `docs/slices.md`, R50's
+paragraph in `docs/generality.md` and HANDOFF's orientation. **Asked with it which slice follows, the maintainer chose
+S6, rot and registers** — the contributor's recommendation. S6 opens with its plan and STOPs for rulings before any
+tool is written (CLAUDE.md §6).
+
+**Anti-hyperfocus checkpoint at the end of S5 (BBX-27, `docs/slices.md`).** Is the next slice still the most valuable
+one? S6's registers and rot checks are where this slice's incidents point: pages whose counts and status lines went
+stale (G69, G74), a single-consumer unit left undeclared across sittings (G78), and temporary directories left behind
+by the thousand (G80); S7's F20 gives none of S5's three unmet units a second consumer. Does the last green mean what
+it is treated as meaning? It means that BBX's rules, the evidence the ledger gives them and BBX's generated skill agree
+as one reader reads them; it says nothing about whether a rule is right, and nothing generic about the three declared
+units.

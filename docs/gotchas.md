@@ -1621,3 +1621,15 @@ behind, and its source is unmeasured.
 Learning (R27): a kept run that a host signal ended reads FAIL, exit 143, on the gate it cut, a verdict about the host
 and not about the gate; a pair is run one battery per command, so one stop costs one battery. The `$TMPDIR` count is
 named in HANDOFF for bbx-28, measured once and not gated. Rules re-anchored in fact: §1.
+
+## G81 — A probe for BBX-25's second consumers printed three zeros that measured nothing: under zsh `set -- $spec` left the whole line in `$1`, and every `git -C "" grep` failed into `wc -l` (paid: 0 — caught reading the labels the probe printed, before any number was used; one re-run under `sh`; 2026-09-14)
+Answering what an unmet BBX-25 entails for S5's three units, a loop over `"bbh $B 10a82d2" "VampireSaved $V 0cdd9726"
+"SMS $S ecc5481"` split each item with `set -- $spec`. zsh does not split an unquoted parameter into words, G75's
+mechanism, so `$1` held the whole item and `$2` and `$3` were empty; `git -C "" grep` failed, its error went to
+`/dev/null`, and `wc -l` printed 0 for the re-anchor lists, the `numbers` keys and the skill generators of all three
+repositories. The labels gave it away, reading `bbh /Users/… 10a82d2 @:`. Re-run under `/bin/sh` with a positive
+control per repository, its `SKILL.md` files (1, 8 and 2), the three zeros held and became a measurement.
+Learning (R27): G59's shape, a zero out of a pipeline whose producer failed, reached through G75's zsh mechanism, in a
+probe with no positive control of its own shape. No harness mechanism; a probe over several repositories counts
+something known to be there in each before it counts what may be absent, and runs under `sh`. Rules re-anchored in
+fact: §1, BBX-7.

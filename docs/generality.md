@@ -162,6 +162,15 @@ and the table it points at are what is gone over then: whether R50's unit still
 fits the subjects covered by then, the temporal family's count once VampireSaved
 runs through BBX (F20, measured then), and the location question above.
 
+**Rider (the maintainer, ruling S5 DONE, 2026-09-14, on S4's precedent):** S5's three units with one consumer — the
+ledger reader `lib/py/bbx/reanchors.py`, the skill generator `lib/py/bbx/gen_skill.py` with its page, and the
+`integers` number vocabulary of `lib/py/bbx/checkskills.py` — stay BBX's own and are never called generic (CLAUDE.md
+§9); they are gone over again when a second consumer is in view. None was in the lineage at the ruling: bbh,
+VampireSaved and SMS at their census commits hold no explicit re-anchor list, no skill table setting `numbers` and no
+skill generator, and VampireSaved ties an incident to a rule by an anchor in the incident's paragraph. What a second
+consumer would find wired to BBX is listed in `docs/readout.md`, "bbx-27, after the close". Where the three live joins
+the location question above: they sit in `lib/py/bbx/` beside the kind-blind code.
+
 ## What this proof does NOT establish
 
 That BBX works on a *real* document set or a *real* tool (both fixtures are
