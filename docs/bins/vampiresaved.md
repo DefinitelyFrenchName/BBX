@@ -641,7 +641,7 @@ Shape: table, one row per census B item, ids identical to the census. Bins per C
 | V-D7 | L3 coverage denominator 346 (473 atlas addresses minus the 127 carried only b… | generalize | -> BBX-18: the coverage denominator is a ruling, registered (BBX-24) |
 | V-D8 | The NOTE class — a measured number reported by the static runner's advisory b… | keep | G1 / BBX-1 an advisory NOTE is never a fifth verdict word |
 | V-D9 | `test_build_ref_rot` reports CURRENCY and never fails on it — "a superseded r… | keep | 3.3 a measurement on our own build locks CURRENCY, never correctness |
-| V-D10 | The eight harness defaults, each RULED/DECIDED with the maintainer's verbatim… | keep | BBX-24 / 3.1 every default RULED, dated, with a stated veto path |
+| V-D10 | The ten §7 harness decisions (2 RULED, 8 DECIDED), each with the maintainer's… | keep | BBX-24 / 3.1 every default RULED, dated, with a stated veto path |
 | V-D11 | Per-gate default BUILD dirs — re-pointed at every freeze by the sweep; the cl… | generalize | -> rot class 4: default SUBJECT SET pointers re-pointed at every freeze |
 | V-G1 | `tests/ci_portable.txt` — the ROM-free tier registry (68 rows); also records… | keep | R2 gates by tier (portable), exclusions recorded with their reason |
 | V-G2 | `tests/ci_static.txt` — the static tier registry (74 rows); needs ROMDIR / bu… | keep | R2 gates by tier (static) |
@@ -723,7 +723,7 @@ Shape: table, one row per census B item, ids identical to the census. Bins per C
 | V-X8 | Provenance vocabulary #3 (rule-5 census classification): `IN-TABLE` / `DERIVE…` | generalize | -> R11 closed provenance vocabulary (E3) |
 | V-X9 | The memory-file convention: STATE holds ~3 session groups + THE LEDGER + the… | keep | 6 STATE lean + history twin verbatim |
 | V-X10 | The `_history.md` TWIN convention — docs stay lean, the complete LOG lives in… | keep | BBX-20 the living page / history twin convention |
-| V-X11 | The eight harness_scope decisions (§7), each RULED/DECIDED with the maintaine… | keep | 3.1 / BBX-24 each default RULED with the maintainer words, a date and a veto path |
+| V-X11 | The ten harness_scope decisions (§7: 2 RULED, 8 DECIDED), with the maintainer… | keep | 3.1 / BBX-24 each default RULED with the maintainer words, a date and a veto path |
 | V-X12 | The 19-red sweep — "155 gates, 136 PASS, 19 FAIL, ZERO SKIP … and NOT ONE red… | keep | BBX-10 the 19-red sweep; not one red was a product defect |
 | V-X13 | The 19 reds mapped ONTO the rot classes: 1 orphan ×1, 3 dead control ×2, 4 st… | keep | BBX-10 the rot taxonomy is a standing checklist |
 | V-X14 | THE DEADNESS REGISTER — every "legacy never reaches this, so we may reuse it"… | generalize | -> the absence-claim register with guard and fallback columns (BBX-7) |

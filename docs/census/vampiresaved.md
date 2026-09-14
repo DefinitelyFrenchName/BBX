@@ -776,7 +776,7 @@ Read-only survey. Every number below carries the command that printed it, run fr
 | V-D7 | D | L3 coverage denominator 346 (473 atlas addresses minus the 127 carried only by `ram.md`), ruled at the plan stage | HANDOFF.md:53 | read |
 | V-D8 | D | The NOTE class — a measured number reported by the static runner's advisory block, "never fatal"; never a fifth verdict in `classify.sh` | docs/project/living_docs_scope.md:164 | read |
 | V-D9 | D | `test_build_ref_rot` reports CURRENCY and never fails on it — "a superseded reference is often correct, and only the gate's author knows which" | HANDOFF_HISTORY.md:2378 | read |
-| V-D10 | D | The eight harness defaults, each RULED/DECIDED with the maintainer's verbatim words, a date and a stated veto path | docs/project/harness_scope.md:418 | read |
+| V-D10 | D | The ten harness decisions of `harness_scope.md` §7 (2 RULED, 8 DECIDED; counted at bbx-28, X66), each with the maintainer's verbatim words, a date and a stated veto path | docs/project/harness_scope.md:418 | read |
 | V-D11 | D | Per-gate default BUILD dirs — re-pointed at every freeze by the sweep; the class rot gate 4 watches | tests/test_build_ref_rot.sh:1 | read |
 | V-G1 | G | `tests/ci_portable.txt` — the ROM-free tier registry (68 rows); also records which gates are EXCLUDED and why | tests/ci_portable.txt | read |
 | V-G2 | G | `tests/ci_static.txt` — the static tier registry (74 rows); needs ROMDIR / build dirs, no emulator | tests/ci_static.txt | read |
@@ -858,7 +858,7 @@ Read-only survey. Every number below carries the command that printed it, run fr
 | V-X8 | X | Provenance vocabulary #3 (rule-5 census classification): `IN-TABLE` / `DERIVED` / `BAKED` | tools/audit_rule5.py:8 | read |
 | V-X9 | X | The memory-file convention: STATE holds ~3 session groups + THE LEDGER + the standing sections; `STATE_HISTORY.md` holds every older record VERBATIM | CLAUDE.md:233 | read |
 | V-X10 | X | The `_history.md` TWIN convention — docs stay lean, the complete LOG lives in the twin; twins join the LOG lists as they are created | tools/checkskills.py:74 | read |
-| V-X11 | X | The eight harness_scope decisions (§7), each RULED/DECIDED with the maintainer's words, a date and a veto path; the license is explicitly NOT a default | docs/project/harness_scope.md:418 | read |
+| V-X11 | X | The ten harness_scope decisions (§7: 2 RULED, 8 DECIDED; counted at bbx-28, X66), each with the maintainer's words, a date and a veto path; the license is explicitly NOT a default | docs/project/harness_scope.md:418 | read |
 | V-X12 | X | The 19-red sweep — "155 gates, 136 PASS, 19 FAIL, ZERO SKIP … and NOT ONE red was a defect in the shipped artifact"; 8 closed in-session | docs/project/harness_hardening_history.md:80 | read |
 | V-X13 | X | The 19 reds mapped ONTO the rot classes: 1 orphan ×1, 3 dead control ×2, 4 stale reference ×7, 5 parser ×1, 6 deleted ×1, 7 operand ×3, unclassed ×4 | docs/project/harness_hardening_history.md:84 | read |
 | V-X14 | X | THE DEADNESS REGISTER — every "legacy never reaches this, so we may reuse it" claim, with guard and fallback; "the FIRST PLACES TO CHECK" | STATE.md:1230 | read |

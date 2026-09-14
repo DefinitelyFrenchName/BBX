@@ -131,6 +131,8 @@ else. The executable form is strictly stronger and compatible: the lines
 above stay, the runner does one more thing. Cadence is the tier's, not the
 contract's: every battery in the portable tier (a gate may short-circuit to
 the affected section under the mode), the static tier under release until
-measured. Until S6 lands, every FIRED in this tree is a self-report, and the
-readout says so.
+measured. Until S6 lands, every FIRED in this tree is a self-report. The
+hand-written sections of `docs/readout.md` say so; the generated screen does
+not, and prints `each can fail: <n> of <m> gates proved a control fires on
+purpose` (`lib/py/bbx/readout.py:323`; measured at bbx-28, X65).
 
