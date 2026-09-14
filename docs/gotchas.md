@@ -1357,3 +1357,74 @@ the hazard's safe form. No harness mechanism (the harness's tools run under `/bi
 one reader); for probes, a revision spliced with a path is written `"${c}:path"`, a zero out of a pipeline whose
 producer failed is silence, not a count (the G59 shape), and a grep over a whole file is not a header read.
 Rules re-anchored in fact: §1, BBX-12, BBX-16.
+
+## G61 — A line-only probe of the ledger's re-anchor lists reported 12 rules never re-anchored; the number is 7, because lists wrap and the probe read the line that held the lead word (paid: 2 probe re-runs, seconds; no number reached a document; 2026-09-14)
+Measuring S5's census at bbx-26, a first probe took, for each gotcha, the one line containing "re-anchor" and the
+rule ids on it, and printed 12 rules with no incident: BBX-2, 3, 4, 7, 11, 13, 14, 17, 18, 26, 27, 28. STATE's own
+list said `G17 → BBX-24/BBX-26`, which the tally contradicted: G17's list names BBX-24 on the line that holds its
+lead word and BBX-26 on the next. A second probe read each paragraph to its end and over-read: explanations in parentheses name
+rules that are not re-anchors. The third read each list from its lead to the end of its sentence with parenthesized
+text skipped (`docs/plans/S5.md`, appendix A): 59 of 60 entries carry a list, G24 none, 23 rules named and 7 not.
+Checked both ways against STATE's hand-kept list, which was itself wrong in 6 of the 30 entries its range covers (X51).
+Learning (R27): G53's shape inside a probe — one line of a multi-line thing read as the whole — caught by a second
+source, which is the G59 learning applied: a tally is checked against another reading of the same population before
+any share of it is used. Mechanism, proposed with R53: the ledger reader carries `wrapped-incident-list` and
+`parenthesized-id`, the two controls these two failures define. Rules re-anchored in fact: §1, BBX-7, BBX-16.
+
+## G62 — F18's filed bbh-side command could not produce a verdict: bare `check-skills -v` reads no config and exits 2; filed at birth and first run at bbx-26, and the correction's first draft typed a mechanism nobody had measured (paid: 0 — no gate was built on it; one clone run and one read of `bbh.config.consumer`, seconds; 2026-09-14)
+`docs/fidelity.md` (session 1, 2026-09-09) gave F18's bbh side without `--config`. On a plain clone of `10a82d2` with
+`BBH_CONFIG` unset both tools exit 2: `FAIL  config: [skills].prefixes names no skill` and `FAIL  config:
+[skills].guided names no skill (and no --prefix given)`. bbh's own test calls them with `--config
+skill/skills.toml`, and there the lock reads `ALL PASS (87 rules across 1 skills …)`. The first draft of the
+correction said the bare form "reads bbh's example config"; before the commit `bbh.config.consumer(None, None)` was
+read and run — with no path and no `BBH_CONFIG` it returns `{}` and the working directory — and the sentence was
+rewritten to that (`736949e`, X49).
+Learning (R27): a command written into a plan is a claim until it has run once, and a mechanism written into a
+correction is measured like any other claim (G27's family, caught before the commit). No harness mechanism: F18's
+gate runs the command and diffs it, which is the check. Rules re-anchored in fact: §1, BBX-19, BBX-21.
+
+## G63 — bbh's guide generator keeps only the first line of a wrapped rule while the lock and `--check` stay green; the lineage's 642 definitions never wrapped and BBX's 30 all do (paid: 0 — a probe in the scratchpad before any lift; 2026-09-14)
+A synthetic skill whose rule `- [XX-1] FIRST LINE of a wrapped rule` continues on an indented `SECOND LINE that a
+reader must not lose.` was run through bbh at `10a82d2`: `check-skills` ALL PASS, `skill-guide` wrote the guide,
+`--check` read it current, and the guide carries `**[XX-1]** FIRST LINE of a wrapped rule` — `SECOND LINE` 0 times,
+`FIRST LINE` once. `RULE_RE` in `gen_skill_guide.py` matches one line. bbh's skill wraps 0 of 87 definitions and
+VampireSaved's eight skills 0 of 555 at `0cdd9726`; every one of CLAUDE.md §4's 30 entries spans more than one line.
+A finding about bbh too, which BBX does not modify (G11's precedent: the maintainer's to act on there).
+Learning (R27): "unchanged for its second consumer" is a claim until the second consumer's input has run through it
+(G26) — here measured before the lift rather than after. Mechanism, proposed as R54(a): a definition followed by a
+continuation line fails the lock, so no guide is ever generated from a truncated rule. Rules re-anchored in fact:
+BBX-25, BBX-16, BBX-30.
+
+## G64 — The lock's "numbers cite the log" was calibrated on the ROM lineage: over BBX's rules it sees nothing, over BBX's pages it misses the counts and reads commit-id fragments as numbers (paid: 0 — measured before any lift; 2026-09-14)
+`checkskills.numbers` has six patterns (0x-hex of 3+, `$`-hex of 4+, comma-grouped integers, decimals, integers of
+4+ digits, lowercase hex of 8+), years and `d.d` section numbers skipped. Over VampireSaved's eight skills it finds
+124 tokens; over all of CLAUDE.md, 0 — the only digit runs in the 30 rule bodies are BBX-10's "19 reds" and
+BBX-30's "§3.2", and it sees neither. Over `HANDOFF.md` it sees 5 distinct tokens and misses 67 distinct 1–3 digit
+integers (`STATE.md` 11 and 44, `docs/readout.md` 175 and 227), and among what it sees are `63797`, `81417`, `4094`
+and `5481`, the digit runs of `fd63797`, `e81417d`, `f4094c2` and `ecc5481`.
+Learning (R27): BBX-24's biased default, with BBX as the second consumer that detects it; lifted unchanged, it would
+be a check that cannot fail on BBX's skill (BBX-6's silent mode by construction). Mechanism, proposed as R54(b): a
+per-skill vocabulary, bbh's six patterns the default. Rules re-anchored in fact: BBX-24, BBX-6, §1.
+
+## G65 — Three lineage citations in CLAUDE.md give bbh rule ids to VampireSaved, or cite a bbh rule that says none of what the BBX rule says (paid: 0 — measured on the clones while reading the tags for S5; 2026-09-14)
+BBX-20's tag is `[inherited VS BBH-9; L1]` and §3.3 ends "(VampireSaved BBH-53, extended)". VampireSaved at
+`0cdd9726` holds no `BBH-9` and no `BBH-53` — the literal search is proven able to fire (`VSP-19`: 23 occurrences in
+17 files) — and its five `BBH-` occurrences all describe bbh's skill; both ids are bbh's, anchored in bbh's
+`docs/doctrine.md` and `docs/hygiene.md`. BBX-1's tag is `[inherited bbh BBH-10..13]`, and bbh's BBH-10 is "The
+doctrine is not a tuning guide and not a claim about correctness": read beside BBX-1's clauses, it carries none of
+them, while BBH-6 and BBH-16 carry two and are not cited. bbh's `SKILL.md` did not change between `f675710` and
+`10a82d2`, so the citations were written against this numbering. CLAUDE.md is not edited here (R16): the wording is
+filed with R55.
+Learning (R27): G2's reading again — a citation is a claim and is checked like one. Mechanism, proposed with R56: a
+`[BBH-N]` the skill carries is resolved against bbh's `SKILL.md` at the fidelity baseline. Rules re-anchored in fact:
+BBX-21, §1.
+
+## G66 — Queuing R51–R57, DECISIONS.md's open-rulings line still read `none`, and the shape gate said so before the commit (paid: 1 gate run, seconds; 2026-09-14)
+The seven rulings were written into `docs/rulings.md` under `## Open`, and STATE's and HANDOFF's status lines were
+updated in the same pass, but `DECISIONS.md` carries its own open-rulings line, which `gates/rulings_shape.sh` reads
+with `\bR\d+\b` and requires to list exactly the open ids. On the tree it printed `open-line-mismatch listed=none
+actual=R51,R52,R53,R54,R55,R56,R57` and FAILed; nothing had been committed. A range written with a dash would have
+failed as well — that reader takes two ids from it, not seven — so the line lists the seven one by one.
+Learning (R27): no new mechanism; the check exists for exactly this (G14, G51) and fired at its first chance. The trap
+worth naming: a raised ruling is written in four places (the queue, DECISIONS.md's open-rulings line, STATE, HANDOFF),
+and a range is not a list to the reader of the second. Rules re-anchored in fact: BBX-9, BBX-20.

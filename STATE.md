@@ -29,10 +29,10 @@ the identity line moved) and the self subject was refrozen in one quoted line (`
 battery at `a2ec618` was GREEN (PASS 32, controls 131 / 131); a battery over the uncommitted build read
 PASS 32, controls 133 / 133; the close's pair is quoted in `docs/readout.md` (CLOSE — bbx-25). **The WSL
 platform row stays GREEN at `429d3f8` and attests that commit only; native Linux is a PARTIAL row** at
-`f6f136d` (the static tier not run). Gotchas G1–G60; retractions X1–X51.
+`f6f136d` (the static tier not run). Gotchas G1–G66; retractions X1–X51.
 
-**Open rulings: none.** Every ruling R0–R50 is answered and recorded in `DECISIONS.md`; R50 was
-raised and answered at bbx-25 and is built. The maintainer's words with R49 stand as a rule of
+**Open rulings: R51–R57**, raised by S5's plan at bbx-26 (`docs/plans/S5.md` §12, `docs/rulings.md`); no S5
+tool is written until they are answered. R0–R50 are answered and recorded in `DECISIONS.md`. The maintainer's words with R49 stand as a rule of
 method: discipline is never arbitrated — only the method of applying it, on time or practicality.
 In force since bbx-2: R18 (the census and the tests
 work on a clone or are explicitly, provably read-only), R19 (parallel work
