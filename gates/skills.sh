@@ -71,6 +71,7 @@
 # NOT-ASSERTED: that a rule of BBX's skill is true or well chosen: the lock asserts anchoring, liftability, numbers and cross-references, and the page says which ledger entries name a rule, never that they justify it
 # NOT-ASSERTED: that the installed skill is this tree's: the symlink under ~/.claude/skills is the maintainer's act (R57), and nothing here reads it
 # NOT-ASSERTED: BBX-25 for the skill generator and its anchor page: their one consumer is BBX's own constitution and ledger (R50)
+# NOT-ASSERTED: BBX-25 for the integers number vocabulary: its one real consumer is BBX's own skill, the lineage's skill tables keep lineage (R50, D66)
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME
