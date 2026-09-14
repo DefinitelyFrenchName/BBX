@@ -26,8 +26,9 @@ rows; identity `5059aa730eb5`), a fourth run superseded before its commit (G78),
 (CLOSE — bbx-27). **The WSL platform row stays GREEN at `429d3f8` and attests that commit only; native Linux is a
 PARTIAL row** at `f6f136d` (the static tier not run). Gotchas G1–G81; retractions X1–X63.
 
-**Open rulings: R59, R60, R61, R62, R63, R64, R65**, raised by S6's plan (`docs/plans/S6.md`, bbx-28), each with its
-recommendation in `docs/rulings.md`. R0–R58 are answered and recorded in `DECISIONS.md`. The maintainer's words with R49 stand as
+**Open rulings: none.** R0–R65 are answered and recorded in `DECISIONS.md`; R59–R65, raised by S6's plan
+(`docs/plans/S6.md`, bbx-28), were ruled the same sitting, all as recommended — R62 on its second form, a TOML register,
+after the maintainer declined a TSV (R40's caveat, restated). The maintainer's words with R49 stand as
 a rule of method: discipline is never arbitrated — only the method of applying it, on time or practicality.
 In force since bbx-2: R18 (the census and the tests
 work on a clone or are explicitly, provably read-only), R19 (parallel work
@@ -71,8 +72,8 @@ not_recountable=56`); the two added at bbx-2 are host facts the clone
 exposed (G13, rule 7), the only exception ever allowed to move it upward. Grammar in
 `docs/census/README.md`.
 
-**Next:** (1) **S6's plan is written and STOPPED** (`docs/plans/S6.md`, bbx-28, 2026-09-14): the maintainer's rulings
-on R59–R65 come before any S6 tool (CLAUDE.md §6). BBX's skill is installed, a symlink
+**Next:** (1) **S6 step 1** (`docs/plans/S6.md` §10; R59–R65 ruled at bbx-28): the registers' pages first —
+`docs/defaults.md` corrected and completed (R61), routing lines for the pages HANDOFF does not name (R62). BBX's skill is installed, a symlink
 `~/.claude/skills/bbx` → `skill/bbx` measured after the close (R57). **Standing with S4's DONE ruling:** BBX-25's scope and status are gone over again as F20 lands (S7's
 row in `docs/slices.md`). **Standing with S5's:** the ledger reader, the skill generator and the `integers` vocabulary
 stay BBX's own, never called generic, until a second consumer is in view (`docs/generality.md`). (2) **Named, not queued (bbx-25):** where the single-kind comparators live
