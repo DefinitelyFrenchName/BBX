@@ -108,7 +108,7 @@ independent of us (hardware, a specification, an upstream artifact) > a
 lineage-independent corroborator (a second implementation with different
 ancestry) > a measurement on our own build (locks *currency*, never
 *correctness*) > a filed count. Evidence may be upgraded to a stronger
-class; it is never silently downgraded. *(VampireSaved BBH-53, extended.)*
+class; it is never silently downgraded. *(bbh BBH-53, extended.)*
 
 **3.4 Expectations are anchored outside the artifact under test.** We do not
 get to write that what we built is what we built. A gate whose expectation
@@ -128,7 +128,7 @@ for dropping, not for keeping on faith. The skill this project will
 eventually carry is generated from these, never hand-written.
 
 **Verdicts**
-- [BBX-1] `[inherited bbh BBH-10..13]` Exit status decides before any text.
+- [BBX-1] `[inherited bbh BBH-6, BBH-12, BBH-13, BBH-16]` Exit status decides before any text.
   SKIP is not PASS and asserts nothing; TIMEOUT is its own verdict; a
   non-zero exit with a skip marker is a FAILURE. Every count is reported
   separately.
@@ -201,7 +201,7 @@ eventually carry is generated from these, never hand-written.
   document is corrected first, in its own commit; only then is a check
   written against the corrected wording. A document is never bent to match
   a tool.
-- [BBX-20] `[inherited VS BBH-9; L1]` A living page states what is true; its
+- [BBX-20] `[inherited bbh BBH-9; VS L1]` A living page states what is true; its
   history twin states how it came to be known. Every document declares its
   shape at birth and is reachable from the map; completeness is a check.
 
