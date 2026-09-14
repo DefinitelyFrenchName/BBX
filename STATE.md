@@ -29,7 +29,7 @@ the identity line moved) and the self subject was refrozen in one quoted line (`
 battery at `a2ec618` was GREEN (PASS 32, controls 131 / 131); a battery over the uncommitted build read
 PASS 32, controls 133 / 133; the close's pair is quoted in `docs/readout.md` (CLOSE — bbx-25). **The WSL
 platform row stays GREEN at `429d3f8` and attests that commit only; native Linux is a PARTIAL row** at
-`f6f136d` (the static tier not run). Gotchas G1–G59; retractions X1–X48.
+`f6f136d` (the static tier not run). Gotchas G1–G60; retractions X1–X51.
 
 **Open rulings: none.** Every ruling R0–R50 is answered and recorded in `DECISIONS.md`; R50 was
 raised and answered at bbx-25 and is built. The maintainer's words with R49 stand as a rule of
@@ -59,9 +59,9 @@ R39, D62, D63): regenerated at bbx-25 at identity `c26e5a94b344`, 32 gates, 45 r
 **Rules:** 29 of the 30 rule lines in CLAUDE.md §4 carry `[inherited]` and BBX-30 is
 `[this project]`, as it was written (re-measured at bbx-25); none is promoted (edits
 need R16); incidents that re-anchor one in fact: G8 → §1, G9 → BBX-15,
-G10 → BBX-8, G12 → BBX-29, G13 → BBX-16, G14 → BBX-20, G15 → §0/§1,
-G16 → BBX-1, G17 → BBX-24/BBX-26, G18 → BBX-1, G19 → BBX-10, G20 → BBX-5,
-G21 → §1/BBX-16, G22 → BBX-10/§1, G23 → BBX-1, G24 → BBX-10, G25 → BBX-5/BBX-16, G26 → §1/§3.3/BBX-19/BBX-25, G27 → §1, G28 → BBX-5/§1, G29 → §1,
+G10 → BBX-8, G11 → BBX-16/BBX-15, G12 → BBX-29/BBX-9, G13 → BBX-16/BBX-15, G14 → BBX-20/BBX-9, G15 → §0/§1,
+G16 → BBX-1/§1, G17 → BBX-24/BBX-26, G18 → BBX-1, G19 → BBX-10, G20 → BBX-5,
+G21 → §1/BBX-16, G22 → BBX-10/§1, G23 → BBX-1, G24 → none written (its entry calls itself G19's shape, BBX-10's rot class 4, and carries no re-anchor line), G25 → BBX-5/BBX-16, G26 → §1/§3.3/BBX-19/BBX-25, G27 → §1, G28 → BBX-5/§1, G29 → §1,
 G30 → BBX-28/§3.2/BBX-30, G31 → §3.3/BBX-30, G32 → BBX-9/BBX-10/§3.3,
 G33 → §1/BBX-16/BBX-12, G34 → BBX-9/§1/BBX-6, G35 → BBX-25/§3.3/§1,
 G36 → BBX-16/BBX-6/BBX-12, G37 → §1/BBX-6/BBX-16. From G38 on, every entry in
@@ -90,7 +90,7 @@ ground (the maintainer's rider, filed on S7's row in `docs/slices.md`).
 that kind's profile, and neither single-kind family's comparators were — they sit in `lib/py/bbx/` beside
 the kind-blind families, reported by the census and moved by nothing. (3) **A full native Linux pair**
 (with `BBX_BBH_HOME` set) and **a WSL re-run** whenever the platform row should attest a commit newer than
-`429d3f8` (`docs/platforms/README.md`). (4) **G48's sweep, widened by G50, G53 and G59**: every reader —
+`429d3f8` (`docs/platforms/README.md`). (4) **G48's sweep, widened by G50, G53, G59 and G60**: every reader —
 the contributor's probes included — that may read LESS than is there, asking whether the shortfall reads
 as silence. (5) **The candidate ruling G54 names**: BBX's own `docs/` checked as a document-set subject.
 For any future harness change, the order that avoids paying twice is in HANDOFF.
