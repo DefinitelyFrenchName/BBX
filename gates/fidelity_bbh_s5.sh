@@ -18,7 +18,7 @@
 # VampireSaved on a plain clone of its census commit, both under TMPDIR, each required clean of tracked, untracked AND
 # ignored entries after the run; PYTHONDONTWRITEBYTECODE=1 for the whole gate, as in fidelity_bbh_s2.sh.
 # MUST-FIRE: shadow-tool: verdict-text-f18 — a shadow BBX home whose lifted lock prints one verdict string changed must make an F18a pair differ, or the diff cannot fail
-# NOT-ASSERTED: a skill whose rule definitions wrap onto a second line, or a number outside bbh's six patterns: no F18 input carries either (docs/plans/S5.md §4, R54)
+# NOT-ASSERTED: a skill whose rule definitions wrap onto a second line, or a number outside bbh's six patterns: no F18 input carries either, and gates/skills.sh is where BBX's two deltas for them are asserted (R54)
 # NOT-ASSERTED: that a [BBH-N] a BBX skill cites names a rule bbh defines (R56)
 # NOT-ASSERTED: the --help text of the two lifted tools, which names bbx and $BBX_CONFIG by design; no pair asks for help
 # NOT-ASSERTED: VampireSaved's eight skills on a host whose census-recorded VampireSaved path holds no copy of the recorded commit: F18d is then not run, and a NOTE says so

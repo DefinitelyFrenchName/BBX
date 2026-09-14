@@ -41,6 +41,22 @@ none (this file prints no command name); the config is read through BBX's layers
 `[skills]` settings in the kind-blind defaults, docs/defaults.md D64). Fidelity
 F18 (`gates/fidelity_bbh_s5.sh`) diffs both tools against bbh's over bbh's own
 skill, bbh's synthetic test consumer and VampireSaved's eight skills.
+
+TWO BBX DELTAS (slice S5 step 2, 2026-09-14; ruling R54), neither reachable from an
+input F18 carries (none of bbh's 87 or VampireSaved's 555 definitions continues onto
+a second line, and no lineage table sets `numbers`):
+  5. A DEFINITION IS ONE LINE.  A definition followed by a continuation — an
+     indented line, or an unindented one that opens no list item, heading, block
+     quote, fence or thematic break, which CommonMark joins to the item — FAILS
+     naming the rule and the line: the guide quotes a definition's first line only,
+     so a wrapped rule would be generated in part (docs/gotchas.md G63).
+  6. A NUMBER VOCABULARY PER SKILL.  `[skill_<PFX>].numbers` is `lineage` (the six
+     patterns above, the default) or `integers`, which also reads every plain
+     integer — not glued to a word character, not after `-` `.` `,` `$` `§`, not the
+     head of a decimal or a comma group, not a heading or list ordinal, `20xx` years
+     skipped — and finds it in the logs only as a whole integer token: over BBX's own
+     ledgers every two-digit integer occurs as a substring, so a substring test
+     could never fail on one (measured bbx-26; docs/defaults.md D66).
 """
 import argparse
 import re
@@ -70,8 +86,11 @@ def load_skills(cfg):
             if not isinstance(row, list) or len(row) < 2:
                 raise KeyError(f"[{sec}].sections rows are [file, header, ...]")
             sections[row[0]] = list(row[1:])
+        vocab = t.get("numbers", "lineage")
+        if vocab not in VOCABULARIES:
+            raise KeyError(f"[{sec}].numbers is {vocab!r}; the vocabularies are {', '.join(VOCABULARIES)}")
         skills[prefix] = dict(path=t["path"], docs=list(t["docs"]), logs=list(t["logs"]),
-                              forbid=list(t.get("forbid", []) or []), sections=sections)
+                              forbid=list(t.get("forbid", []) or []), sections=sections, numbers=vocab)
     return skills, set(skills)
 
 
@@ -111,6 +130,32 @@ def numbers(text):
     # a decimal run inside a hex/$ token is not a number of its own
     return {t for t in found
             if not (t.isdigit() and any(t != u and t in u for u in found))}
+
+
+# BBX delta 6 (R54): the `integers` vocabulary
+VOCABULARIES = ("lineage", "integers")
+INT_TOKEN = re.compile(r"(?<![\w.,$§-])\d+(?!\w|[.,]\d)")
+ORDINAL = re.compile(r"(?m)^(#{1,6}[ \t]+|[ \t]*)\d+[.)](?=[ \t])")
+
+
+def integers(text):
+    """Plain integers: not glued to a word character, not after `-` `.` `,` `$` `§`, not the
+    head of a decimal or a comma group, not a heading or list ordinal; `20xx` years skipped."""
+    text = ORDINAL.sub(r"\1", text)
+    return {t for t in INT_TOKEN.findall(text) if not (len(t) == 4 and t.startswith("20"))}
+
+
+# BBX delta 5 (R54): a line that opens its own block, so it cannot continue the definition above it
+INTERRUPT = re.compile(r"^(?:[-*+]\s|\d+[.)]\s|#{1,6}(?:\s|$)|>|```|~~~|(?:-{3,}|\*{3,}|_{3,})\s*$)")
+
+
+def continues(line):
+    """True when `line`, directly after a definition, would join the definition's list item."""
+    if not line.strip():
+        return False
+    if line[:1] in (" ", "\t"):
+        return True
+    return not INTERRUPT.match(line)
 
 
 XREF = re.compile(r"(?<!\*)\[([A-Z]+-\d+)\](?!\*)")
@@ -153,6 +198,12 @@ def check(root, skills, xref_prefixes, verbose=False,
         foreign = sorted({i for i in defs if not i.startswith(prefix + "-")})
         if foreign:
             fails.append(f"{prefix}: DEFINES foreign-prefix rule(s) {', '.join(foreign)}")
+        # 5. (BBX, R54) a definition is ONE line
+        lines = text.split("\n")
+        for n, line in enumerate(lines, 1):
+            m = DEF_SKILL.match(line)
+            if m and n < len(lines) and continues(lines[n]):
+                fails.append(f"{prefix}: rule {m.group(1)} wraps onto line {n + 1} of {cfg['path']} — a definition is ONE line")
 
         # 1. ID-lock against this skill's anchor docs
         anchors = {}
@@ -218,9 +269,17 @@ def check(root, skills, xref_prefixes, verbose=False,
                         if i.startswith(prefix + "-"):
                             fails.append(f"{prefix}: {i} anchored in HISTORY file {rel} "
                                          "— history carries no anchors")
-        missing = sorted(t for t in numbers(text) if t not in log_text)
+        quoted = numbers(text)
+        missing = {t for t in quoted if t not in log_text}
+        if cfg.get("numbers", "lineage") == "integers":
+            # 6. (BBX, R54) a plain integer is found in a log only as a whole integer token
+            extra = integers(text) - quoted
+            log_ints = integers(log_text)
+            missing |= {t for t in extra if t not in log_ints}
+            quoted = quoted | extra
+        missing = sorted(missing)
         if verbose:
-            print(f"  {prefix}: {len(numbers(text))} numeric tokens quoted")
+            print(f"  {prefix}: {len(quoted)} numeric tokens quoted")
         if missing:
             fails.append(f"{prefix}: number(s) quoted but in NO log: {', '.join(missing)}")
 
@@ -324,6 +383,28 @@ def selftests():
         write(skill=lone, doc="intro\n\n## Standing\nnothing\n\n## Other\n" + SYN_DOC)
         if not any("OUTSIDE the standing sections" in f for f in run()):
             bad.append("an anchor outside the named sections was not caught")
+        # the two BBX deltas (R54), each both ways
+        skills["XX"] = xx()
+        write(skill=SYN_SKILL + "  continued on an indented second line\n")
+        if not any("rule XX-2 wraps onto line" in f for f in run()):
+            bad.append("a definition continued on an indented line was not caught")
+        write(skill=SYN_SKILL + "continued with no indentation\n")
+        if not any("rule XX-2 wraps onto line" in f for f in run()):
+            bad.append("a lazy continuation of a definition was not caught")
+        write(skill=SYN_SKILL + "\nprose after a blank line\n## a heading\n")
+        if any("wraps onto line" in f for f in run()):
+            bad.append("a line after a blank line was read as a continuation")
+        probe = "## 1. Rules\n19 reds in BBX-10, G61, R4, 581eced, §3.2, 0.125, 4,808, 2026 and (7)"
+        if integers(probe) != {"19", "7"}:
+            bad.append(f"integer extractor drifted: {integers(probe)}")
+        skills["XX"] = xx(numbers="integers")
+        body = SYN_SKILL.replace("rule two", "rule two counts 19 reds")
+        write(skill=body, log=SYN_LOG + "in 2019 and 1195\n")
+        if not any(re.search(r"in NO log: (.*, )?19(,|$)", f) for f in run()):
+            bad.append("an integer a log holds only inside longer digit runs was not caught")
+        write(skill=body, log=SYN_LOG + "it counted 19 reds\n")
+        if any("in NO log" in f for f in run()):
+            bad.append(f"an integer the log holds as a token was reported missing: {run()}")
     return bad
 
 
