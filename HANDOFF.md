@@ -155,9 +155,11 @@ by construction (the recount's clone) and by `fidelity_bbh`'s proof.
   built at bbx-25. On this host the battery is green — the close's pair is quoted in `docs/readout.md`,
   CLOSE — bbx-25.
 - **S4 is DONE** — ruled by the maintainer after the bbx-25 close (2026-09-14), on the amended §7 table.
-  **FIRST: which slice follows**, unless ruled since — S5 (the skill) by the table, or R29's executable
-  controls (S6) first; the contributor recommends S5 (`DECISIONS_HISTORY.md` bbx-24). It was asked with the
-  DONE ruling and not answered with it. No slice work, and no plan, before that ruling.
+  **FIRST: S5, the skill** — ruled next by the maintainer the same day ("next is S5"). Open bbx-26 with the
+  ritual, then write S5's plan, `docs/plans/S5.md`: a measured census of what the skill is generated from
+  (bbh's H10 machinery, R4; BBX's rules and the incidents that re-anchor them in fact, G1–G60), the bins, the
+  fidelity plan (F18), and the open rulings — then STOP for the maintainer's rulings before any tool is
+  written (CLAUDE.md §6). S5's row in `docs/slices.md` names its must-fire cases and what its readout says.
 - **The rider on S4's DONE ruling, standing:** "we should note to go over the BBX-25 scope and status as we
   F20 and cover more ground." What it goes over is on file: the temporal family's one consumer inside BBX
   (VampireSaved through F20 is the candidate second — measured then, never assumed), R50's unit against the

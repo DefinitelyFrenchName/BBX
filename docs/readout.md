@@ -4852,3 +4852,7 @@ the maintainer's; the contributor's recommendation, S5, stands.
 **What this does NOT assert:** anything measured after the close — the ruling rests on the close pair at
 `bf557d0`; that BBX-25 is met for the tolerant-numeric or the temporal family; any platform green beyond those
 already recorded.
+
+**Then, the same day: S5 is next.** The maintainer: "next is S5" — the contributor's recommendation since bbx-24.
+S5 (the skill) opens at bbx-26 with its plan, which STOPs for the maintainer's rulings before any tool is written
+(CLAUDE.md §6); S6 and S7 keep their places in `docs/slices.md`, and the BBX-25 rider stays on S7's row.

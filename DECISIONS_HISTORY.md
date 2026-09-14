@@ -1512,3 +1512,8 @@ never assumed; R50's unit (the family decides, finer units declared) against the
 where a one-kind component lives, which R50 did not settle. The question put with the DONE ruling — which slice
 follows, S5 or R29's executable controls (S6) first — was not answered with it and stays the maintainer's; the
 contributor's recommendation, S5, stands.
+
+**Answered the same day: S5 is next.** The maintainer, 2026-09-14: "next is S5" — the contributor's recommendation
+since bbx-24. S5 (the skill) opens at bbx-26 with its plan, a measured census, the bins, the fidelity plan (F18)
+and its open rulings, and STOPs for the maintainer's rulings before any tool is written (CLAUDE.md §6). S6 and S7
+keep their places in `docs/slices.md`; the BBX-25 rider stays on S7's row.

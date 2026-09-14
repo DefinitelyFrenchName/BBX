@@ -9,7 +9,7 @@ and outputs. Born 2026-09-09.
 
 **Status (bbx-25 close, 2026-09-13; S4's ruling after it, 2026-09-14):** slices S1 and S2 complete; **S3 DONE**;
 **S4 DONE — ruled by the maintainer after the bbx-25 close, on the amended §7 table, with a rider: BBX-25's scope
-and status are gone over again as F20 lands and BBX covers more ground.**
+and status are gone over again as F20 lands and BBX covers more ground. S5 is next (ruled the same day).**
 Both gaps the bbx-24 layout found are closed, and the build met a ruling first. **R50 was raised and
 ruled before option A was built:** re-deriving bbx-24's claim that every S4 component had two instances
 except the tolerant-numeric family, it held per comparison family and failed per format and per driver;
@@ -81,9 +81,9 @@ not_recountable=56`); the two added at bbx-2 are host facts the clone
 exposed (G13, rule 7), the only exception ever allowed to move it upward. Grammar in
 `docs/census/README.md`.
 
-**Next:** (1) **Which slice follows** — S5 (the skill) by the table, or R29's executable controls (S6) first,
-since every controls count a readout quotes is still a gate's self-report; asked with S4's DONE ruling and not
-answered with it, so it stays the maintainer's; the contributor's answer is in `DECISIONS_HISTORY.md` (bbx-24).
+**Next:** (1) **S5 — the skill** (ruled next by the maintainer, 2026-09-14): its plan, `docs/plans/S5.md` — a
+measured census of what the skill is generated from, the bins, the fidelity plan (F18), the open rulings — is
+written at bbx-26 and STOPs for the maintainer's rulings before any tool (CLAUDE.md §6).
 **Standing with S4's DONE ruling:** BBX-25's scope and status are gone over again as F20 lands and BBX covers more
 ground (the maintainer's rider, filed on S7's row in `docs/slices.md`).
 (2) **Named, not queued (bbx-25):** `docs/generality.md` says a component used by one kind is moved to
