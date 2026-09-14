@@ -124,6 +124,31 @@ DEFAULTS = {
     "expectations": {
         "kinds": [["skip", "-", "SKIP", "-"], ["sha1", "exact", "N/A", "log"], ["pending", "-", "NOT-EVALUATED", "-"]],
     },
+    # [skills] — the skills lock and the guide generator (lib/py/bbx/checkskills.py, gen_skill_guide.py; S5 step 1,
+    # lifted from bbh H10, D64). Kind-blind: a skill is documentation about any subject. bbh's values verbatim, so bbh's
+    # own skill and VampireSaved's eight read identically through both tools (F18); the guide_header lines are the
+    # lineage's exact text, so a lineage guide regenerates byte-identical. The table is `prefixes` + one [skill_<PFX>]
+    # table per skill, in the consumer's config.
+    "skills": {
+        "prefixes": [],                       # the skills, IN ORDER; each has a [skill_<PFX>] table
+        "history_regex": r"_(history|HISTORY)\.md$",   # a LOG file matching this is a history twin: numbers resolve there, anchors may not live there
+        "history_exempt": [],                 # logs matching the regex that are session ARCHIVES, not twins (the lineage: STATE_HISTORY.md, DECISIONS_HISTORY.md)
+        "guided": [],                         # the skills with a GENERATED GUIDE.md beside SKILL.md
+        "guide_origin": "",                   # substituted for {origin} in guide_header
+        "guide_header": [                     # the guide's opening lines; {title} {name} {origin} substituted
+            "# {title} — the guide", "",
+            "The human rendition of `SKILL.md` in this directory: the same rules, the same",
+            "IDs, each followed by the INCIDENT that taught it. **GENERATED** by",
+            "`tools/gen_skill_guide.py` of the originating project from the documentation",
+            "paragraph every rule is anchored to — never hand-edited; regenerate there.",
+            "Origin: {origin}. The incidents therefore name that project's game, builds,",
+            "gates and session tags (`14z-N`); the RULES do not. The rule is the reminder,",
+            "the incident is the fact. IDs are stable and never reused; a gap means the",
+            "rule stayed at the origin's board-specific level.", "",
+            "**To use this skill elsewhere:** copy this directory (`SKILL.md` + `GUIDE.md`)",
+            "into `~/.claude/skills/{name}/`. Nothing in it depends on the origin tree.", "",
+        ],
+    },
 }
 
 # The kind profiles: the second layer. `frame-driven` is bbh's DEFAULTS for
