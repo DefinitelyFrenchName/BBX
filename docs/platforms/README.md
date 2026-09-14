@@ -67,7 +67,7 @@ Three things to hold to, each paid for here:
 * **Run it alone.** Nothing else of BBX's, and no editing of the tree while it
   runs — the runner reports a tracked file that changed mid-run as `dirtied`, and
   such a run is not a clean measurement (G44).
-* **It takes about ten to fifteen minutes** on the macOS host with 32 registered gates
+* **It takes about ten to fifteen minutes** on the macOS host with 33 registered gates since bbx-26
   (the gate runtimes of four kept runs on 2026-09-13 summed 865, 841, 666 and 618 s), so
   it is past a ten-minute foreground cap if you have one. Read the verdict off the
   **kept run**, never off a pipe: `| tail` keeps only the tail and hands you the
@@ -119,8 +119,8 @@ declared 123` and `31 of 31` (bbx-22's close pair).
 The gate total is worth re-deriving rather than trusting this page:
 `grep -hv '^#' gates/portable.txt gates/static.txt | wc -l`.
 
-A Linux screen showing `PASS 30  SKIP 1` with `census_recount` skipped is the
-expected shape, not a problem. **Since R48 (bbx-22, `8d5f97d`) that screen reads
+A Linux screen showing every registered gate PASS but one, `census_recount`, SKIPPED is the
+expected shape, not a problem (the total is the command above, never a number copied here). **Since R48 (bbx-22, `8d5f97d`) that screen reads
 GREEN.** Measured on the macOS host with `census_recount` alone and its census
 pointed at an absent tree: the runner ends its controls block with
 `skipped: 1, whose 4 declared control(s) assert nothing`, and the readout's controls
