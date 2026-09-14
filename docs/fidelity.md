@@ -1,6 +1,6 @@
 # The fidelity plan — the F-series from F12
 
-**Shape: proposal (session 1, 2026-09-09), now partly measured: F13, F14 and F15 run in `gates/fidelity_bbh.sh` and diff empty (2026-09-09); F12, F16 and F17 run in `gates/fidelity_bbh_s2.sh` and diff empty (2026-09-10); F18–F21 are open.**
+**Shape: proposal (session 1, 2026-09-09), now partly measured: F13, F14 and F15 run in `gates/fidelity_bbh.sh` and diff empty (2026-09-09); F12, F16 and F17 run in `gates/fidelity_bbh_s2.sh` and diff empty (2026-09-10); F18 runs in `gates/fidelity_bbh_s5.sh` and diffs empty (2026-09-14); F19–F21 are open.**
 
 ## The obligation
 
