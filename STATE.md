@@ -24,7 +24,7 @@ awaited an approval R55 had given (`9353ff2`, G77, X62); and one missing BBX-25 
 in zsh and left 24 CPU burners up for 1 h 41 min (G75). The census was regenerated and committed three times (48, 49 and 49
 rows; identity `5059aa730eb5`), a fourth run superseded before its commit (G78), and the self subject refrozen each time. The close's pair is quoted in `docs/readout.md`
 (CLOSE — bbx-27). **The WSL platform row stays GREEN at `429d3f8` and attests that commit only; native Linux is a
-PARTIAL row** at `f6f136d` (the static tier not run). Gotchas G1–G79; retractions X1–X62.
+PARTIAL row** at `f6f136d` (the static tier not run). Gotchas G1–G80; retractions X1–X62.
 
 **Open rulings: none.** R0–R58 are answered and recorded in `DECISIONS.md`. The maintainer's words with R49 stand as
 a rule of method: discipline is never arbitrated — only the method of applying it, on time or practicality.

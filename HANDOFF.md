@@ -180,6 +180,9 @@ by construction (the recount's clone) and by `fidelity_bbh`'s proof.
   line of any page whose row the step moved (`docs/fidelity.md` called F18 open for a sitting after it was gated).
 - **Named, not queued (bbx-25):** the tolerant-numeric and temporal comparators sit in `lib/py/bbx/` beside the
   kind-blind families, and only their kinds-table rows are in a profile; R50 settled declaration, not location.
+- **Named, not queued (bbx-27):** `$TMPDIR` held 81,224 `tmp.*` entries at the bbx-27 close, 21,327 older than a day
+  and 36,909 empty, 594 of them changed in 15 minutes around a census and a battery: some gate or tool leaves temporary
+  directories behind. Attribute the source before any cleanup; the count is measured once, not gated (G80).
 - **The WSL platform row attests `429d3f8`; native Linux is a PARTIAL row at `f6f136d`** (the static tier not run).
   A re-run follows `docs/platforms/README.md`; push first and confirm on the remote before asking (G49). Its tree
   check reads `gates/band.sh`'s blind spots, which do not tell bbx-26's tree from bbx-25's: on a newer tree, check
@@ -301,3 +304,4 @@ by construction (the recount's clone) and by `fidelity_bbh`'s proof.
 - A probe that starts processes on this host must stop them in `sh`, never in zsh: zsh leaves an unquoted `$pids` as one word, so `kill $pids` refuses the whole list, and behind `2>/dev/null` it does so silently — 24 CPU burners ran 1 h 41 min that way, load average about 57 (G75). Write such a probe as a script file run with `sh`, kill by a loop over the ids, never hide the cleanup's errors, and confirm `pgrep` reads 0 before reporting.
 - A verdict that compares two clocks has a margin, and a margin is a tolerance nobody ratified: `gates/sweep_runner.sh` §15 passed 91 of 92 kept runs on 1-2 s and failed a battery once (G76). Prove order by a handshake (a marker the later party leaves, which the earlier one reads), print clocks for the reader, and never re-run a red timing check into green (BBX-14).
 - `docs/rules.md` and `skill/bbx/GUIDE.md` quote every re-anchoring gotcha's HEADING: a heading that repeats a retracted wording puts it into both generated files, where the retraction sweep finds it (X20 through G26's heading, widened at bbx-27 to the two views). Word a new heading without a retracted phrase, or widen that row to the two generated views with the reason stated.
+- The host can stop a background command for low memory (G80: 16 GB, Zoom and WhatsApp open, a battery stopped a minute in). A stopped battery's kept run reads FAIL, exit 143, on the gate it cut, which says nothing about that gate. Run a pair one battery per background command, print `memory_pressure` before each, and if one is stopped, report it before retrying.

@@ -1606,3 +1606,18 @@ Learning (R27): G27's shape, a commit message's number not read off the run, thr
 by its position in a line rather than by its field name. No harness mechanism (the harness's own readers take
 `rows=`-style fields by name); for probes a field is taken by an anchored name, `rows \([0-9]*\)   missing`, or with
 `awk` over split fields, never by a greedy match. Rules re-anchored in fact: §1, BBX-12.
+
+## G80 — The close's battery pair was stopped a minute in because the host ran low on memory; the battery was the one killed, not the one using the memory (paid: one battery start lost, about 1 min, and the pair re-run one battery per command; 2026-09-14)
+At 15:32:54Z battery A of the close pair started at `197634e` in one background command with battery B queued behind
+it; about a minute later the command was stopped "because the system is running low on memory". Its kept run holds 6
+rows: `static_runner` and `controls` PASS, and `sweep_runner` FAIL with exit 143 after 22 s, the signal the stop sent.
+Measured just after: no harness process left and the tree clean; 16 GB physical with 60 MB of free pages, 6.2 GB in the
+compressor and 79.5 GB of cumulative swapouts; the largest resident processes the Claude app (481 MB), a browser (405
+MB), Zoom (376 MB, started 6 minutes before) and WhatsApp (371 MB, started under a minute before). The maintainer chose
+to re-run at once, one battery per background command with a memory reading printed before each. The same reading
+found `$TMPDIR` holding 81,224 `tmp.*` entries, 21,327 of them older than a day and 36,909 empty, with 594 changed in
+the previous 15 minutes, around a census and a battery: something BBX or its lineage runs leaves temporary directories
+behind, and its source is unmeasured.
+Learning (R27): a kept run that a host signal ended reads FAIL, exit 143, on the gate it cut, a verdict about the host
+and not about the gate; a pair is run one battery per command, so one stop costs one battery. The `$TMPDIR` count is
+named in HANDOFF for bbx-28, measured once and not gated. Rules re-anchored in fact: §1.
