@@ -72,4 +72,4 @@ table below is what is in force.
 | M2 | A census row's provenance is `gen:<generator>` or `read`; every count has its command; a filed count is labelled `filed:` with its source. | contributor (method) | 2026-09-09 |
 | M3 | Every load-bearing census number is produced by one agent and re-derived by a different one; unresolved mismatches are reported, never averaged. | contributor (method), from FIRST_PROMPT.md | 2026-09-09 |
 
-Open rulings: none. New ones are raised in `docs/rulings.md` under `## Open` and moved under an `## Answered` heading when answered (`gates/rulings_shape.sh`).
+Open rulings: R59, R60, R61, R62, R63, R64, R65 (raised by S6's plan, `docs/plans/S6.md`, bbx-28). New ones are raised in `docs/rulings.md` under `## Open` and moved under an `## Answered` heading when answered (`gates/rulings_shape.sh`).

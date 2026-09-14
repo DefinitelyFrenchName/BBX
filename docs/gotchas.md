@@ -1633,3 +1633,53 @@ Learning (R27): G59's shape, a zero out of a pipeline whose producer failed, rea
 probe with no positive control of its own shape. No harness mechanism; a probe over several repositories counts
 something known to be there in each before it counts what may be absent, and runs under `sh`. Rules re-anchored in
 fact: §1, BBX-7.
+
+## G82 — The temporary directories G80 named come from bbh's fake driver: it makes a fresh sandbox with `mktemp -d` when none is named and never removes it, and three of BBX's static gates name none (paid: 0 runs — attributed at the bbx-28 open from the opening battery's own window; 40,312 such directories left on this host since 2026-09-11, their bytes not measured; 2026-09-14)
+The opening battery at `35faa56` (`build/selftest_20260914T180055Z`, started 18:00:56Z, gate runtimes summed 854 s
+against 855 s of wall clock, so the static runner ran its gates one after another) was bracketed by counts of
+`$TMPDIR/tmp.*`: 82,414 before, 83,010 after. Grouped by birth time and by the names inside, the 594 entries born
+during the run were all directories holding one file, `fake_replay.log`; assigned by birth time to the gate whose
+cumulative window held them, `fidelity_bbh` 26, `fidelity_bbh_s2` 310, `suite` 258, none unassigned. bbh's
+`drivers/fake.sh:64` writes that file into `WORK="${SANDBOX:-$(mktemp -d)}"` (`:54`); the script holds no `trap`,
+`rm -rf` or `rmdir` (the same search finds its three `rm -f` lines) and is unchanged from `c26ba45` (2026-09-06) to
+bbh's tip. bbh's driver contract makes the sandbox optional, "a fresh temp dir when omitted" (`drivers/README.md:20`
+at `10a82d2`), and says nothing of removing it; `bin/bbx-run-suite:233` calls the driver with three arguments exactly
+as `bin/bbh-run-suite:120` does, and so do `gates/suite.sh:122` and `gates/fidelity_bbh_s2.sh:141`. BBX's own
+command-line driver removes a fresh sandbox (`drivers/cli.sh:90`) and its header cites `[BBH-36]` for "removed after
+the run", which BBH-36 does not say. BBX's own temporary files left nothing born in the window: no other `tmp.*` name
+from the 44 lines naming `mktemp` in its code, and none of the 3,554 `tmp<random>` names Python's `tempfile` writes
+(the same scan saw the 83,011 `tmp.*` entries). The backlog, counted by
+birth day and contents: 40,312 directories holding only `fake_replay.log`, from 2026-09-11 on (12,434 and 12,777 on
+the two whole days; hourly counts of 1,782 and 2,970, three and five batteries' worth); 36,909 empty, of which 36,898
+were modified at least a day after their birth and always in a 03:00 local hour (the 31,669 born 2026-09-10 were
+emptied on 2026-09-14 at 03h) — something on the host empties old temporary files nightly, so what those held is not
+recoverable and is not attributed; 5,433 holding `cfg` and `nvram`, born 2026-08-28 to 2026-09-09, before any BBX gate
+called a driver; and 358 others at the first count. The probes are kept in `docs/plans/S6_probes/`.
+Learning (R27): the second harness side effect found outside its sandbox, after G30's crash reports, and the second
+found by the host rather than by a gate — a mechanism, not a hazard line: count what each gate leaves on the host.
+Attribute before any cleanup: birth time and the names inside attributed 594 of 594, and the gap between birth and
+modification time told a directory emptied later from one born empty. S6's plan carries both (R65). Rules re-anchored
+in fact: §1, BBX-23.
+
+## G83 — A census probe's positive control could not fail: it appended a letter AFTER a quoted fragment, which leaves the fragment in the document, and SMS's checker rightly passed (paid: 0 — caught reading the control's exit, 0 where 1 was required, before the sabotage result it guarded was used; one re-run; 2026-09-14)
+Re-deriving a census agent's report that SMS's `tools/checkdocs.py` at `ecc5481` passes an orphan page and a dead
+link, the probe planted both in a copy and, as its positive control, edited a fragment the checker quotes from a
+document through `says()`: it replaced the fragment with itself followed by `X`. `says()` asks whether the document
+contains the fragment, and it still did, so the control read `ALL PASS (249 checks across 20 documents)` like the
+sabotage beside it, and the sabotage's pass measured nothing. The edit was moved inside the fragment, with an
+assertion that the fragment is gone: `1 of 249 checks FAILED`, exit 1, and the sabotaged copy's `ALL PASS` became a
+measurement. The fixed probe is `docs/plans/S6_probes/rederive_sms.sh`.
+Learning (R27): the control's own predicate was not read — a check for containment cannot be failed by adding text.
+No harness mechanism; a planted defect asserts it removed what it claims to remove before the run it guards. Rules
+re-anchored in fact: §1, BBX-8.
+
+## G84 — A retraction pattern matched two of the four lines it was written for: a space before its alternation demanded `harness _scope` where the pages read `harness_scope` (paid: 0 — caught by counting the pattern's matches against the four occurrences a plain search had listed minutes before, and before any page was corrected; 2026-09-14)
+X66 was first written `The eight harness (defaults|_scope decisions)`, to retire the count in rows V-D10 and V-X11 of
+`docs/census/vampiresaved.md` and `docs/bins/vampiresaved.md`, four lines a fixed-string search had just listed. The
+sweep, run before the correction as G41 asks, fired, and that alone would have passed G41's test; a line-by-line match
+of each new pattern across the tree read two lines for X66, both V-D10's. The space sat outside the group, so the
+V-X11 lines could never match. The pattern became `The eight harness(?: defaults|_scope decisions)` and was run
+against the uncorrected pages again before they were edited.
+Learning (R27): G41's rule, that a planted pattern must be seen to fire, is met by one hit, and one hit is not the
+population the pattern was written for; a retraction pattern is checked against the number of occurrences its wording
+has. No harness mechanism beyond G41's filed candidate. Rules re-anchored in fact: §1.

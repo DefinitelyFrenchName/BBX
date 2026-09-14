@@ -58,7 +58,7 @@ Nothing in it depends on the harness tree at load time.
 
 > **Incident** (`docs/rules.md` › *Controls*):
 >
-> RE-ANCHORED by 1 entry of `docs/gotchas.md` whose explicit list names it: G10 — A pattern that could never match measured "0 forward references", and the verifier reproduced the 0 by re-running it (paid: 0 — caught by reading the row while rewriting it, 2026-09-09).
+> RE-ANCHORED by 2 entries of `docs/gotchas.md` whose explicit list names it: G10 — A pattern that could never match measured "0 forward references", and the verifier reproduced the 0 by re-running it (paid: 0 — caught by reading the row while rewriting it, 2026-09-09); G83 — A census probe's positive control could not fail: it appended a letter AFTER a quoted fragment, which leaves the fragment in the document, and SMS's checker rightly passed (paid: 0 — caught reading the control's exit, 0 where 1 was required, before the sabotage result it guarded was used; one re-run; 2026-09-14).
 
 ## Registries and rot
 
@@ -156,7 +156,7 @@ Nothing in it depends on the harness tree at load time.
 
 > **Incident** (`docs/rules.md` › *Provenance and memory*):
 >
-> RE-ANCHORED by 1 entry of `docs/gotchas.md` whose explicit list names it: G6 — The local clone's directory is not the repository's name (paid: one failed `find`, 2026-09-09).
+> RE-ANCHORED by 2 entries of `docs/gotchas.md` whose explicit list names it: G6 — The local clone's directory is not the repository's name (paid: one failed `find`, 2026-09-09); G82 — The temporary directories G80 named come from bbh's fake driver: it makes a fresh sandbox with `mktemp -d` when none is named and never removes it, and three of BBX's static gates name none (paid: 0 runs — attributed at the bbx-28 open from the opening battery's own window; 40,312 such directories left on this host since 2026-09-11, their bytes not measured; 2026-09-14).
 
 **[BBX-24]** Every default value carries a provenance class (`principled` / reference-calibrated / `arbitrary`) in a register; changing one is a ruling. A default calibrated on one consumer and presented as generic is the *biased default*, and the second consumer is its detector.
 
