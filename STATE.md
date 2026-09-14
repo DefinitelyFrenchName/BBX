@@ -27,10 +27,14 @@ lineage citations in CLAUDE.md, under R55's approved wording (`581eced`, G65, X5
 declining a config key, an inference that step 1's own F13e run measured false (G68, X55); three current-tense counts
 on the platform step-by-step (G69, X56–X58). The opening battery at `f89eec2` was GREEN (PASS 32, controls 133 / 133);
 the close's pair is quoted in `docs/readout.md` (CLOSE — bbx-26). **The WSL platform row stays GREEN at `429d3f8` and
-attests that commit only; native Linux is a PARTIAL row** at `f6f136d` (the static tier not run). Gotchas G1–G71;
-retractions X1–X59. **bbx-27, in progress: S5 step 3 built** — the ledger reader and `gates/skills.sh` §7 (`c17ae40`),
-the census regenerated (`b2a7080`), the self subject refrozen (`2446418`); the opening battery at `db5a1ca` was GREEN
-(PASS 34, controls 150 / 150) and the battery over the step 3 build GREEN (PASS 34, controls 162 / 162).
+attests that commit only; native Linux is a PARTIAL row** at `f6f136d` (the static tier not run). Gotchas G1–G76;
+retractions X1–X61. **bbx-27, in progress: S5 steps 3 and 4 built** — step 3 the ledger reader (`c17ae40`); step 4
+BBX's skill `skill/bbx/` generated from §4 and locked to the generated `docs/rules.md`, every `[BBH-N]` resolved in F18
+(`23a10c6`); the sweep runner gate's queue check made deterministic after it read one battery NOT GREEN (`b07edbc`,
+G76); the census regenerated (`b2a7080`, `025e90b`) and the self subject refrozen (`2446418`, `9332c51`). The opening
+battery at `db5a1ca` was GREEN (PASS 34, controls 150 / 150), the battery over the step 3 build GREEN (162 / 162),
+the one over the step 4 build NOT GREEN on `sweep_runner` alone (PASS 33, controls 179 / 179,
+`build/selftest_20260914T092705Z`), and the one over the step 4 build with the fix GREEN (PASS 34, controls 179 / 179).
 
 **Open rulings: none.** R0–R57 are answered and recorded in `DECISIONS.md`. The maintainer's words with R49 stand as
 a rule of method: discipline is never arbitrated — only the method of applying it, on time or practicality.
@@ -45,8 +49,8 @@ subject and an external test framework a driver — five consumers:
 bbh's `example/`, `fixture/docset/`, `fixture/fakecli/`, `fixture/unittest/`,
 `fixture/selfgates/` (R14, R15, R37, R38). **BBX's own harness files are
 measured by a gate**, not by a document (`docs/census/bbx_files.md`, generated;
-R39, D62, D63): regenerated at bbx-27 after S5 step 3 at identity `da6bb9deb618`, 34 gates, 48 rows for
-48 harness files, and `bbx file-census --self --check-register` reads no drift.
+R39, D62, D63): regenerated at bbx-27 after S5 step 4 at identity `670d71385e8a`, 34 gates, 49 rows for
+49 harness files, and `bbx file-census --self --check-register` reads no drift.
 
 **Lineage, measured 2026-09-09** (`docs/census/README.md`):
 
@@ -62,8 +66,9 @@ list and 7 by none (BBX-2, BBX-3, BBX-4, BBX-11, BBX-13, BBX-17, BBX-27). The ta
 `docs/plans/S5.md` §3.2 over G1–G60, re-read over G1–G69 with the same count; it is not copied here, because the
 hand-kept list this paragraph used to carry rotted (X51). Since S5 step 3 (bbx-27, `c17ae40`) `bin/bbx reanchors`
 derives it every run: `gates/skills.sh` reproduces the plan's table through G60 and prints the whole ledger's reading
-on the screen (23 and 7 over G1–G71). Step 4 builds the generated `docs/rules.md`, and R55's part (2) promotes the 23
-tags after both.
+on the screen (23 and 7 over G1–G76). Since step 4 (`23a10c6`) the generated `docs/rules.md` states each rule's
+evidence in one anchored paragraph, and BBX's generated skill is locked to it. R55's part (2) promotes the 23 tags next,
+on wording the maintainer approves.
 
 **Constitution:** BBX-5's citation corrected to `MJC-52` (R12, own commit); BBX-1's and BBX-20's tags and §3.3's
 citation corrected under R55's part (1) (`581eced`). Every further edit to `CLAUDE.md` needs maintainer approval
@@ -77,9 +82,10 @@ not_recountable=56`); the two added at bbx-2 are host facts the clone
 exposed (G13, rule 7), the only exception ever allowed to move it upward. Grammar in
 `docs/census/README.md`.
 
-**Next:** (1) **S5 step 4** (`docs/plans/S5.md` §5 K2, K3, K6, K7; R51, R52, R56, R57): the skill generator, the
-generated `docs/rules.md`, the `[BBH-N]` check in the F18 gate, BBX's skill locked; then step 5 (R55's promotion, the
-slice readout). Step 3, the ledger reader, was built at bbx-27 (`c17ae40`). **Standing with S4's DONE ruling:** BBX-25's scope and status are gone over again as F20 lands (S7's
+**Next:** (1) **S5 step 5** (`docs/plans/S5.md` §5 K5, §10; R55 part (2)): the 23 re-anchored tags promoted in
+CLAUDE.md on wording the maintainer approves first (R16), then the slice readout with CLAUDE.md §7's six conditions.
+Steps 3 and 4 were built at bbx-27 (`c17ae40`, `23a10c6`); BBX's skill is not installed until the maintainer links
+`~/.claude/skills/bbx` to `skill/bbx` (R57). **Standing with S4's DONE ruling:** BBX-25's scope and status are gone over again as F20 lands (S7's
 row in `docs/slices.md`). (2) **Named, not queued (bbx-25):** where the single-kind comparators live
 (`docs/generality.md`). (3) **A full native Linux pair** (with `BBX_BBH_HOME` set) and **a WSL re-run** whenever a
 platform row should attest a commit newer than its own (`docs/platforms/README.md`). (4) **G48's sweep, widened by

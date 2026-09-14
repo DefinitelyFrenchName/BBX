@@ -1501,3 +1501,71 @@ Learning (R27): G33's and G60's family, a shell rewriting a word the command nev
 a pipeline whose producer failed. No harness mechanism: the harness runs under `/bin/sh`, and `bin/bbx help` reads its
 own file by path. For probes on this host a separator is quoted, and a script that reads `$0` is run by its path,
 never through a pipe. Rules re-anchored in fact: §1.
+
+## G72 — Run on the pre-build clone, the skills gate's new §8 stopped at a `set -e` command substitution over the missing skills table: a traceback, and no line saying why §8 could not run (paid: 0 — the red-on-old run caught it before the commit; one gate re-run; 2026-09-14)
+Measuring S5 step 4's two changed gates red on a clone of `4f57867` with only those gates copied in, `gates/skills.sh`
+exited 1 after 106 lines. §8's checks over the tree printed `skill-gen --check … refused` (`bbx: unknown command
+'skill-gen'`) and `the forbid list is empty or bars what R4 allows`; then `_ownfiles="$(python3 -c …)"`, which loads
+`skill/skills.toml`, raised `FileNotFoundError`, and `set -e` ended the gate on that line. The verdict was right, and
+only because the exit decided it: exit 1, classified FAIL, and 16 declared controls unfired. The log never said that §8
+had no skills table to read, G40's shape of a log that simply stops. Guarded before the commit: §8 now opens on `[ -f
+skill/skills.toml ]`, and on the same clone the gate exits 1 printing `FAIL  BBX's skills table skill/skills.toml is
+missing: §8 cannot run, and its controls stay unfired`, with 28 controls fired, no traceback, and exactly §8's 16
+controls declared and unfired.
+Learning (R27): mechanism built (the guard). A gate section guards the file it is about before a command substitution
+reads it, and a red-on-old run is read for why it is red, not only that it is. Rules re-anchored in fact: BBX-1, BBX-6.
+
+## G73 — A probe counted 93 of 90 two-digit integers present in one page: it kept every two-character token, and seven carried a leading zero (paid: 0 — the impossible count was caught on sight; no number reached a document; 2026-09-14)
+Choosing the skill's logs at S5 step 4, a probe printed `two_digit_present=93/90` for `docs/census/vampiresaved.md`. It
+counted the tokens `integers()` returns that are two characters long, and seven of those are `00`, `01`, `02`, `03`,
+`05`, `06` and `08` (measured after); over the integers 10 to 99 the page holds 86. The impossible count was not used,
+the absent list printed beside it (66, 81, 87, 96) came from the range and was right, and D69's figures (40 of 90 for
+the two logs chosen, 86 with the census page instead) were measured over the range before they were written.
+Learning (R27): G59's shape, a total not checked against its population before a share of it is read, caught this
+time because the population was printed in the same line. No harness mechanism: the gate's absent-integer control
+(`own-number-in-no-log`) walks the range 10 to 99, never tokens by length. Rules re-anchored in fact: §1.
+
+## G74 — Two status lines stayed stale while the rows beneath them were kept current: the fidelity plan's shape line still called F18 open a sitting after F18 was gated, and the S5 plan's status still named step 3 as next after step 3's own ledger commit (paid: 0 — found by a sweep for stale next-step wording at S5 step 4; no gate reads either line; 2026-09-14)
+Sweeping the tree outside the ledgers for next-step wording before S5 step 4's ledgers, `git grep` found
+`docs/plans/S5.md:23` still ending "Step 3 of §10 is next." — true when bbx-26 wrote it, false from `c17ae40`, and
+left standing by bbx-27's own step-3 ledger commit `4f57867`, which moved STATE and HANDOFF but not the plan. Reading
+`docs/fidelity.md` for its F18 row in the same hour showed the page's shape line, "F18–F21 are open": F18 has run in
+`gates/fidelity_bbh_s5.sh` since `a6f3e58` (bbx-26, S5 step 1), and bbx-26 wrote F18's measurements into the row
+below that line twice (`f994b4a`, `1427d4e`) without touching the line itself. Both were corrected in their own commit
+before step 4 landed (BBX-19).
+Learning (R27): G69's shape again, a status repeated in a page's summary line going stale while the page's table is
+kept, now in two plans. No harness mechanism; at a step's ledger commit the sweep covers every plan the step belongs
+to, its status line, and the shape line of any page whose row the step moved (a HANDOFF orientation bullet). It
+strengthens G54's named candidate a third time. Rules re-anchored in fact: BBX-20, §1.
+
+## G75 — A load test's cleanup never ran: under zsh `kill $pids` is one word, so 24 CPU burners stayed up for 1 h 41 min on the maintainer's machine while the script waited on them (paid: 1 h 41 min of a 12-core host saturated, load average about 57, and anything else run on the host in that window ran on it; 2026-09-14)
+Investigating G76, a background command started 24 `yes` processes to load the CPU, collected their ids with
+`pids="$pids $!"`, ran the gate, then ran `kill $pids 2>/dev/null; wait`. The shell the command ran in is zsh, which
+does not split an unquoted parameter into words: `kill` received the whole list as one argument, refused it as an
+illegal pid, and `2>/dev/null` swallowed the refusal; `wait` then waited on 24 live children. Found when the maintainer
+asked for the status: 24 `yes` processes under one parent, elapsed 01:41:22, load average { 55.42 57.13 59.32 };
+killed one by one by id, 0 left. Measured after with zsh 5.9 on two harmless `sleep 40` processes: `kill $pids` prints
+`illegal pid:  65093 65094`, exits 1 and leaves both alive; the same line under `sh` kills both; `${=pids}` splits in zsh.
+Learning (R27): G33's, G60's and G71's family, zsh reading a line differently from `/bin/sh`, and this time the cost
+landed outside the tree. For probes: anything that starts processes is a script file run with `sh`, its cleanup kills
+by a loop over the ids, never behind `2>/dev/null`, and the probe confirms none is left before it reports. A HANDOFF
+hazard. Rules re-anchored in fact: §1, BBX-7.
+
+## G76 — The sweep runner gate's pull-queue check compared two clocks on a 1-2 s margin, and one battery read the third short stub starting 5 s after the slow stub ended (paid: one NOT GREEN battery over the S5 step 4 build, about 14 min, and three runs of the gate; the burners of G75 were spent here too; 2026-09-14)
+The battery over S5 step 4's uncommitted build (`build/selftest_20260914T092705Z`) read NOT GREEN, PASS 33 FAIL 1,
+controls 179 / 179: `gates/sweep_runner.sh` §15, `FAIL: queue: f3 start='1789378113' slow end='1789378108'`. The check
+started a 4 s stub and three 1 s stubs on two workers and required the third short stub's start stamp to be earlier
+than the slow stub's end stamp. Over the gate's 92 kept runs the slow stub had ended 1 s after (64 runs) or 2 s after
+(27 runs), a margin a few seconds of late start erases, and this run read -5: every stub started late, the third short
+one 7 s after a queue would have started it. Nothing the step changed reaches the runner (`bin/bbx-run-sweep` last
+changed at `8890e4e`, bbx-2). Re-run alone the gate passed with a margin of 1 s, and under 24 CPU burners on 12 cores
+it passed with a margin of 1 s again: CPU load alone did not reproduce it, and the delay's cause is unmeasured
+(XProtect at 37% CPU at the time is a candidate only). Made deterministic rather than re-run into green (BBX-14): the
+slow stub now ends when it sees a marker the third short stub leaves as it starts, with a 30 s limit, and §15 reads its
+`saw_f3=yes|no`; a second run starts every short stub 2 s late. On a clone of `4f57867` whose old §15 had the same 2 s
+late starts, the old gate went red on exactly that check (`f3 start='1789385481' slow end='1789385479'`); the fixed gate
+passed twice in the tree, 87 s and 85 s, and in both runs its normal case printed the third short stub's start and the
+slow stub's end in the same second, which the old strict comparison would have read as a failure.
+Learning (R27): mechanism built (the marker). A verdict decided by comparing two clocks has a margin, and a margin is
+a tolerance nobody ratified: order is proven by a handshake, and a clock is printed, never compared. Feature work
+halted on the red until the gate was fixed and measured. Rules re-anchored in fact: BBX-14, BBX-26.
