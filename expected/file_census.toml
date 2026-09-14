@@ -8,7 +8,7 @@
 [spec]
 class = "self"
 # measured_at is R38's whole-set key over bin, lib, drivers, gates — NOT HEAD
-measured_at = "f189534d8e9ef9496c4df90f651c66d38a3e54f7"
+measured_at = "1fbb91c0bff11ff9828b0a22e1f41b79199507d9"
 mode = "shrink-only"
 
 [f1]
@@ -65,7 +65,7 @@ kinds = "F"
 
 [f14]
 file = "lib/py/bbx/checkskills.py"
-kinds = "F"
+kinds = "KF"
 
 [f15]
 file = "lib/py/bbx/cli.py"
@@ -133,7 +133,7 @@ kinds = "KFDC"
 
 [f31]
 file = "lib/py/bbx/gen_skill_guide.py"
-kinds = "F"
+kinds = "KF"
 
 [f32]
 file = "lib/py/bbx/logfmt.py"
