@@ -1472,3 +1472,32 @@ Learning (R27): G54's shape again — a procedure page quotes registry counts as
 reads the page against the registry; when a slice moves a registry, sweep the procedure pages as well as HANDOFF. No
 harness mechanism; it strengthens G54's named candidate, BBX's own `docs/` checked as a document-set subject.
 Rules re-anchored in fact: BBX-20, BBX-9, §1.
+
+## G70 — A probe for quoted leads counted 9 real re-anchor lists as quoted: it took a quotation mark or backtick before a lead for an opening one, and all 9 were closing (paid: 0 — the hits were read before any was counted; no number reached a document; 2026-09-14)
+Designing S5 step 3's handling of a quoted lead at bbx-27, a probe searched `docs/gotchas.md` for a straight or curly
+quotation mark or a backtick followed, within 40 characters on one line, by `Re-anchors` or `re-anchored in fact`, to
+count the leads the ledger holds inside quotations. It printed 9 candidates, at lines 105, 122, 216, 445, 520, 619,
+718, 1155 and 1419; read one by one, every one was a real list whose lead follows the CLOSING mark of an earlier
+quotation or code span. Which side of a pair a mark is on cannot be told from its neighbours, only by pairing from the
+start of the paragraph. Measured next that way: of the ledger's 137 entry paragraphs none has an odd backtick count or
+an unpaired straight or curly quotation outside code, and none of the 68 leads sits inside an open one; the draft
+reader, which closes a backtick run only on a run of its own length and pairs quotations and parentheses, named the
+same references as appendix A's prototype in all 69 entries.
+Learning (R27): mechanism built. `lib/py/bbx/reanchors.py` pairs code spans, quotations and parentheses from the start
+of each paragraph, and a paragraph holding a lead whose spans do not close is an error, never a guess (D67, control
+`unbalanced-paragraph`); the four quotings the probe could not tell apart are control `quoted-lead`. Rules re-anchored
+in fact: §1, BBX-5.
+
+## G71 — Two probe lines at bbx-27 read less than they asked, each loudly: zsh abandoned a line at an unquoted `=====`, and `sh -s help` over a piped `bin/bbx` printed nothing because the help reads `$0` (paid: 0 — one probe re-run; no number reached a document; 2026-09-14)
+A probe chained as `git show -s --format='%B' a6f3e58 | head -45; echo =====; sed -n '1,20p' gates/census_register.sh`
+printed the commit message, then `(eval):1: ==== not found`, and never ran the `sed`. Measured with zsh 5.9: `zsh -c
+'echo first; echo =====; echo third'` prints `first` and `zsh:1: ==== not found`, exits 1, and never prints `third`;
+with the separator quoted it prints all three and exits 0. zsh expands a word that begins with `=` into the path of
+the command it names, and a failed expansion abandons the rest of the line. In the same sitting, `git show
+HEAD:bin/bbx | sh -s help | wc -l` read 0 where the working tree's `bin/bbx help` prints 21 lines: the help is `sed -n
+'2,22p' "$0"`, and under `sh -s` the name in `$0` is `sh` (`sed: sh: No such file or directory`, exit 1). Neither
+zero was used: the first probe was re-run with the separator removed, the second dropped.
+Learning (R27): G33's and G60's family, a shell rewriting a word the command never sees, and G59's shape, a zero out of
+a pipeline whose producer failed. No harness mechanism: the harness runs under `/bin/sh`, and `bin/bbx help` reads its
+own file by path. For probes on this host a separator is quoted, and a script that reads `$0` is run by its path,
+never through a pipe. Rules re-anchored in fact: §1.
