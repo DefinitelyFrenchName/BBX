@@ -5,15 +5,17 @@
 # selftest/test_run_sweep.sh (S1, 2026-09-09), whose lineage is VampireSaved's
 # test_emulator_runner.sh (thirteen sections). The example-consumer section (bbh's §15) lives
 # in gates/fidelity_bbh.sh as F14. Sections 15–16 (bbx-2, R19): the --jobs queue is a PULL
-# (a worker takes the next gate the moment it frees, measured by start/end stamps in the
-# gates' own logs) and [sweep].clone_per_slot gives every slot its own plain clone of HEAD,
-# so a gate that writes into its tree never touches the working tree. Portable, ~90 s measured 2026-09-09 on a loaded host.
+# (a worker takes the next gate the moment it frees, read since bbx-27 from the slow stub's own
+# record that the third short stub had started while it still held its slot, never from two
+# clocks compared, G76) and [sweep].clone_per_slot gives every slot its own plain clone of HEAD,
+# so a gate that writes into its tree never touches the working tree. Portable, ~86 s measured 2026-09-14 (87 s and 85 s with the marker, bbx-27).
 # Usage: gates/sweep_runner.sh
 # MUST-FIRE: shadow-tool: env-default-export — a copy of the runner with the export line removed must leave the gate's MAME_BIN UNSET, or the assertion depends on the environment and not on the export
 # MUST-FIRE: known-bad: prereq-stop — a red gate in the prereq lane must STOP the run before any later lane, or a moved instrument's measurements would be read as evidence
-# MUST-FIRE: known-bad: serial-order — at --jobs 1 the third short gate must start only AFTER the long one ends, or the stamps cannot tell a queue from a line (the known negative of section 15)
+# MUST-FIRE: known-bad: serial-order — at --jobs 1 the slow stub must end on its limit having seen no marker from the third short stub, which starts only after it, or the marker cannot tell a queue from a line (the known negative of section 15)
 # MUST-FIRE: known-bad: no-clone-dirties — without clone_per_slot the same writing gates must dirty the base tree, or section 16's clean base proves nothing
 # NOT-ASSERTED: speed-up on a real consumer: the queue is measured on stub gates with sleeps, not on an instrument-tier suite
+# NOT-ASSERTED: a host so slow that each short stub starts about 9 s late or more: the slow stub's 30 s limit would pass before the marker and read as a line (the stubs' arithmetic, not a measurement)
 # NOT-ASSERTED: a gate that escapes its clone by an absolute path: clone-per-slot pins the cwd, nothing more
 # NOT-ASSERTED: portability beyond macOS: mkfifo and exec 8<> are POSIX, not yet run on Linux or WSL
 #
@@ -259,26 +261,49 @@ out14b="$(cd "$FR" && "$BBX_HOME/bin/bbx-run-sweep" --config bbx.toml --log "$T/
 out14c="$(cd "$FR" && "$BBX_HOME/bin/bbx-run-sweep" --config bbx.toml --list 2>&1)" && printf '%s\n' "$out14c" | grep -q "^lanes=prereq fbneo mame scope=release cadence=all only=\*  (1 gates)$" && ok "--list needs no input and prints the lineage's summary line" || fail "--list: $out14c"
 
 echo "15. --jobs N is a PULL queue: a worker takes the next gate the moment it frees (R19)"
-# g_q_slow holds one of two slots for 4 s; three 1-s gates share the other. Under a queue the
-# third short gate starts before the slow one ends; under a barrier ([slow,f1] wait [f2,f3])
-# or a line it cannot. Stamps come from the gates themselves (date +%s), never from the runner.
-printf '#!/bin/sh\n: "${MAME_BIN:-}"\necho "start=$(date +%%s)"\nsleep 4\necho "end=$(date +%%s)"\n' > "$FR/tests/g_q_slow.sh"
-for _n in 1 2 3; do printf '#!/bin/sh\n: "${MAME_BIN:-}"\necho "start=$(date +%%s)"\nsleep 1\necho "end=$(date +%%s)"\n' > "$FR/tests/g_q_f$_n.sh"; done
-chmod +x "$FR/tests/g_q_slow.sh" "$FR/tests/g_q_f1.sh" "$FR/tests/g_q_f2.sh" "$FR/tests/g_q_f3.sh"
+# g_q_slow holds one of two slots until it SEES the marker g_q_f3 leaves as it starts, or until its
+# limit; three short gates share the other slot. Under a queue the marker appears while the slow
+# gate still holds its slot, however late the host starts a gate; under a barrier ([slow,f1] wait
+# [f2,f3]) or a line it cannot, and the slow gate ends on its limit having seen nothing. The
+# evidence is the slow gate's own line saw_f3=yes|no, never two clocks compared: the stamps this
+# section compared until bbx-27 passed on a 1-2 s margin in 91 of 92 kept runs and read -5 once
+# (G76). The stamps are still printed for the reader.
+HS="$T/hs15"
+qgates() {  # qgates <delay> <limit> — the four stubs: each short one sleeps <delay> s before it starts; the slow one waits at most <limit> s
+    rm -rf "$HS"; mkdir -p "$HS"
+    { echo '#!/bin/sh'; echo ': "${MAME_BIN:-}"'; echo 'echo "start=$(date +%s)"'; echo '_w=0'
+      echo "while [ ! -f \"$HS/f3.started\" ] && [ \"\$_w\" -lt $2 ]; do sleep 1; _w=\$((_w + 1)); done"
+      echo "if [ -f \"$HS/f3.started\" ]; then echo saw_f3=yes; else echo saw_f3=no; fi"
+      echo 'echo "end=$(date +%s)"'; } > "$FR/tests/g_q_slow.sh"
+    for _n in 1 2 3; do
+        { echo '#!/bin/sh'; echo ': "${MAME_BIN:-}"'; echo "sleep $1"
+          if [ "$_n" = 3 ]; then echo "touch \"$HS/f3.started\""; fi
+          echo 'echo "start=$(date +%s)"'; echo 'sleep 1'; echo 'echo "end=$(date +%s)"'; } > "$FR/tests/g_q_f$_n.sh"
+    done
+    chmod +x "$FR/tests/g_q_slow.sh" "$FR/tests/g_q_f1.sh" "$FR/tests/g_q_f2.sh" "$FR/tests/g_q_f3.sh"
+}
 reg "$(row g_q_slow mame release - '')" "$(row g_q_f1 mame release - '')" "$(row g_q_f2 mame release - '')" "$(row g_q_f3 mame release - '')"
 stamp() { grep -h "^$2=" "$1" 2>/dev/null | cut -d= -f2; }
+saw()   { grep -h '^saw_f3=' "$1" 2>/dev/null | cut -d= -f2; }
+qgates 0 30
 run --jobs 2 --log "$T/l15" >/dev/null 2>&1 || true
-s_end="$(stamp "$T/l15/g_q_slow.log" end)"; f3_start="$(stamp "$T/l15/g_q_f3.log" start)"
-if [ -n "$s_end" ] && [ -n "$f3_start" ] && [ "$f3_start" -lt "$s_end" ]; then
-    ok "--jobs 2: the third short gate started at $f3_start, before the slow gate ended at $s_end — a pull, not a batch"
-else fail "queue: f3 start='$f3_start' slow end='$s_end' (a barrier or a line would give start >= end)"; fi
+if [ "$(saw "$T/l15/g_q_slow.log")" = yes ]; then
+    ok "--jobs 2: the slow gate saw the third short gate's marker while it held its slot — a pull, not a batch (f3 start $(stamp "$T/l15/g_q_f3.log" start), slow end $(stamp "$T/l15/g_q_slow.log" end))"
+else fail "queue: the slow gate ended with saw_f3='$(saw "$T/l15/g_q_slow.log")' (a barrier or a line gives no)"; fi
 [ "$(awk -F'\t' 'NR>1' "$T/l15/results.tsv" | wc -l | tr -d ' ')" = 4 ] && ok "all four rows recorded (order is the workers', keyed by name)" || fail "rows: $(cat "$T/l15/results.tsv")"
-# the known negative: --jobs 1 is a line, and the stamps must say so
+# a slow host, made on purpose: every short gate starts 2 s late, which turns the stamps this section used to compare red
+qgates 2 30
+run --jobs 2 --log "$T/l15d" >/dev/null 2>&1 || true
+if [ "$(saw "$T/l15d/g_q_slow.log")" = yes ]; then
+    ok "--jobs 2 with every short gate starting 2 s late: still read as a pull (f3 start $(stamp "$T/l15d/g_q_f3.log" start), slow end $(stamp "$T/l15d/g_q_slow.log" end))"
+else fail "queue under late starts: saw_f3='$(saw "$T/l15d/g_q_slow.log")' — the check depends on the host's speed again"; fi
+# the known negative: --jobs 1 is a line, and the slow gate must end having seen nothing
+qgates 0 5
 run --jobs 1 --log "$T/l15s" >/dev/null 2>&1 || true
-s_end1="$(stamp "$T/l15s/g_q_slow.log" end)"; f3_start1="$(stamp "$T/l15s/g_q_f3.log" start)"
-if [ -n "$s_end1" ] && [ -n "$f3_start1" ] && [ "$f3_start1" -ge "$s_end1" ]; then
-    echo "CONTROL FIRED: serial-order — at --jobs 1 the third short gate started at $f3_start1, after the slow gate ended at $s_end1"
-else fail "CONTROL DEAD: serial-order — f3 start='$f3_start1' slow end='$s_end1'"; fi
+s_end1="$(stamp "$T/l15s/g_q_slow.log" end)"; f3_start1="$(stamp "$T/l15s/g_q_f3.log" start)"; saw1="$(saw "$T/l15s/g_q_slow.log")"
+if [ "$saw1" = no ] && [ -n "$s_end1" ] && [ -n "$f3_start1" ] && [ "$f3_start1" -ge "$s_end1" ]; then
+    echo "CONTROL FIRED: serial-order — at --jobs 1 the slow gate ended at $s_end1 having seen no marker, and the third short gate started at $f3_start1"
+else fail "CONTROL DEAD: serial-order — saw_f3='$saw1' f3 start='$f3_start1' slow end='$s_end1'"; fi
 
 echo "16. [sweep].clone_per_slot: every slot measures its own plain clone of HEAD; the base tree is never written"
 printf '#!/bin/sh\n: "${MAME_BIN:-}"\necho "tree=$(pwd -P)"\necho "head=$(git rev-parse --short HEAD)"\necho written > "dirty_$$.txt"\nsleep 1\necho PASS\n' > "$FR/tests/g_c_a.sh"
