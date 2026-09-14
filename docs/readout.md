@@ -4831,3 +4831,24 @@ unmet`), each planted in a copy of the tree and FIRED (`retraction_hits=2`) befo
 amended §7 table above), and with it the question of which slice follows (`DECISIONS_HISTORY.md`, bbx-24).
 
 **Sweeps on the final tree:** `PASS: close_sweeps=/Users/koneko/Developer/generalized-blackbox-harness/BBX files=171 retractions=48 retraction_hits=0 deferrals=0 defaults_rows=63 citations=962 unresolved=0 header_entries=249 continued=0 errors=0; 4 controls fired`; `PASS: rulings=/Users/koneko/Developer/generalized-blackbox-harness/BBX/docs/rulings.md entries=51 open=0 answered=51 decisions_rows=51 errors=0; 4 controls fired`.
+
+# bbx-25, after the close — S4 ruled DONE, with a rider on BBX-25 (2026-09-14)
+
+**S4's DONE ruling.** Laid before the maintainer on the amended §7 table above — all six conditions yes, with
+BBX-25 unmet and declared for two families and for every single-consumer format, row shape, view and driver —
+and published for reading as a private page that restates that section at `ab31e8a`. **Ruled by the maintainer,
+2026-09-14: "S4 is done but we should note to go over the BBX-25 scope and status as we F20 and cover more
+ground."**
+
+**The rider, filed where the work meets it:** S7's row in `docs/slices.md` (F20 is S7's), F20's row in
+`docs/fidelity.md`, R50's paragraph in `docs/generality.md`, and HANDOFF's orientation. On file for it: the
+temporal family's one consumer inside BBX, for which VampireSaved through F20 is the candidate second consumer —
+measured when F20 runs, never assumed; R50's unit (the family decides, finer units declared) against the subjects
+covered by then; and where a one-kind component lives, which R50 did not settle.
+
+**Not answered with it:** which slice follows — S5 (the skill) or R29's executable controls (S6) first. It stays
+the maintainer's; the contributor's recommendation, S5, stands.
+
+**What this does NOT assert:** anything measured after the close — the ruling rests on the close pair at
+`bf557d0`; that BBX-25 is met for the tolerant-numeric or the temporal family; any platform green beyond those
+already recorded.

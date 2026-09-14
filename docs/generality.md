@@ -156,6 +156,12 @@ rows live in a kind profile (`lib/py/bbx/config.py`). The file census REPORTS
 them as reached by one kind's gates (`docs/census/bbx_files.md`); nothing moves
 them.
 
+**Rider (the maintainer, ruling S4 DONE, 2026-09-14):** "we should note to go
+over the BBX-25 scope and status as we F20 and cover more ground." This paragraph
+and the table it points at are what is gone over then: whether R50's unit still
+fits the subjects covered by then, the temporal family's count once VampireSaved
+runs through BBX (F20, measured then), and the location question above.
+
 ## What this proof does NOT establish
 
 That BBX works on a *real* document set or a *real* tool (both fixtures are

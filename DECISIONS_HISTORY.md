@@ -1499,3 +1499,16 @@ inside the thread's own subject, a readout saying less than is true, so it staye
 lasted. It is finished, and the next question is not the contributor's to pick: S4's DONE ruling and the next slice
 (S5, or R29's executable controls first) go to the maintainer at this close. The last green means what the amended
 §7 table says and no more — BBX-25 is unmet for two families and declared, not met.
+
+### bbx-25, after the close — S4 ruled DONE, with a rider on BBX-25 (2026-09-14)
+
+S4 was laid before the maintainer on the amended §7 table, published for reading as a private page that restates
+`docs/readout.md` at `ab31e8a`. **The maintainer ruled S4 DONE**, in these words: "S4 is done but we should note to
+go over the BBX-25 scope and status as we F20 and cover more ground." The rider is filed where the work it names
+will meet it — S7's row in `docs/slices.md` (F20 is S7's), F20's row in `docs/fidelity.md`, R50's paragraph in
+`docs/generality.md`, and HANDOFF's orientation. What it will go over is already on file: the temporal family's one
+consumer inside BBX, for which VampireSaved through F20 is the candidate second consumer, to be measured then and
+never assumed; R50's unit (the family decides, finer units declared) against the subjects covered by then; and
+where a one-kind component lives, which R50 did not settle. The question put with the DONE ruling — which slice
+follows, S5 or R29's executable controls (S6) first — was not answered with it and stays the maintainer's; the
+contributor's recommendation, S5, stands.
