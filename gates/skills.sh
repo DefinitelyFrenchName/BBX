@@ -360,7 +360,7 @@ own eg; repl "$T/o_eg/CLAUDE.md" '**Controls**' '**A planted empty group**
 control empty-group "empty-group 'A planted empty group'" ogen eg
 own dr; repl "$T/o_dr/CLAUDE.md" '- [BBX-4] `' '- [BBX-3] `'
 control gen-duplicate-rule "duplicate-rule BBX-3" ogen dr
-own rc; repl "$T/o_rc/CLAUDE.md" '`[inherited bbh BBH-49]`' '`[inherited bbh BBH-49..50]`'
+own rc; repl "$T/o_rc/CLAUDE.md" 'BBH-49]`' 'BBH-49..50]`'
 control range-citation "unresolvable-citation BBX-14" ogen rc
 own pd; repl "$T/o_pd/skill/skills.toml" 'docs = ["docs/rules.md"]' 'docs = ["DECISIONS.md"]'
 control page-not-in-docs "is not among its docs" ogen pd
