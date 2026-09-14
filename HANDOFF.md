@@ -196,7 +196,7 @@ by construction (the recount's clone) and by `fidelity_bbh`'s proof.
 - **`$TMPDIR`, attributed at bbx-28 (G82, R65):** every battery leaves 594 `tmp.*` directories holding only
   `fake_replay.log` — bbh's fake driver's unremoved sandbox, reached through `fidelity_bbh`, `fidelity_bbh_s2` and
   `suite` — until S6 step 4 gives each gate its own `TMPDIR`. The maintainer deleted the 40,312 such directories at
-  bbx-28, after a listing proven on a synthetic root, and a listing afterwards read 0. The 36,909 empty directories are
+  bbx-28, after a listing proven on a synthetic root, and a listing afterwards read 0. The close's battery pair left 1,188 more (two batteries' worth). The 36,909 empty directories are
   not attributed (a nightly 03:00 process empties old temporary files) and stay.
 - **The WSL platform row attests `429d3f8`; native Linux is a PARTIAL row at `f6f136d`** (the static tier not run).
   A re-run follows `docs/platforms/README.md`; push first and confirm on the remote before asking (G49). Its tree
