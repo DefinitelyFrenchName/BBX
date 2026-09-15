@@ -166,8 +166,8 @@ by construction (the recount's clone) and by `fidelity_bbh`'s proof.
   own, never called generic, and are gone over again when a second consumer is in view (`docs/readout.md`, "bbx-27,
   after the close"; `docs/generality.md`).
 - **FIRST: G96's small fix (R27)** — `gates/fidelity_bbh_s6.sh` compares, on its clone, every `[gate_header]` key of
-  bbh's `DEFAULTS` with what BBX resolves for a config naming no kind (D85): bbh's literals written into the wrong kind
-  profile would pass F19a, whose example config sets all but three keys. **Then S6 step 4** (`docs/plans/S6.md` §10;
+  bbh's `DEFAULTS` with what BBX resolves for a config naming no kind (D85): F19's pairs read a default only through a
+  key their configs leave unset, so a changed value under a key every config sets goes unseen (G98). **Then S6 step 4** (`docs/plans/S6.md` §10;
   R64, R65, R67): K5, the rot register, first, because K6 reads it; then K6 over the six shapes R67 names, resolving
   among the tracked files and their directories (G95, control `ignored-file-not-resolved`); K2, the whole-tree control
   count; K9, a `TMPDIR` per gate, measuring first whether a fidelity pair prints a temporary path. R60's rebaseline and

@@ -1833,3 +1833,33 @@ was in one universe and not the other until it was staged, the shape of bbx-13's
 the tree has not staged.
 Learning (R27): a new page is staged with its register row before the registers gate reads it, and HANDOFF's routing
 row for step 3 says so. No harness mechanism: the gate was loud both ways. No rule of §4 is named here.
+
+## G98 — G96 said F19a could not see bbh's gate-index literals under the wrong kind, reading one of its two configs; a plant made 8 of F19's 19 pairs differ (paid: one probe run before the fix's commit, and the claim carried in HANDOFF's orientation for one sitting; 2026-09-15)
+G96's entry reasoned from bbh's example config alone. Read at bbx-31 from `example/bbh.toml` at `10a82d2`, it sets 7 of
+the 10 `[gate_header]` keys of bbh's `DEFAULTS` (unset: `title_sep_regex`, `session_regex`, `duration_regex`). F19a also
+runs over the synthetic root of bbh's selftest, whose config in `gates/fidelity_bbh_s6.sh` sets 4 (`index_out`,
+`families_tsv`, `families`, `index_preamble`). On a scratch clone of BBX with the frame-driven profile's `gate_header`
+table renamed out of the resolver's reach (`docs/plans/S6_probes/probe_g98_f19_blind.sh`), the gate read `F19: 19 pairs,
+8 differ`, all 8 from the synthetic root while the example's 6 pairs and F19b's 5 stayed identical, and D85 read 7 of
+10 keys differing; unplanted, 0 and 0. G96's second clause holds for two of its three keys only: `session_regex`
+differs by value, and renders the example's index the same, as `probe_f19a_defaults.sh` measured at bbx-30. The claim
+reached HANDOFF's orientation (retracted, X74) and, in this fix's first draft, the D85 row of `docs/defaults.md`, where
+it was corrected before any commit. What F19 does miss was measured the same sitting: at bbh's tip `13ff687`
+`index_preamble`, a key every F19a config sets, moved, and the 19 pairs stayed identical while D85 read it.
+Learning (R27): a claim that a check cannot see something is a claim about every input the check reads, and it is
+planted before it is written, which is §1's own case. No harness mechanism beyond D85 and its control
+`d85-profile-misplaced`. No rule of §4 is named here.
+
+## G99 — Two host-residue probes read zero: a glob over 53,979 temporary directories hid its own error, and a count "since the start" was taken against a file the battery wrote until its end (paid: two probe runs, caught before any document; 2026-09-15)
+Before and after bbx-31's opening battery, `ls -d "${TMPDIR:-/tmp}"/tmp.* 2>/dev/null | wc -l` printed 0 both times.
+`find` counted 53,979 such directories. Run without the redirection, the glob reads `argument list too long` in zsh
+(exit 127) and in `/bin/sh` (exit 126), `ARG_MAX` 1048576 on this host: `wc` counted an empty stream, G48's shape in a
+contributor probe behind G75's `2>/dev/null`. The retry counted `fake_replay.log` directories `-newer` the battery's
+screen file, whose last write was 19:16:46, the same second as the kept run's `run.txt`: the battery's end, so every
+directory it made was older and the count read 0 again. With a marker touched to the battery's start, 19:04:50, and a
+directory made during the probe as its positive control (counted 1), the battery left 596 new `tmp.*` directories, 594
+of them holding `fake_replay.log` (HANDOFF's filed 594 per battery, re-derived), and no crash report.
+Learning (R27): count a large directory with `find`, never with a glob; a "since" is a marker set to the start, never a
+file the run writes; and a probe's count carries a positive control of its own shape. No harness mechanism: no gate
+counts the host's residue yet, and K9 (S6 step 4) is where a gate's residue is named from inside the run. No rule of §4
+is named here.
