@@ -4,4 +4,4 @@
 # commits did), and a moved key is an UNREGISTERED identity before any scenario runs: the refreeze is
 # a REVIEWED step of the close, never automatic (R38, §3.4; its cost is R44's question).
 # sha1	expectation-set	notes
-bc53b3b479db7c3af3688f4ae90a3bd29d3c51b4	derived	the harness whose self-subject behaviour was reviewed at this freeze
+8e866d01618776fa1f7d0cfa94f28175b3504e89	derived	the harness whose self-subject behaviour was reviewed at this freeze
