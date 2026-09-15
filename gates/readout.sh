@@ -22,8 +22,10 @@
 # NOT-ASSERTED: the sweep runner's runs: only bbx-run-static --log and bbx-run-suite --log are read
 # NOT-ASSERTED: that a register row's class is true of its file: the suite screen prints what the register says (gates/provenance.sh keeps it complete and inside the vocabulary)
 # MUST-FIRE: known-bad: fast-fail-named — a kept run whose g_a FAILs in 0 s under a header quoting ~10 min, g_b in 5 s under ~10 s and g_s in 0 s under ~1 s must name g_a alone and list g_s as too short to judge in whole seconds, and the green run must print no runtime line, or BBX-11's diagnostic is prose (R64, rot class 6's candidate)
+# MUST-FIRE: known-bad: unrun-controls-counted — a gate on disk declaring two controls that the kept run has no row for must be counted and named with its registry on the controls-on-disk line, and the green run must count every declaration as run, or the controls of a gate outside the run's tiers are seen by nobody (K2)
 # NOT-ASSERTED: that run.txt's tallies are right: where they and the kept rows disagree the screen names both and decides nothing, and a gate the runner counted without a row is named by its tier alone (G57)
 # NOT-ASSERTED: that a gate named on the runtime line bailed before measuring: a FAIL under a tenth of the runtime its header quotes is BBX-11's symptom, read against a quote written by hand (G29), and a failing gate whose header quotes none, or quotes under ten seconds, is listed, never judged (D88)
+# NOT-ASSERTED: that the controls counted on disk are the ones the run's commit carried: every header is read at the recorded root as it is when the screen is generated, as the blind spots are
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME
@@ -290,6 +292,15 @@ if grep -qx "runtime (BBX-11): 1 of 3 failing gate(s) under a tenth of the runti
    && grep -qx "  g_a FAILED in 0 s where its header quotes ~10 min: a gate that fails that fast bailed before measuring anything" "$T/c10" \
    && ! grep -q '^  g_b FAILED' "$T/c10" && ! grep -q '^  g_s FAILED' "$T/c10" && ! grep -q '^runtime (BBX-11)' "$T/s1"; then echo "CONTROL FIRED: fast-fail-named — g_a's FAIL in 0 s under ~10 min is named, g_b's in 5 s under ~10 s is not, g_s's under ~1 s is listed as too short to judge, and the green run prints no runtime line"
 else fail "CONTROL DEAD: fast-fail-named — $(grep -A2 '^runtime' "$T/c10" | tr '\n' '|')"; fi
+
+# 11. unrun-controls-counted: a gate on disk that declares two controls, registered nowhere, and absent from the run (K2)
+cp -R "$FR" "$T/fru"
+printf '#!/bin/sh\n# g_w.sh — declares two controls and is registered nowhere\n# MUST-FIRE: known-bad: one — must fail\n# MUST-FIRE: known-bad: two — must fail\n#\necho "PASS: fine"\n' > "$T/fru/tests/g_w.sh"; chmod +x "$T/fru/tests/g_w.sh"
+cp -R "$T/r1" "$T/r1u"; sed -i.bak "s|^root=.*|root=$T/fru|" "$T/r1u/run.txt"
+python3 -m bbx.readout "$T/r1u" > "$T/c11" 2>&1 || true
+if grep -qx "  controls on disk: 3 declared under tests, 1 by the gates in this run; not run: g_w (unregistered, 2)" "$T/c11" \
+   && grep -qx "  controls on disk: 1 declared under tests, 1 by the gates in this run; every declaring gate ran" "$T/s1"; then echo "CONTROL FIRED: unrun-controls-counted — g_w's two declarations are counted and named as unregistered and not run; the green run counts its one as run"
+else fail "CONTROL DEAD: unrun-controls-counted — $(grep -h 'controls on disk' "$T/c11" "$T/s1" | tr '\n' '|')"; fi
 
 echo "== 5. R48 and G48: a skipped gate's declarations are set aside, named and never counted as proved; a gate with no controls line is named =="
 cat > "$FR/tests/g_k.sh" <<'G'

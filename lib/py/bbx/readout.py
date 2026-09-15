@@ -26,7 +26,9 @@ resolved. A NOT GREEN run's FAIL rows are read against the runtime each gate's h
 index's own reader over the whole header (G29): a FAIL under a tenth of that runtime is named on a `runtime (BBX-11)`
 line; a failing gate whose header quotes none is listed and never judged, and so is one whose quote is under ten
 seconds, whose tenth the run's whole seconds cannot hold (D88; rot class 6's candidate, R64); a run with no FAIL row
-prints no such line. A kept SUITE run (run.txt carries
+prints no such line. Every control declared under the gates dir, each header read through the one header reader at
+the root the run recorded, is counted against the declarations of the gates the run kept a row for, and each declaring
+gate with no row is named with the registry that holds it (K2, S6 step 4). A kept SUITE run (run.txt carries
 `expset=`) gets its own screen (S2 step 4): the findings counted apart, the
 expectations relied upon as a histogram by R11 class from the register beside
 the tree, which classes PASSed on a pairing that is not fixture-class; since S3
@@ -252,6 +254,36 @@ def suite_screen(run, meta, rows, against):
     return 0 if ok else 1
 
 
+def controls_on_disk(meta, rows):
+    """K2 (S6 step 4): (declared on disk, declared by the gates the run kept a row for, [(gate, registry, n)] for each
+    declaring gate on disk with no row), every header read through bbx.controls and every registry through bbx.tier's
+    readers, with the run's own config at the root the run recorded; None when that gates dir cannot be read (G50)."""
+    from . import config as C, controls as K, tier as TR
+    root = meta.get("root", "")
+    if not root or not os.path.isdir(os.path.join(root, meta.get("gates_dir", "."))):
+        return None
+    cfg_path = meta.get("config", "")
+    try:
+        cfg = C.load(cfg_path) if cfg_path and os.path.isfile(cfg_path) else {}
+        reg = lambda key: os.path.join(root, C.get(cfg, key))
+        portable, static = TR.read_registry(reg("registries.portable")), TR.read_registry(reg("registries.static"))
+        sweep, gates = set(TR.read_sweep(reg("registries.sweep"))), list(TR.Tier(cfg, root).gates())
+    except (OSError, KeyError, C.toml_subset.SubsetError):
+        return None
+    kept = {r["gate"] for r in rows}
+    total = in_run = 0
+    unrun = []
+    for name, path in gates:
+        n = len(K.declared(path)[0])
+        total += n
+        if name in kept:
+            in_run += n
+        elif n:
+            where = "portable" if name in portable else "static" if name in static else "sweep" if name in sweep else "unregistered"
+            unrun.append((name, where, n))
+    return total, in_run, unrun
+
+
 FAST_FAIL_FACTOR = 10     # D88: a FAIL under a tenth of the runtime its header quotes is named (BBX-11)
 RESOLUTION_S = 1          # D88: results.tsv keeps whole seconds, so a limit under one second cannot be judged
 UNIT_SECONDS = {"s": 1, "sec": 1, "min": 60, "h": 3600, "hour": 3600, "hours": 3600}   # the units of [gate_header].duration_regex
@@ -369,6 +401,14 @@ def main(argv=None):
               f"{'; skipped, proving nothing this run: ' + ', '.join(skipped_declaring) if skipped_declaring else ''}")
     else:
         print("  controls: not enforced in this run (no controls.txt) — no gate here has proved it can fail")
+    disk = controls_on_disk(meta, rows)
+    if disk is None:
+        print(f"  controls on disk: NOT READ — no gates dir {meta.get('gates_dir', '?')} at the root the run recorded, so the "
+              "declarations outside this run are UNKNOWN, not absent (G50)")
+    else:
+        d_total, d_run, d_unrun = disk     # never `unrun`: that name is reconcile()'s count of gates a tier left unrun (G57)
+        print(f"  controls on disk: {d_total} declared under {meta.get('gates_dir', '?')}, {d_run} by the gates in this run"
+              + ("; not run: " + ", ".join(f"{g} ({w}, {n})" for g, w, n in d_unrun) if d_unrun else "; every declaring gate ran"))
     # expectations
     print("  expectations relied upon: none registered — a static run compares against no frozen expectation; "
           "a kept suite run (bbx-run-suite --log) carries its register's histogram (D32)")
