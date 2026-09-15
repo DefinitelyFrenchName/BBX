@@ -159,7 +159,8 @@ by construction (the recount's clone) and by `fidelity_bbh`'s proof.
   before its first tool (`abe52b2`). Step 3: K8 the trap lint, K7 the gate index with `docs/gates.md`, F19 a static
   fidelity gate (`82fc129`, `9816082`; census `d417355`, refreeze `a2a0208`). On this host the battery is green — the
   close's pair is quoted in `docs/readout.md`, CLOSE — bbx-30.
-- **No ruling open.** R0–R68 are answered; R66 was raised by S6 step 1's measurement and ruled at bbx-29, R67 and R68 by
+- **R69 is open** (raised at bbx-31 by S6 step 4's measurement, G101): K9's containment, since this host's `mktemp -d`
+  ignores `TMPDIR`. R0–R68 are answered; R66 was raised by S6 step 1's measurement and ruled at bbx-29, R67 and R68 by
   S6 step 3's at bbx-30.
 - **S5 ruled DONE by the maintainer after the bbx-27 close** (2026-09-14), on its slice readout, with a rider on BBX-25
   following S4's precedent: the ledger reader, the skill generator with its page and the `integers` vocabulary stay BBX's

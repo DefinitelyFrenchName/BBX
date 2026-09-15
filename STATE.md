@@ -23,7 +23,8 @@ identity `016163742714`) and the self subject refrozen (`a2a0208`). The close's 
 gate-index preamble default that D85 copies. **The WSL platform row stays GREEN at `429d3f8` and attests that commit
 only; native Linux is a PARTIAL row** at `f6f136d` (the static tier not run). Gotchas G1–G97; retractions X1–X73.
 
-**Open rulings: none.** R0–R68 are answered and recorded in `DECISIONS.md`. The maintainer's words with R49 stand as
+**Open rulings: R69** (K9's containment on a host whose `mktemp` ignores `TMPDIR`, raised at bbx-31 by S6 step 4's
+measurement, G101). R0–R68 are answered and recorded in `DECISIONS.md`. The maintainer's words with R49 stand as
 a rule of method: discipline is never arbitrated — only the method of applying it, on time or practicality. The
 maintainer's caveat on TSV stands the same way (R34, R40, restated at R62 and applied at R68): a new register or row file
 is a TOML-subset file.
