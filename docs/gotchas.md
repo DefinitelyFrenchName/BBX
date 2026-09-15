@@ -1898,3 +1898,16 @@ measured here.
 Learning (R27): a mechanism a plan names in parentheses is measured on the host before a ruling rests on it, and a
 probe's positive control is written in the form its population uses. The plan is corrected first (BBX-19), X75
 retracts both wordings, and R69 is raised before K9's first tool. Rules re-anchored in fact: BBX-5, BBX-7.
+
+## G102 — K2's first draft reused the readout's name for the gates a tier left unrun, and the screen's "not run" line vanished with no error (paid: one gate run and a kept copy of the gate's temporary tree; 2026-09-15)
+`readout.py`'s static screen sets `unrun`, the count of gates the runner counted as SKIP and kept no row for, at its
+verdict line (`reconcile`, G57), and prints its `not run` line from the same name at the screen's end. K2's first draft
+unpacked its own result as `total, in_run, unrun = disk` between the two, so on a run whose unrun tier held no declaring
+gate the name became an empty list and the `not run` line was never printed. `gates/readout.sh`'s control
+`unrun-tier-named` read DEAD, 13 of 14 fired, its message showing both VERDICT lines as expected and nothing else. A copy
+of the gate that kept its temporary tree showed that screen ending with no `not run` line and no traceback. The locals
+were renamed `d_total, d_run, d_unrun`, with a comment naming the collision, and the control fired again, 14 of 14,
+before any commit.
+Learning (R27): a neighbouring control is the detector for a new block in a shared screen function (G28's shape, a
+name where G28 had a variable's scope), and a new block's locals in a long function take a prefix of their own. No
+harness mechanism beyond the control that caught it. No rule of §4 is named here.

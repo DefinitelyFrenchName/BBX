@@ -997,3 +997,41 @@ R39, D62, D63): regenerated at the bbx-29 close at identity `bc53b3b479db`, 35 g
 51 harness files, and `bbx file-census --self --check-register` reads no drift. **BBX's own registers are checked every
 battery** since bbx-29: `docs/defaults.md` (K3) and `docs/documents.toml` (K4), by `gates/registers.sh`.
 
+
+## bbx-30 (closed 2026-09-15)
+
+**Status (bbx-30 close, 2026-09-15):** slices S1 and S2 complete; **S3, S4 and S5 DONE** (S4 and S5 with riders on
+BBX-25); **S6 — rot and registers — IN PROGRESS: steps 1 to 3 of six built.** The opening battery at `fe37bf0` was
+GREEN (PASS 35, controls 207 / 207). **G91's small fix** (`92d7f4f`): `gates/registry_complete.sh` refuses a registered
+gate on disk that is not executable. **R67 and R68, raised by step 3's measurement and ruled the same sitting**
+(`abe52b2`): K6 reads the pages that state what is true now, counts only rooted tokens as path claims, and moves to step
+4 after K5; K7's family file is read by its extension and its two further columns are named by config. The probes behind
+them are in `docs/plans/S6_probes/`; G95 records that two counts first read in the working tree carried an ignored file
+of this host. **Step 3** (`82fc129`, X71; `9816082`): K8, `bbx demand-after-trap` lifted from bbh with its two deltas and
+`gates/trap_lint.sh`; K7, `bbx gate-index` lifted with its three deltas, `gates/families.toml`, `docs/gates.md` generated
+and `gates/gate_index.sh`; F19, `gates/fidelity_bbh_s6.sh`, 19 pairs identical; D83–D86; X72, X73. A battery over the
+change before its commit read GREEN (PASS 38, controls 218 / 218). The census was regenerated (`d417355`: 53 rows at
+identity `016163742714`) and the self subject refrozen (`a2a0208`). The close's pair is quoted in `docs/readout.md`
+(CLOSE — bbx-30). bbh was committed twice during the sitting (`833f7a7`, `13ff687`), changing after the baseline the
+gate-index preamble default that D85 copies. **The WSL platform row stays GREEN at `429d3f8` and attests that commit
+only; native Linux is a PARTIAL row** at `f6f136d` (the static tier not run). Gotchas G1–G97; retractions X1–X73.
+
+**Open rulings: none.** R0–R68 are answered and recorded in `DECISIONS.md`. The maintainer's words with R49 stand as
+a rule of method: discipline is never arbitrated — only the method of applying it, on time or practicality. The
+maintainer's caveat on TSV stands the same way (R34, R40, restated at R62 and applied at R68): a new register or row file
+is a TOML-subset file.
+In force since bbx-2: R18 (the census and the tests
+work on a clone or are explicitly, provably read-only), R19 (parallel work
+is a pull queue; the FIFO token queue is the default implementation, the
+principle is the ruling), R20 (fidelity on a plain clone of bbh at the
+baseline; the recount's clone plain too).
+BBX = Black Box harness eXpanded; GPL-3; sh + Python 3 on macOS, Linux and
+Windows/WSL; kinds: frame-driven (bbh), document set, command-line tool, with BBX ITSELF a
+subject and an external test framework a driver — five consumers:
+bbh's `example/`, `fixture/docset/`, `fixture/fakecli/`, `fixture/unittest/`,
+`fixture/selfgates/` (R14, R15, R37, R38). **BBX's own harness files are
+measured by a gate**, not by a document (`docs/census/bbx_files.md`, generated;
+R39, D62, D63): regenerated at bbx-30 at identity `016163742714`, 38 gates, 53 rows for 53 harness files, and
+`bbx file-census --self --check-register` reads no drift. **BBX's own registers are checked every battery** since
+bbx-29: `docs/defaults.md` (K3) and `docs/documents.toml` (K4), by `gates/registers.sh`; **its gates are indexed** since
+bbx-30: `docs/gates.md`, generated and held current by `gates/gate_index.sh` (K7).

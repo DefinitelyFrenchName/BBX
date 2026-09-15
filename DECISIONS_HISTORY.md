@@ -1709,3 +1709,48 @@ the work moved on. Is S6 still the most valuable next thread? Yes: step 4 holds 
 the host residue, and step 5 R60's executable controls. Does the last green mean what it is treated as meaning? It means
 38 gates passed and 218 controls printed that they fired; F19's 19 identical pairs are fidelity to bbh, not truth; and
 no control is executed against its gate's real input until R60.
+
+## bbx-31 (2026-09-15) — G96's fix built; S6 step 4 built (K5, K6, K2, K9); R69 raised by step 4's measurement and ruled the same sitting
+
+The sitting opened on the maintainer's "read handoff.md and state.md" and "do ti" (the opening battery): GREEN at
+`ccae767` (`build/selftest_20260915_190450`: PASS 38, controls 218 / 218, no `census-drift` NOTE). Two of the
+contributor's own host probes read zero before they were believed (G99): a glob over 53,979 temporary directories hid
+its own error, and a count "since the start" was taken against a file written until the end; re-read against a start
+marker, the battery left 596 new `tmp.*` directories, 594 holding `fake_replay.log`.
+
+**G96's small fix** (`3f08f81`): `gates/fidelity_bbh_s6.sh` compares every `[gate_header]` key of bbh's `DEFAULTS` on
+its clone with BBX's resolution for a config naming no kind, 10 of 10 identical at `10a82d2`, control
+`d85-profile-misplaced`; at bbh's tip `13ff687` it reads `index_preamble` differing while F19's 19 pairs stay identical.
+Measuring its reason found G96's own claim false — a plant made 8 of the 19 pairs differ, all from bbh's selftest root,
+which G96 had not read — and the claim was retracted first, in its own commit (`02187d5`, X74, G98).
+
+**S6 step 4 was built contract by contract, each committed green on the gates it touches:** K5, the rot register
+`docs/rot.toml` and `bbx rot --check` in `gates/registers.sh` (`eea7262`, D87: 6 of 7 classes with a detector, class 6 a
+none row); BBX-11's runtime diagnostic on the readout, class 6's candidate, whose first real use named a gate it could
+not judge and gained a whole-second resolution rule (`8a73913`, D88, G100); K6, `bbx references --check` and
+`gates/references.sh` over the 11 current pages, D84's bbh example index path read as a lineage path rather than exempted
+(`03ee699`, D89); K2, the controls-on-disk line, whose first draft silently removed the screen's `not run` line and was
+caught by its neighbouring control (`2a2bb65`, G102).
+
+**R69 was raised by K9's measurement before its first tool.** K9's first probe's positive control read dead: this
+host's `mktemp -d` ignores `TMPDIR` (macOS 26.6.2; the man page's `_CS_DARWIN_USER_TEMP_DIR`), so R65's per-gate
+`TMPDIR` would have counted 0 while bbh's fake driver kept leaking. The plan's premise was corrected first with X75 and
+G101 (`006ab47`), R69 was raised with measured options (`ccd7b97`), and the maintainer answered "Shim + host count" (the
+recommendation). K9 (`d570200`, D90): each gate's own `TMPDIR`, a `mktemp` shim first on its `PATH`, and
+`NOTE: host-residue <gate> tmp= host= ips=`; the pre-commit battery named `fidelity_bbh tmp=26`,
+`fidelity_bbh_s2 tmp=310` and `suite tmp=258`, G82's attribution contained, and the host gained 0 `fake_replay.log`
+directories; F13 read identical in its nine pairs. bbh issue #3 was filed for the driver's unremoved sandbox, as R69
+answered. The census was regenerated at `d570200` (`dfd19f8`: 787 s, 55 rows, `references.py` and `rot.py` entering
+with kinds `K`, no row lost) and the self subject refrozen from `016163742714` to `68c94b574552` (`c112e9b`).
+
+**The close.** With step 4 built and R69 answered, the contributor closed in HANDOFF's order — code, census, refreeze,
+ledgers, then the battery pair, quoted in `docs/readout.md` (CLOSE — bbx-31).
+
+**Anti-hyperfocus (BBX-27).** The thread was the one the bbx-30 close named, and its detours — G96's retracted claim,
+the two zero-reading probes, the runtime note's resolution, the `mktemp` premise and R69, the screen-name collision —
+were each settled before the work moved on. Is S6 still the most valuable next thread? Yes: step 5 holds R60's
+executable controls, the one place the screen's "each can fail" still rests on a gate's own printed line, and step 6 the
+slice readout. Does the last green mean what it is treated as meaning? It means 39 gates passed and their controls
+printed that they fired; K9's containment is measured on this macOS host only (Linux's `mktemp` is not measured), its
+host count is a NOTE beside other processes' directories, the references check proves existence and not meaning, and a
+rot register row asserts where a class is caught, never that its control's failure is an instance of it.
