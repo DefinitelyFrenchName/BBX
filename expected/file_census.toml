@@ -8,7 +8,7 @@
 [spec]
 class = "self"
 # measured_at is R38's whole-set key over bin, lib, drivers, gates — NOT HEAD
-measured_at = "bc53b3b479db7c3af3688f4ae90a3bd29d3c51b4"
+measured_at = "016163742714ae1a733be70bea6b6c0f2b433d2d"
 mode = "shrink-only"
 
 [f1]
@@ -109,108 +109,116 @@ kinds = "KFDC"
 
 [f25]
 file = "lib/py/bbx/controls.py"
-kinds = "KDC"
+kinds = "KFDC"
 
 [f26]
 file = "lib/py/bbx/defaults.py"
 kinds = "K"
 
 [f27]
+file = "lib/py/bbx/demand_after_trap.py"
+kinds = "KF"
+
+[f28]
 file = "lib/py/bbx/docset.py"
 kinds = "DC"
 
-[f28]
+[f29]
 file = "lib/py/bbx/documents.py"
 kinds = "K"
 
-[f29]
+[f30]
 file = "lib/py/bbx/expectations.py"
 kinds = "KFDC"
 
-[f30]
+[f31]
 file = "lib/py/bbx/file_census.py"
 kinds = "K"
 
-[f31]
+[f32]
 file = "lib/py/bbx/finding.py"
 kinds = "FDC"
 
-[f32]
+[f33]
 file = "lib/py/bbx/fingerprint.py"
 kinds = "KFDC"
 
-[f33]
-file = "lib/py/bbx/gen_skill.py"
-kinds = "K"
-
 [f34]
-file = "lib/py/bbx/gen_skill_guide.py"
+file = "lib/py/bbx/gen_gate_index.py"
 kinds = "KF"
 
 [f35]
+file = "lib/py/bbx/gen_skill.py"
+kinds = "K"
+
+[f36]
+file = "lib/py/bbx/gen_skill_guide.py"
+kinds = "KF"
+
+[f37]
 file = "lib/py/bbx/logfmt.py"
 kinds = "FDC"
 
-[f36]
+[f38]
 file = "lib/py/bbx/propose_temporal.py"
 kinds = "F"
 
-[f37]
+[f39]
 file = "lib/py/bbx/provenance.py"
 kinds = "KDC"
 
-[f38]
+[f40]
 file = "lib/py/bbx/readout.py"
 kinds = "KDC"
 
-[f39]
+[f41]
 file = "lib/py/bbx/reanchors.py"
 kinds = "K"
 
-[f40]
+[f42]
 file = "lib/py/bbx/recount.py"
 kinds = "KFDC"
 
-[f41]
+[f43]
 file = "lib/py/bbx/rulings_shape.py"
 kinds = "K"
 
-[f42]
+[f44]
 file = "lib/py/bbx/sha1.py"
 kinds = "KDC"
 
-[f43]
+[f45]
 file = "lib/py/bbx/thresholds.py"
 kinds = "F"
 
-[f44]
+[f46]
 file = "lib/py/bbx/tier.py"
 kinds = "KFC"
 
-[f45]
+[f47]
 file = "lib/py/bbx/toml_subset.py"
 kinds = "KFDC"
 
-[f46]
+[f48]
 file = "lib/sh/baseline.sh"
 kinds = "F"
 
-[f47]
+[f49]
 file = "lib/sh/classify.sh"
 kinds = "KFC"
 
-[f48]
+[f50]
 file = "lib/sh/compare.sh"
 kinds = "FDC"
 
-[f49]
+[f51]
 file = "lib/sh/config.sh"
 kinds = "KFDC"
 
-[f50]
+[f52]
 file = "lib/sh/expectation_kinds.sh"
 kinds = "KFDC"
 
-[f51]
+[f53]
 file = "lib/sh/registry.sh"
 kinds = "KFC"
