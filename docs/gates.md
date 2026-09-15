@@ -8,7 +8,7 @@ portable gate, the static tier's variable for a static one, and for an instrumen
 header quotes; `since` is the first session its header names; `controls` its declared must-fire controls
 by shape; `blind spots` the count of its `NOT-ASSERTED:` lines. Reachable from `HANDOFF.md`.
 
-**39 scripts** — 32 portable, 6 static, 1 instrument-tier (run by name).
+**40 scripts** — 33 portable, 6 static, 1 instrument-tier (run by name).
 
 | family | scripts | what the family is |
 |---|---|---|
@@ -17,7 +17,7 @@ by shape; `blind spots` the count of its `NOT-ASSERTED:` lines. Reachable from `
 | [kinds](#kinds) | 8 | the subject kinds end to end: fixtures, drivers, suites and the two adapters |
 | [fidelity](#fidelity) | 4 | the lineage pairs: BBX's lifted tools against bbh's over the same inputs |
 | [census](#census) | 4 | the censuses: the lineage's counts and BBX's own file census |
-| [registers](#registers) | 6 | the registers and the pages: rulings, close sweeps, skills, defaults, documents, the gate index and the trap lint |
+| [registers](#registers) | 7 | the registers and the pages: rulings, close sweeps, skills, defaults, documents, rot, the gate index, the trap lint and the references in the current pages |
 
 ## runner
 
@@ -89,12 +89,13 @@ the censuses: the lineage's counts and BBX's own file census.
 
 ## registers
 
-the registers and the pages: rulings, close sweeps, skills, defaults, documents, the gate index and the trap lint.
+the registers and the pages: rulings, close sweeps, skills, defaults, documents, rot, the gate index, the trap lint and the references in the current pages.
 
 | gate | kind | tier | needs | locks (the script's own header) | since | controls | blind spots |
 |---|---|---|---|---|---|---|---|
 | `gates/close_sweeps.sh` | test | portable | — | the close ritual's sweeps run as a check: no retracted claim stated as current, no deferral in prose, no default cited without a register row, no header entry that runs past its one line HANDOFF.md step 8 was hand-run at every close until b… | bbx-2 | 4 known-bad | 3 |
 | `gates/gate_index.sh` | test | portable | — | docs/gates.md is the current generated index of BBX's gates, and the lifted generator fails where it must: a stale index, a CRLF copy, a gate with no family, a dead or doubled family row, and columns only where the config names them Ruled R… | bbx-30 | 1 known-bad, 5 perturbed-copy | 4 |
+| `gates/references.sh` | test | portable | — | the paths, file:line citations and G, X and R ids in the pages that state what is true now resolve, and every finding the check can print fires on a planted copy Ruled R64 and R67 (S6 step 4, bbx-31). | bbx-31 | 10 perturbed-copy | 6 |
 | `gates/registers.sh` | test | portable | — | the defaults, documents and rot registers hold against the code, the pages and the gates they name, and every finding each check can print fires on a planted copy Ruled R61, R62 and R66 (S6 step 2, bbx-29), and R64 (S6 step 4, bbx-31). | bbx-29 | 36 perturbed-copy | 10 |
 | `gates/rulings_shape.sh` | test | portable | — | every ruling sits under the heading of its state, and the queue and DECISIONS.md agree both ways docs/rulings.md is a document BBX reads (R14): | — | 4 known-bad | 1 |
 | `gates/skills.sh` | test | portable | — | the skills lock fires on every perturbation of a synthetic consumer, refuses a wrapped definition, and reads a plain integer under the integers vocabulary; the ledger reader derives which rules the incident ledger re-anchors; | bbx-26 | 10 known-bad, 34 perturbed-copy | 12 |

@@ -121,6 +121,12 @@ population = "a skill's cross-references against the rules the other configured 
 gate = "gates/skills.sh"
 control = "dangling-cross-reference"
 
+[c4-paths]
+class = 4
+population = "backticked rooted paths, file:line citations and G, X and R ids in the pages that state what is true now"
+gate = "gates/references.sh"
+control = "dead-path"
+
 [c5-header-entry]
 class = 5
 population = "a MUST-FIRE or NOT-ASSERTED entry run past the one line every header reader reads"

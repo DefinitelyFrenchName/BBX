@@ -160,3 +160,7 @@ family = "registers"
 [g39]
 gate = "gates/fidelity_bbh_s6.sh"
 family = "fidelity"
+
+[g40]
+gate = "gates/references.sh"
+family = "registers"

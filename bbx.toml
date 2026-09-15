@@ -58,7 +58,7 @@ families = [["runner", "the runners, the classifier, the tiers, the controls con
             ["kinds", "the subject kinds end to end: fixtures, drivers, suites and the two adapters"],
             ["fidelity", "the lineage pairs: BBX's lifted tools against bbh's over the same inputs"],
             ["census", "the censuses: the lineage's counts and BBX's own file census"],
-            ["registers", "the registers and the pages: rulings, close sweeps, skills, defaults, documents, the gate index and the trap lint"]]
+            ["registers", "the registers and the pages: rulings, close sweeps, skills, defaults, documents, rot, the gate index, the trap lint and the references in the current pages"]]
 index_preamble = ["# Gates — the index (GENERATED)",
                   "",
                   "Shape: generated, written by `bbx gate-index --config bbx.toml` from each gate's own header, the family",
