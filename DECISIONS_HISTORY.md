@@ -1651,3 +1651,30 @@ screen's "proved a control fires on purpose" rests on self-reports (X65, R60), a
 reads. Does the last green mean what it is treated as meaning? It means the battery's 34 gates passed and their 179
 controls printed that they fired; until R60 lands, it does not mean any control was executed against its gate's real
 input.
+
+## bbx-29 (2026-09-14 to 2026-09-15) — S6 steps 1 and 2 built; R66 raised by step 1's measurement and ruled the same sitting
+
+The sitting opened on a GREEN battery at `1cb162e` (PASS 34, controls 179 / 179), run while bbh was being committed on
+the same host (G86). S6 step 1 corrected and completed `docs/defaults.md` under R61 (`998e0f7`: 80 rows, D70–D80
+registering 24 keys and 6 fallbacks no row held, X68 retracting D8's claim, G88) and routed by path the ten pages
+HANDOFF had reached only through a directory or a brace form.
+
+**R66 was raised by that measurement.** `[project].lib_dir` was read by no line in BBX or in bbh (G87); at the
+maintainer's request the contributor opened bbh issue #2. The maintainer answered "agreed with the proposal" to its
+removal from BBX, and — after asking for the benefit and the risk of not doing it — "Then let's add it" to K3's third
+direction, every default's reader (`154b481`).
+
+**S6 step 2 was built in the order HANDOFF gives:** the eight pages whose `Shape:` line did not lead with one of R62's
+fifteen words reworded first (`f01488e`), then K3 and K4 with `gates/registers.sh`, `docs/documents.toml`, D81, D82
+and the removal (`b18678b`), the census regenerated (`008db5f`, 51 rows at `b9009dc1057c`) and the self subject
+refrozen (`858fc45`). The gate's 28 controls found three defects before the commit (G89, G90, G91), the last costing a
+battery. At the close, G90's list re-anchored BBX-2 and stopped a skills gate control keyed to BBX-2's old status; the
+control was re-keyed (`0ee5bfb`, G93), and the census and the self subject moved a second time.
+
+**Anti-hyperfocus (BBX-27).** The thread was the one the bbx-28 close named, and the detours — the shared host at the
+open, the `lib_dir` ticket, the three defects the new gate's controls exposed — were each settled before the work moved
+on. Is S6 still the most valuable next thread? Yes: its steps 3 to 6 hold the reference check, the lifted index and
+lint, the host residue and R60's executable controls, and the screen's "proved a control fires on purpose" still rests
+on self-reports. Does the last green mean what it is treated as meaning? It means 35 gates passed and 207 controls
+printed that they fired; the new gate's 28 were each planted in a copy and required by their own line, and until R60 no
+control is executed against its gate's real input.

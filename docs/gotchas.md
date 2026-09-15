@@ -1697,3 +1697,90 @@ only the method of meeting it. The maintainer chose the full form every time.
 Learning (R27): both sets of words were in the tree, and the plan read the ancestors' files but not the maintainer's
 rulings on form. No harness mechanism; a hazard line in HANDOFF and the contributor's memory. No rule of §4 is named
 here: the incident concerns the maintainer's rulings on form and method.
+
+## G86 — The opening battery ran while bbh was being committed on the same host: its tip moved two commits during the run, and the run left 871 of bbh's fake-driver directories where a quiet battery leaves 594 (paid: 0 runs — attributed after the run by the kept runs' gate windows, one probe; 2026-09-15)
+The bbx-29 opening battery (`build/selftest_20260914_235459`, `1cb162e`, 23:54:59 to 00:09:12 local) read GREEN, PASS
+34. Its fidelity gates printed `bbh-source tip=e7d6767 porcelain=1`; after it bbh's HEAD was `37db3ac`, two local
+commits past `e7d6767` by bbh's reflog — `6e11c48` at 00:08:05, inside the run, and `37db3ac` at 00:09:16, four seconds
+after it. The host's G82-shaped directories grew by 871. Assigned to the kept runs' gate windows by the time their file
+was written: the bbx-28 close pair read 594 and 594 (`fidelity_bbh` 26, `fidelity_bbh_s2` with `fidelity_bbh_s5` 310,
+`suite` 258); this run read `fidelity_bbh` 185, `fidelity_bbh_s2` with `fidelity_bbh_s5` 400, `cli_suite` 28 and `suite`
+258 — the 277 more all between 22:00 and 22:08Z while bbh was worked on, and `suite`, which ran after bbh's first
+commit, at its usual count. The sitting's three later batteries, on a quiet host, read 594 each. The fidelity pairs clone
+bbh at the baseline, so the verdicts did not rest on bbh's working tree; the run's runtime and residue did.
+Learning (R27): "alone" in the ritual is about this session's processes, and another session can move a lineage tree
+during a run while nothing in the kept run says so — the fidelity gates print bbh's tip once each. Mechanism candidate,
+not built: the static runner records each lineage tip at the run's start and end, and the readout names a tip that
+moved. A hazard line in HANDOFF: look at bbh's porcelain and the peer sessions before a battery. The attribution probe
+is measured once, not gated. Rules re-anchored in fact: BBX-29, BBX-23.
+
+## G87 — `[project].lib_dir` was a default nobody read: born in bbh's first core commit, documented as used by the hygiene tools, set three times in BBX, and read by no line of either harness (paid: 0 runs; R66 raised and ruled, bbh issue #2 opened; 2026-09-15)
+Completing `docs/defaults.md` under R61 (S6 step 1) meant naming every `DEFAULTS` key in the row that registers it, and
+naming `lib_dir` meant looking for its reader. No line under `bin lib drivers gates` named it outside the defaults, the
+self profile, `bbx.toml` and `gates/file_census_tool.sh`'s synthetic config. At bbh's tip `37db3ac` it occurs in five
+lines, none a reader, and `git log -S lib_dir` reads one commit, `803f372`, so no reader naming it was ever added and
+kept; its row in bbh's `docs/config.md` read "H5 uses it" at birth and "the hygiene tools use it" since `276b086`, while
+`demand-after-trap` takes `--lib` on its command line and the tier's `source_regex` carries `tests/lib/` as a literal.
+VampireSaved names it at neither `0cdd9726` nor `8044a0bb`. R61's check as ruled would have read it green both ways. The
+maintainer ruled R66: the key removed from BBX (`b18678b`, every bbh fidelity pair measured identical first) and K3 given
+a third direction, every default's reader, which read red with the key present (`key-without-reader [project].lib_dir`)
+and green without it. bbh's side is bbh issue #2, opened at the maintainer's request.
+Learning (R27): a register that records what a default is cannot say whether anything honours it; the mechanism is
+R66's reader direction, built. Rules re-anchored in fact: BBX-24, BBX-7, BBX-10.
+
+## G88 — `docs/defaults.md` D8 called BBX's own config the second consumer that differs on all nine layout defaults, as BBX-25's detector at work; four of the nine carried the kind-blind value (paid: 0 — found reading `bbx.toml` while completing the row, corrected in the same commit; X68; 2026-09-15)
+`bbx.toml` names all nine keys and gives `gate_glob`, `runner_prefixes`, `manual_suffixes` and `source_depth` the
+kind-blind value, so no second consumer had differed on those four. D8 says so since `998e0f7`, and X68 retracts the
+wording: its pattern was planted in a copy's `docs/abstraction.md` and required to fire, and read nothing on the clean
+copy. With `lib_dir` removed under R66 the row names eight keys, four of them given another value.
+Learning (R27): a consumer that restates a default's own value is not a second instance of it; "overridden" is a claim
+about values, not about keys. No harness mechanism. Rules re-anchored in fact: BBX-25, BBX-22, BBX-19.
+
+## G89 — The registers gate's first run reddened the real tree with its own planted fallback: the plant was written whole inside the gate, under `gates/`, which the defaults check scans (paid: 1 gate run, 2 s; 2026-09-15)
+`gates/registers.sh` proves `fallback-without-row` by planting a shell fallback for an unregistered variable in a copy,
+and carried that fallback's text literally in its own Python; the real tree's check read `fallbacks=16 errors=1`, and
+the gate FAILed before any control ran. The same file carried the planted name for `name-without-code` whole, which would
+have kept that control from ever firing, since a variable some code names is not "without code". Both names are now
+assembled at run time, and a search of the gate for either whole name and for any literal fallback reads nothing.
+Learning (R27): a gate whose tool scans the directory the gate lives in must not carry its plant in the form the tool
+matches; the requirement that the unplanted copy read `errors=0` before any control caught it. No further mechanism.
+Rules re-anchored in fact: BBX-5, BBX-6.
+
+## G90 — The defaults check read a rewritten run-time reader as still declared: it matched the builder `"fingerprint." + k` as a substring, and `"fingerprint." + key` contains it (paid: 2 gate runs, about 10 s; 2026-09-15)
+`runtime-reader-gone` read DEAD twice. First its plant did not apply: it assumed `"fingerprint." + k for k in _KEYS`
+where the code reads `"fingerprint." + k) for k in _KEYS`, and the plant's own assertion said so. Then the plant applied
+and the check still exited 0, because `lib/py/bbx/defaults.py` tested the builder with `in`. The builder must now end at
+a word boundary, and the control fires naming the declared reader. Before its planted failure the check had only ever
+read green, on a tree where the builder is present.
+Learning (R27): a declared name needs the boundary every other search for a name needs (G67's family), and the gate's
+must-fail direction found what the green direction could not. No further mechanism. Rules re-anchored in fact: BBX-2,
+BBX-8.
+
+## G91 — The registers gate was written without its execute bit: every run through `sh` passed, and the battery read it MISSING (paid: one battery, 14 min 48 s; 2026-09-15)
+The battery over step 2's uncommitted tree (`build/selftest_20260915_092545`) read `NOT GREEN`, `MISSING 1`, `registers
+MISSING (registered but not executable)`: `bin/bbx-run-static` requires `[ -x ]` (line 129), the writer that made the
+file left mode 644, and all 35 gates git recorded were `100755`. The contributor had predicted the untracked gate would
+run, and every earlier run of it had been `sh gates/registers.sh`. After `chmod +x` the battery read GREEN
+(`build/selftest_20260915_094158`), and `b18678b` records `100755`.
+Learning (R27): run a new gate through the runner, or read its mode, before a battery. Mechanism, the next sitting's
+first small fix: `gates/registry_complete.sh` refuses a registered gate that is not executable, in about a second where
+the battery took fifteen minutes. Rules re-anchored in fact: BBX-1.
+
+## G92 — Two of the contributor's probes read less than was there: a pipe handed back `head`'s exit for a search, and a line cut at 220 characters made a blind spot look shortened on the readout (paid: 0 — both re-read before anything rested on them; 2026-09-15)
+Checking VampireSaved for `lib_dir`, a `git grep … | cut | head; echo "grep_exit=$?"` printed `grep_exit=0` with no
+lines, the pipe's exit (G16's shape); `git grep -q` read 1 at both commits, with a control reading 0. And a readout line
+cut at 220 characters ended before `(D82)`, which looked like the readout dropping a citation; the header and the kept
+screen both end `(D82)`.
+Learning (R27): G48's sweep holds for the contributor's own probes every sitting. No harness mechanism. Rules
+re-anchored in fact: BBX-16, §1.
+
+## G93 — The skills gate's stale-guide control planted into BBX-2's INHERITED paragraph, and G90 honestly re-anchored BBX-2: the plant found nothing to replace and the gate stopped (paid: one skills gate run, 8 s, and the census regenerated and the self subject refrozen a second time at the close; 2026-09-15)
+At the close, after G86–G92 were filed and `docs/rules.md` regenerated, `gates/skills.sh` exited 1 inside its `repl`
+helper: `'**[BBX-2]** INHERITED: no entry' occurs 0 times`. The lock itself read `ALL PASS (30 rules …)`; the gate's
+`own-stale-guide` control assumed BBX-2 was inherited, and G90's list names it (`bbx reanchors`: `rules re-anchored=24
+inherited=6`). The control now plants into `**[BBX-1]** RE-ANCHORED by `, text the guide quotes, and fires `is STALE`;
+the gate reads PASS with 44 of 44 controls fired. Taking BBX-2 out of G90's list would have bent the ledger to the gate.
+Learning (R27): G53's rule in another form — a control keyed to a status the ledger can move breaks the day an honest
+entry moves it, and an append-only ledger makes RE-ANCHORED the status to key on. The gate's other plants key on
+CLAUDE.md's rule text and tags, which move only by an approved edit (R16). No further mechanism; a hazard line in
+HANDOFF. Rules re-anchored in fact: BBX-10, BBX-6.
