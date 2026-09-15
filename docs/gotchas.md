@@ -1863,3 +1863,16 @@ Learning (R27): count a large directory with `find`, never with a glob; a "since
 file the run writes; and a probe's count carries a positive control of its own shape. No harness mechanism: no gate
 counts the host's residue yet, and K9 (S6 step 4) is where a gate's residue is named from inside the run. No rule of §4
 is named here.
+
+## G100 — The runtime diagnostic's first draft named a gate it could not judge: whole seconds cannot hold a tenth of a runtime under ten seconds (paid: one probe run, caught before the commit; 2026-09-15)
+Run over the kept batteries under `build/` before its commit, the first draft of `readout.py`'s runtime line named
+`rulings_shape` as FAILED in 0 s where its header quotes ~1 s, in the battery at `8890e4e`. The runner keeps `seconds`
+as whole seconds (111 kept batteries, 2,939 rows, none fractional; a planted `0.5` counted), so a tenth of a ~1 s quote
+is 0.1 s and any sub-second FAIL reads 0: the line asserted a bail it could not see. Of 39 gate headers 35 quote a
+runtime and 23 of those quote under 10 s. The note now judges a FAIL only when a tenth of its quote is at least one
+second and lists the others as too short to judge in whole seconds (D88); over the same five readable batteries it
+lists four and judges one, `sweep_runner`, not named. The control `fast-fail-named` carries the case: g_s, 0 s under
+~1 s, listed and never named.
+Learning (R27): a threshold is compared with the resolution of the value it reads before the instrument's first real
+use, and its first real use is on kept data before any commit. No harness mechanism beyond D88's rule and its control.
+No rule of §4 is named here.

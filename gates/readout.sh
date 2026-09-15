@@ -21,7 +21,9 @@
 # NOT-ASSERTED: that a declared blind spot is true or complete: the screen prints what the header says
 # NOT-ASSERTED: the sweep runner's runs: only bbx-run-static --log and bbx-run-suite --log are read
 # NOT-ASSERTED: that a register row's class is true of its file: the suite screen prints what the register says (gates/provenance.sh keeps it complete and inside the vocabulary)
+# MUST-FIRE: known-bad: fast-fail-named — a kept run whose g_a FAILs in 0 s under a header quoting ~10 min, g_b in 5 s under ~10 s and g_s in 0 s under ~1 s must name g_a alone and list g_s as too short to judge in whole seconds, and the green run must print no runtime line, or BBX-11's diagnostic is prose (R64, rot class 6's candidate)
 # NOT-ASSERTED: that run.txt's tallies are right: where they and the kept rows disagree the screen names both and decides nothing, and a gate the runner counted without a row is named by its tier alone (G57)
+# NOT-ASSERTED: that a gate named on the runtime line bailed before measuring: a FAIL under a tenth of the runtime its header quotes is BBX-11's symptom, read against a quote written by hand (G29), and a failing gate whose header quotes none, or quotes under ten seconds, is listed, never judged (D88)
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME
@@ -259,6 +261,35 @@ grep -qx 'pass=5' "$T/r1c/run.txt" || fail "counts-disagree-named: the perturbat
 python3 -m bbx.readout "$T/r1c" > "$T/c9" 2>&1 || true
 if grep -qx "counts disagree: run.txt pass=5, kept rows 2 — the counts above are the kept rows'; this screen does not decide which is right (G57)" "$T/c9" && grep -q '^VERDICT: GREEN   PASS 2  SKIP 1 ' "$T/c9"; then echo "CONTROL FIRED: counts-disagree-named — run.txt's pass=5 against 2 kept PASS rows is named, and the verdict line still counts the rows"
 else fail "CONTROL DEAD: counts-disagree-named — $(grep -E '^(VERDICT|counts disagree)' "$T/c9" | tr '\n' '|')"; fi
+
+# 10. fast-fail-named: g_a FAILs in 0 s under a header quoting ~10 min, g_b in 5 s under ~10 s, g_s in 0 s under ~1 s (BBX-11; R64, rot class 6's candidate)
+cp -R "$FR" "$T/frf"
+sed 's/^# g_a.sh — passes, proves its control, declares two blind spots, reports coverage and a drift$/&, ~10 min/' "$FR/tests/g_a.sh" > "$T/frf/tests/g_a.sh"
+sed 's/^# g_b.sh — passes, declares no blind spot$/&, ~10 s/' "$FR/tests/g_b.sh" > "$T/frf/tests/g_b.sh"
+sed 's/^# g_s.sh — skips$/&, ~1 s/' "$FR/tests/g_s.sh" > "$T/frf/tests/g_s.sh"
+grep -q ', ~10 min$' "$T/frf/tests/g_a.sh" && grep -q ', ~10 s$' "$T/frf/tests/g_b.sh" && grep -q ', ~1 s$' "$T/frf/tests/g_s.sh" || fail "fast-fail-named: the perturbation did not apply to the three headers"
+cp -R "$T/r1" "$T/r1f"; sed -i.bak "s|^root=.*|root=$T/frf|; s/^verdict=GREEN/verdict=NOT GREEN/" "$T/r1f/run.txt"
+if ! python3 - "$T/r1f/results.tsv" <<'PY'
+import sys
+p = sys.argv[1]
+lines = open(p, encoding="utf-8").read().split("\n")
+head = lines[0].split("\t")
+g, v, s = head.index("gate"), head.index("verdict"), head.index("seconds")
+out, n = [lines[0]], 0
+for line in lines[1:]:
+    f = line.split("\t")
+    if len(f) == len(head) and f[g] in ("g_a", "g_b", "g_s"):
+        f[v], f[s], n = "FAIL", {"g_a": "0", "g_b": "5", "g_s": "0"}[f[g]], n + 1
+    out.append("\t".join(f))
+open(p, "w", encoding="utf-8").write("\n".join(out))
+sys.exit(0 if n == 3 else 1)
+PY
+then fail "fast-fail-named: the perturbation did not rewrite the three rows"; fi
+python3 -m bbx.readout "$T/r1f" > "$T/c10" 2>&1 || true
+if grep -qx "runtime (BBX-11): 1 of 3 failing gate(s) under a tenth of the runtime their header quotes; quoting under 10 s, too short to judge in whole seconds: g_s — rot class 6's candidate (R64)" "$T/c10" \
+   && grep -qx "  g_a FAILED in 0 s where its header quotes ~10 min: a gate that fails that fast bailed before measuring anything" "$T/c10" \
+   && ! grep -q '^  g_b FAILED' "$T/c10" && ! grep -q '^  g_s FAILED' "$T/c10" && ! grep -q '^runtime (BBX-11)' "$T/s1"; then echo "CONTROL FIRED: fast-fail-named — g_a's FAIL in 0 s under ~10 min is named, g_b's in 5 s under ~10 s is not, g_s's under ~1 s is listed as too short to judge, and the green run prints no runtime line"
+else fail "CONTROL DEAD: fast-fail-named — $(grep -A2 '^runtime' "$T/c10" | tr '\n' '|')"; fi
 
 echo "== 5. R48 and G48: a skipped gate's declarations are set aside, named and never counted as proved; a gate with no controls line is named =="
 cat > "$FR/tests/g_k.sh" <<'G'

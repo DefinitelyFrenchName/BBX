@@ -22,7 +22,11 @@ left in a log is a number the maintainer never saw (bbx-3's first fix); BBX-14 m
 verdict differs; the newest re-baseline line. The gate counts are the kept rows' reconciled with every tally
 run.txt records (G57): gates the runner counted as SKIP and kept no row for — a tier it did not run — are added to
 SKIP and named with their tier, and any other tally the rows do not reproduce is printed as a disagreement, never
-resolved. A kept SUITE run (run.txt carries
+resolved. A NOT GREEN run's FAIL rows are read against the runtime each gate's header quotes, through the gate
+index's own reader over the whole header (G29): a FAIL under a tenth of that runtime is named on a `runtime (BBX-11)`
+line; a failing gate whose header quotes none is listed and never judged, and so is one whose quote is under ten
+seconds, whose tenth the run's whole seconds cannot hold (D88; rot class 6's candidate, R64); a run with no FAIL row
+prints no such line. A kept SUITE run (run.txt carries
 `expset=`) gets its own screen (S2 step 4): the findings counted apart, the
 expectations relied upon as a histogram by R11 class from the register beside
 the tree, which classes PASSed on a pairing that is not fixture-class; since S3
@@ -248,6 +252,46 @@ def suite_screen(run, meta, rows, against):
     return 0 if ok else 1
 
 
+FAST_FAIL_FACTOR = 10     # D88: a FAIL under a tenth of the runtime its header quotes is named (BBX-11)
+RESOLUTION_S = 1          # D88: results.tsv keeps whole seconds, so a limit under one second cannot be judged
+UNIT_SECONDS = {"s": 1, "sec": 1, "min": 60, "h": 3600, "hour": 3600, "hours": 3600}   # the units of [gate_header].duration_regex
+
+
+def fast_failures(meta, rows, gates_dir):
+    """BBX-11 over the kept FAIL rows: (fast, unquoted, unjudged, failing). `fast` holds (gate, seconds, quote) for
+    each FAIL whose seconds are under 1/FAST_FAIL_FACTOR of the runtime its header quotes, the quote read by the gate
+    index's reader, first_duration over the whole header, with the run's own config (G29); `unquoted` the failing
+    gates whose header quotes no runtime or was not found; `unjudged` those whose limit is under RESOLUTION_S, which
+    the kept whole seconds cannot tell from 0. Rot class 6's candidate (R64, docs/rot.toml)."""
+    failing = [r for r in rows if r.get("verdict") == "FAIL"]
+    if not failing:
+        return [], [], [], 0
+    from . import config as C, gen_gate_index as G
+    cfg_path = meta.get("config", "")
+    try:
+        settings = G.Settings(C.load(cfg_path) if cfg_path and os.path.isfile(cfg_path) else {})
+    except (OSError, KeyError, C.toml_subset.SubsetError):
+        settings = G.Settings({})
+    fast, unquoted, unjudged = [], [], []
+    for r in failing:
+        gp = os.path.join(gates_dir, r["gate"] + ".sh")
+        quote = G.first_duration(G.header_text(gp, whole=True), settings) if os.path.isfile(gp) else ""
+        m = re.match(r"^~(\d+(?:\.\d+)?) (\S+)$", quote)
+        try:
+            secs = float(r.get("seconds", ""))
+        except ValueError:
+            secs = None
+        if not m or m.group(2) not in UNIT_SECONDS or secs is None:
+            unquoted.append(r["gate"])
+            continue
+        limit = float(m.group(1)) * UNIT_SECONDS[m.group(2)] / FAST_FAIL_FACTOR
+        if limit < RESOLUTION_S:
+            unjudged.append(r["gate"])
+        elif secs < limit:
+            fast.append((r["gate"], r["seconds"], quote))
+    return fast, unquoted, unjudged, len(failing)
+
+
 def main(argv=None):
     argv = list(sys.argv[1:] if argv is None else argv)
     against = None
@@ -408,6 +452,14 @@ def main(argv=None):
               f"kept SKIP rows {counts['SKIP']}; G57)")
     if counts["FAIL"] or counts["TIMEOUT"] or counts["MISSING"]:
         print("not green: " + ", ".join(f"{r['gate']} {r['verdict']}" for r in rows if r["verdict"] in ("FAIL", "TIMEOUT", "MISSING")))
+    fast, unquoted, unjudged, nfail = fast_failures(meta, rows, gates_dir)
+    if nfail:
+        short = f"; quoting under {FAST_FAIL_FACTOR * RESOLUTION_S} s, too short to judge in whole seconds: " + ", ".join(unjudged)
+        print(f"runtime (BBX-11): {len(fast)} of {nfail} failing gate(s) under a tenth of the runtime their header quotes"
+              f"{'; quoting none or not found: ' + ', '.join(unquoted) if unquoted else ''}{short if unjudged else ''}"
+              f" — rot class 6's candidate (R64)")
+        for g, s, q in fast:
+            print(f"  {g} FAILED in {s} s where its header quotes {q}: a gate that fails that fast bailed before measuring anything")
     ok = verdict == "GREEN" and bbx14 is not False
     return 0 if ok else 1
 
