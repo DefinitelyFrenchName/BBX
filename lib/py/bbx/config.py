@@ -31,7 +31,6 @@ DEFAULTS = {
         "kind": "frame-driven",      # D9: which KIND PROFILE fills the second layer (bbh configs carry no kind)
         "gates_dir": "tests",
         "gate_glob": "*.sh",
-        "lib_dir": "tests/lib",
         "runner_prefixes": ["run_"],
         "manual_suffixes": ["_soak"],
         "instrument_word": "instrument",
@@ -249,7 +248,7 @@ KINDS = {
                                    ["schema", "schema", "EVAL", "json"], ["band", "tolerant-numeric", "EVAL", "bands"]]},
     },
     "self": {
-        "project": {"gates_dir": "gates", "lib_dir": "lib/sh", "instrument_word": "instrument"},
+        "project": {"gates_dir": "gates", "instrument_word": "instrument"},
         "registries": {"portable": "gates/portable.txt", "static": "gates/static.txt",
                        "sweep": "gates/sweep.tsv", "static_needs_env": "BBX_BBH_HOME"},
         "sweep": {"input_env": "BBX_BBH_HOME", "log_dir_prefix": "build/sweep_"},

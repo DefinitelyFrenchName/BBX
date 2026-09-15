@@ -1,0 +1,259 @@
+# docs/documents.toml — the documents register (BBX-20; ruled R62, 2026-09-14): one bare table per
+# tracked markdown page, every field named. Checked by `bbx documents --check` (lib/py/bbx/documents.py):
+# complete both ways against `git ls-files '*.md'`; `shape` one of the fifteen of D82; a page whose
+# leading lines carry `Shape:` names the row's shape as that line's first word; a `living` or `history`
+# row names its twin (which names it back) or `none — <reason>`, and any other row's twin is empty;
+# `routed_by` is `root` for the one map everything starts from, and otherwise a `map` or `census` page
+# that names this page by its path. Hand-written; a new page gets its row in the commit that adds it.
+
+[d1]
+file = "CLAUDE.md"
+shape = "constitution"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d2]
+file = "DECISIONS.md"
+shape = "living"
+twin = "DECISIONS_HISTORY.md"
+routed_by = "HANDOFF.md"
+
+[d3]
+file = "DECISIONS_HISTORY.md"
+shape = "history"
+twin = "DECISIONS.md"
+routed_by = "HANDOFF.md"
+
+[d4]
+file = "FIRST_PROMPT.md"
+shape = "history"
+twin = "none — the session-1 brief, kept as it was given"
+routed_by = "HANDOFF.md"
+
+[d5]
+file = "HANDOFF.md"
+shape = "map"
+twin = ""
+routed_by = "root"
+
+[d6]
+file = "README.md"
+shape = "living"
+twin = "none — rewritten after a close with its numbers dated to a commit; its history is the commit log"
+routed_by = "HANDOFF.md"
+
+[d7]
+file = "STATE.md"
+shape = "living"
+twin = "STATE_HISTORY.md"
+routed_by = "HANDOFF.md"
+
+[d8]
+file = "STATE_HISTORY.md"
+shape = "history"
+twin = "STATE.md"
+routed_by = "HANDOFF.md"
+
+[d9]
+file = "docs/abstraction.md"
+shape = "proposal"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d10]
+file = "docs/bins.md"
+shape = "map"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d11]
+file = "docs/bins/bbh.md"
+shape = "census"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d12]
+file = "docs/bins/sms.md"
+shape = "census"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d13]
+file = "docs/bins/vampiresaved.md"
+shape = "census"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d14]
+file = "docs/census/README.md"
+shape = "reference"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d15]
+file = "docs/census/bbh.md"
+shape = "census"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d16]
+file = "docs/census/bbx_files.md"
+shape = "census"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d17]
+file = "docs/census/sms.md"
+shape = "census"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d18]
+file = "docs/census/vampiresaved.md"
+shape = "census"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d19]
+file = "docs/controls.md"
+shape = "reference"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d20]
+file = "docs/defaults.md"
+shape = "register"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d21]
+file = "docs/fidelity.md"
+shape = "proposal"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d22]
+file = "docs/generality.md"
+shape = "proposal"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d23]
+file = "docs/gotchas.md"
+shape = "ledger"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d24]
+file = "docs/plans/S2.md"
+shape = "proposal"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d25]
+file = "docs/plans/S3.md"
+shape = "proposal"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d26]
+file = "docs/plans/S4.md"
+shape = "proposal"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d27]
+file = "docs/plans/S5.md"
+shape = "proposal"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d28]
+file = "docs/plans/S6.md"
+shape = "proposal"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d29]
+file = "docs/platforms/README.md"
+shape = "procedure"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d30]
+file = "docs/platforms/linux-native/README.md"
+shape = "kept-run"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d31]
+file = "docs/platforms/wsl/README.md"
+shape = "kept-run"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d32]
+file = "docs/readout.md"
+shape = "readout"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d33]
+file = "docs/rebaselines.md"
+shape = "ledger"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d34]
+file = "docs/rules.md"
+shape = "generated"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d35]
+file = "docs/rulings.md"
+shape = "queue"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d36]
+file = "docs/slices.md"
+shape = "proposal"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d37]
+file = "drivers/README.md"
+shape = "reference"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d38]
+file = "fixture/docset/subject/overview.md"
+shape = "fixture"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d39]
+file = "fixture/docset/subject/ranks.md"
+shape = "fixture"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d40]
+file = "fixture/docset/subject/weights.md"
+shape = "fixture"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d41]
+file = "skill/bbx/GUIDE.md"
+shape = "generated"
+twin = ""
+routed_by = "HANDOFF.md"
+
+[d42]
+file = "skill/bbx/SKILL.md"
+shape = "generated"
+twin = ""
+routed_by = "HANDOFF.md"

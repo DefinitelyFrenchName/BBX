@@ -18,6 +18,8 @@
 #   bbx skill-guide [--config C] [--root DIR] [--check] [--prefix P]  the GENERATED GUIDE.md beside a SKILL.md (lib/py/bbx/gen_skill_guide.py; S5)
 #   bbx reanchors [--root DIR] [--rules P] [--ledger P] [--through N] [--against T]   which rules the incident ledger re-anchors (lib/py/bbx/reanchors.py; S5, R53)
 #   bbx skill-gen [--config C] [--root DIR] [--check] [--prefix P]    the GENERATED SKILL.md and its anchor page (lib/py/bbx/gen_skill.py; S5, R51, R52)
+#   bbx defaults --check [--root DIR] [--register P]    the defaults register both ways against the code, and every default's reader (lib/py/bbx/defaults.py; S6, R61, R66)
+#   bbx documents --check [--root DIR] [--register P]   every tracked page's shape, twin and route (lib/py/bbx/documents.py; S6, R62)
 #
 # Every subcommand finds the harness from THIS file's location, so the
 # harness can live anywhere; the consumer is found from --config / $BBX_CONFIG
@@ -25,7 +27,7 @@
 # from bbh bin/bbh.
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME
-[ $# -ge 1 ] || { sed -n '2,23p' "$0"; exit 2; }
+[ $# -ge 1 ] || { sed -n '2,25p' "$0"; exit 2; }
 cmd="$1"; shift
 PYTHONPATH="$BBX_HOME/lib/py${PYTHONPATH:+:$PYTHONPATH}"; export PYTHONPATH
 case "$cmd" in
@@ -42,8 +44,10 @@ check-skills) exec python3 -m bbx.checkskills "$@" ;;
 skill-guide)  exec python3 -m bbx.gen_skill_guide "$@" ;;
 reanchors)    exec python3 -m bbx.reanchors "$@" ;;
 skill-gen)    exec python3 -m bbx.gen_skill "$@" ;;
+defaults)     exec python3 -m bbx.defaults "$@" ;;
+documents)    exec python3 -m bbx.documents "$@" ;;
 compare)      _t="${1:?bbx compare <flicker|window|composite|diverge|propose> ...}"; shift; case "$_t" in flicker|window|composite|exact|set|schema|band) exec python3 -m "bbx.compare_$_t" "$@" ;; diverge) exec python3 -m bbx.check_diverge "$@" ;; propose) exec python3 -m bbx.propose_temporal "$@" ;; *) echo "bbx compare: unknown class tool '$_t'" >&2; exit 2 ;; esac ;;
 selftest)     cd "$BBX_HOME" && exec "$BBX_HOME/bin/bbx-run-static" --config "$BBX_HOME/bbx.toml" "$@" ;;
--h|--help|help) sed -n '2,23p' "$0"; exit 0 ;;
+-h|--help|help) sed -n '2,25p' "$0"; exit 0 ;;
 *) echo "bbx: unknown command '$cmd' (try bbx help)" >&2; exit 2 ;;
 esac

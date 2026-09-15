@@ -8,7 +8,6 @@ root = "."
 kind = "self"
 gates_dir = "gates"
 gate_glob = "*.sh"
-lib_dir = "lib/sh"
 runner_prefixes = ["run_"]
 manual_suffixes = ["_soak"]
 instrument_word = "instrument"

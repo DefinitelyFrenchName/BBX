@@ -30,3 +30,4 @@ file_census_tool
 census_register
 registry_complete
 skills
+registers

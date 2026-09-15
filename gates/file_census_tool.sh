@@ -37,7 +37,6 @@ root = "."
 kind = "self"
 gates_dir = "gates"
 gate_glob = "*.sh"
-lib_dir = "lib/sh"
 [registries]
 portable = "gates/portable.txt"
 static = "gates/static.txt"
