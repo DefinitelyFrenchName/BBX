@@ -26,7 +26,7 @@ stays GREEN at `429d3f8` and attests that commit only; native Linux is a PARTIAL
 run). At the close, G90's list re-anchored BBX-2 and stopped a skills gate control keyed to BBX-2's old status; the control
 was re-keyed to a re-anchored rule (`0ee5bfb`, G93). Gotchas G1–G94; retractions X1–X68.
 
-**Open rulings: none.** R0–R66 are answered and recorded in `DECISIONS.md`. The maintainer's words with R49 stand as
+**Open rulings: none.** R0–R68 are answered and recorded in `DECISIONS.md`. The maintainer's words with R49 stand as
 a rule of method: discipline is never arbitrated — only the method of applying it, on time or practicality. The
 maintainer's caveat on TSV stands the same way (R34, R40, restated at R62): a new register or row file is a TOML-subset
 file.
@@ -42,7 +42,8 @@ bbh's `example/`, `fixture/docset/`, `fixture/fakecli/`, `fixture/unittest/`,
 `fixture/selfgates/` (R14, R15, R37, R38). **BBX's own harness files are
 measured by a gate**, not by a document (`docs/census/bbx_files.md`, generated;
 R39, D62, D63): regenerated at the bbx-29 close at identity `bc53b3b479db`, 35 gates, 51 rows for
-51 harness files, and `bbx file-census --self --check-register` reads no drift. **BBX's own registers are checked every
+51 harness files; `bbx file-census --self --check-register` reads `census-drift` since G91's fix moved the identity to
+`8e866d016187` (bbx-30), until the census is regenerated. **BBX's own registers are checked every
 battery** since bbx-29: `docs/defaults.md` (K3) and `docs/documents.toml` (K4), by `gates/registers.sh`.
 
 **Lineage, measured 2026-09-09** (`docs/census/README.md`):
@@ -73,9 +74,10 @@ not_recountable=56`); the two added at bbx-2 are host facts the clone
 exposed (G13, rule 7), the only exception ever allowed to move it upward. Grammar in
 `docs/census/README.md`.
 
-**Next:** (1) **G91's small fix (R27)**: `gates/registry_complete.sh` refuses a registered gate that is not executable.
-(2) **S6 step 3** (`docs/plans/S6.md` §10; R63, R64): K6, references and ids in living pages; K7, the gate index; K8, the
-trap lint; F19 as a static fidelity gate. (3) **BBX-2's tag promotion** in CLAUDE.md, for the maintainer's approval.
+**Next:** (1) **G91's small fix (R27)** — built at bbx-30 (`92d7f4f`, the self subject refrozen `16ccfd7`):
+`gates/registry_complete.sh` refuses a registered gate on disk that is not executable. (2) **S6 step 3** (`docs/plans/S6.md`
+§10; R63, R68): K7, the gate index; K8, the trap lint; F19 as a static fidelity gate. K6, references and ids in living
+pages, moved to step 4 after K5 under R67. (3) **BBX-2's tag promotion** in CLAUDE.md, for the maintainer's approval.
 (4) bbh issue #2, bbh's to answer. **Standing with S4's DONE ruling:** BBX-25's scope and status are gone over again as
 F20 lands (S7's row in `docs/slices.md`). **Standing with S5's:** the ledger reader, the skill generator and the
 `integers` vocabulary stay BBX's own, never called generic, until a second consumer is in view (`docs/generality.md`);

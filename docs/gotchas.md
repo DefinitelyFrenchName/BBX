@@ -1795,3 +1795,18 @@ under `caffeinate -i` and its window holds no sleep event.
 Learning (R27): on battery power the host sleeps a background battery the way low memory stopped one (G80), and a
 runtime three times the usual is read against `pmset -g log` before any gate is suspected. No harness mechanism; a
 hazard line in HANDOFF. No rule of §4 is named here: the incident is the host's power policy.
+
+## G95 — Two K6 probes resolved paths through the working tree, where an ignored kept battery exists on this host only, and two counts shown to the maintainer were each one off (paid: one probe re-run on a clone and one diff, under a minute, before any commit; 2026-09-15)
+`docs/plans/S6_probes/probe_k6_scope.py` and `probe_k6_variants.py`, written for R67, counted a token as resolving when
+`os.path.exists` found it, which reads the working tree. Run in the tree at `16ccfd7` they read 746 resolving and 59
+under a lineage prefix over R64's 18 pages, and 498 and 32 over R67's 11; the same probes on a plain clone of
+`16ccfd7` read 745 and 60, and 497 and 33, every unresolved count the same (17, 6, 3). A diff of the two readings,
+with the tree's ignored build directory linked into a second clone, named one token: the kept battery
+`build/selftest_20260915_094158` at `HANDOFF.md:72`, present on this host and on no clone. The R67 question had
+already shown the maintainer 746 and 59, 498 and 32; its options differed in their unresolved counts, which did not
+move, and the ruling was recorded with the clone's numbers. The diff's first invocation passed eighteen page names as
+one word, since zsh does not split an unquoted variable (G75's shape), and stopped on a traceback.
+Learning (R27): a claim about a commit is read from what the commit tracks. The probes now resolve among the tracked
+files and their directories, with a control in each direction, and S6's plan gives K6 the same rule and the control
+`ignored-file-not-resolved`; a number read in the tree is re-read on a clone before it is quoted. A hazard line in
+HANDOFF. Rules re-anchored in fact: BBX-16, BBX-29.
