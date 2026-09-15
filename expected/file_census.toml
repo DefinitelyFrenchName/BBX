@@ -8,7 +8,7 @@
 [spec]
 class = "self"
 # measured_at is R38's whole-set key over bin, lib, drivers, gates — NOT HEAD
-measured_at = "5059aa730eb59e148cdf06909b896b604f3977f0"
+measured_at = "b9009dc1057c5cba0061b486c9cfe730249d0fdc"
 mode = "shrink-only"
 
 [f1]
@@ -112,97 +112,105 @@ file = "lib/py/bbx/controls.py"
 kinds = "KDC"
 
 [f26]
+file = "lib/py/bbx/defaults.py"
+kinds = "K"
+
+[f27]
 file = "lib/py/bbx/docset.py"
 kinds = "DC"
 
-[f27]
-file = "lib/py/bbx/expectations.py"
-kinds = "KFDC"
-
 [f28]
-file = "lib/py/bbx/file_census.py"
+file = "lib/py/bbx/documents.py"
 kinds = "K"
 
 [f29]
+file = "lib/py/bbx/expectations.py"
+kinds = "KFDC"
+
+[f30]
+file = "lib/py/bbx/file_census.py"
+kinds = "K"
+
+[f31]
 file = "lib/py/bbx/finding.py"
 kinds = "FDC"
 
-[f30]
+[f32]
 file = "lib/py/bbx/fingerprint.py"
 kinds = "KFDC"
 
-[f31]
+[f33]
 file = "lib/py/bbx/gen_skill.py"
 kinds = "K"
 
-[f32]
+[f34]
 file = "lib/py/bbx/gen_skill_guide.py"
 kinds = "KF"
 
-[f33]
+[f35]
 file = "lib/py/bbx/logfmt.py"
 kinds = "FDC"
 
-[f34]
+[f36]
 file = "lib/py/bbx/propose_temporal.py"
 kinds = "F"
 
-[f35]
+[f37]
 file = "lib/py/bbx/provenance.py"
 kinds = "KDC"
 
-[f36]
+[f38]
 file = "lib/py/bbx/readout.py"
 kinds = "KDC"
 
-[f37]
+[f39]
 file = "lib/py/bbx/reanchors.py"
 kinds = "K"
 
-[f38]
+[f40]
 file = "lib/py/bbx/recount.py"
 kinds = "KFDC"
 
-[f39]
+[f41]
 file = "lib/py/bbx/rulings_shape.py"
 kinds = "K"
 
-[f40]
+[f42]
 file = "lib/py/bbx/sha1.py"
-kinds = "DC"
+kinds = "KDC"
 
-[f41]
+[f43]
 file = "lib/py/bbx/thresholds.py"
 kinds = "F"
 
-[f42]
+[f44]
 file = "lib/py/bbx/tier.py"
 kinds = "KFC"
 
-[f43]
+[f45]
 file = "lib/py/bbx/toml_subset.py"
 kinds = "KFDC"
 
-[f44]
+[f46]
 file = "lib/sh/baseline.sh"
 kinds = "F"
 
-[f45]
+[f47]
 file = "lib/sh/classify.sh"
 kinds = "KFC"
 
-[f46]
+[f48]
 file = "lib/sh/compare.sh"
 kinds = "FDC"
 
-[f47]
+[f49]
 file = "lib/sh/config.sh"
 kinds = "KFDC"
 
-[f48]
+[f50]
 file = "lib/sh/expectation_kinds.sh"
 kinds = "KFDC"
 
-[f49]
+[f51]
 file = "lib/sh/registry.sh"
 kinds = "KFC"
