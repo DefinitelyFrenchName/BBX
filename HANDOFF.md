@@ -155,7 +155,7 @@ by construction (the recount's clone) and by `fidelity_bbh`'s proof.
 - **bbx-28 closed (2026-09-14): S6's plan written, and R59–R65 ruled the same sitting** (`docs/plans/S6.md`; R62
   and R64 as TOML registers — the maintainer declined TSV again, R34's and R40's caveat). No harness file changed this
   sitting. On this host the battery is green — the close's pair is quoted in `docs/readout.md`, CLOSE — bbx-28.
-- **No ruling open.** R0–R65 are answered; R59–R65 were raised by S6's plan and ruled at bbx-28.
+- **No ruling open.** R0–R66 are answered; R59–R65 were raised by S6's plan and ruled at bbx-28; R66 was raised by S6 step 1's measurement and ruled at bbx-29 (both parts land in step 2: `[project].lib_dir` removed, K3's reader direction).
 - **S5 ruled DONE by the maintainer after the bbx-27 close** (2026-09-14), on its slice readout, with a rider on BBX-25
   following S4's precedent: the ledger reader, the skill generator with its page and the `integers` vocabulary stay BBX's
   own, never called generic, and are gone over again when a second consumer is in view (`docs/readout.md`, "bbx-27,

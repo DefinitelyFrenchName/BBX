@@ -26,7 +26,7 @@ identity `5059aa730eb5` and the self subject stand. The close's pair is quoted i
 **The WSL platform row stays GREEN at `429d3f8` and attests that commit only; native Linux is a PARTIAL row** at
 `f6f136d` (the static tier not run). Gotchas G1–G85; retractions X1–X67.
 
-**Open rulings: none.** R0–R65 are answered and recorded in `DECISIONS.md`. The maintainer's words with R49 stand as
+**Open rulings: none.** R0–R66 are answered and recorded in `DECISIONS.md` (R66, bbx-29: `[project].lib_dir` removed from BBX and K3's reader direction, both in S6 step 2). The maintainer's words with R49 stand as
 a rule of method: discipline is never arbitrated — only the method of applying it, on time or practicality. The maintainer's caveat on TSV stands the same way (R34, R40, restated at R62): a new
 register or row file is a TOML-subset file.
 In force since bbx-2: R18 (the census and the tests
