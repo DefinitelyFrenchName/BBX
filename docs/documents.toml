@@ -257,3 +257,9 @@ file = "skill/bbx/SKILL.md"
 shape = "generated"
 twin = ""
 routed_by = "HANDOFF.md"
+
+[d43]
+file = "docs/gates.md"
+shape = "generated"
+twin = ""
+routed_by = "HANDOFF.md"

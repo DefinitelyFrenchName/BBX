@@ -31,3 +31,5 @@ census_register
 registry_complete
 skills
 registers
+trap_lint
+gate_index

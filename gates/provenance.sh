@@ -12,7 +12,7 @@
 # MUST-FIRE: known-bad: file-named-twice — a second row for one file must be REFUSED, or a hand-edited register carries two answers
 # MUST-FIRE: known-bad: row-untracked — a row naming a file git ignores must FAIL naming it, or an expectation present here and absent from every clone reads as frozen (G22: the fixture's three truth logs, one sitting)
 # NOT-ASSERTED: that a row's class is TRUE of its file: the register is written by hand at the freeze; only completeness and the vocabulary are checked
-# NOT-ASSERTED: bbh's example register (markdown, a consumer list of classes): it is bbh's and F19 (S6) reads it under R11
+# NOT-ASSERTED: bbh's example register (markdown, a consumer list of classes): it is bbh's, binned consumer by R63, and no F19 pair reads it (gates/fidelity_bbh_s6.sh pairs the gate index and the trap lint)
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME

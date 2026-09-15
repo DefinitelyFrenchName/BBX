@@ -44,3 +44,27 @@ fail_tail = 12
 
 [controls]
 enforce = true
+
+[gate_header]
+# the gate index, docs/gates.md (bbx gate-index; S6 step 3, R63, R68): generated from each gate's own
+# header, the family register gates/families.toml and the registries; gates/gate_index.sh fails when it
+# is stale. BBX's session token is bbx-N; the two further columns are R68's.
+index_out = "docs/gates.md"
+families_tsv = "gates/families.toml"
+session_regex = '\b(bbx-\d+|20\d\d-\d\d-\d\d)'
+columns = ["controls", "blind spots"]
+families = [["runner", "the runners, the classifier, the tiers, the controls contract and the readout: the kernel's own ground truth"],
+            ["comparison", "the comparator families, their dispatch, the expectation kinds and the provenance register"],
+            ["kinds", "the subject kinds end to end: fixtures, drivers, suites and the two adapters"],
+            ["fidelity", "the lineage pairs: BBX's lifted tools against bbh's over the same inputs"],
+            ["census", "the censuses: the lineage's counts and BBX's own file census"],
+            ["registers", "the registers and the pages: rulings, close sweeps, skills, defaults, documents, the gate index and the trap lint"]]
+index_preamble = ["# Gates — the index (GENERATED)",
+                  "",
+                  "Shape: generated, written by `bbx gate-index --config bbx.toml` from each gate's own header, the family",
+                  "register `gates/families.toml` and the registries, never hand-edited: `bbx gate-index --check`, run by",
+                  "`gates/gate_index.sh`, fails when this page is stale. One row per gate under `gates/`, grouped by family:",
+                  "`locks` is the first paragraph of the gate's header, cut near 240 characters; `needs` is nothing for a",
+                  "portable gate, the static tier's variable for a static one, and for an instrument gate the runtime its",
+                  "header quotes; `since` is the first session its header names; `controls` its declared must-fire controls",
+                  "by shape; `blind spots` the count of its `NOT-ASSERTED:` lines. Reachable from `HANDOFF.md`."]

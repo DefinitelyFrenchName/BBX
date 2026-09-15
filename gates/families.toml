@@ -1,0 +1,162 @@
+# gates/families.toml — the family of every gate under gates/, the one hand-maintained input of
+# `bbx gate-index` (ruled R68, S6 step 3): one bare table per gate with `gate` and `family`, and optional
+# `needs` and `since` overrides. docs/gates.md is GENERATED from this, the registries and each gate's
+# own header. Completeness is checked both ways by `bbx gate-index --check` (gates/gate_index.sh): a gate
+# with no table, a table whose gate is gone, and a gate named by two tables each fail. The families and
+# their order are [gate_header].families in bbx.toml. A new gate gets its table in the commit that adds it.
+
+[g1]
+gate = "gates/adapters.sh"
+family = "kinds"
+
+[g2]
+gate = "gates/band.sh"
+family = "comparison"
+
+[g3]
+gate = "gates/census_recount.sh"
+family = "census"
+
+[g4]
+gate = "gates/census_register.sh"
+family = "census"
+
+[g5]
+gate = "gates/classify.sh"
+family = "runner"
+
+[g6]
+gate = "gates/cli_driver.sh"
+family = "kinds"
+
+[g7]
+gate = "gates/cli_fixture.sh"
+family = "kinds"
+
+[g8]
+gate = "gates/cli_suite.sh"
+family = "kinds"
+
+[g9]
+gate = "gates/close_sweeps.sh"
+family = "registers"
+
+[g10]
+gate = "gates/compare_dispatch.sh"
+family = "comparison"
+
+[g11]
+gate = "gates/config.sh"
+family = "runner"
+
+[g12]
+gate = "gates/controls.sh"
+family = "runner"
+
+[g13]
+gate = "gates/docset_driver.sh"
+family = "kinds"
+
+[g14]
+gate = "gates/docset_fixture.sh"
+family = "kinds"
+
+[g15]
+gate = "gates/docset_suite.sh"
+family = "kinds"
+
+[g16]
+gate = "gates/expectation_kinds.sh"
+family = "comparison"
+
+[g17]
+gate = "gates/fidelity_bbh.sh"
+family = "fidelity"
+
+[g18]
+gate = "gates/fidelity_bbh_s2.sh"
+family = "fidelity"
+
+[g19]
+gate = "gates/fidelity_bbh_s5.sh"
+family = "fidelity"
+
+[g20]
+gate = "gates/file_census.sh"
+family = "census"
+
+[g21]
+gate = "gates/file_census_tool.sh"
+family = "census"
+
+[g22]
+gate = "gates/fingerprint.sh"
+family = "runner"
+
+[g23]
+gate = "gates/json_schema.sh"
+family = "comparison"
+
+[g24]
+gate = "gates/provenance.sh"
+family = "comparison"
+
+[g25]
+gate = "gates/readout.sh"
+family = "runner"
+
+[g26]
+gate = "gates/registers.sh"
+family = "registers"
+
+[g27]
+gate = "gates/registry_complete.sh"
+family = "runner"
+
+[g28]
+gate = "gates/rulings_shape.sh"
+family = "registers"
+
+[g29]
+gate = "gates/set_schema.sh"
+family = "comparison"
+
+[g30]
+gate = "gates/skills.sh"
+family = "registers"
+
+[g31]
+gate = "gates/static_runner.sh"
+family = "runner"
+
+[g32]
+gate = "gates/suite.sh"
+family = "kinds"
+
+[g33]
+gate = "gates/sweep_runner.sh"
+family = "runner"
+
+[g34]
+gate = "gates/temporal.sh"
+family = "comparison"
+
+[g35]
+gate = "gates/thresholds.sh"
+family = "comparison"
+
+[g36]
+gate = "gates/tier.sh"
+family = "runner"
+
+[g37]
+gate = "gates/trap_lint.sh"
+family = "registers"
+
+[g38]
+gate = "gates/gate_index.sh"
+family = "registers"
+
+[g39]
+gate = "gates/fidelity_bbh_s6.sh"
+family = "fidelity"
