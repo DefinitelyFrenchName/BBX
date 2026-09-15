@@ -74,7 +74,7 @@ the lineage pairs: BBX's lifted tools against bbh's over the same inputs.
 | `gates/fidelity_bbh.sh` | test | static | BBX_BBH_HOME | the generic runners, classifiers and the fingerprint reproduce bbh's verdict text byte for byte over bbh's own fixtures (F13, F14, F15) THE FIDELITY OBLIGATION (CLAUDE.md §2, §7.2; docs/fidelity.md): | 2026-09-09 | 1 perturbed-copy | 3 |
 | `gates/fidelity_bbh_s2.sh` | test | static | BBX_BBH_HOME | the lifted suite, dispatcher and temporal family reproduce bbh's verdict text byte for byte over the same inputs (F12, F16, F17) THE FIDELITY OBLIGATION for slice S2 (CLAUDE.md §7.2; docs/fidelity.md): | 2026-09-10 | 3 perturbed-copy | 3 |
 | `gates/fidelity_bbh_s5.sh` | test | static | BBX_BBH_HOME | BBX's lifted skills lock and guide generator reproduce bbh's verdict text byte for byte over the same skills (F18) THE FIDELITY OBLIGATION for slice S5 (CLAUDE.md §7.2; docs/fidelity.md F18; ruling R56): | — | 1 perturbed-copy, 1 shadow-tool | 5 |
-| `gates/fidelity_bbh_s6.sh` | test | static | BBX_BBH_HOME | BBX's lifted gate index and trap lint reproduce bbh's printed text and exit byte for byte over bbh's example and bbh's own selftest cases (F19) THE FIDELITY OBLIGATION for S6's two lifts (CLAUDE.md §7.2; docs/fidelity.md F19; | — | 1 shadow-tool | 3 |
+| `gates/fidelity_bbh_s6.sh` | test | static | BBX_BBH_HOME | BBX's lifted gate index and trap lint reproduce bbh's printed text and exit byte for byte over bbh's example and bbh's own selftest cases (F19) THE FIDELITY OBLIGATION for S6's two lifts (CLAUDE.md §7.2; docs/fidelity.md F19; | — | 1 perturbed-copy, 1 shadow-tool | 5 |
 
 ## census
 

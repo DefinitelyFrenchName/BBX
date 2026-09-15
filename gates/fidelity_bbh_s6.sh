@@ -10,15 +10,20 @@
 # BBX's deltas are neutral over these inputs because none reaches one: every index is LF, every family file a TSV,
 # no config names a column, no directory is missing, and no file without a .sh name carries a shell shebang;
 # gates/gate_index.sh and gates/trap_lint.sh assert the deltas. Every planted $ and < is an octal escape (G89).
+# D85 (G96): every key of bbh's DEFAULTS["gate_header"], imported from the clone, is compared by value with what BBX's
+# resolver returns for a config naming no kind, so bbh's literals written under another kind's name read as a difference.
 # Usage: BBX_BBH_HOME=~/Developer/blackbox-harness gates/fidelity_bbh_s6.sh     (static tier)
 # SKIP: BBX_BBH_HOME unset or not a bbh tree (exit 0; asserts nothing).
 # READ-ONLY (R18, R20): bbh on a PLAIN LOCAL CLONE of the baseline (lib/sh/baseline.sh, docs/defaults.md D20) under
 # TMPDIR, required clean of tracked, untracked and ignored entries after the run; every perturbed input is a copy;
 # PYTHONDONTWRITEBYTECODE=1 for the whole gate.
 # MUST-FIRE: shadow-tool: verdict-text-f19 — a shadow BBX home whose lifted gate index prints one verdict string changed and whose lifted lint prints its hit line changed must make an F19a pair and an F19b pair each differ, or the diff cannot fail
+# MUST-FIRE: perturbed-copy: d85-profile-misplaced — a copy of BBX's lib/py whose config.py has lost the frame-driven profile's gate_header table (G96's near-miss: bbh's literals under no kind a bbh config resolves to) must make D85 read more keys differing than the tree reads, or D85 is held by nothing
 # NOT-ASSERTED: bbh's and BBX's text on an input that reaches a delta — a CRLF index, a TOML family file, a named column, a missing directory, a shell file with no .sh name: those pairs differ by design, and gates/gate_index.sh and gates/trap_lint.sh assert BBX's side
 # NOT-ASSERTED: the usage text, the --help text and the lint's bad-argument message of the two lifted tools, which name bbx by design; no pair asks for them
 # NOT-ASSERTED: that an index or a lint is right about anything: identical output on both sides is fidelity, not truth
+# NOT-ASSERTED: the gate_header keys bbh's DEFAULTS lack (columns, R68), which gates/gate_index.sh's columns-by-config asserts, and bbh's defaults at any commit but the one this gate clones, which a rebaseline re-reads here (docs/rebaselines.md)
+# NOT-ASSERTED: any section of bbh's DEFAULTS but gate_header: D85 reads that one table
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME
@@ -140,6 +145,42 @@ pair "F19b a hit under lib/" "$T/l" demand-after-trap c
 pair "F19b --skip l.sh" "$T/l" demand-after-trap c --skip l.sh
 echo "  F19: $pairs pairs, $bad differ"
 
+echo "== D85. bbh's gate_header defaults at $BASELINE against what BBX resolves for a config naming no kind (G96) =="
+d85() {  # d85 <bbx-home> <out> — `same <key>` or `differs <key>` per key of bbh's DEFAULTS["gate_header"], then `keys=<n> differ=<m>` and the exit
+    (python3 - "$B/lib/py" "$1/lib/py" <<'EOF'
+import sys
+sys.path[:0] = sys.argv[1:3]
+import bbh.config as H
+import bbx.config as X
+lineage = H.DEFAULTS["gate_header"]
+n = 0
+for k, v in lineage.items():
+    try:
+        same = X.get({}, "gate_header." + k) == v
+    except KeyError:
+        same = False
+    n += 0 if same else 1
+    print(("same " if same else "differs ") + k)
+print("keys=%d differ=%d" % (len(lineage), n))
+EOF
+    echo "exit=$?") > "$2" 2>&1
+}
+field() {  # field <name> <file> — the digits of `<name>=` on the tally line, read by name (BBX-12)
+    grep '^keys=' "$2" | tr ' ' '\n' | sed -n "s/^$1=\([0-9][0-9]*\)$/\1/p"
+}
+d85 "$BBX_HOME" "$T/d85.txt"
+d85_keys="$(field keys "$T/d85.txt")"; d85_diff="$(field differ "$T/d85.txt")"
+d85_lines="$(grep -E -c '^(same|differs) ' "$T/d85.txt" || true)"
+if [ -z "$d85_keys" ] || [ -z "$d85_diff" ] || ! grep -qx 'exit=0' "$T/d85.txt"; then
+    fail "D85 the comparison printed no tally or exited non-zero:"; sed 's/^/        /' "$T/d85.txt" | head -12
+elif [ "$d85_keys" = 0 ] || [ "$d85_lines" != "$d85_keys" ]; then
+    fail "D85 keys=$d85_keys with $d85_lines key lines: nothing, or not everything, was compared"
+elif [ "$d85_diff" = 0 ]; then
+    ok "D85 all $d85_keys of bbh's gate_header defaults resolve identically in BBX for a config naming no kind"
+else
+    fail "D85 $d85_diff of bbh's $d85_keys gate_header defaults resolve differently in BBX: $(sed -n 's/^differs //p' "$T/d85.txt" | tr '\n' ' ')"
+fi
+
 echo "== MUST-FIRE: a verdict-text change in either lifted tool is visible to F19 =="
 SB="$T/shadow"; mkdir -p "$SB/bin" "$SB/lib"; cp "$BBX_HOME/bin/bbx" "$SB/bin/bbx"; cp -R "$BBX_HOME/lib/py" "$SB/lib/py"
 sed -i.bak 's/is current (/is current. (/' "$SB/lib/py/bbx/gen_gate_index.py"
@@ -164,6 +205,34 @@ else
     pairs=$_pb
 fi
 
+echo "== MUST-FIRE: bbh's gate_header literals out of a bbh config's reach are visible to D85 (G96) =="
+SC="$T/shadow_d85"; mkdir -p "$SC/lib"; cp -R "$BBX_HOME/lib/py" "$SC/lib/py"
+if python3 - "$SC/lib/py" > "$T/d85_plant.txt" 2>&1 <<'EOF'
+import sys
+p = sys.argv[1] + "/bbx/config.py"
+t = open(p, encoding="utf-8").read()
+old = '"gate_header": {'
+if t.count(old) != 2:
+    sys.exit("the plant expects the kind-blind and the frame-driven tables, and found %d" % t.count(old))
+i = t.rindex(old)
+open(p, "w", encoding="utf-8").write(t[:i] + '"gate_header_misplaced": {' + t[i + len(old):])
+sys.path.insert(0, sys.argv[1])
+import bbx.config as X
+if "gate_header" in X.KINDS["frame-driven"] or "gate_header_misplaced" not in X.KINDS["frame-driven"] or "gate_header" not in X.DEFAULTS:
+    sys.exit("the plant did not take the frame-driven table, and only it, out of the resolver's reach")
+EOF
+then
+    d85 "$SC" "$T/d85_shadow.txt"
+    _sd="$(field differ "$T/d85_shadow.txt")"
+    if [ -n "$_sd" ] && [ -n "$d85_diff" ] && [ "$_sd" -gt "$d85_diff" ]; then
+        echo "CONTROL FIRED: d85-profile-misplaced — the frame-driven gate_header table out of reach in a copy, and D85 reads $_sd of $d85_keys keys differing where the tree reads $d85_diff: $(sed -n 's/^differs //p' "$T/d85_shadow.txt" | tr '\n' ' ')"; ok "D85 can fail"
+    else
+        echo "CONTROL DEAD: d85-profile-misplaced — the plant left D85 at differ=${_sd:-none} where the tree reads differ=${d85_diff:-none}"; fail "D85 cannot fail"
+    fi
+else
+    echo "CONTROL DEAD: d85-profile-misplaced — the plant could not be built: $(tr '\n' ' ' < "$T/d85_plant.txt" | cut -c1-160)"; fail "control could not be built"
+fi
+
 echo "== READ-ONLY: the bbh clone after the run (R18, R20) =="
 _dirt="$(git -C "$B" status --porcelain --ignored)"
 if [ -z "$_dirt" ]; then ok "the clone is clean after the run: 0 tracked, untracked or ignored entries"
@@ -171,4 +240,4 @@ else fail "the clone was WRITTEN by this gate:"; printf '%s\n' "$_dirt" | sed 's
 echo "NOTE: bbh-source tip=$_tip porcelain=$_porc untouched-by-construction=clone"
 
 echo
-[ "$rc" = 0 ] && [ "$bad" = 0 ] && echo "PASS: BBX's lifted gate index and trap lint reproduce bbh's text and exit over $pairs pairings (F19)" || { echo "FAIL: see above"; exit 1; }
+[ "$rc" = 0 ] && [ "$bad" = 0 ] && echo "PASS: BBX's lifted gate index and trap lint reproduce bbh's text and exit over $pairs pairings (F19), and all $d85_keys of bbh's gate_header defaults resolve identically for a config naming no kind (D85)" || { echo "FAIL: see above"; exit 1; }
