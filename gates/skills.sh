@@ -343,7 +343,9 @@ own ft; repl "$T/o_ft/skill/bbx/SKILL.md" '- [BBX-3] An unvalidated' '- [BBX-3] 
 control own-forbidden-token "names 'fbneo'" olock ft
 own fb; repl "$T/o_fb/skill/bbx/SKILL.md" 'is a FAILURE, not a pending note.' 'is a FAILURE, not a pending note [SSP-3].'
 control own-foreign-bracket "names '[SSP-'" olock fb
-own sg; repl "$T/o_sg/docs/rules.md" '**[BBX-2]** INHERITED: no entry' '**[BBX-2]** INHERITED (planted): no entry'
+# the plant is keyed to a RE-ANCHORED rule: the ledger is append-only, so a re-anchored rule stays one, while an inherited
+# rule can be named by the next entry — this line planted into BBX-2's INHERITED paragraph until G90 re-anchored BBX-2 (G93)
+own sg; repl "$T/o_sg/docs/rules.md" '**[BBX-1]** RE-ANCHORED by ' '**[BBX-1]** RE-ANCHORED (planted) by '
 control own-stale-guide "is STALE" oguide sg --check
 own ur; repl "$T/o_ur/CLAUDE.md" '- [BBX-3] `[inherited bbh; VS ".pending"]` ' '- [BBX-3] '
 control unread-rule "unread-rule line" ogen ur
