@@ -1,0 +1,150 @@
+# docs/rot.toml — the rot register (BBX-10; R64; S6 step 4, K5): the seven ways a harness rots, each with
+# the gates and declared controls that detect it on a named population, or the reason it has none.
+# One bare table per detector (`class`, `population`, `gate`, `control`) or per class without one (`class`,
+# `none`). Classes, in BBX-10's order: 1 orphan, 2 silent downgrade, 3 dead control, 4 stale reference,
+# 5 outgrown parser, 6 deleted mechanism, 7 missing operand. Checked both ways by `bbx rot --check`
+# (lib/py/bbx/rot.py, D87) in gates/registers.sh: every class present, every gate tracked, every control
+# declared in its gate's header. Written by hand; a row asserts where a class is caught, never that the
+# control's failure is an instance of it (gates/registers.sh declares that blind spot).
+
+[c1-gates]
+class = 1
+population = "gate scripts on disk against the portable and static registries"
+gate = "gates/registry_complete.sh"
+control = "plain-orphan"
+
+[c1-harness-files]
+class = 1
+population = "tracked harness files under bin, lib, drivers and gates against the census register expected/file_census.toml"
+gate = "gates/census_register.sh"
+control = "file-without-row"
+
+[c1-expectations]
+class = 1
+population = "expectation files against their PROVENANCE.toml register"
+gate = "gates/provenance.sh"
+control = "file-without-row"
+
+[c1-pages]
+class = 1
+population = "tracked pages against docs/documents.toml"
+gate = "gates/registers.sh"
+control = "undeclared-document"
+
+[c1-families]
+class = 1
+population = "gates on disk against the family register gates/families.toml"
+gate = "gates/gate_index.sh"
+control = "family-toml-row-missing"
+
+[c2-skip-marker]
+class = 2
+population = "a gate's verdict when a SKIP marker meets a non-zero exit"
+gate = "gates/static_runner.sh"
+control = "skip-and-exit-2"
+
+[c2-failed-skip]
+class = 2
+population = "the declared controls of a gate that prints a SKIP marker and exits non-zero"
+gate = "gates/controls.sh"
+control = "failed-skip-not-exempt"
+
+[c2-thresholds]
+class = 2
+population = "the temporal thresholds loosened with no ruling"
+gate = "gates/thresholds.sh"
+control = "loosened-without-ruling"
+
+[c2-band]
+class = 2
+population = "a frozen band widened with no ruling"
+gate = "gates/band.sh"
+control = "ruling-less-class"
+
+[c2-counts]
+class = 2
+population = "the screen's counts against the kept run's tallies"
+gate = "gates/readout.sh"
+control = "counts-disagree-named"
+
+[c3-declared]
+class = 3
+population = "every gate's declared must-fire controls against what its run printed"
+gate = "gates/controls.sh"
+control = "dead-control"
+
+[c3-reader]
+class = 3
+population = "the controls reader itself, crashing before it reports"
+gate = "gates/controls.sh"
+control = "reader-crash-is-red"
+
+[c3-skip]
+class = 3
+population = "a dead control inside a gate the classifier calls SKIP"
+gate = "gates/controls.sh"
+control = "skip-cannot-hide-dead"
+
+[c4-retractions]
+class = 4
+population = "retracted wordings across the tracked tree"
+gate = "gates/close_sweeps.sh"
+control = "retraction-restated"
+
+[c4-default-ids]
+class = 4
+population = "D<n> citations against docs/defaults.md"
+gate = "gates/close_sweeps.sh"
+control = "default-unregistered"
+
+[c4-lineage]
+class = 4
+population = "each lineage census's recorded commit against that repository's HEAD"
+gate = "gates/census_recount.sh"
+control = "drift-detected"
+
+[c4-index]
+class = 4
+population = "docs/gates.md against the gate headers it quotes"
+gate = "gates/gate_index.sh"
+control = "stale-index"
+
+[c4-guide]
+class = 4
+population = "skill/bbx/GUIDE.md against the rules it renders"
+gate = "gates/skills.sh"
+control = "stale-guide"
+
+[c4-cross-reference]
+class = 4
+population = "a skill's cross-references against the rules the other configured skill defines"
+gate = "gates/skills.sh"
+control = "dangling-cross-reference"
+
+[c5-header-entry]
+class = 5
+population = "a MUST-FIRE or NOT-ASSERTED entry run past the one line every header reader reads"
+gate = "gates/close_sweeps.sh"
+control = "entry-continued"
+
+[c5-readout-cut]
+class = 5
+population = "a blind spot the screen prints from an entry run past its line"
+gate = "gates/readout.sh"
+control = "truncated-blind-spot-marked"
+
+[c5-definition]
+class = 5
+population = "a skill rule's definition wrapped past the one line the lock reads"
+gate = "gates/skills.sh"
+control = "wrapped-definition"
+
+[c6]
+class = 6
+none = "no gate detects a gate that probes a mechanism a later design removed, which is re-targeted or dropped as a coverage decision (BBX-10); BBX-11's runtime diagnostic, a FAIL under a tenth of the runtime its header quotes, is the candidate R64 names, a symptom this class shares with others"
+
+[c7-demand-under-trap]
+class = 7
+population = "BBX's shell files under gates, drivers, lib/sh and bin: a demand for a variable after an EXIT trap, whose abort exits 0 on this host's sh (G18)"
+gate = "gates/trap_lint.sh"
+control = "demand-reported"

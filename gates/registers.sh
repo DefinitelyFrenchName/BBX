@@ -1,9 +1,11 @@
 #!/bin/sh
-# registers.sh — the defaults register and the documents register hold against the code and the pages, and every finding either check can print fires on a planted copy
-# Ruled R61, R62 and R66 (S6 step 2, bbx-29). `bbx defaults --check` (lib/py/bbx/defaults.py, D81) holds
+# registers.sh — the defaults, documents and rot registers hold against the code, the pages and the gates they name, and every finding each check can print fires on a planted copy
+# Ruled R61, R62 and R66 (S6 step 2, bbx-29), and R64 (S6 step 4, bbx-31). `bbx defaults --check` (lib/py/bbx/defaults.py, D81) holds
 # docs/defaults.md in R61's form, both ways against config.py's DEFAULTS and the ${BBX_*:-} fallbacks,
 # and requires every default to have a reader (R66). `bbx documents --check` (lib/py/bbx/documents.py,
 # D82) holds docs/documents.toml against the tracked pages: completeness, shapes, twins, routes (R62).
+# `bbx rot --check` (lib/py/bbx/rot.py, D87) holds docs/rot.toml: each of BBX-10's seven classes has a detector
+# whose gate is tracked and declares the named control, or a stated none (R64).
 # Every finding each tool can print is planted in a COPY of the tree and required by its own line, after
 # the unplanted copy has read errors=0 — so a control fires for its own reason and never for a real
 # finding the copy inherited (G53). Every plant asserts it changed the text it names (G83).
@@ -36,6 +38,14 @@
 # MUST-FIRE: perturbed-copy: twin-on-shape — a reference row given a twin must FAIL naming the page and its shape
 # MUST-FIRE: perturbed-copy: root-count — a second row routed from root must FAIL naming both roots
 # MUST-FIRE: perturbed-copy: unrouted-document — a page routed by a map that never names its path must FAIL naming the page and the router
+# MUST-FIRE: perturbed-copy: class-without-row — every class 3 table taken out of the rot register must FAIL naming class 3, or a class with no detector and no stated none passes
+# MUST-FIRE: perturbed-copy: rot-control-undeclared — a detector row naming a control its gate does not declare must FAIL naming the row, the gate and the control
+# MUST-FIRE: perturbed-copy: gate-not-found — a detector row naming a gate the tree does not track must FAIL naming the row and the gate
+# MUST-FIRE: perturbed-copy: unknown-class — a detector row whose class is 8 must FAIL naming the row and the class
+# MUST-FIRE: perturbed-copy: rot-row-fields — a table carrying a class and a gate and nothing else must FAIL naming the table and its fields
+# MUST-FIRE: perturbed-copy: duplicate-detector — a second table naming class 3's dead-control detector again must FAIL naming both tables (BBX-17)
+# MUST-FIRE: perturbed-copy: none-beside-detector — a none row for class 3, which has detectors, must FAIL naming the class
+# MUST-FIRE: perturbed-copy: duplicate-none — a second none row for class 6 must FAIL naming both tables
 # NOT-ASSERTED: that a row's class is TRUE of its default: only its grammar and vocabulary are read, and a wrong class inside the vocabulary passes (R61)
 # NOT-ASSERTED: that a key with a reader changes anything: a line naming `section.key` is found, never what the value does (R66)
 # NOT-ASSERTED: a full name inside a Python string or docstring: it counts as a reader, so a dead key a docstring names passes; only markdown files, `#` lines and the DEFAULTS and KINDS literals are set aside (D81)
@@ -43,7 +53,9 @@
 # NOT-ASSERTED: that a page's content fits its shape: only the register, the first word of a `Shape:` line in the first 12 lines, the twins and the routes are read, and a page with no `Shape:` line is not asked to carry one (D82)
 # NOT-ASSERTED: that a route can be followed: a router is proven to name the page's path, never that the sentence around it leads a reader there
 # NOT-ASSERTED: counts and statuses written in the pages (G54): BBX's `docs/` read as a document-set subject is G54's candidate, named in R59
-# NOT-ASSERTED: that either check is generic: each has one consumer, BBX's own `docs/defaults.md` and `docs/documents.toml` over BBX's own tree (R50)
+# NOT-ASSERTED: that a detector detects its class: only that its gate is tracked and declares the named control, never that the control's failure is an instance of the class its row names (R64)
+# NOT-ASSERTED: that a class is detected on every population it has: one resolving detector row counts the class as detected, however many populations have none
+# NOT-ASSERTED: that any of the three checks is generic: each has one consumer, BBX's own `docs/defaults.md`, `docs/documents.toml` and `docs/rot.toml` over BBX's own tree (R50)
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME
@@ -54,10 +66,10 @@ ok()   { printf '  ok    %s\n' "$1"; }
 fail() { printf '  FAIL  %s\n' "$1"; rc=1; }
 T="$(mktemp -d)"; trap 'rm -rf "$T"' EXIT INT TERM
 SUM() { python3 -m bbx.sha1 "$1" | cut -d" " -f1; }
-B_DEF="$(SUM docs/defaults.md)"; B_DOC="$(SUM docs/documents.toml)"
+B_DEF="$(SUM docs/defaults.md)"; B_DOC="$(SUM docs/documents.toml)"; B_ROT="$(SUM docs/rot.toml)"
 
 echo "== 1. the real registers =="
-for tool in defaults documents; do
+for tool in defaults documents rot; do
     if python3 -m "bbx.$tool" --check > "$T/real_$tool.out" 2>&1; then
         ok "$(tail -1 "$T/real_$tool.out")"
     else
@@ -70,7 +82,7 @@ C="$T/copy"; mkdir -p "$C"
 git ls-files -c -o --exclude-standard -z | xargs -0 tar -cf - | tar -xf - -C "$C"
 git -C "$C" init -q && git -C "$C" add -A
 clean=1
-for tool in defaults documents; do
+for tool in defaults documents rot; do
     if python3 -m "bbx.$tool" --check --root "$C" > "$T/copy_$tool.out" 2>&1; then
         ok "copy: $(tail -1 "$T/copy_$tool.out")"
     else
@@ -110,6 +122,24 @@ def swap_lines(p, a, b):
     i, j = next(n for n, l in enumerate(ls) if l.startswith(a)), next(n for n, l in enumerate(ls) if l.startswith(b))
     ls[i], ls[j] = ls[j], ls[i]
     wr(p, "\n".join(ls))
+R = "docs/rot.toml"
+ROT_TABLE = r"(?ms)^\[([A-Za-z0-9_-]+)\]\n(.*?)(?=^\[|\Z)"
+def drop_rot_class(n):
+    t = rd(R)
+    new = re.sub(ROT_TABLE, lambda m: "" if re.search(r"(?m)^class = " + str(n) + r"$", m.group(2)) else m.group(0), t)
+    if new == t:
+        raise AssertionError(f"plant did not apply: no class {n} table in {R}")
+    wr(R, new)
+def rot_field(table, name, value):
+    t = rd(R)
+    m = re.search(r"(?ms)^\[" + re.escape(table) + r"\]\n(.*?)(?=^\[|\Z)", t)
+    if not m:
+        raise AssertionError(f"plant did not apply: no [{table}] in {R}")
+    block = m.group(1)
+    new = re.sub(r'(?m)^' + name + r' = ".*"$', f'{name} = "{value}"', block, count=1)
+    if new == block:
+        raise AssertionError(f"plant did not apply: [{table}].{name}")
+    wr(R, t[:m.start(1)] + new + t[m.end(1):])
 def run(tool):
     r = subprocess.run([sys.executable, "-m", f"bbx.{tool}", "--check", "--root", C], capture_output=True, text=True)
     return r.returncode, r.stdout
@@ -153,10 +183,18 @@ CONTROLS = [
     ("twin-on-shape", "documents", lambda: field("d19", "twin", "docs/gotchas.md"), r"^ERROR: twin-on-shape docs/controls\.md shape=reference "),
     ("root-count", "documents", lambda: field("d7", "routed_by", "root"), r"^ERROR: root-count roots=HANDOFF\.md,STATE\.md$"),
     ("unrouted-document", "documents", lambda: field("d6", "routed_by", "docs/bins.md"), r"^ERROR: unrouted-document README\.md routed_by=docs/bins\.md \(does not name the path\)$"),
+    ("class-without-row", "rot", lambda: drop_rot_class(3), r"^ERROR: class-without-row 3 dead-control$"),
+    ("rot-control-undeclared", "rot", lambda: rot_field("c3-declared", "control", "dead-control-planted"), r"^ERROR: rot-control-undeclared \[c3-declared\] gate=gates/controls\.sh control=dead-control-planted$"),
+    ("gate-not-found", "rot", lambda: rot_field("c3-reader", "gate", "gates/planted_nowhere.sh"), r"^ERROR: gate-not-found \[c3-reader\] gate=gates/planted_nowhere\.sh$"),
+    ("unknown-class", "rot", lambda: append(R, '\n[planted]\nclass = 8\npopulation = "planted"\ngate = "gates/controls.sh"\ncontrol = "dead-control"\n'), r"^ERROR: unknown-class \[planted\] class=8$"),
+    ("rot-row-fields", "rot", lambda: append(R, '\n[planted]\nclass = 3\ngate = "gates/controls.sh"\n'), r"^ERROR: rot-row-fields \[planted\] fields=class,gate$"),
+    ("duplicate-detector", "rot", lambda: append(R, '\n[planted]\nclass = 3\npopulation = "planted"\ngate = "gates/controls.sh"\ncontrol = "dead-control"\n'), r"^ERROR: duplicate-detector \[planted\] same=\[c3-declared\]$"),
+    ("none-beside-detector", "rot", lambda: append(R, '\n[planted]\nclass = 3\nnone = "planted"\n'), r"^ERROR: none-beside-detector class=3 none=\[planted\] "),
+    ("duplicate-none", "rot", lambda: append(R, '\n[planted]\nclass = 6\nnone = "planted"\n'), r"^ERROR: duplicate-none class=6 tables=c6,planted$"),
 ]
 def snapshot():
     out = {}
-    for p in (D, M, "lib/py/bbx/config.py", "lib/py/bbx/fingerprint.py", "lib/py/bbx/tier.py", "lib/sh/baseline.sh", "HANDOFF.md"):
+    for p in (D, M, R, "lib/py/bbx/config.py", "lib/py/bbx/fingerprint.py", "lib/py/bbx/tier.py", "lib/sh/baseline.sh", "HANDOFF.md"):
         out[p] = rd(p)
     return out
 dead = 0
@@ -196,7 +234,7 @@ PYEOF
         grep '^CONTROL' "$T/controls.out" || true
         fail "$(tail -1 "$T/controls.out")"
     fi
-    for tool in defaults documents; do
+    for tool in defaults documents rot; do
         python3 -m "bbx.$tool" --check --root "$C" > "$T/after_$tool.out" 2>&1 && ok "copy restored: $(tail -1 "$T/after_$tool.out")" \
           || fail "the copy reads a finding after the controls: $(tail -1 "$T/after_$tool.out")"
     done
@@ -205,12 +243,14 @@ else
 fi
 
 echo "== 4. the tracked registers are untouched BY THIS GATE =="
-[ "$(SUM docs/defaults.md)" = "$B_DEF" ] && [ "$(SUM docs/documents.toml)" = "$B_DOC" ] \
-  && ok "docs/defaults.md and docs/documents.toml are byte-identical to before this gate ran; every plant was in the copy" \
+[ "$(SUM docs/defaults.md)" = "$B_DEF" ] && [ "$(SUM docs/documents.toml)" = "$B_DOC" ] && [ "$(SUM docs/rot.toml)" = "$B_ROT" ] \
+  && ok "docs/defaults.md, docs/documents.toml and docs/rot.toml are byte-identical to before this gate ran; every plant was in the copy" \
   || fail "THIS GATE wrote a tracked register"
 
 printf '\nNOTE: defaults %s\n' "$(tail -1 "$T/real_defaults.out" | cut -d' ' -f2-)"
 printf 'NOTE: documents %s\n' "$(tail -1 "$T/real_documents.out" | cut -d' ' -f2-)"
+printf 'NOTE: rot %s\n' "$(tail -1 "$T/real_rot.out" | cut -d' ' -f2-)"
+printf 'NOTE: rot-classes %s\n' "$(sed -n 's/^classes: //p' "$T/real_rot.out")"
 echo
-[ "$rc" = 0 ] && echo "PASS: both registers hold against the code and the pages, and every finding either check can print fires on a planted copy" \
+[ "$rc" = 0 ] && echo "PASS: the three registers hold against the code, the pages and the gates they name, and every finding each check can print fires on a planted copy" \
   || { echo "FAIL: see above"; exit 1; }
