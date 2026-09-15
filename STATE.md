@@ -20,7 +20,8 @@ from BBX, and K3 given a third direction, every default's reader. **Step 2** (`f
 `gates/registers.sh`, portable, 28 controls, every finding either check can print planted in a copy; the bbh fidelity
 pairs measured identical with the key removed. The gate's controls found three defects before the commit (G89, G90,
 G91, the last costing a battery). The census was regenerated (`008db5f`: 51 rows at identity `b9009dc1057c`) and the self
-subject refrozen (`858fc45`). The close's pair is quoted in `docs/readout.md` (CLOSE — bbx-29). **The WSL platform row
+subject refrozen (`858fc45`), and both again after the skills gate fix below (`e9b579f`: 51 rows at identity
+`bc53b3b479db`, only the key moved; refreeze `1db186f`). The close's pair is quoted in `docs/readout.md` (CLOSE — bbx-29). **The WSL platform row
 stays GREEN at `429d3f8` and attests that commit only; native Linux is a PARTIAL row** at `f6f136d` (the static tier not
 run). At the close, G90's list re-anchored BBX-2 and stopped a skills gate control keyed to BBX-2's old status; the control
 was re-keyed to a re-anchored rule (`0ee5bfb`, G93). Gotchas G1–G93; retractions X1–X68.
@@ -40,7 +41,7 @@ subject and an external test framework a driver — five consumers:
 bbh's `example/`, `fixture/docset/`, `fixture/fakecli/`, `fixture/unittest/`,
 `fixture/selfgates/` (R14, R15, R37, R38). **BBX's own harness files are
 measured by a gate**, not by a document (`docs/census/bbx_files.md`, generated;
-R39, D62, D63): regenerated at bbx-29 after S6 step 2 at identity `b9009dc1057c`, 35 gates, 51 rows for
+R39, D62, D63): regenerated at the bbx-29 close at identity `bc53b3b479db`, 35 gates, 51 rows for
 51 harness files, and `bbx file-census --self --check-register` reads no drift. **BBX's own registers are checked every
 battery** since bbx-29: `docs/defaults.md` (K3) and `docs/documents.toml` (K4), by `gates/registers.sh`.
 

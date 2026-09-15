@@ -189,7 +189,7 @@ by construction (the recount's clone) and by `fidelity_bbh`'s proof.
 - Open with the battery **in the background** (10 to 15 min, 35 registered gates), with
   `--log build/selftest_<stamp>`, alone, nothing edited while it runs, and nothing else started on the host while it does.
 - **Expect NO `census-drift` NOTE** at the close commit or any docs-only descendant: the census records identity
-  `b9009dc1057c` (regenerated at bbx-29 after S6 step 2, `008db5f`, 51 rows). A commit touching
+  `bc53b3b479db` (regenerated at the bbx-29 close after the skills gate fix, `e9b579f`, 51 rows). A commit touching
   `bin`, `lib`, `drivers` or `gates` brings the NOTE back, loud and never fatal (R47).
 - **Expect `header_entries=349 continued=0`** on the close sweep's PASS line, and controls fired 207 / declared 207
   (`readout` declares 12, `skills` 44, `registers` 28). Keep every `MUST-FIRE:` and `NOT-ASSERTED:` entry on ONE line, however long (R49).
@@ -211,7 +211,7 @@ by construction (the recount's clone) and by `fidelity_bbh`'s proof.
   that `skill/skills.toml` exists (added at bbx-27). The maintainer's rider — SSH or basic automation — becomes a ruling once the
   cadence of platform runs is known.
 - **THREE THINGS move on a commit touching `bin`, `lib`, `drivers` or `gates`**: the self subject's registry row (a
-  reviewed refreeze whose commit quotes the changed line, R38/R44 — bbx-29's was `858fc45`), the census's key
+  reviewed refreeze whose commit quotes the changed line, R38/R44 — bbx-29's last was `1db186f`), the census's key
   (D62), and — if the commit adds a FILE under `bin/`, `lib/` or `drivers/` (a new file under `gates/` does not
   count) — the BATTERY itself, because `gates/census_register.sh` fails on a file with no frozen row (R47). A commit
   touching only `docs/`, `expected/` or `fixture/` moves none of them.
