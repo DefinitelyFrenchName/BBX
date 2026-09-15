@@ -1,5 +1,5 @@
 #!/bin/sh
-# registry_complete.sh — BBX-9's orphan direction has a VERDICT: every gate on disk is in the registry its tier needs, and every sweep row names a gate that exists (R45)
+# registry_complete.sh — BBX-9's orphan direction has a VERDICT: every gate on disk is in the registry its tier needs, every sweep row names a gate that exists, and every registered gate on disk is executable (R45, G91)
 # Ground truth for `bbx tier <config> --complete` (lib/py/bbx/tier.py). The positive is BBX's OWN
 # config; the controls are a SYNTHETIC consumer under TMPDIR. Why a gate and not a runner (R45):
 # bin/bbx-run-static's printed text and verdict are bbh's, and fidelity F13 runs both runners over a
@@ -11,9 +11,11 @@
 # MUST-FIRE: known-bad: plain-orphan — an instrument-free gate in neither the portable nor the static registry must FAIL naming it, or an orphan is a report and never a verdict (G34)
 # MUST-FIRE: known-bad: instrument-orphan — a gate the tier classifies INSTRUMENT, with no sweep row, must FAIL naming it, or the orphan class step 6 opened stays reported by nobody (G45)
 # MUST-FIRE: known-bad: dead-sweep-row — a sweep row naming a gate that is not on disk must FAIL naming it, or a dead row reads like a registration (BBX-9)
+# MUST-FIRE: known-bad: not-executable — a gate named in each of the portable, static and sweep registries, on disk with its execute bit cleared, must FAIL naming all three, or a gate written without its mode is found by a battery reading it MISSING instead of by this gate in a second (G91)
 # NOT-ASSERTED: that a gate is in the RIGHT registry: an instrument-free gate registered static that could run portable passes here
 # NOT-ASSERTED: a dead portable or static row: bin/bbx-run-static already reads it as MISSING and fails, and the fidelity pairs depend on that text
 # NOT-ASSERTED: an instrument reached through a path the tier's source regex does not match — that is gates/tier.sh's blind spot, inherited here
+# NOT-ASSERTED: the mode git records for a gate: only the working tree's execute permission is read, the one both runners test, so a gate executable here whose index or commit records 100644 passes this gate
 #
 set -eu
 BBX_HOME="$(cd "$(dirname "$0")/.." && pwd)"; export BBX_HOME
@@ -51,7 +53,7 @@ printf 'g_plain\ng_comment\n' > "$FR/tests/portable.txt"; printf 'g_static\n' > 
 printf '# COLUMNS gate lane scope cadence args note\ng_inst\tprereq\trelease\talways\t-\tthe one instrument gate\n' > "$FR/tests/sweep.tsv"
 cmp() { python3 -m bbx.tier "$FR/bbx.toml" --complete > "$T/out" 2>&1 && s=0 || s=$?; }
 cmp
-if [ "$s" = 0 ] && grep -q "ok: every instrument-free gate is in the portable or static registry" "$T/out" && grep -q "ok: every instrument gate has a sweep row" "$T/out" && grep -q "ok: every sweep row names a gate on disk" "$T/out"; then ok "complete both ways: exit 0, three ok lines (g_comment's pattern sits in a comment and it stays PLAIN)"
+if [ "$s" = 0 ] && grep -q "ok: every instrument-free gate is in the portable or static registry" "$T/out" && grep -q "ok: every instrument gate has a sweep row" "$T/out" && grep -q "ok: every sweep row names a gate on disk" "$T/out" && grep -q "ok: every registered gate on disk is executable" "$T/out"; then ok "complete both ways: exit 0, four ok lines (g_comment's pattern sits in a comment and it stays PLAIN)"
 else fail "the complete consumer: exit $s; $(tr '\n' '|' < "$T/out")"; fi
 
 echo "== 3. MUST-FIRE controls =="
@@ -65,10 +67,24 @@ mk g_inst2 'FAKE_INSTRUMENT --other'; cmp
 if [ "$s" = 1 ] && grep -q "^  FAIL orphan: g_inst2 reaches an instrument and has no row in tests/sweep.tsv$" "$T/out"; then echo "CONTROL FIRED: instrument-orphan — exit 1, g_inst2 named"
 else echo "CONTROL DEAD: instrument-orphan — exit $s; $(tr '\n' '|' < "$T/out")"; fail "an INSTRUMENT orphan was not a failure"; fi
 rm "$FR/tests/g_inst2.sh"
+# CONTROL not-executable
+chmod -x "$FR/tests/g_plain.sh" "$FR/tests/g_static.sh" "$FR/tests/g_inst.sh"
+if [ -x "$FR/tests/g_plain.sh" ] || [ -x "$FR/tests/g_static.sh" ] || [ -x "$FR/tests/g_inst.sh" ]; then
+    echo "CONTROL DEAD: not-executable — the plant did not clear an execute bit on this host"; fail "the not-executable plant did not take"
+else
+    cmp
+    if [ "$s" = 1 ] && [ "$(grep -c '^  FAIL ' "$T/out")" = 3 ] \
+       && grep -q "^  FAIL not-executable: g_plain is named in tests/portable.txt and is not executable, which the runners read as MISSING$" "$T/out" \
+       && grep -q "^  FAIL not-executable: g_static is named in tests/static.txt and is not executable, which the runners read as MISSING$" "$T/out" \
+       && grep -q "^  FAIL not-executable: g_inst is named in tests/sweep.tsv and is not executable, which the runners read as MISSING$" "$T/out"; then
+        echo "CONTROL FIRED: not-executable — exit 1, g_plain, g_static and g_inst named, one per registry"
+    else echo "CONTROL DEAD: not-executable — exit $s; $(tr '\n' '|' < "$T/out")"; fail "a registered gate that is not executable was not a failure"; fi
+fi
+chmod +x "$FR/tests/g_plain.sh" "$FR/tests/g_static.sh" "$FR/tests/g_inst.sh"
 # CONTROL dead-sweep-row
 printf 'no_such_gate\tprereq\trelease\talways\t-\ta row naming nothing\n' >> "$FR/tests/sweep.tsv"; cmp
 if [ "$s" = 1 ] && grep -q "^  FAIL dead-row: tests/sweep.tsv names no_such_gate, which is not a gate on disk$" "$T/out"; then echo "CONTROL FIRED: dead-sweep-row — exit 1, no_such_gate named"
 else echo "CONTROL DEAD: dead-sweep-row — exit $s; $(tr '\n' '|' < "$T/out")"; fail "a dead sweep row was not a failure"; fi
 
 echo
-[ "$rc" = 0 ] && echo "PASS: every registry is complete both ways on BBX's own tree, and an orphan of either tier and a dead sweep row each fail" || { echo "FAIL: see above"; exit 1; }
+[ "$rc" = 0 ] && echo "PASS: every registry is complete both ways on BBX's own tree, and an orphan of either tier, a dead sweep row and a registered gate that is not executable each fail" || { echo "FAIL: see above"; exit 1; }

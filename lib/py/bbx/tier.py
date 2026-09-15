@@ -3,8 +3,9 @@ anti-orphan report the runners print.
 
     python3 -m bbx.tier <config.toml> --unregistered   the runner's report block
     python3 -m bbx.tier <config.toml> --list           name / INSTRUMENT|PLAIN / registry
-    python3 -m bbx.tier <config.toml> --complete       every gate in the registry its tier needs, and
-                                                       every sweep row a gate on disk: exit 1 on a gap (R45)
+    python3 -m bbx.tier <config.toml> --complete       every gate in the registry its tier needs, every
+                                                       sweep row a gate on disk, and every registered gate
+                                                       on disk executable: exit 1 on a gap (R45, G91)
 
 A gate needs an instrument (an emulator, a simulator, a driver, an external
 tool) if its body, comments stripped, matches any of [tier].patterns — or if
@@ -27,8 +28,12 @@ informative. `--strict` on the sweep runner is where it becomes fatal.
 
 `--complete` is BBX's addition (ruled R45) and is the VERDICT that report never
 was: an instrument-free gate in neither the portable nor the static registry,
-an INSTRUMENT gate with no sweep row, and a sweep row naming a gate that is not
-on disk each FAIL, exit 1. It is a separate mode on purpose: `--list` and
+an INSTRUMENT gate with no sweep row, a sweep row naming a gate that is not
+on disk, and a gate named in any of the three registries that is on disk and
+not executable each FAIL, exit 1. The last is G91's: both runners test `[ -x ]`
+and read such a gate MISSING, so a gate written without its execute bit cost a
+whole battery; a portable or static row naming no file at all is still left to
+the runner (R45). It is a separate mode on purpose: `--list` and
 `--unregistered` stay the lineage's text (fidelity F13e diffs both), and
 neither runner changes. Ground truth: `gates/registry_complete.sh`.
 """
@@ -166,6 +171,13 @@ def main(argv):
                 if name not in known:
                     plain_orphans.append(name)
         dead_rows = [n for n in sweep if n not in on_disk]
+        # G91: both runners test `[ -x ]` on <gates_dir>/<name>.sh and read a registered gate that fails it as
+        # MISSING. Only a file that IS there is asked; a portable or static row naming no file stays the runner's (R45).
+        gates_abs = os.path.join(root, t.gates_dir)
+        rows = [(n, reg_p) for n in sorted(portable)] + [(n, reg_s) for n in sorted(static)] + [(n, reg_w) for n in sweep]
+        not_exec = [(n, r) for n, r in rows
+                    if os.path.isfile(os.path.join(gates_abs, n + ".sh"))
+                    and not os.access(os.path.join(gates_abs, n + ".sh"), os.X_OK)]
         print(f"  gates on disk {len(on_disk)}: {n_plain} {word}-free, {n_inst} {word}, {excluded} runner/manual; "
               f"rows: portable {len(portable)}, static {len(static)}, sweep {len(sweep)}")
         for n in plain_orphans:
@@ -174,13 +186,17 @@ def main(argv):
             print(f"  FAIL orphan: {n} reaches an {word} and has no row in {rel(reg_w)}")
         for n in dead_rows:
             print(f"  FAIL dead-row: {rel(reg_w)} names {n}, which is not a gate on disk")
+        for n, r in not_exec:
+            print(f"  FAIL not-executable: {n} is named in {rel(r)} and is not executable, which the runners read as MISSING")
         if not plain_orphans:
             print(f"  ok: every {word}-free gate is in the portable or static registry")
         if not inst_orphans:
             print(f"  ok: every {word} gate has a sweep row")
         if not dead_rows:
             print("  ok: every sweep row names a gate on disk")
-        return 1 if (plain_orphans or inst_orphans or dead_rows) else 0
+        if not not_exec:
+            print("  ok: every registered gate on disk is executable")
+        return 1 if (plain_orphans or inst_orphans or dead_rows or not_exec) else 0
     print(f"bbx tier: unknown mode {mode!r}", file=sys.stderr)
     return 2
 
