@@ -1,6 +1,6 @@
 # Bins — VampireSaved (census docs/census/vampiresaved.md @ 5df1d8be) — 2026-09-09
 
-Shape: table, one row per census B item, ids identical to the census. Bins per CLAUDE.md §5. Every `drop` carries a reason. Totals at the end are produced by the command shown.
+Shape: census, a table with one row per census B item, ids identical to the census. Bins per CLAUDE.md §5. Every `drop` carries a reason. Totals at the end are produced by the command shown.
 
 | id | item (≤ 80 chars) | bin | becomes / reason |
 |---|---|---|---|

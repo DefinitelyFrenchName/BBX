@@ -1,6 +1,6 @@
 # Readout — session 1, 2026-09-09
 
-Shape: the one screen (CLAUDE.md §3.2). What was measured, what was assumed,
+Shape: readout, the one screen (CLAUDE.md §3.2). What was measured, what was assumed,
 what was not looked at, and what this session's "done" does not assert.
 
 ## Verdict

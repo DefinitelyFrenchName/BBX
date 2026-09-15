@@ -1,6 +1,6 @@
 # HANDOFF — the map for the next session
 
-Shape: operational map. Read this first, then `STATE.md`, then
+Shape: map, operational. Read this first, then `STATE.md`, then
 `docs/rulings.md`. `CLAUDE.md` is the constitution, not the map.
 
 ## Where things are

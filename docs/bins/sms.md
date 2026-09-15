@@ -1,6 +1,6 @@
 # Bins — SMS-FrenchName-edition (census docs/census/sms.md @ ecc5481) — 2026-09-09
 
-Shape: table, one row per census B item, ids identical to the census. Bins per CLAUDE.md §5. Every `drop` carries a reason. Totals at the end are produced by the command shown.
+Shape: census, a table with one row per census B item, ids identical to the census. Bins per CLAUDE.md §5. Every `drop` carries a reason. Totals at the end are produced by the command shown.
 
 Vocabulary in the `becomes` column is `docs/abstraction.md` (S1–S5, D1–D6, O1–O6, E1–E6, C1–C6, G1–G5, R1–R3, RO1–RO3) and the `[BBX-N]` rules of CLAUDE.md §4.
 

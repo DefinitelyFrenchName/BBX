@@ -1,6 +1,6 @@
 # The four bins — every census item, sorted
 
-Shape: index and totals. The rows are in three files, one per lineage
+Shape: map — the index and totals. The rows are in three files, one per lineage
 repository, ids identical to the census rows they bin (`docs/census/*.md`):
 `docs/bins/bbh.md`, `docs/bins/vampiresaved.md`, `docs/bins/sms.md`. Bins per
 CLAUDE.md §5; the burden is on `drop`, and a `drop` row without a reason is
