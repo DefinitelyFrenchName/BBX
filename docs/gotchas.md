@@ -1876,3 +1876,25 @@ lists four and judges one, `sweep_runner`, not named. The control `fast-fail-nam
 Learning (R27): a threshold is compared with the resolution of the value it reads before the instrument's first real
 use, and its first real use is on kept data before any commit. No harness mechanism beyond D88's rule and its control.
 No rule of §4 is named here.
+
+## G101 — S6's plan said a per-gate `TMPDIR` contains bbh's fake driver; on this host `mktemp -d` ignores `TMPDIR`, found when a probe's positive control read dead (paid: three probe runs before K9's first tool, and a plan sentence R65 was ruled on standing since bbx-28; 2026-09-15)
+K9's first probe (`docs/plans/S6_probes/probe_k9_example_residue.sh`, first form) ran bbh's example battery under a
+fresh `TMPDIR` and read `left=0`, and its own positive control, a `mktemp -d` under a set `TMPDIR`, read `left=0` too
+where 1 was required, so nothing the probe said could be read. Measured next (`probe_k9_mktemp.sh`) on macOS 26.6.2
+with `/usr/bin/mktemp`: under an exported `TMPDIR`, `mktemp -d`, `mktemp -d -t foo` and a bare `mktemp` make their
+entry in the per-user temp dir and only an explicit template lands in `TMPDIR`, 1 of 4 forms; a `TMPDIR` inside BBX's
+ignored `build/` read the same, so the session's sandbox is not the cause; `-p` is honoured, and a shim first on `PATH`
+that adds `-p "$TMPDIR"` put all 4 forms there. The host's man page: `-t` builds its template from
+`_CS_DARWIN_USER_TEMP_DIR` "if available", `TMPDIR` a fallback, and a lone `-d` "behaves as if -t tmp was supplied".
+Python's `tempfile` honours `TMPDIR`. bbh's `drivers/fake.sh` makes `WORK="${SANDBOX:-$(mktemp -d)}"` (`:54` at
+`10a82d2`), `SANDBOX` taken from its fourth argument alone (`:25`). So the plan's "(`mktemp` honours `TMPDIR`)" and
+R65's third declined option, "once a gate has its own `TMPDIR` the runner removes what it left and nothing reaches the
+host", do not hold here: a per-gate `TMPDIR` would count 0 while a battery's 594 directories still land in the per-user
+dir, a count by absence. The rewritten probe counts both places against a start marker and attributes by contents:
+bbh's example battery read 0 and 0 in three runs alone, its control counting 1, and 3 new per-user directories in the
+one run that overlapped three of the contributor's own gate runs, each making its `mktemp -d` there (G86's shape). The
+contributor removed, by exact path, the empty directories its own probes had made there. Linux's `mktemp` is not
+measured here.
+Learning (R27): a mechanism a plan names in parentheses is measured on the host before a ruling rests on it, and a
+probe's positive control is written in the form its population uses. The plan is corrected first (BBX-19), X75
+retracts both wordings, and R69 is raised before K9's first tool. Rules re-anchored in fact: BBX-5, BBX-7.
