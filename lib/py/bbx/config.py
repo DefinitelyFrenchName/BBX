@@ -55,6 +55,11 @@ DEFAULTS = {
     "controls": {
         "enforce": False,            # D10: read MUST-FIRE declarations and require them to fire (off = bbh's behaviour, fidelity)
     },
+    # K9 (R65, R69): every gate's own TMPDIR and mktemp shim are always on; the NOTE naming what a gate left is printed
+    # only when this is on (D90) — off kind-blind, D10's precedent, so bbh's runner text holds (fidelity F13)
+    "residue": {
+        "note": False,
+    },
     # the instrument-tier sweep (bin/bbx-run-sweep) — kind-blind: one lane, no instruments, no placeholders (D15)
     "sweep": {
         "lanes": ["prereq"],
@@ -305,6 +310,7 @@ KINDS = {
                        "sweep": "gates/sweep.tsv", "static_needs_env": "BBX_BBH_HOME"},
         "sweep": {"input_env": "BBX_BBH_HOME", "log_dir_prefix": "build/sweep_"},
         "controls": {"enforce": True},
+        "residue": {"note": True},
     },
 }
 

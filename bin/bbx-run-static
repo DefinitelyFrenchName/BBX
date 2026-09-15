@@ -26,6 +26,13 @@
 # reader's OUTPUT, one line per gate that ran, never on its exit (G48). Off, the
 # output is bbh's byte for byte (fidelity F13); BBX's own config turns it on.
 #
+# A SECOND ADDITION (K9; ruled R65 and R69, D90): every gate runs with its own
+# TMPDIR and a `mktemp` shim first on its PATH, because a host's `mktemp -d`
+# can ignore TMPDIR (macOS 26.6.2 does, G101). What the gate leaves there is
+# counted and removed, with the new `tmp.*` entries in the host's temporary dir
+# and the new crash reports, and named as `NOTE: host-residue` when
+# [residue].note is on. Off, nothing printed changes (fidelity F13).
+#
 # Usage:
 #   bbx-run-static [--config config.toml]     portable tier only (no inputs)
 #   <NEEDS_ENV>=... bbx-run-static            portable + static tiers
@@ -56,7 +63,7 @@ while [ $# -gt 0 ]; do
     --list)   LIST=1 ;;
     --tier)   shift; TIER="${1:?--tier needs portable|static|all}" ;;
     --log)    shift; LOG="${1:?--log needs a dir}" ;;
-    -h|--help) sed -n '2,44p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,51p' "$0"; exit 0 ;;
     *) echo "unknown argument '$1' (try --help)" >&2; exit 2 ;;
     esac
     shift
@@ -70,6 +77,7 @@ REG_STATIC="$(bbx_cfg registries.static)"
 NEEDS_ENV="$(bbx_cfg registries.static_needs_env "")"
 WORD="$(bbx_cfg project.instrument_word)"
 ENFORCE="$(bbx_cfg controls.enforce)"
+RESIDUE_NOTE="$(bbx_cfg residue.note)"
 
 # The input variable must be ABSOLUTE for the gates: a gate that resolves it
 # from a DIFFERENT working directory than the caller's (a symlink into it from
@@ -100,6 +108,40 @@ if [ "$LIST" = 1 ]; then
 fi
 
 WORK="$(mktemp -d)"; trap 'rm -rf "$WORK"' EXIT INT TERM
+# K9 (R65, R69; D90). The shim adds -p "$TMPDIR" only to a call that names no -p, no template and no path; any other
+# call runs the host's mktemp unchanged. The host's temporary dir is where an escaping call lands: the per-user dir
+# macOS's mktemp prefers, else the caller's TMPDIR, else /tmp.
+_real_mktemp="$(command -v mktemp)"
+HOST_TMP="$(getconf DARWIN_USER_TEMP_DIR 2>/dev/null || true)"; [ -n "$HOST_TMP" ] || HOST_TMP="${TMPDIR:-/tmp}"; HOST_TMP="${HOST_TMP%/}"
+_work_name="$(basename "$WORK")"
+mkdir -p "$WORK/shim"
+cat > "$WORK/shim/mktemp" <<SHIM
+#!/bin/sh
+# bbx-run-static's mktemp shim (K9, R69): -p "\$TMPDIR" only for a call naming no -p, no template and no path
+_prev=
+for _a in "\$@"; do
+    case "\$_a" in
+        -p|--tmpdir*|*/*) exec "$_real_mktemp" "\$@" ;;
+        -*) ;;
+        *) [ "\$_prev" = -t ] || exec "$_real_mktemp" "\$@" ;;
+    esac
+    _prev="\$_a"
+done
+[ -z "\${TMPDIR:-}" ] || exec "$_real_mktemp" -p "\$TMPDIR" "\$@"
+exec "$_real_mktemp" "\$@"
+SHIM
+chmod +x "$WORK/shim/mktemp"
+ips_count() { find "$HOME/Library/Logs/DiagnosticReports" -name '*.ips' 2>/dev/null | wc -l | tr -d ' '; }
+residue() {  # residue <gate> — what it left in its TMPDIR, the new tmp.* in the host's dir, the new crash reports; its TMPDIR removed
+    _rt="$(find "$WORK/gate.$1/tmp" -mindepth 1 -maxdepth 1 2>/dev/null | wc -l | tr -d ' ')"
+    _rh="$(find "$HOST_TMP" -mindepth 1 -maxdepth 1 -type d -name 'tmp.*' ! -name "$_work_name" -newer "$WORK/gate.$1/marker" 2>/dev/null | wc -l | tr -d ' ')"
+    _ri=$(( $(ips_count) - _ips0 )); [ "$_ri" -ge 0 ] || _ri=0
+    if [ "$RESIDUE_NOTE" = true ] && [ $((_rt + _rh + _ri)) -gt 0 ]; then
+        echo "NOTE: host-residue $1 tmp=$_rt host=$_rh ips=$_ri" >> "$WORK/$1.out"
+        [ -z "$LOG" ] || echo "NOTE: host-residue $1 tmp=$_rt host=$_rh ips=$_ri" >> "$LOG/$1.log"
+    fi
+    rm -rf "$WORK/gate.$1"
+}
 # --log: the run kept on disk, keyed by (subject version, start time) — BBX-29. Nothing printed changes.
 RUN_START="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 if [ -n "$LOG" ]; then
@@ -132,10 +174,12 @@ run_tier() {  # run_tier <label> <names>
             [ -z "$LOG" ] || printf '%s\t%s\tMISSING\t0\t-\tregistered but not executable\n' "$g" "$_label" >> "$LOG/results.tsv"
             continue
         fi
+        # K9: the gate's own TMPDIR and the mktemp shim, and a marker for what reaches the host (R65, R69; D90)
+        mkdir -p "$WORK/gate.$g/tmp"; : > "$WORK/gate.$g/marker"; _ips0="$(ips_count)"
         _t0=$(date +%s)
         # </dev/null: a gate that reads stdin otherwise swallows the rest of
         # this loop's input. Paid for once — a 32-entry run became 28 silently.
-        "$GATES_DIR/$g.sh" </dev/null > "$WORK/$g.out" 2>&1 && _st=0 || _st=$?
+        TMPDIR="$WORK/gate.$g/tmp" PATH="$WORK/shim:$PATH" "$GATES_DIR/$g.sh" </dev/null > "$WORK/$g.out" 2>&1 && _st=0 || _st=$?
         _t1=$(date +%s)
         _dur=$((_t1 - _t0))
         ran="$ran $g"
@@ -166,6 +210,7 @@ run_tier() {  # run_tier <label> <names>
             printf '  %-34s PASS  %3ss\n' "$g" "$_dur"
             n_pass=$((n_pass + 1)) ;;
         esac
+        residue "$g"
     done
 }
 

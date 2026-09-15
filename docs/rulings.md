@@ -525,12 +525,15 @@ written until the ruling its slice needs is answered (CLAUDE.md §6, §9).
 - **Answer:** (1) "Read the file by extension"; (2) "bbh's five, plus two by config" (both the recommendation) — maintainer, 2026-09-15 (bbx-30).
 
 
-## Open
-
-(A new ruling is added here with its recommendation, the alternatives declined, and `- **Answer:** (open)` until the maintainer answers, then moved.)
+## Answered 2026-09-15 (bbx-31) — R69, raised by S6 step 4's measurement and ruled the same sitting
 
 ### R69 — K9's containment on a host whose `mktemp` ignores `TMPDIR` (raised bbx-31, S6 step 4)
 - **Context measured (2026-09-15, bbx-31; `docs/plans/S6_probes/probe_k9_mktemp.sh` and `probe_k9_example_residue.sh`; G101):** R65 ruled a per-gate `TMPDIR` on the plan's premise that `mktemp` honours it. On this host (macOS 26.6.2, `/usr/bin/mktemp`) it does not for the form bbh's fake driver uses: under an exported `TMPDIR`, `mktemp -d`, `mktemp -d -t foo` and a bare `mktemp` make their entry in the per-user temp dir (`_CS_DARWIN_USER_TEMP_DIR`), and 1 of 4 call forms, an explicit template, lands in `TMPDIR`. `-p` is honoured, and a `mktemp` shim first on `PATH` that adds `-p "$TMPDIR"` when the call names neither `-p` nor a template path lands 4 of 4. Python's `tempfile` honours `TMPDIR`. The driver takes its sandbox from its fourth argument alone (`drivers/fake.sh:25` at `10a82d2`), so no environment variable reaches it. A battery leaves 596 new `tmp.*` directories in the per-user dir, 594 holding `fake_replay.log` (G99). bbh's example battery, the population of F13b and F13c, leaves 0 in its `TMPDIR` and 0 in the per-user dir in three runs alone (its control counting 1), so a residue NOTE printed by BBX's runner would not move those pairs over today's inputs. Linux's `mktemp` is not measured here; a platform row can measure it.
 - **Recommendation:** (1) R65 as ruled, and the runner puts a `mktemp` shim first on each gate's `PATH` beside its `TMPDIR`: the shim adds `-p "$TMPDIR"` only when the call names neither `-p` nor a template path, and otherwise runs the next `mktemp` on the `PATH` unchanged, so containment reaches bbh's driver without editing bbh; the runner counts what each gate left in its `TMPDIR` and removes it; and the NOTE carries a second number, the new `tmp.*` directories in the per-user temp dir during the gate, `NOTE: host-residue <gate> tmp=<n> host=<n> ips=<n>`, so a call form the shim misses is counted rather than read as zero (BBX-7). Whether a fidelity pair prints a temporary path or a `PATH` the change moves is measured at the build (G43), and bbh's driver leaving its fresh sandbox is filed as a bbh issue, measured first.
 - **Declined:** (2) R65 as ruled without the shim — on this host it counts 0 while a battery's 594 directories land in the per-user dir, a count by absence (BBX-7); (3) a per-gate `TMPDIR` with the per-user count alone — attribution without containment, the backlog named and still growing by 594 a battery; (4) a sandbox named at BBX's three call sites — the bbh side of every fidelity pair keeps leaking (R65's declined (2), unchanged); (5) editing, forking or wrapping bbh's driver — bbh is never modified.
-- **Answer:** (open)
+- **Answer:** "Shim + host count" (the recommendation) — maintainer, 2026-09-15 (bbx-31).
+
+
+## Open
+
+(A new ruling is added here with its recommendation, the alternatives declined, and `- **Answer:** (open)` until the maintainer answers, then moved.)
