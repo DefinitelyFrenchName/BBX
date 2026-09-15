@@ -24,7 +24,7 @@ subject refrozen (`858fc45`), and both again after the skills gate fix below (`e
 `bc53b3b479db`, only the key moved; refreeze `1db186f`). The close's pair is quoted in `docs/readout.md` (CLOSE — bbx-29). **The WSL platform row
 stays GREEN at `429d3f8` and attests that commit only; native Linux is a PARTIAL row** at `f6f136d` (the static tier not
 run). At the close, G90's list re-anchored BBX-2 and stopped a skills gate control keyed to BBX-2's old status; the control
-was re-keyed to a re-anchored rule (`0ee5bfb`, G93). Gotchas G1–G93; retractions X1–X68.
+was re-keyed to a re-anchored rule (`0ee5bfb`, G93). Gotchas G1–G94; retractions X1–X68.
 
 **Open rulings: none.** R0–R66 are answered and recorded in `DECISIONS.md`. The maintainer's words with R49 stand as
 a rule of method: discipline is never arbitrated — only the method of applying it, on time or practicality. The

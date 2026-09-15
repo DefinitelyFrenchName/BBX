@@ -1784,3 +1784,14 @@ Learning (R27): G53's rule in another form — a control keyed to a status the l
 entry moves it, and an append-only ledger makes RE-ANCHORED the status to key on. The gate's other plants key on
 CLAUDE.md's rule text and tags, which move only by an approved edit (R16). No further mechanism; a hazard line in
 HANDOFF. Rules re-anchored in fact: BBX-10, BBX-6.
+
+## G94 — The laptop idle-slept for 32 min 35 s in the middle of the close's battery A, on battery power, and the whole pause landed inside one gate (paid: 32 min 35 s of wall time, no re-run; 2026-09-15)
+Battery A of the bbx-29 close pair (`build/selftest_20260915_111859`, `643013f`) ran from 11:19:02 to 12:06:34 and
+read GREEN, PASS 35. `pmset -g log` records `Entering Sleep state due to 'Idle Sleep'` with `Using Batt (Charge:70%)` at
+11:22:18 and `Wake from Deep Idle` at 11:54:53. `gates/docset_suite.sh` took 2,039 s where the step-2 battery's took 81
+s, and no other gate moved by more than 3 s; the gate runtimes summed 2,850 s, against battery B's 745 s. A paused
+process computes the same verdict, and BBX-14 read met over the pair (35 gates, 0 verdict differences). Battery B ran
+under `caffeinate -i` and its window holds no sleep event.
+Learning (R27): on battery power the host sleeps a background battery the way low memory stopped one (G80), and a
+runtime three times the usual is read against `pmset -g log` before any gate is suspected. No harness mechanism; a
+hazard line in HANDOFF. No rule of §4 is named here: the incident is the host's power policy.
