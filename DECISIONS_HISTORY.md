@@ -1678,3 +1678,34 @@ lint, the host residue and R60's executable controls, and the screen's "proved a
 on self-reports. Does the last green mean what it is treated as meaning? It means 35 gates passed and 207 controls
 printed that they fired; the new gate's 28 were each planted in a copy and required by their own line, and until R60 no
 control is executed against its gate's real input.
+
+## bbx-30 (2026-09-15) — G91's fix built; R67 and R68 raised by S6 step 3's measurement and ruled the same sitting; S6 step 3 built
+
+The sitting opened on a GREEN battery at `fe37bf0` (`build/selftest_20260915_123513`: PASS 35, controls 207 / 207, no
+`census-drift` NOTE). G91's small fix came first, at the maintainer's "do it": `gates/registry_complete.sh` refuses a
+registered gate on disk that is not executable (`92d7f4f`; the self subject refrozen, `16ccfd7`).
+
+**R67 and R68 were raised by step 3's measurement before its first tool.** K6 as R64 and the plan scoped it read 17
+unresolved path tokens at `16ccfd7`, none a dead reference and 11 of them in answered rulings; K7's lift needed a TSV
+family file, which the TOML rule excludes, and columns bbh's renderer does not have. Put as questions with the measured
+counts beside each option, the maintainer answered R67 "Current pages, rooted paths" and R68 "Read the file by
+extension" and "bbh's five, plus two by config", each the recommendation (`abe52b2`). Reproducing the probes on a clone
+before that commit found that two resolved counts shown in the question had included an ignored file on this host
+(G95): the unresolved counts the options differed in did not move, and the ruling was recorded with the clone's numbers.
+
+**S6 step 3 was built in the order HANDOFF gives:** the plan's K7 columns corrected first (`82fc129`, X71); K8, K7 and
+F19 with `docs/gates.md` (`9816082`), after a battery over the uncommitted change read GREEN (PASS 38, controls 218 /
+218); the census regenerated (`d417355`, 53 rows) and the self subject refrozen (`a2a0208`). bbh was committed twice
+during the sitting (`833f7a7`, `13ff687`), changing after the baseline the gate-index preamble default D85 copies.
+
+**The close.** Asked whether to close or to continue with step 4, the maintainer wrote "I'd continue but we're at 65%
+context, do we have enough headroom for step 4 and close?"; the contributor estimated that step 4, larger than step 3,
+and the close would not both fit without the context being summarized in the middle of a step, and the maintainer
+answered "close".
+
+**Anti-hyperfocus (BBX-27).** The thread was the one the bbx-29 close named, and its detours — the two rulings, G95's
+host-dependent counts, the page read two ways (G97), the near-miss in the kind profile (G96) — were each settled before
+the work moved on. Is S6 still the most valuable next thread? Yes: step 4 holds the reference check, the rot register and
+the host residue, and step 5 R60's executable controls. Does the last green mean what it is treated as meaning? It means
+38 gates passed and 218 controls printed that they fired; F19's 19 identical pairs are fidelity to bbh, not truth; and
+no control is executed against its gate's real input until R60.

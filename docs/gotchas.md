@@ -1810,3 +1810,26 @@ Learning (R27): a claim about a commit is read from what the commit tracks. The 
 files and their directories, with a control in each direction, and S6's plan gives K6 the same rule and the control
 `ignored-file-not-resolved`; a number read in the tree is re-read on a clone before it is quoted. A hazard line in
 HANDOFF. Rules re-anchored in fact: BBX-16, BBX-29.
+
+## G96 — One command printed two line ranges of config.py back to back, and the contributor read the join as one kind profile: bbh's gate-index literals were nearly written into the wrong profile (paid: 0 — the edit repeated its own text and changed nothing; 2026-09-15)
+`sed -n '131,160p;240,262p' lib/py/bbx/config.py` printed the end of the kind-blind `DEFAULTS` and the start of `KINDS`,
+then, with nothing between them, the command-line profile's tail. The contributor took the two ranges for one
+`frame-driven` block and wrote an edit anchored on the command-line profile's `expectations` row; its new text repeated
+the old, so the tool refused it as changing nothing. A read with line numbers placed the `frame-driven` block at lines
+172 to 230, and bbh's `[gate_header]` literals went there; a probe then read all 10 of bbh's keys resolved identically
+for a config naming no kind. Had the edit landed, F19a would not have seen it: bbh's example config sets every
+`[gate_header]` key but three, and those three read the same under the kind-blind values (`probe_f19a_defaults.sh`).
+Learning (R27): a read of two ranges carries line numbers, and no edit is anchored on text seen across a range
+boundary. Mechanism, the next sitting's first small fix: `gates/fidelity_bbh_s6.sh` compares, on its clone, every
+`[gate_header]` key of bbh's `DEFAULTS` with what BBX resolves for a config naming no kind, so D85 is held by a gate and
+not by a probe. No rule of §4 is named here.
+
+## G97 — The registers gate read the new generated page two ways before it was staged: its copy counted docs/gates.md and the tree's tracked list did not (paid: two gate runs, about 10 s; 2026-09-15)
+With `docs/gates.md` written and untracked, `gates/registers.sh` read `documents=docs/documents.toml rows=42 pages=43
+shapes=15 errors=1` in its unplanted copy and ran no control; with the page's row `[d43]` added it read
+`ERROR: dead-document-row [d43] docs/gates.md`, `rows=43 pages=42`, on the tree. After `git add docs/gates.md` it read
+`documents rows=43 pages=43 shapes=15 errors=0` and PASS with its 28 controls. Each reading named its finding: the page
+was in one universe and not the other until it was staged, the shape of bbx-13's hazard, where the shadow commits what
+the tree has not staged.
+Learning (R27): a new page is staged with its register row before the registers gate reads it, and HANDOFF's routing
+row for step 3 says so. No harness mechanism: the gate was loud both ways. No rule of §4 is named here.

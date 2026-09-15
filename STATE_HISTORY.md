@@ -956,3 +956,44 @@ bbh's `example/`, `fixture/docset/`, `fixture/fakecli/`, `fixture/unittest/`,
 measured by a gate**, not by a document (`docs/census/bbx_files.md`, generated;
 R39, D62, D63): regenerated at bbx-27 after the skills gate's anchor fix at identity `5059aa730eb5`, 34 gates, 49 rows for
 49 harness files, and `bbx file-census --self --check-register` reads no drift.
+
+## bbx-29 (closed 2026-09-15)
+
+**Status (bbx-29 close, 2026-09-15):** slices S1 and S2 complete; **S3, S4 and S5 DONE** (S4 and S5 with riders on
+BBX-25); **S6 — rot and registers — IN PROGRESS: steps 1 and 2 of six built.** The opening battery at `1cb162e` was
+GREEN (PASS 34, controls 179 / 179) and ran while bbh was being committed on the same host (G86). **Step 1**
+(`998e0f7`): `docs/defaults.md` corrected and completed under R61 — one table, ids in order, every kind-blind `DEFAULTS`
+key named as `[section].key` in its row's default cell, every `${BBX_*:-}` fallback named; D8's claim retracted (X68,
+G88); the ten pages HANDOFF reached only through a directory or a brace form routed by path. **R66, raised by step 1 and
+ruled the same sitting** (`154b481`): `[project].lib_dir`, read by no line of BBX or of bbh (G87; bbh issue #2), removed
+from BBX, and K3 given a third direction, every default's reader. **Step 2** (`f01488e`, `b18678b`): eight pages'
+`Shape:` lines reworded first to lead with R62's vocabulary (BBX-19); `bbx defaults --check` (K3, D81) over
+`docs/defaults.md`, 82 rows, and `bbx documents --check` (K4, D82) over `docs/documents.toml`, 42 pages in 15 shapes;
+`gates/registers.sh`, portable, 28 controls, every finding either check can print planted in a copy; the bbh fidelity
+pairs measured identical with the key removed. The gate's controls found three defects before the commit (G89, G90,
+G91, the last costing a battery). The census was regenerated (`008db5f`: 51 rows at identity `b9009dc1057c`) and the self
+subject refrozen (`858fc45`), and both again after the skills gate fix below (`e9b579f`: 51 rows at identity
+`bc53b3b479db`, only the key moved; refreeze `1db186f`). The close's pair is quoted in `docs/readout.md` (CLOSE — bbx-29). **The WSL platform row
+stays GREEN at `429d3f8` and attests that commit only; native Linux is a PARTIAL row** at `f6f136d` (the static tier not
+run). At the close, G90's list re-anchored BBX-2 and stopped a skills gate control keyed to BBX-2's old status; the control
+was re-keyed to a re-anchored rule (`0ee5bfb`, G93). Gotchas G1–G94; retractions X1–X68.
+
+**Open rulings: none.** R0–R66 are answered and recorded in `DECISIONS.md`. The maintainer's words with R49 stand as
+a rule of method: discipline is never arbitrated — only the method of applying it, on time or practicality. The
+maintainer's caveat on TSV stands the same way (R34, R40, restated at R62): a new register or row file is a TOML-subset
+file.
+In force since bbx-2: R18 (the census and the tests
+work on a clone or are explicitly, provably read-only), R19 (parallel work
+is a pull queue; the FIFO token queue is the default implementation, the
+principle is the ruling), R20 (fidelity on a plain clone of bbh at the
+baseline; the recount's clone plain too).
+BBX = Black Box harness eXpanded; GPL-3; sh + Python 3 on macOS, Linux and
+Windows/WSL; kinds: frame-driven (bbh), document set, command-line tool, with BBX ITSELF a
+subject and an external test framework a driver — five consumers:
+bbh's `example/`, `fixture/docset/`, `fixture/fakecli/`, `fixture/unittest/`,
+`fixture/selfgates/` (R14, R15, R37, R38). **BBX's own harness files are
+measured by a gate**, not by a document (`docs/census/bbx_files.md`, generated;
+R39, D62, D63): regenerated at the bbx-29 close at identity `bc53b3b479db`, 35 gates, 51 rows for
+51 harness files, and `bbx file-census --self --check-register` reads no drift. **BBX's own registers are checked every
+battery** since bbx-29: `docs/defaults.md` (K3) and `docs/documents.toml` (K4), by `gates/registers.sh`.
+
