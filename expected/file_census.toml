@@ -8,7 +8,7 @@
 [spec]
 class = "self"
 # measured_at is R38's whole-set key over bin, lib, drivers, gates — NOT HEAD
-measured_at = "016163742714ae1a733be70bea6b6c0f2b433d2d"
+measured_at = "68c94b57455263f0b7bdaf87e7289e1756ea6454"
 mode = "shrink-only"
 
 [f1]
@@ -180,45 +180,53 @@ file = "lib/py/bbx/recount.py"
 kinds = "KFDC"
 
 [f43]
-file = "lib/py/bbx/rulings_shape.py"
+file = "lib/py/bbx/references.py"
 kinds = "K"
 
 [f44]
+file = "lib/py/bbx/rot.py"
+kinds = "K"
+
+[f45]
+file = "lib/py/bbx/rulings_shape.py"
+kinds = "K"
+
+[f46]
 file = "lib/py/bbx/sha1.py"
 kinds = "KDC"
 
-[f45]
+[f47]
 file = "lib/py/bbx/thresholds.py"
 kinds = "F"
 
-[f46]
+[f48]
 file = "lib/py/bbx/tier.py"
 kinds = "KFC"
 
-[f47]
+[f49]
 file = "lib/py/bbx/toml_subset.py"
 kinds = "KFDC"
 
-[f48]
+[f50]
 file = "lib/sh/baseline.sh"
 kinds = "F"
 
-[f49]
+[f51]
 file = "lib/sh/classify.sh"
 kinds = "KFC"
 
-[f50]
+[f52]
 file = "lib/sh/compare.sh"
 kinds = "FDC"
 
-[f51]
+[f53]
 file = "lib/sh/config.sh"
 kinds = "KFDC"
 
-[f52]
+[f54]
 file = "lib/sh/expectation_kinds.sh"
 kinds = "KFDC"
 
-[f53]
+[f55]
 file = "lib/sh/registry.sh"
 kinds = "KFC"
